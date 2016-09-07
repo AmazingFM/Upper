@@ -1,0 +1,31 @@
+//
+//  PrefixHeader.pch
+//  Upper_1
+//
+//  Created by aries365.com on 15/10/30.
+//  Copyright (c) 2015年 aries365.com. All rights reserved.
+//
+
+#ifndef Upper_1_PrefixHeader_pch
+#define Upper_1_PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import "XWCommonHttpTool.h"
+
+#import "UIImageView+WebCache.h"
+#import "UIImage+CH.h"
+#import "UIView+MJ.h"
+#import "XWBaseMethod.h"
+#import "NSDate+CH.h"
+#import "Reachability.h"
+#import "ASProgressPopUpView.h"
+
+#import "FMDatabase.h"
+#import "FMDatabaseQueue.h"
+
+//network down
+#import "XWNetworkLabel.h"
+#import "XWDatacacheTool.h"
+#endif
