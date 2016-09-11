@@ -39,7 +39,7 @@
 
 #define RGBCOLOR(r,g,b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
 //第一个Label离top的距离
-#define FirstLabelHeight 44
+#define FirstLabelHeight 64
 
 //左右边距
 #define LeftRightPadding 0

@@ -10,6 +10,7 @@
 #import "UpActivitiesController.h"
 #import "UpActDetailController.h"
 #import "UpLoginController.h"
+#import "UPActivityAssistantController.h"
 #import "UpActView.h"
 #import "Info.h"
 #import "XWTopMenu.h"
@@ -34,6 +35,8 @@
 #import "ZouMaDengView.h"
 
 #define kActivityPageSize 20
+
+#define kActivityAssitantTag 100
 
 @interface UpActivitiesController () <XWTopMenuDelegate, UITableViewDelegate, UITableViewDataSource,UPItemButtonDelegate>
 {
@@ -61,6 +64,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UIButton *titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [titleButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    titleButton.tag = kActivityAssitantTag;
+    [titleButton setTitle:@"活动助手" forState:UIControlStateNormal];
+    self.navigationItem.titleView = titleButton;
     
     isLoaded = NO;
     lastPage = NO;
@@ -358,28 +367,14 @@
     [((MainController *)self.parentController).parentController leftClick];
 }
 
--(void)onButtonSelected:(UPBaseCellItem *)cellItem
+- (void)onButtonClick:(UIButton *)sender
 {
-    if ([cellItem isKindOfClass:[UPActivityCellItem class]]) {
-        UPActivityCellItem *actCellItem = (UPActivityCellItem *)cellItem;
-        
-        switch (actCellItem.style) {
-            case UPItemStyleActCreated:
-            case UPItemStyleActOK:
-//                [operatorBtn setTitle:@"修改" forState:UIControlStateNormal];
-                break;
-            case UPItemStyleActBegin:
-//                [operatorBtn setTitle:@"转交" forState:UIControlStateNormal];
-                break;
-            case UPItemStyleActEnd:
-//                [operatorBtn setTitle:@"回顾" forState:UIControlStateNormal];
-                break;
-            case UPItemStyleActJoin:
-//                [operatorBtn setTitle:@"评论" forState:UIControlStateNormal];
-                break;
-        }
-
+    if (sender.tag == kActivityAssitantTag) {
+        UPActivityAssistantController *assistantController = [[UPActivityAssistantController alloc] init];
+        assistantController.title = @"活动助手";
+        [self.navigationController pushViewController:assistantController animated:YES];
     }
 }
+
 
 @end

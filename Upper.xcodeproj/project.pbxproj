@@ -18,6 +18,7 @@
 		2C38F9651D1FE386002CF240 /* UPBaseItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C38F9641D1FE386002CF240 /* UPBaseItem.m */; };
 		2C38F9681D23FEFD002CF240 /* ZouMaDengView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C38F9671D23FEFD002CF240 /* ZouMaDengView.m */; };
 		2C38F96B1D26D2FE002CF240 /* UPRefreshTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C38F96A1D26D2FE002CF240 /* UPRefreshTableViewController.m */; };
+		2C621BF11D85BBFE00068F76 /* UPActivityAssistantController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C621BF01D85BBFE00068F76 /* UPActivityAssistantController.m */; };
 		2C9793A31CEFF8550043EA50 /* UPTimerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C9793A01CEFF8550043EA50 /* UPTimerManager.m */; };
 		2C9793A41CEFF8550043EA50 /* UPTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C9793A21CEFF8550043EA50 /* UPTools.m */; };
 		2C9793A81CF069270043EA50 /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C9793A71CF069270043EA50 /* SFHFKeychainUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -247,6 +248,8 @@
 		2C38F9671D23FEFD002CF240 /* ZouMaDengView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZouMaDengView.m; sourceTree = "<group>"; };
 		2C38F9691D26D2FE002CF240 /* UPRefreshTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPRefreshTableViewController.h; sourceTree = "<group>"; };
 		2C38F96A1D26D2FE002CF240 /* UPRefreshTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPRefreshTableViewController.m; sourceTree = "<group>"; };
+		2C621BEF1D85BBFE00068F76 /* UPActivityAssistantController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPActivityAssistantController.h; sourceTree = "<group>"; };
+		2C621BF01D85BBFE00068F76 /* UPActivityAssistantController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPActivityAssistantController.m; sourceTree = "<group>"; };
 		2C97939F1CEFF8550043EA50 /* UPTimerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPTimerManager.h; sourceTree = "<group>"; };
 		2C9793A01CEFF8550043EA50 /* UPTimerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPTimerManager.m; sourceTree = "<group>"; };
 		2C9793A11CEFF8550043EA50 /* UPTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPTools.h; sourceTree = "<group>"; };
@@ -1220,6 +1223,8 @@
 				3A29398F1D2F798B005CB3F3 /* UPCommentController.m */,
 				3ACF2AF31D6AEDD30083E04E /* RecommendController.h */,
 				3ACF2AF41D6AEDD30083E04E /* RecommendController.m */,
+				2C621BEF1D85BBFE00068F76 /* UPActivityAssistantController.h */,
+				2C621BF01D85BBFE00068F76 /* UPActivityAssistantController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1595,6 +1600,7 @@
 				2CDAD63B1D0EEC4000C260F4 /* FMDatabaseAdditions.m in Sources */,
 				EC3C181A1CECB16D00223D6B /* UPQRViewController.m in Sources */,
 				2CDAD63E1D0EEC4000C260F4 /* FMResultSet.m in Sources */,
+				2C621BF11D85BBFE00068F76 /* UPActivityAssistantController.m in Sources */,
 				2CDAD6311D0EEC4000C260F4 /* AFSecurityPolicy.m in Sources */,
 				EC3C18821CECB16D00223D6B /* UPCells.m in Sources */,
 				EC3C18071CECB16D00223D6B /* XWNetworkLabel.m in Sources */,
