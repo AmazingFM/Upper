@@ -678,13 +678,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Upper_1/Classes/View/cells/UPActivityCell.m"
-            timestampString = "495301782.018648"
+            filePath = "Upper_1/Classes/Controller/UPRefreshTableViewController.m"
+            timestampString = "495302826.188076"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "297"
-            endingLineNumber = "297"
-            landmarkName = "-setActivityItems:"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
+            landmarkName = "-onButtonSelected:withType:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

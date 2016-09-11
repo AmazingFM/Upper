@@ -94,6 +94,7 @@
                     UPActivityCellItem *actCellItem = [[UPActivityCellItem alloc] init];
                     actCellItem.cellWidth = ScreenWidth;
                     actCellItem.cellHeight = 100;
+                    actCellItem.type = SourceTypeWoFaqi;
                     actCellItem.itemData = activityList[i];
                     int status = [actCellItem.itemData.activity_status intValue];
                     if (status!=0) {

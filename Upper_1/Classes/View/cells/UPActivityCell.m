@@ -11,6 +11,7 @@
 #import "UPTools.h"
 #import "DrawSomething.h"
 #import "UPTheme.h"
+#import "MBProgressHUD+MJ.h"
 
 @interface UPTimeLocationView()
 {
@@ -87,7 +88,7 @@
 @end
 
 
-@interface UPActivityCell() <UIGestureRecognizerDelegate>
+@interface UPActivityCell() <UIGestureRecognizerDelegate, UIAlertViewDelegate>
 {
     UIView *backView;
     UIImageView *_img;
@@ -343,11 +344,12 @@
                     _changeActBtn.frame = CGRectZero;
                     break;
                 default:
-                    _reviewActBtn.frame = CGRectMake(0,0,size.width,perHeight);
+                    _commentActBtn.frame = CGRectMake(0,0,size.width,perHeight);
+                    _quitActBtn.frame = CGRectZero;
+
                     _cancelActBtn.frame = CGRectZero;
                     _changeActBtn.frame = CGRectZero;
-                    _commentActBtn.frame = CGRectZero;
-                    _quitActBtn.frame = CGRectZero;
+                    _reviewActBtn.frame = CGRectZero;
                     break;
             }
 
@@ -377,7 +379,7 @@
 {
     if (sender.tag==kUPActQuitTag||
         sender.tag==kUPActCancelTag) {
-        NSString *msg = sender.tag==kUPActCancelTag?@"Hi,你准备取消活动":@"Hi,你准备退出活动";
+        NSString *msg = sender.tag==kUPActCancelTag?@"Hi,你准备取消活动?":@"Hi,你准备退出活动?";
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         alertView.tag = sender.tag;
         [alertView show];
@@ -391,6 +393,93 @@
         }
 
     }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex==1) {
+        if (alertView.tag==kUPActCancelTag) {
+            [self cancelActivity];
+        }
+        
+        if (alertView.tag==kUPActQuitTag) {
+            [self quitActivity];
+        }
+    }
+}
+- (void)quitActivity
+{
+    [MBProgressHUD showMessage:@"正在提交请求，请稍后...." toView:g_mainWindow];
+    
+    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    [params setObject:@"ActivityJoinModify"forKey:@"a"];
+    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
+    [params setObject:_actCellItem.itemData.ID forKey:@"activity_id"];
+    [params setObject:@"2" forKey:@"user_status"];
+    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
+    
+    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
+        [MBProgressHUD hideHUDForView:g_mainWindow];
+        
+        NSDictionary *dict = (NSDictionary *)json;
+        NSString *resp_id = dict[@"resp_id"];
+        if ([resp_id intValue]==0) {
+            NSString *resp_desc = dict[@"resp_desc"];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"🙏🏻，恭喜您" message:resp_desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
+        }
+        else
+        {
+            NSString *resp_desc = dict[@"resp_desc"];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"💔，很遗憾" message:resp_desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
+            
+        }
+        
+    } failture:^(id error) {
+        [MBProgressHUD hideHUDForView:g_mainWindow];
+        NSLog(@"%@",error);
+        
+    }];
+}
+
+- (void)cancelActivity
+{
+    [MBProgressHUD showMessage:@"正在提交请求，请稍后...." toView:g_mainWindow];
+    
+    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    [params setObject:@"ActivityModify"forKey:@"a"];
+    
+    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
+    [params setObject:_actCellItem.itemData.ID forKey:@"activity_id"];
+    [params setObject:@"9" forKey:@"user_status"];
+    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
+    
+    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
+        [MBProgressHUD hideHUDForView:g_mainWindow];
+        
+        NSDictionary *dict = (NSDictionary *)json;
+        NSString *resp_id = dict[@"resp_id"];
+        if ([resp_id intValue]==0) {
+            NSString *resp_desc = dict[@"resp_desc"];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"🙏🏻，恭喜您" message:resp_desc delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
+        }
+        else
+        {
+            NSString *resp_desc = dict[@"resp_desc"];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"💔，很遗憾" message:resp_desc delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
+            
+        }
+        
+    } failture:^(id error) {
+        [MBProgressHUD hideHUDForView:g_mainWindow];
+        NSLog(@"%@",error);
+        
+    }];
 }
 
 @end

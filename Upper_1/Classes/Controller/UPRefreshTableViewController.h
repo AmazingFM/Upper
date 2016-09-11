@@ -10,8 +10,9 @@
 #import "MJRefresh.h"
 #import "MJExtension.h"
 #import "MJRefreshComponent.h"
+#import "UPActivityCell.h"
 
-@interface UPRefreshTableViewController : UPBaseViewController
+@interface UPRefreshTableViewController : UPBaseViewController <UPItemButtonDelegate>
 
 @property (nonatomic, retain) UITableView *mainTable;
 
