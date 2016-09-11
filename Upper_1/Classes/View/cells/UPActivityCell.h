@@ -27,7 +27,7 @@
 
 @interface UPActivityCell : UITableViewCell
 
-@property (nonatomic, copy) UPBaseCellItem *actCellItem;
+@property (nonatomic, copy) UPActivityCellItem *actCellItem;
 @property (nonatomic, retain) id<UPItemButtonDelegate> delegate;
 
 - (void)setActivityItems:(UPBaseCellItem *)item;

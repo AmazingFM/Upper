@@ -9,9 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "UPCellItems.h"
 
+#import "UpActDetailController.h"
+
 @class ActivityData;
 @interface UPActivityCellItem : UPBaseCellItem
 
+@property (nonatomic) SourceType type;
 @property (nonatomic, retain) ActivityData *itemData;
 
 @end

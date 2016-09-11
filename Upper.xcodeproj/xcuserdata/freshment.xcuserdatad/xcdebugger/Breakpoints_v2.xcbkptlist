@@ -31,7 +31,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "85"
             endingLineNumber = "85"
-            landmarkName = "fieldText"
+            landmarkName = "userInteractionDisabled"
             landmarkType = "19">
             <Locations>
                <Location
@@ -298,12 +298,12 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/QRCodeController.m"
-                  timestampString = "493656908.742196"
+                  timestampString = "495301087.848116"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "368"
                   endingLineNumber = "368"
-                  offsetFromSymbolStart = "910">
+                  offsetFromSymbolStart = "1074">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -313,12 +313,12 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/QRCodeController.m"
-                  timestampString = "493656908.742334"
+                  timestampString = "495301087.848249"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "368"
                   endingLineNumber = "368"
-                  offsetFromSymbolStart = "656">
+                  offsetFromSymbolStart = "752">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -328,12 +328,12 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/QRCodeController.m"
-                  timestampString = "493656908.742444"
+                  timestampString = "495301087.848363"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "368"
                   endingLineNumber = "368"
-                  offsetFromSymbolStart = "51">
+                  offsetFromSymbolStart = "34">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -343,12 +343,12 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/QRCodeController.m"
-                  timestampString = "493656908.742548"
+                  timestampString = "495301087.8485"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "368"
                   endingLineNumber = "368"
-                  offsetFromSymbolStart = "29">
+                  offsetFromSymbolStart = "18">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -358,12 +358,12 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/QRCodeController.m"
-                  timestampString = "493656908.742658"
+                  timestampString = "495301087.848621"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "368"
                   endingLineNumber = "368"
-                  offsetFromSymbolStart = "16">
+                  offsetFromSymbolStart = "12">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -380,7 +380,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "189"
             endingLineNumber = "189"
-            landmarkName = "-UUInputFunctionView:sendMessage:"
+            landmarkName = "-UUInputFunctionView:sendVoice:time:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

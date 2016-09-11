@@ -213,6 +213,7 @@
         [backView addSubview:_typeLab];
         [backView addSubview:_clothLab];
         [backView addSubview:_statusLab];
+        [backView addSubview:_btnContainerView];
         [self addSubview:_timeLocationV];
     }
     return self;
@@ -220,8 +221,8 @@
 
 - (void)setActivityItems:(UPBaseCellItem *)item
 {
-    _actCellItem = item;
-    ActivityData *itemData = ((UPActivityCellItem*)item).itemData;
+    _actCellItem = (UPActivityCellItem*)item;
+    ActivityData *itemData = _actCellItem.itemData;
     
     
     backView.frame = CGRectMake(0, TopDownPadding, _actCellItem.cellWidth, _actCellItem.cellHeight-2*TopDownPadding);
@@ -251,7 +252,7 @@
     NSArray*  actTypeArr = @[@"不限", @"派对、酒会", @"桌游、座谈、棋牌", @"KTV", @"户外烧烤", @"运动",@"交友、徒步"];
     
     //0-创建募集期 1-募集成功 2-报名截止 3-活动发生 4-活动结束  5-募集失败 9-活动取消
-    NSArray *actStatusArr = @[@"募集中", @"募集中", @"募集中", @"募集中", @"募集中", @"募集中", @"募集中", @"募集中", @"募集中"];
+    NSArray *actStatusArr = @[@"创建募集期", @"募集成功", @"报名截止", @"活动发生", @"活动结束", @"募集失败", @"", @"",@"", @"活动取消"];
     NSArray *clothTypeArr = @[@"随性", @"西装领带", @"便装"];
 
     int selectIndex;
@@ -279,9 +280,83 @@
         size = SizeWithFont(actStatusArr[selectIndex], kUPThemeMinFont);
         _statusLab.size = CGSizeMake(size.width+10, size.height+4);;
         _statusLab.center = CGPointMake(offsetx+size.width/2+5, offsety+perHeight/2);
+        
+        offsetx = CGRectGetMaxX(_statusLab.frame);
+        
+        _btnContainerView.size = CGSizeMake( width-offsetx, perHeight);
+        _btnContainerView.center = CGPointMake((width+offsetx)/2, offsety+perHeight/2);
+        
+        CGSize size = SizeWithFont(@"回顾", kUPThemeMinFont);
+        size.width += 10;
+        if (_actCellItem.type==SourceTypeWoFaqi) {
+            switch (selectIndex) {
+                case 4:
+                    _reviewActBtn.frame = CGRectMake(0,0,size.width,perHeight);
+                    _cancelActBtn.frame = CGRectZero;
+                    _changeActBtn.frame = CGRectZero;
+                    _commentActBtn.frame = CGRectZero;
+                    _quitActBtn.frame = CGRectZero;
+                    break;
+                case 0:
+                case 1:
+                case 2:
+                    _cancelActBtn.frame = CGRectMake(0,0,size.width,perHeight);
+                    _changeActBtn.frame = CGRectMake(0,0,size.width,perHeight);
+                    _reviewActBtn.frame = CGRectZero;
+                    
+                    _commentActBtn.frame = CGRectZero;
+                    _quitActBtn.frame = CGRectZero;
+
+                    break;
+                default:
+                    _reviewActBtn.frame = CGRectMake(0,0,size.width,perHeight);
+                    _cancelActBtn.frame = CGRectZero;
+                    _changeActBtn.frame = CGRectZero;
+                    _commentActBtn.frame = CGRectZero;
+                    _quitActBtn.frame = CGRectZero;
+                    break;
+            }
+        } else if(_actCellItem.type==SourceTypeWoCanyu) {
+            switch (selectIndex) {
+                case 4:
+                    _commentActBtn.frame = CGRectMake(0,0,size.width,perHeight);
+                    _quitActBtn.frame = CGRectZero;
+
+                    _reviewActBtn.frame = CGRectZero;
+                    _cancelActBtn.frame = CGRectZero;
+                    _changeActBtn.frame = CGRectZero;
+                    break;
+                case 0:
+                case 1:
+                case 2:
+                    _quitActBtn.frame = CGRectMake(0,0,size.width,perHeight);
+                    _commentActBtn.frame = CGRectZero;
+                    
+                    _reviewActBtn.frame = CGRectZero;
+                    _cancelActBtn.frame = CGRectZero;
+                    _changeActBtn.frame = CGRectZero;
+                    break;
+                default:
+                    _reviewActBtn.frame = CGRectMake(0,0,size.width,perHeight);
+                    _cancelActBtn.frame = CGRectZero;
+                    _changeActBtn.frame = CGRectZero;
+                    _commentActBtn.frame = CGRectZero;
+                    _quitActBtn.frame = CGRectZero;
+                    break;
+            }
+
+        } else {
+            _reviewActBtn.frame = CGRectZero;
+            _cancelActBtn.frame = CGRectZero;
+            _changeActBtn.frame = CGRectZero;
+            _commentActBtn.frame = CGRectZero;
+            _quitActBtn.frame = CGRectZero;
+        }
+        
         offsety += perHeight;
     }
     
+    offsetx = height*4/3+kUPThemeBorder;
     NSString *time = [UPTools dateStringTransform:itemData.begin_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy.MM.dd"];
     NSString *location = itemData.activity_place;
     NSString *mergeStr = [NSString stringWithFormat:@"%@AAA%@", time, location];
@@ -294,6 +369,8 @@
 
 - (void)onClick:(UIButton *)sender
 {
+    
+    
     if ([self.delegate respondsToSelector:@selector(onButtonSelected:)]) {
         [self.delegate onButtonSelected:_actCellItem];
     }

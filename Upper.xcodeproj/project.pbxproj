@@ -1460,7 +1460,6 @@
 				TargetAttributes = {
 					FECE88121BE344DA00CC8E85 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = TRR564E7Q4;
 					};
 				};
 			};
@@ -1824,7 +1823,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.upper.me;
 				PRODUCT_NAME = Upper;
-				PROVISIONING_PROFILE = "a289cfa4-ffe2-4ba8-94cc-8107174b7d82";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1852,7 +1851,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.upper.me;
 				PRODUCT_NAME = Upper;
-				PROVISIONING_PROFILE = "a289cfa4-ffe2-4ba8-94cc-8107174b7d82";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

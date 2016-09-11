@@ -55,15 +55,15 @@
 // 添加聊天item（一个cell内容）
 static NSString *previousTime = nil;
 
-- (NSArray *)additems:(NSInteger)number
-{
-    NSMutableArray *result = [NSMutableArray array];
-    
-    [MessageManager shared] getMessages:<#(NSRange)#> withUserId:<#(NSString *)#>
-    for (int i=0; i<number; i++) {
-        <#statements#>
-    }
-}
+//- (NSArray *)additems:(NSInteger)number
+//{
+//    NSMutableArray *result = [NSMutableArray array];
+//    
+//    [MessageManager shared] getMessages:<#(NSRange)#> withUserId:<#(NSString *)#>
+//    for (int i=0; i<number; i++) {
+//        <#statements#>
+//    }
+//}
 
 - (NSArray *)additems:(NSInteger)number
 {

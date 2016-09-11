@@ -109,7 +109,7 @@
 {
     self.chatModel = [[ChatModel alloc]init];
     self.chatModel.isGroupChat = NO;
-    [self.chatModel populateRandomDataSource:self.toUserId];
+//    [self.chatModel populateRandomDataSource:self.toUserId];
     
     IFView = [[UUInputFunctionView alloc]initWithSuperVC:self];
     IFView.delegate = self;
