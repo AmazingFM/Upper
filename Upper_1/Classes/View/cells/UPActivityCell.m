@@ -95,6 +95,15 @@
     UILabel *_typeLab;
     UILabel *_clothLab;
     UILabel *_statusLab;
+    
+    UIView *_btnContainerView;
+    
+    UIButton *_reviewActBtn;
+    UIButton *_cancelActBtn;
+    UIButton *_changeActBtn;
+    UIButton *_commentActBtn;
+    UIButton *_quitActBtn;
+    
     UPTimeLocationView *_timeLocationV;
 }
 
@@ -142,7 +151,61 @@
         _statusLab.textAlignment = NSTextAlignmentCenter;
         _statusLab.layer.cornerRadius = 2.0f;
         _statusLab.layer.masksToBounds = YES;
+        
+        _btnContainerView = [[UIView alloc] initWithFrame:CGRectZero];
+        _btnContainerView.backgroundColor = [UIColor clearColor];
+        
+        _reviewActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_reviewActBtn setTitle:@"回顾" forState:UIControlStateNormal];
+        [_reviewActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        _reviewActBtn.titleLabel.font = kUPThemeMinFont;
+        _reviewActBtn.layer.cornerRadius = 2.0f;
+        _reviewActBtn.layer.masksToBounds = YES;
+        _reviewActBtn.layer.borderWidth = 1.f;
+        [_reviewActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        _cancelActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_cancelActBtn setTitle:@"取消" forState:UIControlStateNormal];
+        [_cancelActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        _cancelActBtn.titleLabel.font = kUPThemeMinFont;
+        _cancelActBtn.layer.cornerRadius = 2.0f;
+        _cancelActBtn.layer.masksToBounds = YES;
+        _cancelActBtn.layer.borderWidth = 1.f;
+        [_cancelActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        _changeActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_changeActBtn setTitle:@"更改" forState:UIControlStateNormal];
+        [_changeActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        _changeActBtn.titleLabel.font = kUPThemeMinFont;
+        _changeActBtn.layer.cornerRadius = 2.0f;
+        _changeActBtn.layer.masksToBounds = YES;
+        _changeActBtn.layer.borderWidth = 1.f;
+        [_changeActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
 
+        _commentActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_commentActBtn setTitle:@"评论" forState:UIControlStateNormal];
+        [_commentActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        _commentActBtn.titleLabel.font = kUPThemeMinFont;
+        _commentActBtn.layer.cornerRadius = 2.0f;
+        _commentActBtn.layer.masksToBounds = YES;
+        _commentActBtn.layer.borderWidth = 1.f;
+        [_commentActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+
+        _quitActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_quitActBtn setTitle:@"取消" forState:UIControlStateNormal];
+        [_quitActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        _quitActBtn.titleLabel.font = kUPThemeMinFont;
+        _quitActBtn.layer.cornerRadius = 2.0f;
+        _quitActBtn.layer.masksToBounds = YES;
+        _quitActBtn.layer.borderWidth = 1.f;
+        [_quitActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+
+        [_btnContainerView addSubview:_reviewActBtn];
+        [_btnContainerView addSubview:_cancelActBtn];
+        [_btnContainerView addSubview:_changeActBtn];
+        [_btnContainerView addSubview:_commentActBtn];
+        [_btnContainerView addSubview:_quitActBtn];
+        
         _timeLocationV = [[UPTimeLocationView alloc] initWithFrame:CGRectZero];
         
         [backView addSubview:_img];
@@ -186,6 +249,8 @@
     
     CGSize size;
     NSArray*  actTypeArr = @[@"不限", @"派对、酒会", @"桌游、座谈、棋牌", @"KTV", @"户外烧烤", @"运动",@"交友、徒步"];
+    
+    //0-创建募集期 1-募集成功 2-报名截止 3-活动发生 4-活动结束  5-募集失败 9-活动取消
     NSArray *actStatusArr = @[@"募集中", @"募集中", @"募集中", @"募集中", @"募集中", @"募集中", @"募集中", @"募集中", @"募集中"];
     NSArray *clothTypeArr = @[@"随性", @"西装领带", @"便装"];
 

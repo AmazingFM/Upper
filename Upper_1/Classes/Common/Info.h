@@ -45,6 +45,11 @@
 #define CellHeightDefault 44
 #define SectionHeaderHeight 15
 
+#define kUPActReviewTag 100
+#define kUPActChangeTag 101
+#define kUPActCancelTag 102
+#define kUPActCommentTag 103
+#define kUPActQuitTag 104
 
 //顶部菜单高度
 #define selectMenuH 30
