@@ -291,7 +291,7 @@
         
         _btnContainerView.size = CGSizeMake( width-offsetx, perHeight);
         _btnContainerView.center = CGPointMake((width+offsetx)/2, offsety+perHeight/2);
-        _btnContainerView.backgroundColor = [UIColor greenColor];
+        _btnContainerView.backgroundColor = [UIColor clearColor];
         
         CGSize size = SizeWithFont(@"回顾", kUPThemeMinFont);
         size.width += 10;
@@ -428,6 +428,7 @@
             NSString *resp_desc = dict[@"resp_desc"];
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"🙏🏻，恭喜您" message:resp_desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [alert show];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierActQuitRefresh object:nil];
         }
         else
         {
@@ -466,6 +467,8 @@
             NSString *resp_desc = dict[@"resp_desc"];
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"🙏🏻，恭喜您" message:resp_desc delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [alert show];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierActCancelRefresh object:nil];
         }
         else
         {

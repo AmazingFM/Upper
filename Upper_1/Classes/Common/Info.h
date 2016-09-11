@@ -21,6 +21,9 @@
 #define kNotifierLogin    @"kNotifierLoginIdentifier"    //登录
 #define kNotifierLogout   @"kNotifierLogoutIdentifier"    //登出
 
+#define kNotifierActCancelRefresh    @"kNotifierActCancelRefreshIdentifier"    //取消活动
+#define kNotifierActQuitRefresh  @"kNotifierActQuitRefreshIdentifier"    //退出活动
+
 #define kNotifierMessagePull    @"kNotifierMessagePull"   //从server 定时取消息
 #define kNotifierMessageSending @"kNotifierMessageSending"    //取到消息后，对chatcontroller内容进行更新
 #define kNotifierMessageComing @"kNotifierMessageComing"    //取到消息后，对chatcontroller内容进行更新

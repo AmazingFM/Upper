@@ -23,6 +23,15 @@
 
 @implementation UPMyLaunchViewController
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startRequest) name:kNotifierActCancelRefresh object:nil];
+    }
+    return self;
+}
+
 - (void)loadMoreData
 {
     self.myRefreshView = self.mainTable.footer;

@@ -24,6 +24,15 @@
 
 @implementation UPMyAnticipateViewController
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startRequest) name:kNotifierActQuitRefresh object:nil];
+    }
+    return self;
+}
+
 - (void)loadMoreData
 {
     self.myRefreshView = self.mainTable.footer;
