@@ -157,6 +157,7 @@
         
         _reviewActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_reviewActBtn setTitle:@"回顾" forState:UIControlStateNormal];
+        _reviewActBtn.tag = kUPActReviewTag;
         [_reviewActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         _reviewActBtn.titleLabel.font = kUPThemeMinFont;
         _reviewActBtn.layer.cornerRadius = 2.0f;
@@ -166,6 +167,7 @@
         
         _cancelActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_cancelActBtn setTitle:@"取消" forState:UIControlStateNormal];
+        _cancelActBtn.tag = kUPActCancelTag;
         [_cancelActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         _cancelActBtn.titleLabel.font = kUPThemeMinFont;
         _cancelActBtn.layer.cornerRadius = 2.0f;
@@ -175,6 +177,7 @@
         
         _changeActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_changeActBtn setTitle:@"更改" forState:UIControlStateNormal];
+        _changeActBtn.tag = kUPActChangeTag;
         [_changeActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         _changeActBtn.titleLabel.font = kUPThemeMinFont;
         _changeActBtn.layer.cornerRadius = 2.0f;
@@ -184,6 +187,7 @@
 
         _commentActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_commentActBtn setTitle:@"评论" forState:UIControlStateNormal];
+        _commentActBtn.tag = kUPActCommentTag;
         [_commentActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         _commentActBtn.titleLabel.font = kUPThemeMinFont;
         _commentActBtn.layer.cornerRadius = 2.0f;
@@ -193,6 +197,7 @@
 
         _quitActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_quitActBtn setTitle:@"取消" forState:UIControlStateNormal];
+        _quitActBtn.tag = kUPActQuitTag;
         [_quitActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         _quitActBtn.titleLabel.font = kUPThemeMinFont;
         _quitActBtn.layer.cornerRadius = 2.0f;
@@ -285,6 +290,7 @@
         
         _btnContainerView.size = CGSizeMake( width-offsetx, perHeight);
         _btnContainerView.center = CGPointMake((width+offsetx)/2, offsety+perHeight/2);
+        _btnContainerView.backgroundColor = [UIColor greenColor];
         
         CGSize size = SizeWithFont(@"回顾", kUPThemeMinFont);
         size.width += 10;
@@ -369,10 +375,21 @@
 
 - (void)onClick:(UIButton *)sender
 {
-    
-    
-    if ([self.delegate respondsToSelector:@selector(onButtonSelected:)]) {
-        [self.delegate onButtonSelected:_actCellItem];
+    if (sender.tag==kUPActQuitTag||
+        sender.tag==kUPActCancelTag) {
+        NSString *msg = sender.tag==kUPActCancelTag?@"Hi,你准备取消活动":@"Hi,你准备退出活动";
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alertView.tag = sender.tag;
+        [alertView show];
+
+    } else if (sender.tag==kUPActReviewTag||
+               sender.tag==kUPActCommentTag||
+               sender.tag==kUPActChangeTag)
+    {
+        if ([self.delegate respondsToSelector:@selector(onButtonSelected:withType:)]) {
+            [self.delegate onButtonSelected:_actCellItem withType:sender.tag];
+        }
+
     }
 }
 

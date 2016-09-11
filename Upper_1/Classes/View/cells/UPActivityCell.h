@@ -21,7 +21,7 @@
 
 @protocol UPItemButtonDelegate <NSObject>
 
--(void)onButtonSelected:(UPBaseCellItem *)cellItem;
+-(void)onButtonSelected:(UPActivityCellItem *)cellItem withType:(int)type;
 
 @end
 
