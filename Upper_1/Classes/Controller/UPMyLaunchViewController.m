@@ -68,14 +68,16 @@
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             NSDictionary *resp_data = dict[@"resp_data"];
+            NSString *resp_desc = dict[@"resp_desc"];
+            NSLog(@"%@", resp_desc);
+
             if (resp_data==nil) {
+                self.tipsLabel.hidden = NO;
                 self.mainTable.footer.hidden = YES;
                 [self.myRefreshView endRefreshing];
                 return;
             }
             
-            NSString *resp_desc = dict[@"resp_desc"];
-            NSLog(@"%@", resp_desc);
             /***************/
             NSMutableDictionary *pageNav = resp_data[@"page_nav"];
             

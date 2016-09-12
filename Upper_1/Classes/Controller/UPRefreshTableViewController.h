@@ -15,6 +15,7 @@
 @interface UPRefreshTableViewController : UPBaseViewController <UPItemButtonDelegate>
 
 @property (nonatomic, retain) UITableView *mainTable;
+@property (nonatomic, retain) UILabel *tipsLabel;
 
 @property (nonatomic, retain) NSMutableArray *itemArray;
 @property (nonatomic) NSInteger pageNum;

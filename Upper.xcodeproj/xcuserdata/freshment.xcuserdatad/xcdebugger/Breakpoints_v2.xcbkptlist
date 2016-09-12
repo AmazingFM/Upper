@@ -89,22 +89,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Upper_1/Classes/Controller/UpLoginController.m"
-            timestampString = "492535055.728232"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "331"
-            endingLineNumber = "331"
-            landmarkName = "-resetValue"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Upper_1/Classes/Controller/UpActDetailController.m"
             timestampString = "492179815.343765"
             startingColumnNumber = "9223372036854775807"
@@ -186,43 +170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Upper_1/Classes/Controller/UPCommentController.m"
-            timestampString = "489773544.087053"
+            timestampString = "495376149.738063"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "311"
-            endingLineNumber = "311"
-            landmarkName = "-dismiss"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Upper_1/Classes/Controller/UPCommentController.m"
-            timestampString = "489773544.087053"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
-            landmarkName = "-touchesBegan:withEvent:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Upper_1/Classes/Controller/UPCommentController.m"
-            timestampString = "489772530.612115"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "203"
-            endingLineNumber = "203"
+            startingLineNumber = "188"
+            endingLineNumber = "188"
             landmarkName = "-submit"
             landmarkType = "5">
          </BreakpointContent>
@@ -250,11 +202,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Upper_1/Classes/Controller/UPCommentController.m"
-            timestampString = "489774438.888626"
+            timestampString = "495376149.738063"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "214"
-            endingLineNumber = "214"
+            startingLineNumber = "199"
+            endingLineNumber = "199"
             landmarkName = "-submit"
             landmarkType = "5">
          </BreakpointContent>
@@ -298,7 +250,7 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/QRCodeController.m"
-                  timestampString = "495303777.15446"
+                  timestampString = "495376248.524276"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "368"
@@ -313,7 +265,7 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/QRCodeController.m"
-                  timestampString = "495303777.154616"
+                  timestampString = "495376248.524438"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "368"
@@ -328,7 +280,7 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/QRCodeController.m"
-                  timestampString = "495303777.154725"
+                  timestampString = "495376248.524573"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "368"
@@ -343,7 +295,7 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/QRCodeController.m"
-                  timestampString = "495303777.154842"
+                  timestampString = "495376248.524703"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "368"
@@ -358,7 +310,7 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/QRCodeController.m"
-                  timestampString = "495303777.15495"
+                  timestampString = "495376248.524837"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "368"
@@ -381,22 +333,6 @@
             startingLineNumber = "189"
             endingLineNumber = "189"
             landmarkName = "-UUInputFunctionView:sendVoice:time:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Upper_1/Classes/Controller/UPCommentController.m"
-            timestampString = "489943547.472671"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "190"
-            endingLineNumber = "190"
-            landmarkName = "-submit"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -550,22 +486,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Upper_1/Classes/Controller/UpLoginController.m"
-            timestampString = "492536229.071555"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "301"
-            endingLineNumber = "301"
-            landmarkName = "-startLoginRequest"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Upper_1/Classes/Controller/UpperController.m"
             timestampString = "492965364.769279"
             startingColumnNumber = "9223372036854775807"
@@ -668,7 +588,103 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "105"
             endingLineNumber = "105"
-            landmarkName = "-onButtonSelected:withType:"
+            landmarkName = "-tableView:cellForRowAtIndexPath:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Upper_1/Classes/Controller/UPCommentController.m"
+            timestampString = "495376248.277147"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "310"
+            endingLineNumber = "310"
+            landmarkName = "-requestPeopleEnrolled"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[UPCommentController requestPeopleEnrolled]"
+                  moduleName = "Upper"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/UPCommentController.m"
+                  timestampString = "495376248.291609"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "311"
+                  endingLineNumber = "311"
+                  offsetFromSymbolStart = "690">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__44-[UPCommentController requestPeopleEnrolled]_block_invoke"
+                  moduleName = "Upper"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/UPCommentController.m"
+                  timestampString = "495376248.29179"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "312"
+                  endingLineNumber = "312"
+                  offsetFromSymbolStart = "62">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Upper_1/Classes/Controller/UPCommentController.m"
+            timestampString = "495376815.641029"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "313"
+            endingLineNumber = "313"
+            landmarkName = "-requestPeopleEnrolled"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Upper_1/Classes/Controller/UPCommentController.m"
+            timestampString = "495377032.744769"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "327"
+            endingLineNumber = "327"
+            landmarkName = "-requestPeopleEnrolled"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Upper_1/Classes/Controller/UPCommentController.m"
+            timestampString = "495377069.522306"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "330"
+            endingLineNumber = "330"
+            landmarkName = "-requestPeopleEnrolled"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

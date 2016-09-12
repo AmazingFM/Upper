@@ -292,7 +292,7 @@ static CGFloat const FixRatio = 4/3.0;
     UPComboxCellItem *item11 = [[UPComboxCellItem alloc] init];  //使用 是否预付的 字段传参
     item11.title = @"付费方式";
     item11.style = UPItemStyleIndex;
-    item11.comboxItems = @[@"现场AA", @"本壕请客", @"预付定金"];
+    item11.comboxItems = @[@"现场AA", @"本壕请客", @"绅士均摊"];
     item11.style = UPItemStyleIndex;
     item11.key = @"is_prepaid";
     

@@ -13,8 +13,6 @@
 @interface UPRefreshTableViewController () <UITableViewDelegate, UITableViewDataSource>
 {
     BOOL isLoaded;
-    
-    UILabel *_tipsLabel;
 }
 @end
 
@@ -82,7 +80,8 @@
 #pragma mark - tableView delegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.itemArray==nil || self.itemArray.count==0) {
+    if (self.itemArray==nil ||
+        self.itemArray.count==0) {
         _tipsLabel.hidden = NO;
     } else {
         _tipsLabel.hidden = YES;

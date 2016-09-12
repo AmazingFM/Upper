@@ -14,6 +14,19 @@
 #import "Info.h"
 #import "UPTheme.h"
 
+@implementation UPUserDemoView
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        //
+    }
+    return self;
+}
+
+@end
+
 
 
 @interface UPCommentController () <UIGestureRecognizerDelegate,UITextViewDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate>
@@ -62,7 +75,11 @@
     singleTap.delegate = self;
     singleTap.cancelsTouchesInView = NO;
 
+    tableView = [[UITableView alloc] initWithFrame:CGRectMake(80, ScreenHeight, ScreenWidth-2*80, 100)];
+    tableView.backgroundColor = [UIColor whiteColor];
+    tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     
+    [self.view addSubview:tableView];
     
     [self initBaseUI];
     
@@ -97,21 +114,6 @@
 
 #pragma mark - UIGestureRecognizerDelegate
 
-//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
-//{
-//    return YES;
-//}
-//
-//-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-//{
-//    if ([touch.view isKindOfClass:[UIControl class]]) {
-//        return NO;
-//    }
-//    else
-//    {
-//        return YES;
-//    }
-//}
 //
 -(void)handleSingleTap:(UITapGestureRecognizer *)sender{
     [commentTextView resignFirstResponder];
@@ -315,7 +317,7 @@ static const int textViewContentHeight = 150;
 
 - (void)requestPeopleEnrolled
 {
-    [MBProgressHUD showMessage:@"正在请求参与人"];
+    [MBProgressHUD showMessage:@"正在请求参与人" toView:self.view];
     NSDictionary *headParam = [UPDataManager shared].getHeadParams;
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
     [params setObject:@"ActivityJoinInfo"forKey:@"a"];
@@ -324,7 +326,8 @@ static const int textViewContentHeight = 150;
     [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
     [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
-        [MBProgressHUD hideHUD];
+        [MBProgressHUD hideHUDForView:self.view];
+        
         NSDictionary *dict = (NSDictionary *)json;
         NSString *resp_id = dict[@"resp_id"];
         NSString *resp_desc = dict[@"resp_desc"];
@@ -334,8 +337,6 @@ static const int textViewContentHeight = 150;
             NSDictionary *resp_data = dict[@"resp_data"];
             int totalCount = [resp_data[@"total_count"] intValue];
             if (totalCount>0) {
-                
-                
                 dispatch_async(dispatch_get_main_queue(), ^{
                     NSString *userList = resp_data[@"user_list"];
                     if ([userList isKindOfClass:[NSArray class]]) {
@@ -350,8 +351,7 @@ static const int textViewContentHeight = 150;
                         }
                     }
                     
-//                    [self.tableView reloadData];
-
+                    
                 });
             } else{
                 //目前黑没有参与者
