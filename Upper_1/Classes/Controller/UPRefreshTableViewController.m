@@ -29,6 +29,7 @@
     isLoaded = NO;
     
     _tipsLabel  = [[UILabel alloc] initWithFrame:CGRectZero];
+    _tipsLabel.size = CGSizeMake(100, 44);
     _tipsLabel.backgroundColor = [UIColor whiteColor];
     _tipsLabel.font = kUPThemeBigFont;
     _tipsLabel.textColor = [UIColor blackColor];
@@ -59,6 +60,7 @@
 {
     [super viewWillLayoutSubviews];
     _mainTable.frame = self.view.bounds;
+    _tipsLabel.center = _mainTable.center;
 }
 
 - (void)refresh
@@ -80,6 +82,11 @@
 #pragma mark - tableView delegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (self.itemArray==nil || self.itemArray.count==0) {
+        _tipsLabel.hidden = NO;
+    } else {
+        _tipsLabel.hidden = YES;
+    }
     return self.itemArray.count;
 }
 

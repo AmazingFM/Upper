@@ -51,7 +51,7 @@
     [self doInit];
     
     
-    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight)];
+    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight+20, ScreenWidth, ScreenHeight-FirstLabelHeight)];
     scrollView.scrollEnabled = YES;
     scrollView.bounces = YES;
     scrollView.backgroundColor = [UIColor clearColor];
