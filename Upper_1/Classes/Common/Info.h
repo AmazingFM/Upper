@@ -38,8 +38,16 @@
 #define REDCOLOR [UIColor colorWithRed:138/255.0 green:16/255.0 blue:16/255.0 alpha:1]
 
 #define RGBCOLOR(r,g,b) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
+
+#define isIOS7  ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
+
+#define NAV_HEIGHT ( isIOS7 ? 64 : 44)  //导航栏高度
+
+#define NAV_HEIGHT_NO_STATUSVIEW 44  //导航栏高度-不包含状态栏
+
+#define NAV_START_Y (NAV_HEIGHT – NAV_HEIGHT_NO_STATUSVIEW)//导航栏绘制时的起始Y值
 //第一个Label离top的距离
-#define FirstLabelHeight 64
+#define FirstLabelHeight 44
 
 //左右边距
 #define LeftRightPadding 0

@@ -61,8 +61,9 @@
 
 @implementation UpActivitiesController
 
-
-- (void)viewDidLoad {
+- (void)loadView
+{
+    [super loadView];
     [super viewDidLoad];
     
     UIButton *titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -73,12 +74,10 @@
     
     isLoaded = NO;
     lastPage = NO;
-    self.title = @"活动大厅";
-    
     
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
     
-    noticeBoard = [[NoticeBoard alloc] initWithFrame:CGRectMake(LeftRightPadding, FirstLabelHeight, ScreenWidth-LeftRightPadding*2, 17)];
+    noticeBoard = [[NoticeBoard alloc] initWithFrame:CGRectMake(LeftRightPadding,44, ScreenWidth-LeftRightPadding*2, 17)];
     [noticeBoard setNoticeMessage:@[@"Yeoman Zhang发起了一个活动",@"总冠军狂喜之夜",@"帅哥、美女high翻天"]];
     [self.view addSubview:noticeBoard];
     
@@ -94,13 +93,14 @@
     [noticeBoard startAnimate];
     
     if (![UPDataManager shared].isLogin) {
-//        [self showLogin];
+        //        [self showLogin];
     } else {
         if (!isLoaded) {
             [_mainTable.header beginRefreshing];
             isLoaded = YES;
         }
     }
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated

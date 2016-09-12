@@ -54,7 +54,7 @@
     [params setObject:[NSString stringWithFormat:@"%d", g_PageSize] forKey:@"page_size"];
     [params setObject:@"" forKey:@"activity_status"];
     [params setObject:@""forKey:@"activity_class"];
-    [params setObject:@"4" forKey:@"industry_id"];
+    [params setObject:@"-1" forKey:@"industry_id"];
     [params setObject:@"" forKey:@"start_begin_time"];
     [params setObject:@"" forKey:@"province_code"];
     [params setObject:@"" forKey:@"city_code"];

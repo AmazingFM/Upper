@@ -37,8 +37,9 @@
 
 @implementation PersonalCenterController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)loadView
+{
+    [super loadView];
     self.view.backgroundColor = [UIColor whiteColor];
     
     self.topView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, ScreenWidth, TopViewHeight)];
@@ -93,11 +94,7 @@
             OtherUserData *user = [self.user initWithDict:dict[@"resp_data"]];
             
             PersonInfoController *personController = self.childViewControllers[0];
-            UPHerLaunchedActivityController *herLaunchController = self.childViewControllers[1];
-            UPHerParticipatedActivityController *herPaticipateController = self.childViewControllers[2];
             [personController setUserData:user];
-            [herLaunchController setUserData:user];
-            [herPaticipateController setUserData:user];
         }
         
     }failture:^(id error) {
@@ -182,11 +179,15 @@
     UIViewController *vc1 = self.childViewControllers[0];
     vc1.view.frame = CGRectMake(0, 0, self.bigScroll.width, self.bigScroll.height);
     
-    UIViewController *v2 = self.childViewControllers[1];
-    v2.view.frame = CGRectMake(ScreenWidth, 0, self.bigScroll.width, self.bigScroll.height);
+    UIViewController *vc2 = self.childViewControllers[1];
+    vc2.view.frame = CGRectMake(ScreenWidth, 0, self.bigScroll.width, self.bigScroll.height);
+    
+    UIViewController *vc3 = self.childViewControllers[2];
+    vc3.view.frame = CGRectMake(2*ScreenWidth, 0, self.bigScroll.width, self.bigScroll.height);
     
     [self.bigScroll addSubview:vc1.view];
-    [self.bigScroll addSubview:v2.view];
+    [self.bigScroll addSubview:vc2.view];
+    [self.bigScroll addSubview:vc3.view];
 }
 
 - (void)addController
@@ -196,8 +197,10 @@
     
     //2
     UPHerLaunchedActivityController *vc2 = [[UPHerLaunchedActivityController alloc]init];
-    
+    vc2.userData = _user;
+
     UPHerParticipatedActivityController *vc3 = [[UPHerParticipatedActivityController alloc]init];
+    vc3.userData = _user;
     
     [self addChildViewController:vc1];
     [self addChildViewController:vc2];
@@ -240,13 +243,13 @@
     [self.zkSegment zk_itemClickByIndex:index];
     self.index = index;
     
-    UIViewController *vc = self.childViewControllers[index];
-    if (vc.view.superview) {
-        return;
-    }
+//    UIViewController *vc = self.childViewControllers[index];
+//    if (vc.view.superview) {
+//        return;
+//    }
     
-    vc.view.frame = scrollView.bounds;
-    [self.bigScroll addSubview:vc.view];
+//    vc.view.frame = scrollView.bounds;
+//    [self.bigScroll addSubview:vc.view];
 }
 
 /** 正在滚动 */
@@ -259,12 +262,6 @@
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
-
-//-(void)rightClick
-//{
-//    [((MainController *)self.parentController) rightClick];
-//}
-
 
 #pragma mark 点击头像视图的事件
 -(void)headerTap

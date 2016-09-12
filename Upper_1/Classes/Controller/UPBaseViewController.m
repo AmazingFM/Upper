@@ -22,10 +22,22 @@ static int kMsgCount = 0;
 
 @implementation UPBaseViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-//    self.automaticallyAdjustsScrollViewInsets=YES;
+- (void)loadView
+{
+    [super loadView];
+    if ([[UIDevice currentDevice].systemVersion floatValue]>=7) {
+        self.edgesForExtendedLayout = UIRectEdgeAll;
+        self.extendedLayoutIncludesOpaqueBars = YES;
+        self.modalPresentationCapturesStatusBarAppearance = NO;
+        self.automaticallyAdjustsScrollViewInsets=NO;
+    }else {
+        self.wantsFullScreenLayout=YES;
+    }
+    
+    if([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]){
+        __weak typeof(self) weakSelf = self;
+        self.navigationController.interactivePopGestureRecognizer.delegate = weakSelf;
+    }
     
     UIImageView *backImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_cover_gaussian"]];
     backImg.userInteractionEnabled = NO;

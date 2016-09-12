@@ -27,6 +27,11 @@
 
 - (void)startRequest
 {
+    if (self.userData.ID==nil || self.userData.ID.length==0) {
+        [self.myRefreshView endRefreshing];
+        return;
+    }
+    
     [self checkNetStatus];
     
     NSDictionary *headParam = [UPDataManager shared].getHeadParams;

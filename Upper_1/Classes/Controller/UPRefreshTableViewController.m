@@ -13,26 +13,37 @@
 @interface UPRefreshTableViewController () <UITableViewDelegate, UITableViewDataSource>
 {
     BOOL isLoaded;
+    
+    UILabel *_tipsLabel;
 }
 @end
 
 @implementation UPRefreshTableViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)loadView
+{
+    [super loadView];
     // Do any additional setup after loading the view.
     self.navigationController.navigationBarHidden = YES;
     self.lastPage = NO;
     isLoaded = NO;
     
-    _mainTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight-64) style:UITableViewStylePlain];
+    _tipsLabel  = [[UILabel alloc] initWithFrame:CGRectZero];
+    _tipsLabel.backgroundColor = [UIColor whiteColor];
+    _tipsLabel.font = kUPThemeBigFont;
+    _tipsLabel.textColor = [UIColor blackColor];
+    _tipsLabel.text = @"没有活动";
+    _tipsLabel.hidden = YES;
+    [self.view addSubview:_tipsLabel];
+    
+    _mainTable = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     _mainTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     _mainTable.delegate = self;
     _mainTable.dataSource = self;
     _mainTable.backgroundColor = [UIColor clearColor];
     _mainTable.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
     _mainTable.footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
-
+    
     [self.view addSubview:_mainTable];
 }
 
@@ -42,6 +53,12 @@
     if (!isLoaded) {
         [self refresh];
     }
+}
+
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    _mainTable.frame = self.view.bounds;
 }
 
 - (void)refresh
