@@ -13,7 +13,6 @@
 #import "Info.h"
 #import "UPBaseViewController.h"
 
-@class UpActivitiesController;
 @class UpRegisterController;
 @class LaunchActivityController;
 @class PersonalCenterController;
@@ -36,14 +35,12 @@
 {
     UpMyActivityViewController *myActController;
     UpExpertController *expertController;
-    UpActivitiesController *activityController;
     UpSettingController *settingController;
     UpRegisterController *registerController;
     LaunchActivityController *launchActController;
     NewLaunchActivityController *newLaunchActController;
     PersonalCenterController *personalCenterController;
     EnrollPeopleController *enrollController;
-    UpActDetailController *actDetailController;
     GetPasswordController *getPasswordController;
     UpperController *upperController;
     UPQRViewController *qrController;

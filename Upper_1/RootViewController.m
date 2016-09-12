@@ -142,7 +142,7 @@
     if (self) {
         _mainViewController = [[MainController alloc] init];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:_mainViewController];
-        
+        nav.interactivePopGestureRecognizer.enabled = NO;
         /************ 控件外观设置 **************/
         
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];

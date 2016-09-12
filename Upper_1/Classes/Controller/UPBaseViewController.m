@@ -57,6 +57,16 @@ static int kMsgCount = 0;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
+//- (void)viewDidAppear:(BOOL)animated
+//{
+//    [super viewDidAppear:animated];
+//    
+//    // 禁用 iOS7 返回手势
+//    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+//        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+//    }
+//}
+
 - (void)addBadgeValue:(NSNotification *)notification
 {
     NSArray *msgArr = notification.object;

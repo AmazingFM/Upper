@@ -170,7 +170,6 @@
 		EC3C18101CECB16D00223D6B /* SexSelectController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16D31CECB16D00223D6B /* SexSelectController.m */; };
 		EC3C18111CECB16D00223D6B /* QRCodeController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16D51CECB16D00223D6B /* QRCodeController.m */; };
 		EC3C18121CECB16D00223D6B /* UpActDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16D71CECB16D00223D6B /* UpActDetailController.m */; };
-		EC3C18131CECB16D00223D6B /* UpActivitiesController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16D91CECB16D00223D6B /* UpActivitiesController.m */; };
 		EC3C18141CECB16D00223D6B /* UpExpertController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16DB1CECB16D00223D6B /* UpExpertController.m */; };
 		EC3C18151CECB16D00223D6B /* UPGuideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16DD1CECB16D00223D6B /* UPGuideViewController.m */; };
 		EC3C18161CECB16D00223D6B /* UpLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16DF1CECB16D00223D6B /* UpLoginController.m */; };
@@ -540,8 +539,6 @@
 		EC3C16D51CECB16D00223D6B /* QRCodeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeController.m; sourceTree = "<group>"; };
 		EC3C16D61CECB16D00223D6B /* UpActDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpActDetailController.h; sourceTree = "<group>"; };
 		EC3C16D71CECB16D00223D6B /* UpActDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpActDetailController.m; sourceTree = "<group>"; };
-		EC3C16D81CECB16D00223D6B /* UpActivitiesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpActivitiesController.h; sourceTree = "<group>"; };
-		EC3C16D91CECB16D00223D6B /* UpActivitiesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpActivitiesController.m; sourceTree = "<group>"; };
 		EC3C16DA1CECB16D00223D6B /* UpExpertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpExpertController.h; sourceTree = "<group>"; };
 		EC3C16DB1CECB16D00223D6B /* UpExpertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpExpertController.m; sourceTree = "<group>"; };
 		EC3C16DC1CECB16D00223D6B /* UPGuideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPGuideViewController.h; sourceTree = "<group>"; };
@@ -1190,8 +1187,6 @@
 				EC3C16C61CECB16D00223D6B /* LaunchActivityController.h */,
 				EC3C16D61CECB16D00223D6B /* UpActDetailController.h */,
 				EC3C16D71CECB16D00223D6B /* UpActDetailController.m */,
-				EC3C16D81CECB16D00223D6B /* UpActivitiesController.h */,
-				EC3C16D91CECB16D00223D6B /* UpActivitiesController.m */,
 				EC3C16DA1CECB16D00223D6B /* UpExpertController.h */,
 				EC3C16DB1CECB16D00223D6B /* UpExpertController.m */,
 				EC3C16DC1CECB16D00223D6B /* UPGuideViewController.h */,
@@ -1588,7 +1583,6 @@
 				EC3C18121CECB16D00223D6B /* UpActDetailController.m in Sources */,
 				2CDAD6521D0EEC4000C260F4 /* MJRefreshBackGifFooter.m in Sources */,
 				2CDAD66A1D0EEC4000C260F4 /* SDRefreshHeaderView.m in Sources */,
-				EC3C18131CECB16D00223D6B /* UpActivitiesController.m in Sources */,
 				2CDAD6471D0EEC4000C260F4 /* NSObject+MJKeyValue.m in Sources */,
 				2CDAD4FB1D0ED8A900C260F4 /* ChatModel.m in Sources */,
 				2CDAD6511D0EEC4000C260F4 /* MJRefreshAutoStateFooter.m in Sources */,

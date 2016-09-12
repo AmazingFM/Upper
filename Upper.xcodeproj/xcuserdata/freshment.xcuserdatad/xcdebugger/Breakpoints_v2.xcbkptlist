@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Upper_1/Classes/Controller/UpActDetailController.m"
-            timestampString = "492179815.343765"
+            timestampString = "495384630.213482"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "428"
-            endingLineNumber = "428"
+            startingLineNumber = "423"
+            endingLineNumber = "423"
             landmarkName = "-joinActivity"
             landmarkType = "5">
          </BreakpointContent>
@@ -170,11 +170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Upper_1/Classes/Controller/UpActDetailController.m"
-            timestampString = "492179815.343765"
+            timestampString = "495384630.213482"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "468"
-            endingLineNumber = "468"
+            startingLineNumber = "463"
+            endingLineNumber = "463"
             landmarkName = "-alertView:clickedButtonAtIndex:"
             landmarkType = "5">
          </BreakpointContent>
@@ -234,7 +234,7 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/QRCodeController.m"
-                  timestampString = "495382249.09956"
+                  timestampString = "495386119.743977"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "368"
@@ -249,7 +249,7 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/QRCodeController.m"
-                  timestampString = "495382249.099714"
+                  timestampString = "495386119.744206"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "368"
@@ -264,7 +264,7 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/QRCodeController.m"
-                  timestampString = "495382249.099835"
+                  timestampString = "495386119.744383"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "368"
@@ -279,7 +279,7 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/QRCodeController.m"
-                  timestampString = "495382249.099959"
+                  timestampString = "495386119.744536"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "368"
@@ -294,7 +294,7 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/QRCodeController.m"
-                  timestampString = "495382249.100122"
+                  timestampString = "495386119.744676"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "368"
@@ -599,7 +599,7 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/UPCommentController.m"
-                  timestampString = "495382249.114076"
+                  timestampString = "495386119.758596"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "194"
@@ -614,7 +614,7 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/freshment/Documents/GitRepo/Upper/Upper_1/Classes/Controller/UPCommentController.m"
-                  timestampString = "495382249.114244"
+                  timestampString = "495386119.758757"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "194"
@@ -622,6 +622,22 @@
                   offsetFromSymbolStart = "12">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Upper_1/Classes/Controller/UpActivitiesController.m"
+            timestampString = "495385490.982078"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "336"
+            endingLineNumber = "336"
+            landmarkName = "@interface UpActivitiesController()"
+            landmarkType = "2">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

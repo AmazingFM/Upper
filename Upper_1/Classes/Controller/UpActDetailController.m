@@ -62,6 +62,7 @@
     self.title = @"活动详情";
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"default_cover_gaussian"]];
 
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
 //    UILabel *tipsLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, FirstLabelHeight, ScreenWidth-LeftRightPadding*2, 17)];
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,FirstLabelHeight,ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
@@ -84,8 +85,6 @@
     
     //:@"策划人" ,@"活动时间", @"活动地点", @"人数上限", @"活动类型", @"报名状态",
     _cellIdArr = @[@"image", @"actTitle", @"actDesc", @"cellID", @"cellID", @"cellID", @"cellID", @"cellID", @"cellID", @"submit"];
-    
-
     
 //    CGFloat btnHeight =30;
 //    UIButton *reviewBtn = [[UIButton alloc] initWithFrame:CGRectMake(0,FirstLabelHeight, 50, btnHeight)];

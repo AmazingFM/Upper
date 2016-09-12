@@ -36,83 +36,18 @@
 
 #define kActivityPageSize 20
 
-#define kActivityAssitantTag 100
-
 @interface UpActivitiesController () <XWTopMenuDelegate, UITableViewDelegate, UITableViewDataSource,UPItemButtonDelegate>
 {
-    MJRefreshComponent *myRefreshView;
-    int pageNum;
-    BOOL lastPage;
-    NoticeBoard *noticeBoard;
-    
-    BOOL isLoaded;
-}
-
-@property (nonatomic, retain) XWTopMenu *topMenu;
-@property (nonatomic, retain) UITableView *mainTable;
-@property (nonatomic, retain) NSMutableArray<UPActivityCellItem *> *actArray;
-
-//@property (nonatomic, retain) NSMutableArray *listArray;
-
-- (void)leftClick;
-- (void)makeAction:(id)sender;
-- (void)handleTap:(UITapGestureRecognizer *)sender;
 @end
 
 @implementation UpActivitiesController
 
-- (void)loadView
-{
-    [super loadView];
-    [super viewDidLoad];
-    
-    UIButton *titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [titleButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    titleButton.tag = kActivityAssitantTag;
-    [titleButton setTitle:@"活动助手" forState:UIControlStateNormal];
-    self.navigationItem.titleView = titleButton;
-    
-    isLoaded = NO;
-    lastPage = NO;
-    
-    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
-    
-    noticeBoard = [[NoticeBoard alloc] initWithFrame:CGRectMake(LeftRightPadding,44, ScreenWidth-LeftRightPadding*2, 17)];
-    [noticeBoard setNoticeMessage:@[@"Yeoman Zhang发起了一个活动",@"总冠军狂喜之夜",@"帅哥、美女high翻天"]];
-    [self.view addSubview:noticeBoard];
-    
-    [self addSelectMenu];
-    
-    [self.view addSubview:self.mainTable];
-    [self.view addSubview:self.topMenu];
-}
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [noticeBoard startAnimate];
-    
-    if (![UPDataManager shared].isLogin) {
-        //        [self showLogin];
-    } else {
-        if (!isLoaded) {
-            [_mainTable.header beginRefreshing];
-            isLoaded = YES;
-        }
-    }
-
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [noticeBoard stopAnimate];
-}
 
 - (UITableView *)mainTable
 {
     if (!_mainTable) {
-        CGRect bounds = CGRectMake(0, _topMenu.origin.y+_topMenu.height, ScreenWidth, ScreenHeight-_topMenu.origin.y-_topMenu.height);
+        CGRect bounds = CGRectMake(0, _topMenu.origin.y+_topMenu.height, ScreenWidth, ScreenHeight-_topMenu.origin.y-_topMenu.height-kUPMainStatusBarHeight);
         _mainTable = [[UITableView alloc] initWithFrame:bounds style:UITableViewStylePlain];
         _mainTable.separatorColor = [UIColor grayColor];
         _mainTable.delegate = self;
@@ -366,15 +301,5 @@
 {
     [((MainController *)self.parentController).parentController leftClick];
 }
-
-- (void)onButtonClick:(UIButton *)sender
-{
-    if (sender.tag == kActivityAssitantTag) {
-        UPActivityAssistantController *assistantController = [[UPActivityAssistantController alloc] init];
-        assistantController.title = @"活动助手";
-        [self.navigationController pushViewController:assistantController animated:YES];
-    }
-}
-
 
 @end
