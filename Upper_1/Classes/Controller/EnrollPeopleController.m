@@ -173,6 +173,8 @@ static int const kPadding = 5;
             if (totalCount>0) {
                 NSString *userList = resp_data[@"user_list"];
                 
+                [self.userArr removeAllObjects];
+                
                 if ([userList isKindOfClass:[NSArray class]]) {
                     for (NSDictionary *userDict in (NSArray *)userList) {
                         UserData *user = [[UserData alloc] init];

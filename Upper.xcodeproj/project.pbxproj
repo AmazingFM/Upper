@@ -145,6 +145,7 @@
 		2CDAD6C51D0EF42000C260F4 /* UIProgressView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CDAD6A31D0EF42000C260F4 /* UIProgressView+AFNetworking.m */; };
 		2CDAD6C61D0EF42000C260F4 /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CDAD6A51D0EF42000C260F4 /* UIRefreshControl+AFNetworking.m */; };
 		2CDAD6C71D0EF42000C260F4 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CDAD6A71D0EF42000C260F4 /* UIWebView+AFNetworking.m */; };
+		3A00689C1D864CDE00BC08CD /* UPHerParticipatedActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A00689B1D864CDE00BC08CD /* UPHerParticipatedActivityController.m */; };
 		3A08464F1D619D6800170C64 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A08464E1D619D6800170C64 /* libsqlite3.0.tbd */; };
 		3A2939901D2F798B005CB3F3 /* UPCommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A29398F1D2F798B005CB3F3 /* UPCommentController.m */; };
 		3A2939931D2F80F6005CB3F3 /* UPTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2939921D2F80F6005CB3F3 /* UPTextView.m */; };
@@ -163,7 +164,7 @@
 		EC3C180A1CECB16D00223D6B /* GetPasswordController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16C51CECB16D00223D6B /* GetPasswordController.m */; };
 		EC3C180B1CECB16D00223D6B /* LaunchActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16C71CECB16D00223D6B /* LaunchActivityController.m */; };
 		EC3C180C1CECB16D00223D6B /* MainController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16CA1CECB16D00223D6B /* MainController.m */; };
-		EC3C180D1CECB16D00223D6B /* FriendsController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16CD1CECB16D00223D6B /* FriendsController.m */; };
+		EC3C180D1CECB16D00223D6B /* UPHerLaunchedActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16CD1CECB16D00223D6B /* UPHerLaunchedActivityController.m */; };
 		EC3C180E1CECB16D00223D6B /* PersonalCenterController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16CF1CECB16D00223D6B /* PersonalCenterController.m */; };
 		EC3C180F1CECB16D00223D6B /* PersonInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16D11CECB16D00223D6B /* PersonInfoController.m */; };
 		EC3C18101CECB16D00223D6B /* SexSelectController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16D31CECB16D00223D6B /* SexSelectController.m */; };
@@ -489,6 +490,8 @@
 		2CDAD6A51D0EF42000C260F4 /* UIRefreshControl+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIRefreshControl+AFNetworking.m"; sourceTree = "<group>"; };
 		2CDAD6A61D0EF42000C260F4 /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		2CDAD6A71D0EF42000C260F4 /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
+		3A00689A1D864CDE00BC08CD /* UPHerParticipatedActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPHerParticipatedActivityController.h; sourceTree = "<group>"; };
+		3A00689B1D864CDE00BC08CD /* UPHerParticipatedActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPHerParticipatedActivityController.m; sourceTree = "<group>"; };
 		3A08464E1D619D6800170C64 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		3A29398E1D2F798B005CB3F3 /* UPCommentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCommentController.h; sourceTree = "<group>"; };
 		3A29398F1D2F798B005CB3F3 /* UPCommentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPCommentController.m; sourceTree = "<group>"; };
@@ -525,8 +528,8 @@
 		EC3C16C71CECB16D00223D6B /* LaunchActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchActivityController.m; sourceTree = "<group>"; };
 		EC3C16C91CECB16D00223D6B /* MainController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainController.h; sourceTree = "<group>"; };
 		EC3C16CA1CECB16D00223D6B /* MainController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainController.m; sourceTree = "<group>"; };
-		EC3C16CC1CECB16D00223D6B /* FriendsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsController.h; sourceTree = "<group>"; };
-		EC3C16CD1CECB16D00223D6B /* FriendsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendsController.m; sourceTree = "<group>"; };
+		EC3C16CC1CECB16D00223D6B /* UPHerLaunchedActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPHerLaunchedActivityController.h; sourceTree = "<group>"; };
+		EC3C16CD1CECB16D00223D6B /* UPHerLaunchedActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPHerLaunchedActivityController.m; sourceTree = "<group>"; };
 		EC3C16CE1CECB16D00223D6B /* PersonalCenterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalCenterController.h; sourceTree = "<group>"; };
 		EC3C16CF1CECB16D00223D6B /* PersonalCenterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalCenterController.m; sourceTree = "<group>"; };
 		EC3C16D01CECB16D00223D6B /* PersonInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonInfoController.h; sourceTree = "<group>"; };
@@ -1232,14 +1235,16 @@
 		EC3C16CB1CECB16D00223D6B /* PersonInfoController */ = {
 			isa = PBXGroup;
 			children = (
-				EC3C16CC1CECB16D00223D6B /* FriendsController.h */,
-				EC3C16CD1CECB16D00223D6B /* FriendsController.m */,
+				EC3C16CC1CECB16D00223D6B /* UPHerLaunchedActivityController.h */,
+				EC3C16CD1CECB16D00223D6B /* UPHerLaunchedActivityController.m */,
 				EC3C16CE1CECB16D00223D6B /* PersonalCenterController.h */,
 				EC3C16CF1CECB16D00223D6B /* PersonalCenterController.m */,
 				EC3C16D01CECB16D00223D6B /* PersonInfoController.h */,
 				EC3C16D11CECB16D00223D6B /* PersonInfoController.m */,
 				EC3C16D21CECB16D00223D6B /* SexSelectController.h */,
 				EC3C16D31CECB16D00223D6B /* SexSelectController.m */,
+				3A00689A1D864CDE00BC08CD /* UPHerParticipatedActivityController.h */,
+				3A00689B1D864CDE00BC08CD /* UPHerParticipatedActivityController.m */,
 			);
 			path = PersonInfoController;
 			sourceTree = "<group>";
@@ -1614,6 +1619,7 @@
 				EC3C181F1CECB16D00223D6B /* CityItem.m in Sources */,
 				2CDAD62E1D0EEC4000C260F4 /* AFHTTPRequestOperationManager.m in Sources */,
 				3A2939931D2F80F6005CB3F3 /* UPTextView.m in Sources */,
+				3A00689C1D864CDE00BC08CD /* UPHerParticipatedActivityController.m in Sources */,
 				EC3C18831CECB16D00223D6B /* UPExpertCell.m in Sources */,
 				2CDAD6361D0EEC4000C260F4 /* ASPopUpView.m in Sources */,
 				2CDAD6341D0EEC4000C260F4 /* AFURLResponseSerialization.m in Sources */,
@@ -1682,7 +1688,7 @@
 				2CDAD66C1D0EEC4000C260F4 /* UIView+SDExtension.m in Sources */,
 				2C1072861CFC97A700D74AE1 /* UPBaseModel.m in Sources */,
 				EC3C188D1CECB16D00223D6B /* UPDatePickView.m in Sources */,
-				EC3C180D1CECB16D00223D6B /* FriendsController.m in Sources */,
+				EC3C180D1CECB16D00223D6B /* UPHerLaunchedActivityController.m in Sources */,
 				2CDAD65F1D0EEC4000C260F4 /* TAAnimatedDotView.m in Sources */,
 				EC3C188A1CECB16D00223D6B /* MyActCell.m in Sources */,
 				2CDAD6751D0EEC4000C260F4 /* SDWebImagePrefetcher.m in Sources */,

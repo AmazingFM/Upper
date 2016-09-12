@@ -8,8 +8,8 @@
 
 #import "PersonalCenterController.h"
 #import "PersonInfoController.h"
-#import "FriendsController.h"
-//#import "MainController.h"
+#import "UPHerLaunchedActivityController.h"
+#import "UPHerParticipatedActivityController.h"
 #import "ZKSegment.h"
 #import "Info.h"
 #import "ChatController.h"
@@ -93,9 +93,11 @@
             OtherUserData *user = [self.user initWithDict:dict[@"resp_data"]];
             
             PersonInfoController *personController = self.childViewControllers[0];
-            FriendsController *friendsController = self.childViewControllers[1];
+            UPHerLaunchedActivityController *herLaunchController = self.childViewControllers[1];
+            UPHerParticipatedActivityController *herPaticipateController = self.childViewControllers[2];
             [personController setUserData:user];
-            [friendsController setUserData:user];
+            [herLaunchController setUserData:user];
+            [herPaticipateController setUserData:user];
         }
         
     }failture:^(id error) {
@@ -193,10 +195,13 @@
     PersonInfoController *vc1 = [[PersonInfoController alloc]init];
     
     //2
-    FriendsController *vc2 = [[FriendsController alloc]init];
+    UPHerLaunchedActivityController *vc2 = [[UPHerLaunchedActivityController alloc]init];
+    
+    UPHerParticipatedActivityController *vc3 = [[UPHerParticipatedActivityController alloc]init];
     
     [self addChildViewController:vc1];
     [self addChildViewController:vc2];
+    [self addChildViewController:vc3];
 }
 
 - (void)resetSegment
@@ -216,7 +221,7 @@
         [strongSelf.bigScroll setContentOffset:offset animated:YES];
     };
 
-   [self.zkSegment zk_setItems:@[ @"基本资料", @"用户活动" ]];
+   [self.zkSegment zk_setItems:@[ @"基本资料", @"发起的活动", @"参与的活动"]];
     [self.view addSubview:self.zkSegment];
 }
 #pragma mark - ******************** scrollView代理方法

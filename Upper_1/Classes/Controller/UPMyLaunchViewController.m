@@ -50,7 +50,7 @@
     NSDictionary *headParam = [UPDataManager shared].getHeadParams;
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
     [params setObject:@"ActivityList"forKey:@"a"];
-    [params setObject:[NSString stringWithFormat:@"%ld", self.pageNum] forKey:@"current_page"];
+    [params setObject:[NSString stringWithFormat:@"%d", self.pageNum] forKey:@"current_page"];
     [params setObject:[NSString stringWithFormat:@"%d", g_PageSize] forKey:@"page_size"];
     [params setObject:@"" forKey:@"activity_status"];
     [params setObject:@""forKey:@"activity_class"];

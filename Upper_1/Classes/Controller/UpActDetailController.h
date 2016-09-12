@@ -32,6 +32,8 @@ typedef NS_ENUM(NSInteger, SourceType) {
     SourceTypeDaTing,
     SourceTypeWoFaqi,
     SourceTypeWoCanyu,
+    SourceTypeTaFaqi,
+    SourceTypeTaCanyu
 };
 
 @interface UpActDetailController : UPBaseViewController

@@ -292,6 +292,7 @@
         _btnContainerView.size = CGSizeMake( width-offsetx, perHeight);
         _btnContainerView.center = CGPointMake((width+offsetx)/2, offsety+perHeight/2);
         _btnContainerView.backgroundColor = [UIColor clearColor];
+        _btnContainerView.hidden =NO;
         
         CGSize size = SizeWithFont(@"回顾", kUPThemeMinFont);
         size.width += 10;
@@ -353,7 +354,11 @@
                     break;
             }
 
+        } else if(_actCellItem.type==SourceTypeTaCanyu ||
+                  _actCellItem.type==SourceTypeTaFaqi) {
+            _btnContainerView.hidden =YES;
         } else {
+            _btnContainerView.hidden =YES;
             _reviewActBtn.frame = CGRectZero;
             _cancelActBtn.frame = CGRectZero;
             _changeActBtn.frame = CGRectZero;

@@ -32,3 +32,4 @@
 
 - (void)setActivityItems:(UPBaseCellItem *)item;
 @end
+

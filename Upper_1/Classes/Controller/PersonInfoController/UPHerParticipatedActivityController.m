@@ -1,37 +1,19 @@
 //
-//  UPMyAnticipateViewController.m
+//  UPHerParticipatedActivityController.m
 //  Upper
 //
-//  Created by freshment on 16/6/26.
+//  Created by 张永明 on 16/9/12.
 //  Copyright © 2016年 aries365.com. All rights reserved.
 //
 
-#import "UPMyAnticipateViewController.h"
-#import "UpActDetailController.h"
-#import "MJRefresh.h"
-#import "MJExtension.h"
-#import "MJRefreshComponent.h"
-#import "UPDataManager.h"
-#import "Info.h"
-#import "XWHttpTool.h"
+#import "UPHerParticipatedActivityController.h"
 #import "UPBaseItem.h"
-#import "ActivityData.h"
-#import "UPActivityCellItem.h"
 
-@interface UPMyAnticipateViewController ()
+@interface UPHerParticipatedActivityController ()
 
 @end
 
-@implementation UPMyAnticipateViewController
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startRequest) name:kNotifierActQuitRefresh object:nil];
-    }
-    return self;
-}
+@implementation UPHerParticipatedActivityController
 
 - (void)loadMoreData
 {
@@ -50,16 +32,16 @@
     NSDictionary *headParam = [UPDataManager shared].getHeadParams;
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
     [params setObject:@"ActivityList"forKey:@"a"];
-    [params setObject:[NSString stringWithFormat:@"%d",self.pageNum] forKey:@"current_page"];
+    [params setObject:[NSString stringWithFormat:@"%d", self.pageNum] forKey:@"current_page"];
     [params setObject:[NSString stringWithFormat:@"%d", g_PageSize] forKey:@"page_size"];
     [params setObject:@"" forKey:@"activity_status"];
     [params setObject:@""forKey:@"activity_class"];
-    [params setObject:@"-1" forKey:@"industry_id"];
+    [params setObject:@"4" forKey:@"industry_id"];
     [params setObject:@"" forKey:@"start_begin_time"];
     [params setObject:@"" forKey:@"province_code"];
     [params setObject:@"" forKey:@"city_code"];
     [params setObject:@""forKey:@"town_code"];
-    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"partner_id"];
+    [params setObject:self.userData.ID forKey:@"partner_id"];
     [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
     
@@ -68,6 +50,11 @@
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             NSDictionary *resp_data = dict[@"resp_data"];
+            if (resp_data==nil) {
+                self.mainTable.footer.hidden = YES;
+                [self.myRefreshView endRefreshing];
+                return;
+            }
             
             NSString *resp_desc = dict[@"resp_desc"];
             NSLog(@"%@", resp_desc);
@@ -98,13 +85,13 @@
                     UPActivityCellItem *actCellItem = [[UPActivityCellItem alloc] init];
                     actCellItem.cellWidth = ScreenWidth;
                     actCellItem.cellHeight = 100;
-                    actCellItem.type = SourceTypeWoCanyu;
+                    actCellItem.type = SourceTypeTaCanyu;
                     actCellItem.itemData = activityList[i];
                     int status = [actCellItem.itemData.activity_status intValue];
                     if (status!=0) {
-                        actCellItem.style = UPItemStyleActJoin;
+                        actCellItem.style = UPItemStyleActLaunch;
                     }
-
+                    
                     [arrayM addObject:actCellItem];
                 }
             }
@@ -137,24 +124,6 @@
         [self.myRefreshView endRefreshing];
         
     }];
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UPActivityCellItem *actCellItem = (UPActivityCellItem *)self.itemArray[indexPath.row];
-    //跳转到详情页面
-    UpActDetailController *actDetailController = [[UpActDetailController alloc] init];
-    actDetailController.actData = actCellItem.itemData;
-    actDetailController.style = actCellItem.style;
-    actDetailController.sourceType = SourceTypeWoCanyu;
-    actDetailController.navigationItem.backBarButtonItem.title = @"我的活动";
-    
-    [((UPBaseViewController *)self.parentController).navigationController pushViewController:actDetailController animated:YES];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

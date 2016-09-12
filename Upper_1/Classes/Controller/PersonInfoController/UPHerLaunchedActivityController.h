@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "PersonalCenterController.h"
-@interface FriendsController : UITableViewController
+#import "UPRefreshTableViewController.h"
+
+@interface UPHerLaunchedActivityController : UPRefreshTableViewController
 
 @property (nonatomic, retain) OtherUserData *userData;
 
