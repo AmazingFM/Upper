@@ -14,21 +14,6 @@
 #import "Info.h"
 #import "UPTheme.h"
 
-@implementation UPUserDemoView
-
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        //
-    }
-    return self;
-}
-
-@end
-
-
-
 @interface UPCommentController () <UIGestureRecognizerDelegate,UITextViewDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
     UIScrollView *scrollView;
@@ -176,8 +161,8 @@ static const int textViewContentHeight = 150;
 
 -(void)radioButtonSelectedAtIndex:(NSUInteger)index inGroup:(NSString*)groupId
 {
-    NSLog(@"%lu, %@", (unsigned long)index, groupId);
     commentLevel = [NSString stringWithFormat:@"%lu",(unsigned long)index+1];
+    NSLog(@"%@, %@", commentLevel, groupId);
 }
 
 - (void)submit {
@@ -197,9 +182,9 @@ static const int textViewContentHeight = 150;
         [params setObject:@"ActivityModify"forKey:@"a"];
         [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
         [params setObject:self.actID  forKey:@"activity_id"];
-//        [params setObject:@"" forKey:@"activity_id"];
-        NSString *likeStr = [self.likes componentsJoinedByString:@","];
-        NSString *dislikeStr = [self.disLikes componentsJoinedByString:@","];
+        [params setObject:@"4" forKey:@"activity_status"];
+        NSString *likeStr = [self.likes componentsJoinedByString:@","]?:@"";
+        NSString *dislikeStr = [self.disLikes componentsJoinedByString:@","]?:@"";
         NSString *commentStr = [UPTools encodeToPercentEscapeString:commentTextView.text];
         NSString *evaluateStr = [NSString stringWithFormat:@"%@^%@^%@", commentStr, likeStr, dislikeStr];
         
@@ -245,6 +230,7 @@ static const int textViewContentHeight = 150;
         [params setObject:commentTextView.text forKey:@"evaluate_text"];
         NSString *userStatus = @"5";
         [params setObject:userStatus forKey:@"user_status"];
+        [params setObject:commentLevel forKey:@"evaluate_level_1"];
         [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
         
         [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
@@ -350,8 +336,6 @@ static const int textViewContentHeight = 150;
                             [self.userArr addObject:user];
                         }
                     }
-                    
-                    
                 });
             } else{
                 //目前黑没有参与者

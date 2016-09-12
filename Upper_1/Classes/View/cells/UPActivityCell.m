@@ -298,7 +298,7 @@
         size.width += 10;
         if (_actCellItem.type==SourceTypeWoFaqi) {
             switch (selectIndex) {
-                case 4:
+                case 3: //针对 活动发生 回顾
                     _reviewActBtn.frame = CGRectMake(0,0,size.width,perHeight);
                     _cancelActBtn.frame = CGRectZero;
                     _changeActBtn.frame = CGRectZero;
@@ -309,7 +309,7 @@
                 case 1:
                 case 2:
                     _cancelActBtn.frame = CGRectMake(0,0,size.width,perHeight);
-                    _changeActBtn.frame = CGRectMake(0,0,size.width,perHeight);
+                    _changeActBtn.frame = CGRectMake(10+size.width,0,size.width,perHeight);
                     _reviewActBtn.frame = CGRectZero;
                     
                     _commentActBtn.frame = CGRectZero;
@@ -317,7 +317,8 @@
 
                     break;
                 default:
-                    _reviewActBtn.frame = CGRectMake(0,0,size.width,perHeight);
+//                    _reviewActBtn.frame = CGRectMake(0,0,size.width,perHeight);
+                    _reviewActBtn.frame = CGRectZero;
                     _cancelActBtn.frame = CGRectZero;
                     _changeActBtn.frame = CGRectZero;
                     _commentActBtn.frame = CGRectZero;
@@ -326,7 +327,7 @@
             }
         } else if(_actCellItem.type==SourceTypeWoCanyu) {
             switch (selectIndex) {
-                case 4:
+                case 3:
                     _commentActBtn.frame = CGRectMake(0,0,size.width,perHeight);
                     _quitActBtn.frame = CGRectZero;
 
@@ -338,14 +339,14 @@
                 case 1:
                 case 2:
                     _quitActBtn.frame = CGRectMake(0,0,size.width,perHeight);
-                    _commentActBtn.frame = CGRectZero;
+                    _commentActBtn.frame = CGRectMake(10+size.width,0,size.width,perHeight);
                     
                     _reviewActBtn.frame = CGRectZero;
                     _cancelActBtn.frame = CGRectZero;
                     _changeActBtn.frame = CGRectZero;
                     break;
                 default:
-                    _commentActBtn.frame = CGRectMake(0,0,size.width,perHeight);
+                    _commentActBtn.frame = CGRectZero;
                     _quitActBtn.frame = CGRectZero;
 
                     _cancelActBtn.frame = CGRectZero;
