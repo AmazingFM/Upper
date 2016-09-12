@@ -27,7 +27,7 @@ static int kMsgCount = 0;
     [super loadView];
     if ([[UIDevice currentDevice].systemVersion floatValue]>=7) {
         self.edgesForExtendedLayout = UIRectEdgeAll;
-        self.extendedLayoutIncludesOpaqueBars = YES;
+        self.extendedLayoutIncludesOpaqueBars = NO;
         self.modalPresentationCapturesStatusBarAppearance = NO;
         self.automaticallyAdjustsScrollViewInsets=NO;
     }else {

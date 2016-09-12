@@ -62,9 +62,6 @@
     self.title = @"活动详情";
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"default_cover_gaussian"]];
 
-    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
-//    UILabel *tipsLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, FirstLabelHeight, ScreenWidth-LeftRightPadding*2, 17)];
-    
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,FirstLabelHeight,ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     _tableView.delegate = self;
