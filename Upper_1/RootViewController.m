@@ -34,6 +34,9 @@
 @property (nonatomic, retain) UpLoginController *loginController;
 @property (nonatomic, retain) YMRootViewController *mainSideController;
 @property (nonatomic, retain) UIViewController *currentVC;
+
+//
+
 @end
 
 @implementation UPRootViewController
@@ -56,6 +59,7 @@
     [self addChildViewController:self.loginController];
     
     self.mainSideController = [[YMRootViewController alloc] init];
+    
     [self addChildViewController:self.mainSideController];
     g_sideController = self.mainSideController;
     
@@ -142,19 +146,16 @@
     if (self) {
         _mainViewController = [[MainController alloc] init];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:_mainViewController];
-        nav.interactivePopGestureRecognizer.enabled = NO;
-        /************ 控件外观设置 **************/
         
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+        if ([[UIDevice currentDevice].systemVersion floatValue]>=7) {
+            self.edgesForExtendedLayout = UIRectEdgeNone;
+            self.extendedLayoutIncludesOpaqueBars = NO;
+            self.modalPresentationCapturesStatusBarAppearance = NO;
+            self.automaticallyAdjustsScrollViewInsets=YES;
+        }else {
+            self.wantsFullScreenLayout=YES;
+        }
         
-        NSDictionary *navbarTitleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
-        [[UINavigationBar appearance] setTitleTextAttributes:navbarTitleTextAttributes];
-        [[UINavigationBar appearance] setBarTintColor:[UIColor clearColor]];
-//        [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-        [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"back_shadow"] forBarMetrics:UIBarMetricsDefault];
-        [[UINavigationBar appearance] setTranslucent:YES];
-        nav.navigationBar.shadowImage=[[UIImage alloc]init];  //隐藏掉导航栏底部的那条线
-
         self.rootViewController = nav;
         self.leftViewController = [[YMSlideViewController alloc] init];
         self.leftViewShowWidth = kYMSlideControllerWidth;
@@ -165,11 +166,6 @@
         _mainViewController.parentController = self;
     }
     return self;
-}
-
-- (void)loadView
-{
-    [super loadView];
 }
 
 - (void)leftClick

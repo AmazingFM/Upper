@@ -174,7 +174,6 @@
 		EC3C18151CECB16D00223D6B /* UPGuideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16DD1CECB16D00223D6B /* UPGuideViewController.m */; };
 		EC3C18161CECB16D00223D6B /* UpLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16DF1CECB16D00223D6B /* UpLoginController.m */; };
 		EC3C18171CECB16D00223D6B /* UpMyActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16E11CECB16D00223D6B /* UpMyActivityController.m */; };
-		EC3C18181CECB16D00223D6B /* UpNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16E31CECB16D00223D6B /* UpNavController.m */; };
 		EC3C18191CECB16D00223D6B /* UpperController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16E51CECB16D00223D6B /* UpperController.m */; };
 		EC3C181A1CECB16D00223D6B /* UPQRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16E71CECB16D00223D6B /* UPQRViewController.m */; };
 		EC3C181B1CECB16D00223D6B /* UpRegisterController.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16E91CECB16D00223D6B /* UpRegisterController.m */; };
@@ -547,8 +546,6 @@
 		EC3C16DF1CECB16D00223D6B /* UpLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpLoginController.m; sourceTree = "<group>"; };
 		EC3C16E01CECB16D00223D6B /* UpMyActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpMyActivityController.h; sourceTree = "<group>"; };
 		EC3C16E11CECB16D00223D6B /* UpMyActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpMyActivityController.m; sourceTree = "<group>"; };
-		EC3C16E21CECB16D00223D6B /* UpNavController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpNavController.h; sourceTree = "<group>"; };
-		EC3C16E31CECB16D00223D6B /* UpNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpNavController.m; sourceTree = "<group>"; };
 		EC3C16E41CECB16D00223D6B /* UpperController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpperController.h; sourceTree = "<group>"; };
 		EC3C16E51CECB16D00223D6B /* UpperController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpperController.m; sourceTree = "<group>"; };
 		EC3C16E61CECB16D00223D6B /* UPQRViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPQRViewController.h; sourceTree = "<group>"; };
@@ -1195,8 +1192,6 @@
 				EC3C16DF1CECB16D00223D6B /* UpLoginController.m */,
 				EC3C16E01CECB16D00223D6B /* UpMyActivityController.h */,
 				EC3C16E11CECB16D00223D6B /* UpMyActivityController.m */,
-				EC3C16E21CECB16D00223D6B /* UpNavController.h */,
-				EC3C16E31CECB16D00223D6B /* UpNavController.m */,
 				EC3C16E41CECB16D00223D6B /* UpperController.h */,
 				EC3C16E51CECB16D00223D6B /* UpperController.m */,
 				EC3C16E61CECB16D00223D6B /* UPQRViewController.h */,
@@ -1609,7 +1604,6 @@
 				2CDAD6421D0EEC4000C260F4 /* MJConst.m in Sources */,
 				EC3C181B1CECB16D00223D6B /* UpRegisterController.m in Sources */,
 				2CDAD6631D0EEC4000C260F4 /* SDCycleScrollView.m in Sources */,
-				EC3C18181CECB16D00223D6B /* UpNavController.m in Sources */,
 				EC3C181F1CECB16D00223D6B /* CityItem.m in Sources */,
 				2CDAD62E1D0EEC4000C260F4 /* AFHTTPRequestOperationManager.m in Sources */,
 				3A2939931D2F80F6005CB3F3 /* UPTextView.m in Sources */,

@@ -26,23 +26,15 @@ static int kMsgCount = 0;
 {
     [super loadView];
     if ([[UIDevice currentDevice].systemVersion floatValue]>=7) {
-        self.edgesForExtendedLayout = UIRectEdgeAll;
+        self.edgesForExtendedLayout = UIRectEdgeNone;
         self.extendedLayoutIncludesOpaqueBars = NO;
         self.modalPresentationCapturesStatusBarAppearance = NO;
-        self.automaticallyAdjustsScrollViewInsets=NO;
+        self.automaticallyAdjustsScrollViewInsets=YES;
     }else {
         self.wantsFullScreenLayout=YES;
     }
     
-    if([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]){
-        __weak typeof(self) weakSelf = self;
-        self.navigationController.interactivePopGestureRecognizer.delegate = weakSelf;
-    }
-    
-    UIImageView *backImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_cover_gaussian"]];
-    backImg.userInteractionEnabled = NO;
-    backImg.frame = self.view.bounds;
-    [self.view addSubview:backImg];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"default_cover_gaussian"]];
     
     messageItem = [self barBtnWithIcon:@"message"];
     messageItem.badgeValue = kMsgCount==0?@"":[NSString stringWithFormat:@"%d", kMsgCount];
@@ -57,15 +49,15 @@ static int kMsgCount = 0;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
-//- (void)viewDidAppear:(BOOL)animated
-//{
-//    [super viewDidAppear:animated];
-//    
-//    // 禁用 iOS7 返回手势
-//    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
-//        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-//    }
-//}
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    // 禁用 iOS7 返回手势
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
+}
 
 - (void)addBadgeValue:(NSNotification *)notification
 {
@@ -121,20 +113,9 @@ static int kMsgCount = 0;
     [self.navigationController pushViewController:msgCenterController animated:YES];
 }
 
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

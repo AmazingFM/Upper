@@ -10,6 +10,8 @@
 #import "RootViewController.h"
 #import "UPGuideViewController.h"
 #import "UPGlobals.h"
+#import "UPTools.h"
+
 #import "MessageManager.h"
 
 @interface AppDelegate ()
@@ -20,8 +22,16 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    UIApplication *app = [UIApplication sharedApplication];
-    app.statusBarStyle = UIStatusBarStyleLightContent;
+    /************ 控件外观设置 **************/
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"back_shadow"] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setTranslucent:YES];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    NSDictionary *navbarTitleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
+    [[UINavigationBar appearance] setTitleTextAttributes:navbarTitleTextAttributes];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
     
     self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
