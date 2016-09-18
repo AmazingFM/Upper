@@ -10,6 +10,8 @@
 #import "RootViewController.h"
 #import "UPGuideViewController.h"
 #import "UPGlobals.h"
+#import "UPTools.h"
+
 #import "MessageManager.h"
 
 @interface AppDelegate ()
@@ -21,13 +23,12 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     /************ 控件外观设置 **************/
-    
     NSDictionary *navbarTitleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
     [[UINavigationBar appearance] setTitleTextAttributes:navbarTitleTextAttributes];
     [[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
             [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"back_shadow"] forBarMetrics:UIBarMetricsDefault];
             [[UINavigationBar appearance] setTranslucent:YES];
-    
+
     self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
     initialize();

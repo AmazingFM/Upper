@@ -26,10 +26,10 @@ static int kMsgCount = 0;
 {
     [super viewDidLoad];
     if ([[UIDevice currentDevice].systemVersion floatValue]>=7) {
-        self.edgesForExtendedLayout = UIRectEdgeAll;
+        self.edgesForExtendedLayout = UIRectEdgeNone;
         self.extendedLayoutIncludesOpaqueBars = NO;
-        //        self.modalPresentationCapturesStatusBarAppearance = NO;
-        self.automaticallyAdjustsScrollViewInsets=NO;
+        self.modalPresentationCapturesStatusBarAppearance = NO;
+        self.automaticallyAdjustsScrollViewInsets=YES;
     }else {
         self.wantsFullScreenLayout=YES;
     }
@@ -112,10 +112,5 @@ static int kMsgCount = 0;
 {
     MessageCenterController *msgCenterController = [[MessageCenterController alloc] init];
     [self.navigationController pushViewController:msgCenterController animated:YES];
-}
-
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleLightContent;
 }
 @end

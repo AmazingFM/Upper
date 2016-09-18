@@ -34,6 +34,9 @@
 @property (nonatomic, retain) UpLoginController *loginController;
 @property (nonatomic, retain) YMRootViewController *mainSideController;
 @property (nonatomic, retain) UIViewController *currentVC;
+
+//
+
 @end
 
 @implementation UPRootViewController
@@ -62,6 +65,7 @@
     [self addChildViewController:self.loginController];
     
     self.mainSideController = [[YMRootViewController alloc] init];
+    
     [self addChildViewController:self.mainSideController];
     g_sideController = self.mainSideController;
     
