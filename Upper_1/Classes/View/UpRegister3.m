@@ -82,10 +82,10 @@
 
 - (void)loadCompanyData:(id)respData
 {
+    [self.companyCategory removeAllObjects];
     NSDictionary *dict = (NSDictionary *)respData;
     
     NSArray<CompanyModel*> *tempArr = [CompanyModel objectArrayWithKeyValuesArray:dict[@"node_list"]];
-    
     if (tempArr && tempArr.count) {
         [self.companyCategory addObjectsFromArray:tempArr];
         [_mainTableView reloadData];

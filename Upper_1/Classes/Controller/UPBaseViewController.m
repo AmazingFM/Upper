@@ -22,21 +22,16 @@ static int kMsgCount = 0;
 
 @implementation UPBaseViewController
 
-- (void)loadView
+- (void)viewDidLoad
 {
-    [super loadView];
+    [super viewDidLoad];
     if ([[UIDevice currentDevice].systemVersion floatValue]>=7) {
         self.edgesForExtendedLayout = UIRectEdgeAll;
         self.extendedLayoutIncludesOpaqueBars = NO;
-        self.modalPresentationCapturesStatusBarAppearance = NO;
+        //        self.modalPresentationCapturesStatusBarAppearance = NO;
         self.automaticallyAdjustsScrollViewInsets=NO;
     }else {
         self.wantsFullScreenLayout=YES;
-    }
-    
-    if([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]){
-        __weak typeof(self) weakSelf = self;
-        self.navigationController.interactivePopGestureRecognizer.delegate = weakSelf;
     }
     
     UIImageView *backImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_cover_gaussian"]];
@@ -47,8 +42,7 @@ static int kMsgCount = 0;
     messageItem = [self barBtnWithIcon:@"message"];
     messageItem.badgeValue = kMsgCount==0?@"":[NSString stringWithFormat:@"%d", kMsgCount];
     messageItem.badgeBGColor = [UIColor redColor];
-    self.navigationItem.rightBarButtonItem=messageItem;
-}
+    self.navigationItem.rightBarButtonItem=messageItem;}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -57,15 +51,14 @@ static int kMsgCount = 0;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
-//- (void)viewDidAppear:(BOOL)animated
-//{
-//    [super viewDidAppear:animated];
-//    
-//    // 禁用 iOS7 返回手势
-//    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
-//        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-//    }
-//}
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
+        [self prefersStatusBarHidden];
+        [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
+    }
+}
 
 - (void)addBadgeValue:(NSNotification *)notification
 {
@@ -121,20 +114,8 @@ static int kMsgCount = 0;
     [self.navigationController pushViewController:msgCenterController animated:YES];
 }
 
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 @end

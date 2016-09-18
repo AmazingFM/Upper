@@ -64,10 +64,6 @@ typedef enum register_enum
     
     //[self addGesture];
     whichStep = 0;
-    UIImageView *backImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_cover_gaussian"]];
-    backImg.userInteractionEnabled = NO;
-    backImg.frame = self.view.bounds;
-    [self.view addSubview:backImg];
  
     UIButton *leftButton = [[UIButton alloc]initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, 22)];
     [leftButton setTitle:@"注册 Register" forState:UIControlStateNormal];
@@ -196,7 +192,7 @@ typedef enum register_enum
             case 4:
             {
                 NSString *emailPrefix = self.registerV5.emailPrefix;
-                _email = [NSString stringWithFormat:@"%@@%@", emailPrefix, _emailSuffix];
+                _email = [NSString stringWithFormat:@"%@%@", emailPrefix, _emailSuffix];
                 _telnum = self.registerV5.telenum;
                 _verifyCode = self.registerV5.verifyCode;
                 
@@ -273,6 +269,7 @@ typedef enum register_enum
         case COMPANY_REQ:
             [params setValue:@"NodeQuery" forKey:@"a"];
             [params setValue:_cityId forKey:@"city_code"];
+            [params setValue:_industryId forKey:@"industry_id"];
             break;
             
         case REGISTER_REQ:

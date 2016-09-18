@@ -20,8 +20,13 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    UIApplication *app = [UIApplication sharedApplication];
-    app.statusBarStyle = UIStatusBarStyleLightContent;
+    /************ 控件外观设置 **************/
+    
+    NSDictionary *navbarTitleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
+    [[UINavigationBar appearance] setTitleTextAttributes:navbarTitleTextAttributes];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
+            [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"back_shadow"] forBarMetrics:UIBarMetricsDefault];
+            [[UINavigationBar appearance] setTranslucent:YES];
     
     self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
@@ -42,20 +47,35 @@
     {
         NSLog(@"第一次启动");
         //如果是第一次启动的话,使用GuideViewController (用户引导页面) 作为根视图
-        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+//        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+        
         UPGuideViewController *guideViewController = [[UPGuideViewController alloc] init];
         self.window.rootViewController = guideViewController;
     }
     else
     {
-        NSLog(@"不是第一次启动");        
+        NSLog(@"不是第一次启动");
+        
         //如果不是第一次启动的话,使用LoginViewController作为根视图
-//        YMRootViewController *rootViewController = [[YMRootViewController alloc] init];
-//        g_sideController = rootViewController;
-        UPRootViewController *rootViewController = [[UPRootViewController alloc] init];
-        self.window.rootViewController = rootViewController;
-        [self.window makeKeyAndVisible];
+        if (![UPDataManager shared].isLogin) {
+            UpLoginController *login = [[UpLoginController alloc] init];
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:login];
+            nav.navigationBar.shadowImage = [[UIImage alloc] init];
+            
+            self.window.rootViewController = nav;
+            [self.window makeKeyAndVisible];
+        } else {
+            //此处应该增加登陆校验
+            [self setRootViewControllerWithMain];
+        }
     }
+}
+
+- (void)setRootViewControllerWithMain
+{
+    YMRootViewController *mainController = [[YMRootViewController alloc] init];
+    self.window.rootViewController=mainController;
+    [self.window makeKeyAndVisible];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application

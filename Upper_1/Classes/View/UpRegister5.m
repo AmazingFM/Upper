@@ -195,17 +195,6 @@
         _emailField.hidden = YES;
         _suffixLabel.hidden = YES;
         desLabel.hidden = YES;
-        
-        NSString *s = [NSString stringWithFormat:@"@%@",_emailSuffix];
-        
-        _suffixLabel.frame = CGRectMake(self.frame.size.width*2/3, 0, self.frame.size.width/3-LeftRightPadding, _tipLabel.height);
-        _suffixLabel.text = s;
-        _suffixLabel.textAlignment = NSTextAlignmentLeft|NSTextAlignmentCenter;
-        _suffixLabel.adjustsFontSizeToFitWidth = YES;
-        _suffixLabel.minimumScaleFactor = 0.5;
-        
-        _emailField.frame = CGRectMake(5+_tipLabel.origin.x+_tipLabel.width, 0, self.frame.size.width*2/3-_tipLabel.origin.x-_tipLabel.width-5, _tipLabel.height);
-        _seperatorV.frame = CGRectMake(5+_tipLabel.origin.x+_tipLabel.width, _tipLabel.y+_tipLabel.height, self.frame.size.width*2/3-_tipLabel.origin.x-_tipLabel.width-5, 1);
     } else {
         telLabel.hidden = YES;
         teleField.hidden = YES;
@@ -220,11 +209,17 @@
         _emailField.hidden = NO;
         _suffixLabel.hidden = NO;
         desLabel.hidden = NO;
+        NSString *s = [NSString stringWithFormat:@"%@",_emailSuffix];
+        
+        _suffixLabel.frame = CGRectMake(self.frame.size.width*2/3, 0, self.frame.size.width/3-LeftRightPadding, _tipLabel.height);
+        _suffixLabel.text = s;
+        _suffixLabel.textAlignment = NSTextAlignmentLeft|NSTextAlignmentCenter;
+        _suffixLabel.adjustsFontSizeToFitWidth = YES;
+        _suffixLabel.minimumScaleFactor = 0.5;
+        
+        _emailField.frame = CGRectMake(5+_tipLabel.origin.x+_tipLabel.width, 0, self.frame.size.width*2/3-_tipLabel.origin.x-_tipLabel.width-5, _tipLabel.height);
+        _seperatorV.frame = CGRectMake(5+_tipLabel.origin.x+_tipLabel.width, _tipLabel.y+_tipLabel.height, self.frame.size.width*2/3-_tipLabel.origin.x-_tipLabel.width-5, 1);
     }
-    
-    
-
-
 }
 
 

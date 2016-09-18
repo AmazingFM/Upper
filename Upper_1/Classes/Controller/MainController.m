@@ -83,6 +83,8 @@
     self.navigationItem.titleView = titleButton;
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
     
+    
+    
     isLoaded = NO;
     lastPage = NO;
     
@@ -635,6 +637,13 @@
         assistantController.title = @"活动助手";
         [self.navigationController pushViewController:assistantController animated:YES];
     }
+}
+
+
+- (BOOL)prefersStatusBarHidden
+
+{
+    return YES; // 是否隐藏状态栏
 }
 
 

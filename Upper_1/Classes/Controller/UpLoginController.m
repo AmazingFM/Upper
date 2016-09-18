@@ -7,9 +7,11 @@
 //
 
 #import "AppDelegate.h"
+
 #import "UpLoginController.h"
+#import "UpRegisterController.h"
+
 #import "Info.h"
-#import "MainController.h"
 
 #import "XWHttpTool.h"
 #import "AFHTTPRequestOperationManager.h"
@@ -50,7 +52,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"登陆";
+    
     UIImageView *backImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_cover_gaussian"]];
     backImg.userInteractionEnabled = NO;
     backImg.frame = self.view.bounds;
@@ -175,6 +177,12 @@
     [self.view addSubview:wangjimima];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+}
+
 #pragma UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
@@ -230,11 +238,6 @@
 {
     int tag = (int)sender.tag;
     switch (tag) {
-        case 0://取消按钮
-        {
-            [self.parentController popViewControllerAnimated:YES];
-            break;
-        }
         case 1://登陆按钮
         {
             userName = _userNameT.text;
@@ -244,35 +247,29 @@
                 [[[UIAlertView alloc]initWithTitle:nil message:@"用户名和密码不能为空" delegate:nil cancelButtonTitle:@"确认" otherButtonTitles:nil] show];
             }
             else {
-//                [self btnStatusRefresh:sender withFlag:NO];
+                sender.enabled = NO;
                 [self startLoginRequest];
             }
             break;
         }
         case 2://注册
         {
-            
-            [self.parentController OnAction:self withType:CHANGE_VIEW toView:REGISTER_VIEW withArg:nil];
+            UpRegisterController *registerVC = [[UpRegisterController alloc] init];
+            [self.navigationController pushViewController:registerVC animated:YES];
             break;
         }
         case 3://忘记密码
         {
-            [self.parentController OnAction:self withType:CHANGE_VIEW toView:GET_PASSWORD_VIEW withArg:nil];
+//            [self.parentController OnAction:self withType:CHANGE_VIEW toView:GET_PASSWORD_VIEW withArg:nil];
         }
         default:
             break;
     }
 }
 
--(void)btnStatusRefresh:(UIButton *)sender withFlag:(BOOL)flag
-{
-    sender.enabled = flag;
-    sender.backgroundColor = flag?[UIColor whiteColor]:[UIColor lightGrayColor];
-}
-
 - (void)startLoginRequest
 {
-    [self checkNetStatus];
+//    [self checkNetStatus];
     //添加一个遮罩，禁止用户操作
     [MBProgressHUD showMessage:@"正在登录...." toView:self.view];
 
@@ -288,6 +285,7 @@
     [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
         //隐藏HUD
         [MBProgressHUD hideHUDForView:self.view];
+        _loginB.enabled = YES;
 
 
         NSDictionary *dict = (NSDictionary *)json;
@@ -304,6 +302,8 @@
             [[UPDataManager shared] writeToDefaults:[UPDataManager shared].userInfo];
             
             [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierLogin object:nil userInfo:nil];//发送登录成功通知
+            
+            [g_appDelegate setRootViewControllerWithMain];
         
             [self resetValue];
         }
@@ -324,6 +324,7 @@
     } failture:^(id error) {
         //隐藏HUD
         [MBProgressHUD hideHUDForView:self.view];
+        _loginB.enabled = YES;
 
         NSLog(@"%@",error);
     }];

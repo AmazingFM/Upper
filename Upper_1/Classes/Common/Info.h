@@ -47,10 +47,10 @@
 
 #define NAV_START_Y (NAV_HEIGHT – NAV_HEIGHT_NO_STATUSVIEW)//导航栏绘制时的起始Y值
 //第一个Label离top的距离
-#define FirstLabelHeight 44
+#define FirstLabelHeight 64
 
 //左右边距
-#define LeftRightPadding 0
+#define LeftRightPadding 15
 //上下边距 for cell
 #define TopDownPadding 1
 #define CellHeightDefault 44

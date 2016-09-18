@@ -50,6 +50,12 @@
     [self cityInfoRequest];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
 - (void)addChildControllers
 {
     self.loginController = [[UpLoginController alloc] init];
@@ -143,17 +149,6 @@
         _mainViewController = [[MainController alloc] init];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:_mainViewController];
         nav.interactivePopGestureRecognizer.enabled = NO;
-        /************ 控件外观设置 **************/
-        
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-        
-        NSDictionary *navbarTitleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
-        [[UINavigationBar appearance] setTitleTextAttributes:navbarTitleTextAttributes];
-        [[UINavigationBar appearance] setBarTintColor:[UIColor clearColor]];
-//        [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-        [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"back_shadow"] forBarMetrics:UIBarMetricsDefault];
-        [[UINavigationBar appearance] setTranslucent:YES];
-        nav.navigationBar.shadowImage=[[UIImage alloc]init];  //隐藏掉导航栏底部的那条线
 
         self.rootViewController = nav;
         self.leftViewController = [[YMSlideViewController alloc] init];
@@ -167,14 +162,32 @@
     return self;
 }
 
-- (void)loadView
+- (void)viewDidAppear:(BOOL)animated
+
 {
-    [super loadView];
+    
+    [super viewDidAppear:animated];
+    
+    if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
+        
+        [self prefersStatusBarHidden];
+        
+        [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
+        
+    }
+    
 }
 
 - (void)leftClick
 {
     [g_sideController showLeftViewController:YES];
+}
+
+
+- (BOOL)prefersStatusBarHidden
+
+{
+    return YES; // 是否隐藏状态栏
 }
 
 @end

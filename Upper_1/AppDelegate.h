@@ -14,5 +14,7 @@
 //@property (nonatomic) BOOL Login;
 
 - (void)setRootViewController;
+- (void)setRootViewControllerWithMain;
+
 @end
 
