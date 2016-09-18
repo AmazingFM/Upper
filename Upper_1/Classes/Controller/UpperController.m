@@ -530,7 +530,7 @@ extern NSString * const g_loginFileName;
         [[UPDataManager shared] cleanUserDafult];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierLogout object:nil];//发送登出通知
-        
+        [g_appDelegate setRootViewController];
     } 
 }
 

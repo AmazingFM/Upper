@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UPActivityAssistantController : UIViewController
+#import "UPBaseViewController.h"
+
+@interface UPActivityAssistantController : UPBaseViewController
 
 @end

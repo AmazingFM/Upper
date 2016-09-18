@@ -13,6 +13,11 @@
 #import "UPTools.h"
 #import "Info.h"
 #import "UPTheme.h"
+#import "YMImageLoadView.h"
+#import "AFHTTPRequestOperationManager.h"
+
+#define kUPReviewCommentPostURL @"http://api.qidianzhan.com.cn/AppServ/index.php?a=ActivityModify"
+
 
 @interface UPCommentController () <UIGestureRecognizerDelegate,UITextViewDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
@@ -20,7 +25,7 @@
     UPTextView *commentTextView;
     UIView *radioBackView;
     UIButton *likeOrDislike;
-    UIButton *uploadPic;
+    YMImageLoadView *_imageLoadView;
     
     UIImagePickerController *pickerController;
     NSData *imgData;
@@ -137,6 +142,8 @@ static const int textViewContentHeight = 150;
         [likeOrDislike setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         likeOrDislike.layer.cornerRadius = 5.0f;
         [likeOrDislike addTarget:self action:@selector(showAnticipates:) forControlEvents:UIControlEventTouchUpInside];
+        
+         _imageLoadView = [[YMImageLoadView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(likeOrDislike.frame)+10, ScreenWidth-2*LeftRightPadding, 300) withMaxCount:5];
         [scrollView addSubview:likeOrDislike];
     } else if (self.type==1) {
         radioBackView = [[UIView alloc] initWithFrame:CGRectMake(LeftRightPadding, textViewContentHeight+5, ScreenWidth-2*LeftRightPadding, 40)];
@@ -179,7 +186,7 @@ static const int textViewContentHeight = 150;
         [MBProgressHUD showMessage:@"正在提交回顾...." toView:self.view];
         NSDictionary *headParam = [UPDataManager shared].getHeadParams;
         NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
-        [params setObject:@"ActivityModify"forKey:@"a"];
+//        [params setObject:@"ActivityModify"forKey:@"a"];
         [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
         [params setObject:self.actID  forKey:@"activity_id"];
         [params setObject:@"4" forKey:@"activity_status"];
@@ -191,33 +198,74 @@ static const int textViewContentHeight = 150;
         [params setObject:evaluateStr forKey:@"evaluate_text"];
         [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
         
-        [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [MBProgressHUD hideHUDForView:self.view];
-            });
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        //申明请求的数据是json类型
+        //manager.requestSerializer.HTTPMethodsEncodingParametersInURI = [NSSet setWithArray:@[@"POST", @"GET", @"HEAD"]];
+        manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+        
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        [manager POST:kUPReviewCommentPostURL parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            static float FixRatio = 1.f;
+            for (int i=0; i<_imageLoadView.images.count&&i<5; i++) {
+                UIImage *image = _imageLoadView.images[i];
+                CGSize imgSize = [image size];
+                CGFloat kWidth;
+                
+                CGFloat ratio = imgSize.width/imgSize.height;
+                if (ratio<FixRatio) {
+                    kWidth = imgSize.width;
+                } else {
+                    kWidth = FixRatio*imgSize.height;
+                }
+                UIImage *cutImage = [UPTools cutImage:image withSize:CGSizeMake(kWidth, kWidth/FixRatio)];
+                
+                [formData appendPartWithFileData:[UPTools compressImage:cutImage] name:[NSString stringWithFormat:@"image_%d",i] fileName:@"pic" mimeType:@"image/jpeg"];
+            }
+        } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSString *resp = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+            NSLog(@"Success:%@,", resp);
             
-            
-            NSDictionary *dict = (NSDictionary *)json;
-            NSString *resp_id = dict[@"resp_id"];
-            if ([resp_id intValue]==0) {
-                NSString *resp_desc = dict[@"resp_desc"];
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"🙏🏻，恭喜您" message:resp_desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            NSObject *jsonObj = [UPTools JSONFromString:resp];
+            if ([jsonObj isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *respDict = (NSDictionary *)jsonObj;
+                NSString *resp_id = respDict[@"resp_id"];
+                NSString *resp_desc = respDict[@"resp_desc"];
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:resp_id message:resp_desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
                 [alert show];
             }
-            else
-            {
-                NSString *resp_desc = dict[@"resp_desc"];
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"💔，很遗憾" message:resp_desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                [alert show];
-            }
-            
-        } failture:^(id error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [MBProgressHUD hideHUDForView:self.view];
-            });
-            NSLog(@"%@",[error localizedDescription]);
-            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"Error: %@", error);
+            [self.navigationController popViewControllerAnimated:YES];
         }];
+
+//        [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [MBProgressHUD hideHUDForView:self.view];
+//            });
+//            
+//            
+//            NSDictionary *dict = (NSDictionary *)json;
+//            NSString *resp_id = dict[@"resp_id"];
+//            if ([resp_id intValue]==0) {
+//                NSString *resp_desc = dict[@"resp_desc"];
+//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"🙏🏻，恭喜您" message:resp_desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+//                [alert show];
+//            }
+//            else
+//            {
+//                NSString *resp_desc = dict[@"resp_desc"];
+//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"💔，很遗憾" message:resp_desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+//                [alert show];
+//            }
+//            
+//        } failture:^(id error) {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [MBProgressHUD hideHUDForView:self.view];
+//            });
+//            NSLog(@"%@",[error localizedDescription]);
+//            
+//        }];
 
     } else if (self.type==1) {
         

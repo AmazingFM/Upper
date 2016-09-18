@@ -37,10 +37,9 @@
 
 @implementation PersonalCenterController
 
-- (void)loadView
+- (void)viewDidLoad
 {
-    [super loadView];
-    self.view.backgroundColor = [UIColor whiteColor];
+    [super viewDidLoad];
     
     self.topView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, ScreenWidth, TopViewHeight)];
     self.topView.image = [UIImage imageNamed:@"person_bg"];
@@ -56,6 +55,18 @@
     [self setupScrollView];
     
     NSLog(@"Index:%d--Query_id:%@", self.index, self.user.ID);
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+//    [self.navigationController setNavigationBarHidden:YES animated:YES];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+//    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 - (void)letsChat:(UIButton *)sender
@@ -112,8 +123,8 @@
     headerView.y=0;
     [self.view addSubview:headerView];
     self.headerView=headerView;
-//    UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(headerTap)];
-//    [self.headerView addGestureRecognizer:tap];
+    UITapGestureRecognizer *tap=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(headerTap)];
+    [self.headerView addGestureRecognizer:tap];
     //2.添加头像到headerView
 
     CGFloat headerW=80;

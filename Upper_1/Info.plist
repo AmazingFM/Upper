@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<true/>
+	<false/>
 	<key>CFBundleDisplayName</key>
 	<string>UPPER</string>
 	<key>CFBundleExecutable</key>

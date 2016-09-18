@@ -45,7 +45,8 @@
     // 标识为添加一个新的图片
     if (![self deleClose:btn]) {
         editTag = -1;
-        [self callImagePicker];
+//        [self callImagePicker];
+        [self openMenu];
     }
 }
 
@@ -55,7 +56,8 @@
     // 标识为修改(tag为修改标识)
     if (![self deleClose:btn]) {
         editTag = btn.tag;
-        [self callImagePicker];
+//        [self callImagePicker];
+        [self openMenu];
     }
 }
 
@@ -128,7 +130,7 @@
         dele.layer.masksToBounds = YES;
         
         [dele addTarget:self action:@selector(deletePic:) forControlEvents:UIControlEventTouchUpInside];
-        dele.frame = CGRectMake(btn.frame.size.width - dele.frame.size.width, 0, dele.frame.size.width, dele.frame.size.height);
+        dele.frame = CGRectMake(btn.frame.size.width - deleImageWH/2, -deleImageWH/2, dele.frame.size.width, dele.frame.size.height);
         [btn addSubview:dele];
         [self start : btn];
     }
@@ -191,6 +193,69 @@
         btn.frame = CGRectMake(btnX, btnY, btnW, btnH);
     }
 }
+
+#pragma mark take photo methods
+- (void)openMenu
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"上传活动图片" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        NSLog(@"取消");
+    }];
+    [alertController addAction:action];
+    
+    [alertController addAction:({
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"从手机相册中获取" style:UIAlertActionStyleDestructive  handler:^(UIAlertAction *action) {
+            NSLog(@"从手机相册中获取");
+            [self localPhoto];
+        }];
+        action;
+    })];
+    
+    [alertController addAction:({
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"打开照相机" style:UIAlertActionStyleDestructive  handler:^(UIAlertAction *action) {
+            NSLog(@"打开照相机");
+            [self takePhoto];
+        }];
+        action;
+    })];
+    
+    [self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
+}
+
+//开始拍照
+- (void)takePhoto
+{
+    UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
+    if ([UIImagePickerController isSourceTypeAvailable:sourceType]) {
+        UIImagePickerController *picker = [[UIImagePickerController alloc]init];
+        picker.delegate = self;
+        //设置拍照后的图片可被编辑
+        picker.showsCameraControls = YES;
+        picker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
+        picker.mediaTypes = @[(NSString *)kUTTypeImage];
+        picker.allowsEditing = YES;
+        picker.sourceType = sourceType;
+        [self.window.rootViewController presentViewController:picker animated:YES completion:nil];
+    } else
+    {
+        NSLog(@"模拟器无法打开照相机");
+    }
+}
+//打开本地相册
+- (void)localPhoto
+{
+    UIImagePickerController *picker = [[UIImagePickerController alloc]init];
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    picker.delegate = self;
+    //设置选择后的图片可被编辑
+    picker.allowsEditing = YES;
+    picker.mediaTypes = @[(NSString *)kUTTypeImage];
+    picker.allowsEditing = YES;
+    
+    [self.window.rootViewController presentViewController:picker animated:YES completion:nil];
+}
+
 
 #pragma mark - UIImagePickerController 代理方法
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
