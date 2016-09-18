@@ -152,22 +152,20 @@
     if (self) {
         _mainViewController = [[MainController alloc] init];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:_mainViewController];
+        nav.navigationBar.shadowImage = [[UIImage alloc] init];
         nav.interactivePopGestureRecognizer.enabled = NO;
 
         self.rootViewController = nav;
         self.leftViewController = [[YMSlideViewController alloc] init];
         self.leftViewShowWidth = kYMSlideControllerWidth;
-        self.needSwipeShowMenu = NO;
+        self.needSwipeShowMenu = YES;
         
         g_mainMenu = _mainViewController;
-        
-        _mainViewController.parentController = self;
     }
     return self;
 }
 
 - (void)viewDidAppear:(BOOL)animated
-
 {
     
     [super viewDidAppear:animated];
@@ -179,7 +177,6 @@
         [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
         
     }
-    
 }
 
 - (void)leftClick
@@ -191,7 +188,7 @@
 - (BOOL)prefersStatusBarHidden
 
 {
-    return YES; // 是否隐藏状态栏
+    return NO; // 是否隐藏状态栏
 }
 
 @end
@@ -272,6 +269,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [g_mainMenu OnAction:nil withType:LEFT_MENU_CHANGE toView:indexPath.row+1 withArg:nil];
+    
+    
     [g_sideController hideSideViewController:YES];
 }
 @end

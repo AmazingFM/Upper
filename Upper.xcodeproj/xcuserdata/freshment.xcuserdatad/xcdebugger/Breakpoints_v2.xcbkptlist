@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Upper_1/Classes/Controller/UpRegisterController.m"
-            timestampString = "495885880.985657"
+            timestampString = "495890934.974641"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "294"
-            endingLineNumber = "294"
+            startingLineNumber = "292"
+            endingLineNumber = "292"
             landmarkName = "-startRequest:"
             landmarkType = "5">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Upper_1/Classes/Controller/UpRegisterController.m"
-            timestampString = "495887320.132907"
+            timestampString = "495890934.974641"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "306"
-            endingLineNumber = "306"
+            startingLineNumber = "304"
+            endingLineNumber = "304"
             landmarkName = "-loadDataForType:withURL:parameters:"
             landmarkType = "5">
          </BreakpointContent>

@@ -61,8 +61,6 @@ typedef enum register_enum
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    //[self addGesture];
     whichStep = 0;
  
     UIButton *leftButton = [[UIButton alloc]initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, 22)];

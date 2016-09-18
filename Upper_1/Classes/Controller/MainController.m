@@ -76,6 +76,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] init];
+    backItem.title = @"返回";
+    self.navigationItem.backBarButtonItem = backItem;
+    
     UIButton *titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [titleButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     titleButton.tag = kActivityAssitantTag;
@@ -88,7 +93,7 @@
     isLoaded = NO;
     lastPage = NO;
     
-    noticeBoard = [[NoticeBoard alloc] initWithFrame:CGRectMake(LeftRightPadding,0, ScreenWidth-LeftRightPadding*2, 17)];
+    noticeBoard = [[NoticeBoard alloc] initWithFrame:CGRectMake(LeftRightPadding,FirstLabelHeight, ScreenWidth-LeftRightPadding*2, 17)];
     [noticeBoard setNoticeMessage:@[@"Yeoman Zhang发起了一个活动",@"总冠军狂喜之夜",@"帅哥、美女high翻天"]];
     [self.view addSubview:noticeBoard];
     
@@ -168,7 +173,7 @@
 - (UITableView *)mainTable
 {
     if (!_mainTable) {
-        CGRect bounds = CGRectMake(0, _topMenu.origin.y+_topMenu.height, ScreenWidth, ScreenHeight-_topMenu.origin.y-_topMenu.height-kUPMainStatusBarHeight);
+        CGRect bounds = CGRectMake(0, _topMenu.origin.y+_topMenu.height, ScreenWidth, ScreenHeight-_topMenu.origin.y-_topMenu.height);
         _mainTable = [[UITableView alloc] initWithFrame:bounds style:UITableViewStylePlain];
         _mainTable.separatorColor = [UIColor grayColor];
         _mainTable.delegate = self;

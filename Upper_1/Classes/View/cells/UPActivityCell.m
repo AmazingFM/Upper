@@ -93,6 +93,7 @@
     UIView *backView;
     UIImageView *_img;
     UILabel *_titleLab;
+    UILabel *_freeTips;
     UILabel *_typeLab;
     UILabel *_clothLab;
     UILabel *_statusLab;
@@ -127,6 +128,12 @@
         _titleLab.font = kUPThemeTitleFont;
         _titleLab.backgroundColor = [UIColor clearColor];
         _titleLab.textAlignment = NSTextAlignmentLeft;
+        _titleLab.adjustsFontSizeToFitWidth = YES;
+
+        _freeTips = [[UILabel alloc] initWithFrame:CGRectZero];
+        _freeTips.font = kUPThemeTitleFont;
+        _freeTips.backgroundColor = [UIColor clearColor];
+        _freeTips.textAlignment = NSTextAlignmentRight;
 
         _img = [[UIImageView alloc] initWithFrame:CGRectZero];
         
@@ -216,6 +223,7 @@
         
         [backView addSubview:_img];
         [backView addSubview:_titleLab];
+        [backView addSubview:_freeTips];
         [backView addSubview:_typeLab];
         [backView addSubview:_clothLab];
         [backView addSubview:_statusLab];
@@ -244,11 +252,30 @@
     _img.clipsToBounds = YES;
     [_img sd_setImageWithURL:[NSURL URLWithString:itemData.activity_image] placeholderImage:[UIImage imageNamed:@"me"]];
     _titleLab.text = itemData.activity_name;
+    
+    NSString *freeStr = [NSString stringWithFormat:@"♀♂免费"];
+    //富文本对象
+    NSMutableAttributedString * aAttributedString = [[NSMutableAttributedString alloc] initWithString:freeStr];
+    
+    NSRange range0 = [freeStr rangeOfString:@"免费"];
+    NSRange range1 = [freeStr rangeOfString:@"♀"];
+    NSRange range2 = [freeStr rangeOfString:@"♂"];
+    
+    //富文本样式
+    [aAttributedString addAttribute:NSForegroundColorAttributeName value:RGBCOLOR(242, 156, 177) range:range1];
+    [aAttributedString addAttribute:NSForegroundColorAttributeName value:RGBCOLOR(0, 124, 195) range:range2];
+    [aAttributedString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:range0];
+    [aAttributedString addAttribute:NSFontAttributeName value:kUPThemeNormalFont range:range1];
+    [aAttributedString addAttribute:NSFontAttributeName value:kUPThemeNormalFont range:range2];
+    [aAttributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:8] range:range0];
+    _freeTips.attributedText = aAttributedString;
 
     
     offsetx += height*4/3+kUPThemeBorder;
     
-    _titleLab.frame = CGRectMake(offsetx,offsety,width-offsetx,30);
+    _titleLab.frame = CGRectMake(offsetx,offsety,width-offsetx-80,30);
+    
+    _freeTips.frame = CGRectMake(width-95, offsety, 80, 30);
     
     offsety += _titleLab.height;
     

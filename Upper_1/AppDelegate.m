@@ -26,8 +26,8 @@
     NSDictionary *navbarTitleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
     [[UINavigationBar appearance] setTitleTextAttributes:navbarTitleTextAttributes];
     [[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
-            [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"back_shadow"] forBarMetrics:UIBarMetricsDefault];
-            [[UINavigationBar appearance] setTranslucent:YES];
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"back_shadow"] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setTranslucent:YES];
 
     self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
@@ -75,6 +75,7 @@
 - (void)setRootViewControllerWithMain
 {
     YMRootViewController *mainController = [[YMRootViewController alloc] init];
+    g_sideController = mainController;
     self.window.rootViewController=mainController;
     [self.window makeKeyAndVisible];
 }

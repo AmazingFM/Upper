@@ -29,11 +29,11 @@
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithRightTitle:@"上海" target:self action:@selector(rightClick)];
     
-    self.leftButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 44, 100, 22)];
+    self.leftButton = [[UIButton alloc]initWithFrame:CGRectMake(0, FirstLabelHeight, 100, 22)];
     [self.leftButton setTitle:@"专家社区" forState:UIControlStateNormal];
     [self.leftButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.leftButton.tag = 0;
-    self.leftButton.backgroundColor = [UIColor yellowColor];
+    self.leftButton.backgroundColor = [UIColor clearColor];
     self.leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.leftButton setContentEdgeInsets:UIEdgeInsetsMake(0, 20, 0, 0)];
     [self.leftButton addTarget:self action:@selector(makeAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -42,7 +42,7 @@
     [rightButton setTitle:@"精彩活动" forState:UIControlStateNormal];
     [rightButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     rightButton.tag = 1;
-    rightButton.backgroundColor = [UIColor yellowColor];
+    rightButton.backgroundColor = [UIColor clearColor];
     [rightButton setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 20)];
     rightButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [rightButton addTarget:self action:@selector(makeAction:) forControlEvents:UIControlEventTouchUpInside];
