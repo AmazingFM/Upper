@@ -194,6 +194,8 @@ static CGFloat const FixRatio = 4/3.0;
     }
     
     [self dismissViewControllerAnimated:YES completion:nil];
+    
+    [self resignFirstResponder];
 }
 
 @end
@@ -205,8 +207,11 @@ static CGFloat const FixRatio = 4/3.0;
     CityItem *_selectedCity;
     NSString *_lowLimit;
     NSString *_highLimit;
+    NSString *_femaleLowLimit;
     
     NSData *_imgData;
+    
+    BOOL needFemale;
 }
 @property (nonatomic, retain) NSMutableArray *itemList;
 @end
@@ -223,6 +228,8 @@ static CGFloat const FixRatio = 4/3.0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    needFemale = NO;
     
     UPButtonCellItem *item0 = [[UPButtonCellItem alloc] init];
     item0.btnStyle = UPBtnStyleImage;
@@ -258,6 +265,10 @@ static CGFloat const FixRatio = 4/3.0;
     item5.comboxItems = types;
     item5.style = UPItemStyleIndex;
     item5.key = @"activity_class";
+    
+    UPTitleCellItem *item15 = [[UPTitleCellItem alloc] init];
+    item15.key = @"fmale_low";
+
 
     UPDetailCellItem *item6 = [[UPDetailCellItem alloc] init];
     item6.title = @"活动地点区域";
@@ -315,6 +326,7 @@ static CGFloat const FixRatio = 4/3.0;
     [_itemList addObject:item3];
     [_itemList addObject:item4];
     [_itemList addObject:item5];
+    [_itemList addObject:item15];
     [_itemList addObject:item6];
     [_itemList addObject:item7];
     [_itemList addObject:item8];
@@ -332,7 +344,10 @@ static CGFloat const FixRatio = 4/3.0;
             cellItem.cellHeight = 200;
         } else if ([cellItem.key isEqualToString:@"activity_desc"]) {
             cellItem.cellHeight = 100;
-        }else {
+        }else if ([cellItem.key isEqualToString:@"fmale_low"]) {
+            cellItem.cellHeight=0;
+        } else
+        {
             cellItem.cellHeight = kUPCellDefaultHeight;
         }
         
@@ -340,7 +355,7 @@ static CGFloat const FixRatio = 4/3.0;
     }];
     
     // Do any additional setup after loading the view.
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight-20) style:UITableViewStylePlain];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
     _tableView.backgroundColor = [UIColor whiteColor];
     _tableView.showsVerticalScrollIndicator = NO;
     _tableView.showsHorizontalScrollIndicator = NO;
@@ -357,8 +372,59 @@ static CGFloat const FixRatio = 4/3.0;
 #endif
     _tableView.tableFooterView = [[UIView alloc] init];
     
+    UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+    gesture.cancelsTouchesInView = NO;
+    [_tableView addGestureRecognizer:gesture];
+    
     [self.view addSubview:_tableView];
+    
+    [self loadNotificationCell];
+}
 
+- (void)tap:(UITapGestureRecognizer *)gestureReco
+{
+//    [self resignFirstResponder];
+    [self.view endEditing:YES];
+}
+
+- (void)loadNotificationCell
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)keyboardWillShow:(NSNotification *)notif
+{
+    if (self.view.hidden == YES) {
+        return;
+    }
+    
+    CGRect rect = [[notif.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.25f];
+    NSArray *subviews = [self.view subviews];
+    for (UIView *sub in subviews) {
+        if ([sub isKindOfClass:[UITableView class]]) {
+            sub.frame = CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight-rect.size.height);
+        }
+    }
+    [UIView commitAnimations];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notif {
+    if (self.view.hidden == YES) {
+        return;
+    }
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.25];
+    _tableView.frame=CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight);
+    [UIView commitAnimations];
+}
+
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark UITableViewDelegate
@@ -402,11 +468,58 @@ static CGFloat const FixRatio = 4/3.0;
         [recoBtn addTarget:self action:@selector(recommend:) forControlEvents:UIControlEventTouchUpInside];
         itemCell.accessoryView = recoBtn;
         
-    } else if ([cellItem.key isEqualToString:@"limit_count"]) {
+    } else if ([cellItem.key isEqualToString:@"fmale_low"]) {
         CGFloat cellWidth = cellItem.cellWidth;
-        UIView *detailView = [[UIView alloc] initWithFrame:CGRectMake(cellWidth/2-30,kUPCellVBorder,(cellWidth-2*kUPCellHBorder)/2+30,kUPCellHeight-2*kUPCellVBorder)];
-        detailView.backgroundColor = [UIColor clearColor];
+        CGFloat cellHeight = cellItem.cellHeight;
         
+        if (cellHeight==0) {
+            itemCell.textLabel.text = @"";
+            itemCell.accessoryView = nil;
+        } else {
+            itemCell.textLabel.text = @"女性人数下限";
+            UIView *detailView = itemCell.accessoryView;
+            if (detailView==nil) {
+                detailView = [[UIView alloc] initWithFrame:CGRectMake(cellWidth/2-30,kUPCellVBorder,(cellWidth-2*kUPCellHBorder)/2+30,kUPCellHeight-2*kUPCellVBorder)];
+                detailView.backgroundColor = [UIColor clearColor];
+                itemCell.accessoryView = detailView;
+            }
+            for (UIView *subView in detailView.subviews) {
+                [subView removeFromSuperview];
+            }
+            
+            CGFloat detailWidth = detailView.size.width;
+            CGFloat detailHeight = detailView.size.height;
+            CGSize sizeOneChar = SizeWithFont(@"至", kUPThemeNormalFont);
+            CGFloat perWidth = sizeOneChar.width;
+            CGFloat perHeight = sizeOneChar.height+4;
+            
+            UITextField *lowField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-3*perWidth-kUPThemeBorder, (detailHeight-perHeight)/2, 2*perWidth, perHeight)];
+            lowField.tag = 1003;
+            lowField.keyboardType = UIKeyboardTypeNumberPad;
+            lowField.borderStyle = UITextBorderStyleLine;
+            [lowField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
+            lowField.delegate = self;
+            
+            UILabel *renLabel = [[UILabel alloc] initWithFrame:CGRectMake(detailWidth-perWidth,(detailHeight-perHeight)/2, perWidth, perHeight)];
+            renLabel.text = @"人";
+            renLabel.font = kUPThemeNormalFont;
+            renLabel.backgroundColor = [UIColor clearColor];
+            [detailView addSubview:lowField];
+            [detailView addSubview:renLabel];
+        }
+    }else if ([cellItem.key isEqualToString:@"limit_count"]) {
+        CGFloat cellWidth = cellItem.cellWidth;
+        
+        UIView *detailView = itemCell.accessoryView;
+        if (detailView==nil) {
+            detailView = [[UIView alloc] initWithFrame:CGRectMake(cellWidth/2-30,kUPCellVBorder,(cellWidth-2*kUPCellHBorder)/2+30,kUPCellHeight-2*kUPCellVBorder)];
+            detailView.backgroundColor = [UIColor clearColor];
+            itemCell.accessoryView = detailView;
+        }
+        for (UIView *subView in detailView.subviews) {
+            [subView removeFromSuperview];
+        }
+
         CGFloat detailWidth = detailView.size.width;
         CGFloat detailHeight = detailView.size.height;
         CGSize sizeOneChar = SizeWithFont(@"至", kUPThemeNormalFont);
@@ -414,6 +527,7 @@ static CGFloat const FixRatio = 4/3.0;
         CGFloat perHeight = sizeOneChar.height+4;
         UITextField *lowField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-6*perWidth-3*kUPThemeBorder, (detailHeight-perHeight)/2, 2*perWidth, perHeight)];
         lowField.tag = 1001;
+        lowField.keyboardType = UIKeyboardTypeNumberPad;
         lowField.borderStyle = UITextBorderStyleLine;
         [lowField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
         lowField.delegate = self;
@@ -421,6 +535,7 @@ static CGFloat const FixRatio = 4/3.0;
         UITextField *highField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-3*perWidth-kUPThemeBorder, (detailHeight-perHeight)/2, 2*perWidth, perHeight)];
         highField.tag = 1002;
         highField.borderStyle = UITextBorderStyleLine;
+        highField.keyboardType = UIKeyboardTypeNumberPad;
         [highField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
         highField.delegate = self;
         
@@ -437,7 +552,6 @@ static CGFloat const FixRatio = 4/3.0;
         [detailView addSubview:highField];
         [detailView addSubview:zhiLabel];
         [detailView addSubview:renLabel];
-        itemCell.accessoryView = detailView;
     }
     itemCell.backgroundColor=[UIColor whiteColor];
     return itemCell;
@@ -482,6 +596,8 @@ static CGFloat const FixRatio = 4/3.0;
         _lowLimit = textField.text;
     } else if (textField.tag==1002) {
         _highLimit = textField.text;
+    } else if (textField.tag==1003) {
+        _femaleLowLimit = textField.text;
     }
     
 }
@@ -493,7 +609,7 @@ static CGFloat const FixRatio = 4/3.0;
         return YES;
     }
     
-    if (textField.tag==1001 || textField.tag==1002) {
+    if (textField.tag==1001 || textField.tag==1002 || textField.tag==1003) {
         int actionLen = 2;
         if (textField.text.length+textEntered.length>actionLen) {
             return NO;
@@ -530,6 +646,27 @@ static CGFloat const FixRatio = 4/3.0;
     UPBaseCellItem *cellItem = self.itemList[indexPath.row];
     UPComboxCellItem *comboxItem = (UPComboxCellItem*)cellItem;
     [comboxItem setSelectedIndex:selectedIndex];
+    
+    if ([cellItem.key isEqualToString:@"activity_class"]) {
+        [_itemList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            UPBaseCellItem *cellItem = (UPBaseCellItem *)obj;
+            if ([cellItem.key isEqualToString:@"fmale_low"]) {
+                if (selectedIndex==1) { //派对，酒会
+                    cellItem.cellHeight=kUPCellDefaultHeight;
+                    needFemale = YES;
+                } else {
+                    cellItem.cellHeight=0;
+                    needFemale = NO;
+                }
+                *stop = YES;
+            } else {
+                *stop = NO;
+            }
+        }];
+        
+        NSIndexPath *indexP = [NSIndexPath indexPathForRow:indexPath.row+1 inSection:0];
+        [_tableView reloadRowsAtIndexPaths:@[indexP] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 - (void)buttonClicked:(UIButton *)btn withIndexPath:(NSIndexPath *)indexPath
@@ -560,11 +697,29 @@ static CGFloat const FixRatio = 4/3.0;
             }
         }
         
+        NSString *msg = nil;
+        if (_selectedCity==nil) {
+            msg = @"请选择城市";
+        } else if (_highLimit==nil || _highLimit.length==0) {
+            msg = @"请输入人数上限";
+        } else if (_highLimit==nil || _highLimit.length==0) {
+            msg = @"请输入人数下限";
+        } else if ((_femaleLowLimit==nil || _femaleLowLimit.length==0)&&needFemale) {
+            msg = @"请输入女性人数要求";
+        }
+        if (msg) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alert show];
+            return;
+        }
+                
         [params setObject:_selectedCity.province_code forKey:@"province_code"];
         [params setObject:_selectedCity.city_code forKey:@"city_code"];
         [params setObject:_selectedCity.town_code forKey:@"town_code"];
         [params setObject:_highLimit forKey:@"limit_count"];
         [params setObject:_lowLimit forKey:@"limit_low"];
+        [params setObject:(_femaleLowLimit&&_femaleLowLimit.length>0)?_femaleLowLimit:@"0" forKey:@"fmale_low"];
+        [params setObject:@"" forKey:@"activity_fee"];
         
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         formatter.dateFormat = @"yyyyMMddHHmmss";
@@ -605,9 +760,20 @@ static CGFloat const FixRatio = 4/3.0;
 
 - (BOOL)check:(UPBaseCellItem *)cellItem
 {
-    if (cellItem.value==nil) {
-        //
+    NSDictionary *paramKey = @{@"activity_name":@"请输入活动名称", @"activity_desc":@"请输入活动描述", @"end_time":@"请输入报名截止时间", @"start_time":@"请输入活动开始时间", @"activity_place_code":@"请填写活动场所", @"activity_place":@"请输入详细地址信息"};
+
+    NSString *msg = nil;
+    NSString *valueStr = cellItem.value;
+    if (valueStr==nil || valueStr.length==0 || [valueStr isEqualToString:@"选择日期"]) {
+        msg = paramKey[cellItem.key];
     }
+    
+    if (msg!=nil) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alert show];
+        return NO;
+    }
+    
     return YES;
 }
 
