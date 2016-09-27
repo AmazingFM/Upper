@@ -212,6 +212,8 @@ static CGFloat const FixRatio = 4/3.0;
     NSData *_imgData;
     
     BOOL needFemale;
+    
+    BOOL malePay;
 }
 @property (nonatomic, retain) NSMutableArray *itemList;
 @end
@@ -292,7 +294,7 @@ static CGFloat const FixRatio = 4/3.0;
     item4.date = @"选择日期";
     item4.key = @"start_time";
     
-    NSArray *types = @[@"不限", @"派对、酒会", @"桌游、座谈、棋牌", @"KTV", @"户外烧烤", @"运动",@"郊游、徒步"];
+    NSArray *types = @[@"不限",@"夜店派对", @"家庭派对", @"派对、酒会", @"桌游、座谈、棋牌", @"KTV", @"户外烧烤", @"运动",@"郊游、徒步"];
     UPComboxCellItem *item5 = [[UPComboxCellItem alloc] init];
     item5.title = @"活动类型";
     item5.comboxItems = types;
@@ -340,6 +342,21 @@ static CGFloat const FixRatio = 4/3.0;
     item11.style = UPItemStyleIndex;
     item11.key = @"is_prepaid";
     
+    /**为了平衡性别比例，从付费方式和活动募集两方面补充规则
+    付费方式：除了现有现场AA和土豪请客两种外，增加一种：绅士分摊，女士免费
+    选择最后一种，预估费用后面出现提示：费用会随男女比例而浮动
+    活动募集：给夜店派对和家庭派对两种活动增加男女比例选项，男女需分别达到人数才能募集成功。男数量为硬上限，达到后男不能报名，女数量为不低于，达到后可继续报名挤占男数量。   另外发起时为这两种派对活动增加一项奖励机制。发起人可设定，男士携__名女士同行可免单。
+     */
+
+    UPTitleCellItem *item17 = [[UPTitleCellItem alloc] init];  //使用 是否预付的 字段传参
+    item17.title = @"设定";
+    item17.style = UPItemStyleIndex;
+    item17.key = @"goodsNum";
+    
+    UPTitleCellItem *item16 = [[UPTitleCellItem alloc] init];
+    item16.key = @"activity_fee";
+
+    
     UPSwitchCellItem *item12 = [[UPSwitchCellItem alloc] init];
     item12.title=@"仅限本行业";
     item12.isOn = YES;
@@ -366,6 +383,7 @@ static CGFloat const FixRatio = 4/3.0;
     [self.itemList addObject:item9];
     [self.itemList addObject:item10];
     [self.itemList addObject:item11];
+    [self.itemList addObject:item16];
     [self.itemList addObject:item12];
     [self.itemList addObject:item13];
     
@@ -475,7 +493,47 @@ static CGFloat const FixRatio = 4/3.0;
         [recoBtn addTarget:self action:@selector(recommend:) forControlEvents:UIControlEventTouchUpInside];
         itemCell.accessoryView = recoBtn;
         
-    } else if ([cellItem.key isEqualToString:@"fmale_low"]) {
+    }else if ([cellItem.key isEqualToString:@"activity_fee"]) {
+        CGFloat cellWidth = cellItem.cellWidth;
+            itemCell.textLabel.text = @"预估费用";
+            UIView *detailView = itemCell.accessoryView;
+            if (detailView==nil) {
+                detailView = [[UIView alloc] initWithFrame:CGRectMake(cellWidth/2-30,kUPCellVBorder,(cellWidth-2*kUPCellHBorder)/2+30,kUPCellHeight-2*kUPCellVBorder)];
+                detailView.backgroundColor = [UIColor clearColor];
+                itemCell.accessoryView = detailView;
+            }
+            for (UIView *subView in detailView.subviews) {
+                [subView removeFromSuperview];
+            }
+        
+        NSString *descText = nil;
+        if (malePay) {
+            descText = @"元";//,费用会随男女比例而浮动
+        } else {
+            descText = @"元";
+        }
+
+            CGFloat detailWidth = detailView.size.width;
+            CGFloat detailHeight = detailView.size.height;
+            CGSize sizeOneChar = SizeWithFont(@"descText", kUPThemeNormalFont);
+            CGFloat perWidth = sizeOneChar.width;
+            CGFloat perHeight = sizeOneChar.height+4;
+            
+            UITextField *lowField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-3*perWidth-kUPThemeBorder, (detailHeight-perHeight)/2, 2*perWidth, perHeight)];
+            lowField.tag = 1004;
+            lowField.keyboardType = UIKeyboardTypeNumberPad;
+            lowField.borderStyle = UITextBorderStyleLine;
+            [lowField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
+            lowField.delegate = self;
+            
+            UILabel *renLabel = [[UILabel alloc] initWithFrame:CGRectMake(detailWidth-perWidth,(detailHeight-perHeight)/2, perWidth, perHeight)];
+            renLabel.text = @"";
+            renLabel.font = kUPThemeNormalFont;
+            renLabel.backgroundColor = [UIColor clearColor];
+            [detailView addSubview:lowField];
+            [detailView addSubview:renLabel];
+
+    }else if ([cellItem.key isEqualToString:@"fmale_low"]) {
         CGFloat cellWidth = cellItem.cellWidth;
         CGFloat cellHeight = cellItem.cellHeight;
         
@@ -658,7 +716,7 @@ static CGFloat const FixRatio = 4/3.0;
         [self.itemList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             UPBaseCellItem *cellItem = (UPBaseCellItem *)obj;
             if ([cellItem.key isEqualToString:@"fmale_low"]) {
-                if (selectedIndex==1) { //派对，酒会
+                if (selectedIndex==1||selectedIndex==2) { //夜店派对，家庭派对
                     cellItem.cellHeight=kUPCellDefaultHeight;
                     needFemale = YES;
                 } else {
