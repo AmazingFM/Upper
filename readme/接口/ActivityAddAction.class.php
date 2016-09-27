@@ -22,6 +22,7 @@ class ActivityAddAction extends BaseAction
 	public $activity_fee; //活动金额
 	public $limit_count; //活动参与人数限制
 	public $limit_low; //活动参与人数限制
+	public $fmale_low; //活动女性参与人数下限
 	public $user_id;
 
 	public function _initialize(){
@@ -45,6 +46,7 @@ class ActivityAddAction extends BaseAction
 		$this->clothes_need = I('clothes_need');
 		$this->limit_count = I('limit_count');		  //活动参与人数限制
 		$this->limit_low = I('limit_low');		  //活动参与人数限制下限
+		$this->fmale_low = I('fmale_low');	
 		$this->activity_fee = I('activity_fee');		  //活动金额
 	}
 		
@@ -94,6 +96,7 @@ class ActivityAddAction extends BaseAction
 		$activity_info['activity_fee'] = $this->activity_fee; //活动金额
 		$activity_info['limit_count'] = $this->limit_count; //活动限制
 		$activity_info['limit_low'] = $this->limit_low; //活动限制下限
+		$activity_info['fmale_low'] = $this->fmale_low;
 		$activity_info['user_id'] = $this->user_id;
 		$activity_info['create_time'] = date('YmdHis');
 
@@ -162,12 +165,5 @@ class ActivityAddAction extends BaseAction
 		return true;
 	}
 	
-	//获取文件后缀
-	private function get_file_extension($str = '') 
-	{
-		$start = strrpos($str, '.');
-		$ext = substr($str, $start + 1);
-		return $ext;
-	}
 }
 ?>

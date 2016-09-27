@@ -156,5 +156,13 @@ abstract class BaseAction extends Action{
 			$this->returnError('当前登陆已失效','0010');
 		}	
 	}
+
+	//获取文件后缀
+	public function get_file_extension($str = '') 
+	{
+		$start = strrpos($str, '.');
+		$ext = substr($str, $start + 1);
+		return $ext;
+	}
 }
 

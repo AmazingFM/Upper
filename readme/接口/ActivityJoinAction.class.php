@@ -42,6 +42,19 @@ class ActivityJoinAction extends BaseAction
 			$this->returnError('活动报名人数已达上限！', '1006');
 		}
 		
+		//查用户
+		$where_info = "id = ".$this->user_id;
+		$user_info = M('Tuser')->where($where_info)->find();
+		if(empty($user_info))
+		{
+			$this->returnError('报名用户不存在！', '1009');
+		}
+
+		$fmale_count = 0;
+		if($user_info['sexual'] == 2)
+		{
+			$fmale_count = 1;
+		}
 
 		//记录报名信息
 		$where_info = "activity_id = ".$this->activity_id." and user_id = ".$this->user_id;
@@ -68,8 +81,18 @@ class ActivityJoinAction extends BaseAction
 		{
 			$this->returnError('活动报名人数更新失败！', '1008');
 		}
+		if($fmale_count > 0)
+		{
+			$rs = M('Tactivity')->where($where)->setInc('fmale_part_count',$fmale_count);
+			if(!$rs)
+			{
+				$this->returnError('活动报名女性人数更新失败！', '1008');
+			}
+		}
 
-		if($activity_info['part_count']+1 >= $activity_info['limit_low'] && $activity_info['activity_status'] == 0)
+		if($activity_info['part_count']+1 >= $activity_info['limit_low'] 
+			&& $activity_info['fmale_part_count'] + $fmale_count >= $activity_info['fmale_low'] 
+			&& $activity_info['activity_status'] == 0)
 		{
 			 M('Tactivity')->where($where)->setInc('activity_status',1);//更新募集期到募集成功
 		}

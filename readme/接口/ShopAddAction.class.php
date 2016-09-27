@@ -19,7 +19,7 @@ class ShopAddAction extends BaseAction
 
 	public function _initialize(){
 		parent::_initialize();
-		$this->checkSign();
+		//$this->checkSign();
 
 		$this->shop_name = I('shop_name');
 		$this->shop_desc = I('shop_desc');
