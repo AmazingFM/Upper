@@ -229,6 +229,39 @@ static CGFloat const FixRatio = 4/3.0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self setNewData];
+    
+    // Do any additional setup after loading the view.
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
+    _tableView.backgroundColor = [UIColor whiteColor];
+    _tableView.showsVerticalScrollIndicator = NO;
+    _tableView.showsHorizontalScrollIndicator = NO;
+    _tableView.separatorColor = [UIColor lightGrayColor];
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+        _tableView.separatorInset = UIEdgeInsetsZero;
+    }
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+    if ([_tableView respondsToSelector:@selector(setLayoutMargins:)]) {
+        _tableView.layoutMargins = UIEdgeInsetsMake(0,0,0,0);
+    }
+#endif
+    _tableView.tableFooterView = [[UIView alloc] init];
+    
+    UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+    gesture.cancelsTouchesInView = NO;
+    [_tableView addGestureRecognizer:gesture];
+    
+    [self.view addSubview:_tableView];
+    
+    [self loadNotificationCell];
+}
+
+- (void)setNewData
+{
+    [self.itemList removeAllObjects];
+    
     needFemale = NO;
     
     UPButtonCellItem *item0 = [[UPButtonCellItem alloc] init];
@@ -268,8 +301,8 @@ static CGFloat const FixRatio = 4/3.0;
     
     UPTitleCellItem *item15 = [[UPTitleCellItem alloc] init];
     item15.key = @"fmale_low";
-
-
+    
+    
     UPDetailCellItem *item6 = [[UPDetailCellItem alloc] init];
     item6.title = @"活动地点区域";
     item6.detail = @"选择城市";
@@ -319,24 +352,24 @@ static CGFloat const FixRatio = 4/3.0;
     item13.tintColor = [UIColor redColor];
     item13.key = @"submit";
     
-    _itemList = [NSMutableArray new];
-    [_itemList addObject:item0];
-    [_itemList addObject:item1];
-    [_itemList addObject:item2];
-    [_itemList addObject:item3];
-    [_itemList addObject:item4];
-    [_itemList addObject:item5];
-    [_itemList addObject:item15];
-    [_itemList addObject:item6];
-    [_itemList addObject:item7];
-    [_itemList addObject:item8];
-    [_itemList addObject:item9];
-    [_itemList addObject:item10];
-    [_itemList addObject:item11];
-    [_itemList addObject:item12];
-    [_itemList addObject:item13];
+    self.itemList = [NSMutableArray new];
+    [self.itemList addObject:item0];
+    [self.itemList addObject:item1];
+    [self.itemList addObject:item2];
+    [self.itemList addObject:item3];
+    [self.itemList addObject:item4];
+    [self.itemList addObject:item5];
+    [self.itemList addObject:item15];
+    [self.itemList addObject:item6];
+    [self.itemList addObject:item7];
+    [self.itemList addObject:item8];
+    [self.itemList addObject:item9];
+    [self.itemList addObject:item10];
+    [self.itemList addObject:item11];
+    [self.itemList addObject:item12];
+    [self.itemList addObject:item13];
     
-    [_itemList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    [self.itemList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         UPBaseCellItem *cellItem = (UPBaseCellItem *)obj;
         
         cellItem.cellWidth = ScreenWidth;
@@ -353,32 +386,6 @@ static CGFloat const FixRatio = 4/3.0;
         
         *stop = NO;
     }];
-    
-    // Do any additional setup after loading the view.
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
-    _tableView.backgroundColor = [UIColor whiteColor];
-    _tableView.showsVerticalScrollIndicator = NO;
-    _tableView.showsHorizontalScrollIndicator = NO;
-    _tableView.separatorColor = [UIColor lightGrayColor];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-        _tableView.separatorInset = UIEdgeInsetsZero;
-    }
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-    if ([_tableView respondsToSelector:@selector(setLayoutMargins:)]) {
-        _tableView.layoutMargins = UIEdgeInsetsMake(0,0,0,0);
-    }
-#endif
-    _tableView.tableFooterView = [[UIView alloc] init];
-    
-    UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-    gesture.cancelsTouchesInView = NO;
-    [_tableView addGestureRecognizer:gesture];
-    
-    [self.view addSubview:_tableView];
-    
-    [self loadNotificationCell];
 }
 
 - (void)tap:(UITapGestureRecognizer *)gestureReco
@@ -648,7 +655,7 @@ static CGFloat const FixRatio = 4/3.0;
     [comboxItem setSelectedIndex:selectedIndex];
     
     if ([cellItem.key isEqualToString:@"activity_class"]) {
-        [_itemList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [self.itemList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             UPBaseCellItem *cellItem = (UPBaseCellItem *)obj;
             if ([cellItem.key isEqualToString:@"fmale_low"]) {
                 if (selectedIndex==1) { //派对，酒会
@@ -734,7 +741,9 @@ static CGFloat const FixRatio = 4/3.0;
         
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         [manager POST:kUPFilePostURL parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-            [formData appendPartWithFileData:_imgData name:@"file" fileName:@"act" mimeType:@"image/jpeg"];
+            if (_imgData!=nil) {
+                 [formData appendPartWithFileData:_imgData name:@"file" fileName:@"act" mimeType:@"image/jpeg"];
+            }
         } success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSString *resp = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
             NSLog(@"Success:%@,", resp);
@@ -744,7 +753,13 @@ static CGFloat const FixRatio = 4/3.0;
                 NSDictionary *respDict = (NSDictionary *)jsonObj;
                 NSString *resp_id = respDict[@"resp_id"];
                 NSString *resp_desc = respDict[@"resp_desc"];
-                
+                if ([resp_id intValue]==0) {
+                    [self setNewData];
+                    [_tableView reloadData];
+                    
+                } else {
+                    //
+                }
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:resp_id message:resp_desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
                 [alert show];
             }
