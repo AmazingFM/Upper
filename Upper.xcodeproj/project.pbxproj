@@ -151,6 +151,7 @@
 		3A2939931D2F80F6005CB3F3 /* UPTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2939921D2F80F6005CB3F3 /* UPTextView.m */; };
 		3A5368261D54791E00F36FBC /* YRSideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A5368251D54791E00F36FBC /* YRSideViewController.m */; };
 		3AAF86391D6C193700248A45 /* YMImageLoadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAF86381D6C193700248A45 /* YMImageLoadView.m */; };
+		3AB7372F1D9B55FA00722380 /* activities.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3AB7372E1D9B55FA00722380 /* activities.plist */; };
 		3ACF2AF51D6AEDD30083E04E /* RecommendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACF2AF41D6AEDD30083E04E /* RecommendController.m */; };
 		3AFCCDBD1D5C09BC0003F6F3 /* NewLaunchActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */; };
 		EC3C18011CECB16D00223D6B /* UPGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B21CECB16D00223D6B /* UPGlobals.m */; };
@@ -499,6 +500,7 @@
 		3A5368251D54791E00F36FBC /* YRSideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YRSideViewController.m; sourceTree = "<group>"; };
 		3AAF86371D6C193700248A45 /* YMImageLoadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMImageLoadView.h; sourceTree = "<group>"; };
 		3AAF86381D6C193700248A45 /* YMImageLoadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMImageLoadView.m; sourceTree = "<group>"; };
+		3AB7372E1D9B55FA00722380 /* activities.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = activities.plist; sourceTree = "<group>"; };
 		3ACF2AF31D6AEDD30083E04E /* RecommendController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecommendController.h; sourceTree = "<group>"; };
 		3ACF2AF41D6AEDD30083E04E /* RecommendController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecommendController.m; sourceTree = "<group>"; };
 		3AFCCDBB1D5C09BC0003F6F3 /* NewLaunchActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewLaunchActivityController.h; sourceTree = "<group>"; };
@@ -703,6 +705,7 @@
 		2CDAD5441D0EE23F00C260F4 /* resource */ = {
 			isa = PBXGroup;
 			children = (
+				3AB7372D1D9B55A000722380 /* plist */,
 				2CDAD5451D0EE23F00C260F4 /* pic */,
 			);
 			path = resource;
@@ -1124,6 +1127,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		3AB7372D1D9B55A000722380 /* plist */ = {
+			isa = PBXGroup;
+			children = (
+				3AB7372E1D9B55FA00722380 /* activities.plist */,
+			);
+			path = plist;
+			sourceTree = "<group>";
+		};
 		EC3C16AD1CECB16D00223D6B /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -1460,6 +1471,7 @@
 				TargetAttributes = {
 					FECE88121BE344DA00CC8E85 = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = 77565T989X;
 					};
 				};
 			};
@@ -1511,6 +1523,7 @@
 				2CDAD55A1D0EE23F00C260F4 /* chat_animation2.png in Resources */,
 				2CDAD5611D0EE23F00C260F4 /* Chat_record_circle.png in Resources */,
 				2CDAD56A1D0EE23F00C260F4 /* headImage.jpeg in Resources */,
+				3AB7372F1D9B55FA00722380 /* activities.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1804,8 +1817,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Yongming Zhang (V76QA6Q843)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yongming Zhang (V76QA6Q843)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Upper_1/PrefixHeader.pch;
 				INFOPLIST_FILE = Upper_1/Info.plist;
@@ -1821,9 +1834,9 @@
 					Security,
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.upper.me;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yeoman.upper;
 				PRODUCT_NAME = Upper;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "e93777dd-abf6-4eb4-a494-760b4a23c264";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1833,7 +1846,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yongming Zhang (V76QA6Q843)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Upper_1/PrefixHeader.pch;
 				INFOPLIST_FILE = Upper_1/Info.plist;
@@ -1849,9 +1862,9 @@
 					Security,
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.upper.me;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yeoman.upper;
 				PRODUCT_NAME = Upper;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "e93777dd-abf6-4eb4-a494-760b4a23c264";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

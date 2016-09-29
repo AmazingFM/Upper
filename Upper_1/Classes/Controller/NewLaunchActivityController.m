@@ -19,6 +19,11 @@
 
 #define kUPFilePostURL @"http://api.qidianzhan.com.cn/AppServ/index.php?a=ActivityAdd"
 
+#define kFieldTagForPrepay          1004
+#define kFieldTagForFemaleLowLimit  1003
+#define kFieldTagForPepleHighLimit  1002
+#define kFieldTagForPepleLowLimit   1001
+
 static CGFloat const FixRatio = 4/3.0;
 
 //#define GB18030_ENCODING CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000)
@@ -208,6 +213,7 @@ static CGFloat const FixRatio = 4/3.0;
     NSString *_lowLimit;
     NSString *_highLimit;
     NSString *_femaleLowLimit;
+    NSString *_activityFee;
     
     NSData *_imgData;
     
@@ -351,7 +357,7 @@ static CGFloat const FixRatio = 4/3.0;
     UPTitleCellItem *item17 = [[UPTitleCellItem alloc] init];  //使用 是否预付的 字段传参
     item17.title = @"设定";
     item17.style = UPItemStyleIndex;
-    item17.key = @"goodsNum";
+    item17.key = @"goodNum";
     
     UPTitleCellItem *item16 = [[UPTitleCellItem alloc] init];
     item16.key = @"activity_fee";
@@ -481,9 +487,22 @@ static CGFloat const FixRatio = 4/3.0;
     [itemCell setItem:cellItem];
     
     if ([cellItem.key isEqualToString:@"activity_place"] &&cellItem.more ) {
+//        CGFloat cellWidth = cellItem.cellWidth;
+//        UIView *detailView = itemCell.accessoryView;
+//        if (detailView==nil) {
+//            detailView = [[UIView alloc] initWithFrame:CGRectMake(cellWidth/2-30,kUPCellVBorder,(cellWidth-2*kUPCellHBorder)/2+30,kUPCellHeight-2*kUPCellVBorder)];
+//            detailView.backgroundColor = [UIColor clearColor];
+//            itemCell.accessoryView = detailView;
+//        }
+//        
+//        for (UIView *subView in detailView.subviews) {
+//            [subView removeFromSuperview];
+//        }
+//        
+        
         itemCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        itemCell.detailTextLabel.text=@"";
         UIButton *recoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+
         
         CGSize size = SizeWithFont(@"推荐", kUPThemeSmallFont);
         recoBtn.frame = CGRectMake(0,0,size.width+10,kUPCellDefaultHeight);
@@ -495,43 +514,43 @@ static CGFloat const FixRatio = 4/3.0;
         
     }else if ([cellItem.key isEqualToString:@"activity_fee"]) {
         CGFloat cellWidth = cellItem.cellWidth;
-            itemCell.textLabel.text = @"预估费用";
-            UIView *detailView = itemCell.accessoryView;
-            if (detailView==nil) {
-                detailView = [[UIView alloc] initWithFrame:CGRectMake(cellWidth/2-30,kUPCellVBorder,(cellWidth-2*kUPCellHBorder)/2+30,kUPCellHeight-2*kUPCellVBorder)];
-                detailView.backgroundColor = [UIColor clearColor];
-                itemCell.accessoryView = detailView;
-            }
-            for (UIView *subView in detailView.subviews) {
-                [subView removeFromSuperview];
-            }
-        
-        NSString *descText = nil;
         if (malePay) {
-            descText = @"元";//,费用会随男女比例而浮动
+            itemCell.textLabel.text = @"预估费用(按男女比例调整)";
         } else {
-            descText = @"元";
+            itemCell.textLabel.text = @"预估费用";
+        }
+        
+        UIView *detailView = itemCell.accessoryView;
+        if (detailView==nil) {
+            detailView = [[UIView alloc] initWithFrame:CGRectMake(cellWidth/2-30,kUPCellVBorder,(cellWidth-2*kUPCellHBorder)/2+30,kUPCellHeight-2*kUPCellVBorder)];
+            detailView.backgroundColor = [UIColor clearColor];
+            itemCell.accessoryView = detailView;
+        }
+    
+        for (UIView *subView in detailView.subviews) {
+            [subView removeFromSuperview];
         }
 
-            CGFloat detailWidth = detailView.size.width;
-            CGFloat detailHeight = detailView.size.height;
-            CGSize sizeOneChar = SizeWithFont(@"descText", kUPThemeNormalFont);
-            CGFloat perWidth = sizeOneChar.width;
-            CGFloat perHeight = sizeOneChar.height+4;
-            
-            UITextField *lowField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-3*perWidth-kUPThemeBorder, (detailHeight-perHeight)/2, 2*perWidth, perHeight)];
-            lowField.tag = 1004;
-            lowField.keyboardType = UIKeyboardTypeNumberPad;
-            lowField.borderStyle = UITextBorderStyleLine;
-            [lowField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
-            lowField.delegate = self;
-            
-            UILabel *renLabel = [[UILabel alloc] initWithFrame:CGRectMake(detailWidth-perWidth,(detailHeight-perHeight)/2, perWidth, perHeight)];
-            renLabel.text = @"";
-            renLabel.font = kUPThemeNormalFont;
-            renLabel.backgroundColor = [UIColor clearColor];
-            [detailView addSubview:lowField];
-            [detailView addSubview:renLabel];
+        CGFloat detailWidth = detailView.size.width;
+        CGFloat detailHeight = detailView.size.height;
+        CGSize sizeOneChar = SizeWithFont(@"元", kUPThemeNormalFont);
+        CGFloat perWidth = sizeOneChar.width;
+        CGFloat perHeight = sizeOneChar.height+4;
+        
+        UITextField *lowField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-3*perWidth-kUPThemeBorder, (detailHeight-perHeight)/2, 2*perWidth, perHeight)];
+        lowField.tag = kFieldTagForPrepay;
+        lowField.text = @"0";
+        lowField.keyboardType = UIKeyboardTypeNumberPad;
+        lowField.borderStyle = UITextBorderStyleLine;
+        [lowField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
+        lowField.delegate = self;
+        
+        UILabel *renLabel = [[UILabel alloc] initWithFrame:CGRectMake(detailWidth-perWidth,(detailHeight-perHeight)/2, perWidth, perHeight)];
+        renLabel.text = @"元";
+        renLabel.font = kUPThemeNormalFont;
+        renLabel.backgroundColor = [UIColor clearColor];
+        [detailView addSubview:lowField];
+        [detailView addSubview:renLabel];
 
     }else if ([cellItem.key isEqualToString:@"fmale_low"]) {
         CGFloat cellWidth = cellItem.cellWidth;
@@ -559,7 +578,7 @@ static CGFloat const FixRatio = 4/3.0;
             CGFloat perHeight = sizeOneChar.height+4;
             
             UITextField *lowField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-3*perWidth-kUPThemeBorder, (detailHeight-perHeight)/2, 2*perWidth, perHeight)];
-            lowField.tag = 1003;
+            lowField.tag = kFieldTagForFemaleLowLimit;
             lowField.keyboardType = UIKeyboardTypeNumberPad;
             lowField.borderStyle = UITextBorderStyleLine;
             [lowField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
@@ -591,14 +610,14 @@ static CGFloat const FixRatio = 4/3.0;
         CGFloat perWidth = sizeOneChar.width;
         CGFloat perHeight = sizeOneChar.height+4;
         UITextField *lowField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-6*perWidth-3*kUPThemeBorder, (detailHeight-perHeight)/2, 2*perWidth, perHeight)];
-        lowField.tag = 1001;
+        lowField.tag = kFieldTagForPepleLowLimit;
         lowField.keyboardType = UIKeyboardTypeNumberPad;
         lowField.borderStyle = UITextBorderStyleLine;
         [lowField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
         lowField.delegate = self;
     
         UITextField *highField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-3*perWidth-kUPThemeBorder, (detailHeight-perHeight)/2, 2*perWidth, perHeight)];
-        highField.tag = 1002;
+        highField.tag = kFieldTagForPepleHighLimit;
         highField.borderStyle = UITextBorderStyleLine;
         highField.keyboardType = UIKeyboardTypeNumberPad;
         [highField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
@@ -657,14 +676,15 @@ static CGFloat const FixRatio = 4/3.0;
 #pragma mark UITextFieldDelegate
 -(void)textFieldChanged:(UITextField*)textField
 {
-    if (textField.tag==1001) {
+    if (textField.tag==kFieldTagForPepleLowLimit) {
         _lowLimit = textField.text;
-    } else if (textField.tag==1002) {
+    } else if (textField.tag==kFieldTagForPepleHighLimit) {
         _highLimit = textField.text;
-    } else if (textField.tag==1003) {
+    } else if (textField.tag==kFieldTagForFemaleLowLimit) {
         _femaleLowLimit = textField.text;
+    } else if (textField.tag==kFieldTagForPrepay) {
+        _activityFee = textField.text;
     }
-    
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)textEntered
@@ -772,6 +792,7 @@ static CGFloat const FixRatio = 4/3.0;
         } else if ((_femaleLowLimit==nil || _femaleLowLimit.length==0)&&needFemale) {
             msg = @"请输入女性人数要求";
         }
+
         if (msg) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
             [alert show];
@@ -784,7 +805,7 @@ static CGFloat const FixRatio = 4/3.0;
         [params setObject:_highLimit forKey:@"limit_count"];
         [params setObject:_lowLimit forKey:@"limit_low"];
         [params setObject:(_femaleLowLimit&&_femaleLowLimit.length>0)?_femaleLowLimit:@"0" forKey:@"fmale_low"];
-        [params setObject:@"" forKey:@"activity_fee"];
+        [params setObject:_activityFee forKey:@"activity_fee"];
         
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         formatter.dateFormat = @"yyyyMMddHHmmss";
