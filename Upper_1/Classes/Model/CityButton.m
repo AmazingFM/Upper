@@ -30,10 +30,8 @@
         [self setBackgroundImage:[UIImage imageNamed:@"unselect_bg"] forState:UIControlStateNormal];
         self.layer.masksToBounds = YES;
         [self.layer setCornerRadius:5.0]; //设置矩形四个圆角半径
-//        self.layer.borderColor   = [UIColor colorWithRed:220/255.0 green:220/255.0 blue:220/255.0 alpha:1].CGColor;
-//        self.layer.borderWidth   = 1;
         
-        //[self setupViews];
+        [self setupViews];
     }
     return self;
 }
@@ -48,10 +46,11 @@
     
     UILabel *titleName = [[UILabel alloc] init];
     titleName.font = [UIFont systemFontOfSize:kCityItemViewTitleTextFont];
-    titleName.textColor = [UIColor blackColor];
+    titleName.textColor = [UIColor whiteColor];
     titleName.textAlignment = NSTextAlignmentCenter;
     titleName.backgroundColor = [UIColor clearColor];
     titleName.numberOfLines = 1;
+    titleName.adjustsFontSizeToFitWidth = YES;
     [container addSubview:titleName];
     
     self.titleName = titleName;
@@ -61,13 +60,13 @@
     self.container = container;
 }
 
-//- (void)layoutSubviews {
-//    
-//    [super layoutSubviews];
-//
-//    self.container.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-//    self.titleName.frame = CGRectMake(0, 0, self.container.frame.size.width, self.container.frame.size.height);
-//}
+- (void)layoutSubviews {
+    
+    [super layoutSubviews];
+
+    self.container.frame = CGRectMake(2, 0, self.frame.size.width-4, self.frame.size.height);
+    self.titleName.frame = CGRectMake(0, 0, self.container.frame.size.width, self.container.frame.size.height);
+}
 
 - (void)setCityItem:(CityItem *)cityItem
 {
@@ -75,8 +74,7 @@
     _cityItem = cityItem;
     
     if (!IsNilOrNull(_cityItem)) {
-        //self.titleName.text = _cityItem.city;
-        [self setTitle:_cityItem.city forState:UIControlStateNormal];
+        self.titleName.text = _cityItem.city;
     }
 }
 

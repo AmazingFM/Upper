@@ -22,13 +22,14 @@
 @class UpperController;
 @class UPQRViewController;
 @class QRCodeController;
-@class ChatController;
+@class BubbleChatViewController;
 @class MessageCenterController;
 @class NewLaunchActivityController;
 
 @class UpExpertController;
 @class UpMyActivityViewController;
 @class UpSettingController;
+@class UPMyFriendsViewController;
 
 
 @interface MainController : UPBaseViewController
@@ -46,7 +47,8 @@
     UPQRViewController *qrController;
     QRCodeController *qrCodeController;
     MessageCenterController *msgCenterController;
-    ChatController *chatController;
+    BubbleChatViewController *chatController;
+    UPMyFriendsViewController *myFriendsController;
 }
 
 @property (nonatomic, retain) id parentController;

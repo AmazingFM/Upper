@@ -31,6 +31,8 @@
 - (void)switchOn:(BOOL)isOn withIndexPath:(NSIndexPath *)indexPath;
 - (void)viewValueChanged:(NSString*)value  withIndexPath:(NSIndexPath*)indexPath;
 - (void)datepickerSelected:(NSString *)date;
+
+- (void)resignKeyboard;
 @end
 
 @interface UPBaseCell :UITableViewCell

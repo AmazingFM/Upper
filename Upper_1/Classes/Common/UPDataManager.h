@@ -33,4 +33,7 @@
 - (void)writeToDefaults:(UserData *)userData;
 - (void)readFromDefaults;
 - (void)cleanUserDafult;
+
+- (void)readSeqFromDefaults;
+- (void)writeSeqToDefaults;
 @end

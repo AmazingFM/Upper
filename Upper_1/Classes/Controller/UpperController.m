@@ -7,6 +7,7 @@
 //
 
 #import "UpperController.h"
+#import "QRCodeController.h"
 #import "Info.h"
 #import "MainController.h"
 #import "AppDelegate.h"
@@ -61,7 +62,7 @@ extern NSString * const g_loginFileName;
     self.title = @"Upper";
 
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"back" highIcon:@"" target:self action:@selector(goBack)];
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithRightIcon:@"top_navigation_righticon" highIcon:@"" target:self action:@selector(scanQR)];
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithRightIcon:@"add" highIcon:@"" target:self action:@selector(scanQR)];
     
     _quitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _quitBtn.frame = CGRectMake(20, ScreenHeight-80, ScreenWidth-40, 35);
@@ -511,7 +512,9 @@ extern NSString * const g_loginFileName;
 
 - (void)scanQR
 {
-    [self.parentController OnAction:self withType:CHANGE_VIEW toView:QR_SCAN_VIEW withArg:nil];
+    QRCodeController *qrController = [[QRCodeController alloc] init];
+    qrController.title = @"扫描";
+    [self.navigationController pushViewController:qrController animated:YES];
 }
 
 - (void)quit:(UIButton *)sender

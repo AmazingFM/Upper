@@ -41,6 +41,8 @@ extern BOOL g_isLogin;
 
 extern void initialize();
 
+UIBarButtonItem* createBarItemTitle(NSString* title ,id target, SEL selector);
+
 @interface UPGlobals : NSObject
 
 @end

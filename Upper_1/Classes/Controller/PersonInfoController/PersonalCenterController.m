@@ -12,7 +12,7 @@
 #import "UPHerParticipatedActivityController.h"
 #import "ZKSegment.h"
 #import "Info.h"
-#import "ChatController.h"
+#import "BubbleChatViewController.h"
 
 #import "UPDataManager.h"
 
@@ -71,7 +71,7 @@
 
 - (void)letsChat:(UIButton *)sender
 {
-    ChatController *chatController = [[ChatController alloc] init];
+    BubbleChatViewController *chatController = [[BubbleChatViewController alloc] init];
     chatController.otherUserData = self.user;
     [self.navigationController pushViewController:chatController animated:YES];
 }

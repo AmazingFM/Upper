@@ -8,7 +8,7 @@
 
 #import "EnrollPeopleController.h"
 #import "PersonalCenterController.h"
-#import "ChatController.h"
+#import "BubbleChatViewController.h"
 #import "UserData.h"
 #import "Info.h"
 
@@ -213,7 +213,7 @@ static int const kPadding = 5;
 {
     NSInteger row = ((UITableViewCell *)[sender superview]).tag;
     
-    ChatController *chatController = [[ChatController alloc] init];
+    BubbleChatViewController *chatController = [[BubbleChatViewController alloc] init];
     chatController.userData = self.userArr[row];
     [self.navigationController pushViewController:chatController animated:YES];
 }

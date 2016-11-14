@@ -8,6 +8,8 @@
 
 #import "NewLaunchActivityController.h"
 #import "RecommendController.h"
+#import "UPActTypeController.h"
+
 #import "DrawSomething.h"
 #import "UPCellItems.h"
 #import "UPCells.h"
@@ -206,10 +208,12 @@ static CGFloat const FixRatio = 4/3.0;
 @end
 
 
-@interface NewLaunchActivityController () <UITableViewDelegate, UITableViewDataSource, UPCellDelegate, UITextFieldDelegate, UIAlertViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface NewLaunchActivityController () <UITableViewDelegate, UITableViewDataSource, UPCellDelegate, UITextFieldDelegate, UIAlertViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UPActTypeSelectDelegate>
 {
     UITableView *_tableView;
     CityItem *_selectedCity;
+    int _typeCode;
+    
     NSString *_lowLimit;
     NSString *_highLimit;
     NSString *_femaleLowLimit;
@@ -236,6 +240,8 @@ static CGFloat const FixRatio = 4/3.0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.title = @"发起活动";
+    _typeCode = -1;
     
     [self setNewData];
     
@@ -300,16 +306,13 @@ static CGFloat const FixRatio = 4/3.0;
     item4.date = @"选择日期";
     item4.key = @"start_time";
     
-    NSArray *types = @[@"不限",@"夜店派对", @"家庭派对", @"派对、酒会", @"桌游、座谈、棋牌", @"KTV", @"户外烧烤", @"运动",@"郊游、徒步"];
-    UPComboxCellItem *item5 = [[UPComboxCellItem alloc] init];
+    UPDetailCellItem *item5 = [[UPDetailCellItem alloc] init];
     item5.title = @"活动类型";
-    item5.comboxItems = types;
-    item5.style = UPItemStyleIndex;
+    item5.detail = @"选择类型";
     item5.key = @"activity_class";
     
     UPTitleCellItem *item15 = [[UPTitleCellItem alloc] init];
     item15.key = @"fmale_low";
-    
     
     UPDetailCellItem *item6 = [[UPDetailCellItem alloc] init];
     item6.title = @"活动地点区域";
@@ -487,19 +490,6 @@ static CGFloat const FixRatio = 4/3.0;
     [itemCell setItem:cellItem];
     
     if ([cellItem.key isEqualToString:@"activity_place"] &&cellItem.more ) {
-//        CGFloat cellWidth = cellItem.cellWidth;
-//        UIView *detailView = itemCell.accessoryView;
-//        if (detailView==nil) {
-//            detailView = [[UIView alloc] initWithFrame:CGRectMake(cellWidth/2-30,kUPCellVBorder,(cellWidth-2*kUPCellHBorder)/2+30,kUPCellHeight-2*kUPCellVBorder)];
-//            detailView.backgroundColor = [UIColor clearColor];
-//            itemCell.accessoryView = detailView;
-//        }
-//        
-//        for (UIView *subView in detailView.subviews) {
-//            [subView removeFromSuperview];
-//        }
-//        
-        
         itemCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         UIButton *recoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
 
@@ -650,8 +640,12 @@ static CGFloat const FixRatio = 4/3.0;
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:citySelectController];
         citySelectController.delegate = self;
         [self presentViewController:nav animated:YES completion:nil];
+    } else if([cellItem.key isEqualToString:@"activity_class"]){
+        UPActTypeController *actTypeSelectVC = [[UPActTypeController alloc] init];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:actTypeSelectVC];
+        actTypeSelectVC.delegate = self;
+        [self presentViewController:nav animated:YES completion:nil];
     }
-    
 }
 
 - (UPBaseCell *)cellWithItem:(UPBaseCellItem*)cellItem
@@ -762,7 +756,7 @@ static CGFloat const FixRatio = 4/3.0;
     if([cellItem.key isEqualToString:@"submit"]){
         
         //industry_id, province_code, city_code, town_code, limit_count, limit_low
-        NSArray *paramKey = @[@"activity_name", @"activity_desc", @"activity_class", @"end_time", @"start_time", @"activity_place_code", @"activity_place", @"is_prepaid", @"industry_id", @"clothes_need"];
+        NSArray *paramKey = @[@"activity_name", @"activity_desc", @"end_time", @"start_time", @"activity_place_code", @"activity_place", @"is_prepaid", @"industry_id", @"clothes_need"];
         
         NSDictionary *headParam = [UPDataManager shared].getHeadParams;
         NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
@@ -798,7 +792,17 @@ static CGFloat const FixRatio = 4/3.0;
             [alert show];
             return;
         }
-                
+        
+        if (_typeCode==-1) {
+            msg = @"请选择活动类型";
+        }
+        if (msg) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alert show];
+            return;
+        }
+        [params setObject:[NSString stringWithFormat:@"%d", _typeCode] forKey:@"activity_place"];
+        
         [params setObject:_selectedCity.province_code forKey:@"province_code"];
         [params setObject:_selectedCity.city_code forKey:@"city_code"];
         [params setObject:_selectedCity.town_code forKey:@"town_code"];
@@ -1007,31 +1011,22 @@ static CGFloat const FixRatio = 4/3.0;
     
 }
 
+- (void)actionTypeDidSelect:(int)typeCode andTypeName:(NSString *)typeName{
+    for (UPBaseCellItem *cellItem in self.itemList) {
+        if ([cellItem.key isEqualToString:@"activity_class"]) {
+            UPDetailCellItem *item = (UPDetailCellItem*)cellItem;
+            item.detail = typeName;
+            [_tableView reloadRowsAtIndexPaths:@[item.indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            break;
+        }
+    }
+    _typeCode = typeCode;
+}
+
+- (void)resignKeyboard
+{
+    [self.view endEditing:YES];
+}
+
 @end
 
-/*******
- 
- dressTypeItems = new ArrayList<SpinnerItem>();
- dressTypeItems.add(new SpinnerItem("1", "随性"));
- dressTypeItems.add(new SpinnerItem("2", "西装领带"));
- dressTypeItems.add(new SpinnerItem("3", "便装"));
- 
- actionTypeItems = new ArrayList<SpinnerItem>();
- actionTypeItems.add(new SpinnerItem("1", "不限"));
- actionTypeItems.add(new SpinnerItem("2", "派对、酒会"));
- actionTypeItems.add(new SpinnerItem("3", "桌游、座谈、棋牌"));
- actionTypeItems.add(new SpinnerItem("4", "KTV"));
- actionTypeItems.add(new SpinnerItem("5", "户外烧烤"));
- actionTypeItems.add(new SpinnerItem("6", "运动"));
- actionTypeItems.add(new SpinnerItem("7", "郊游、徒步"));
- 
- payTypeItem = new ArrayList<SpinnerItem>();
- payTypeItem.add(new SpinnerItem("1", "土豪请客"));
- payTypeItem.add(new SpinnerItem("2", "AA付款"));
- 
- timeRangeItems = new ArrayList<SpinnerItem>();
- timeRangeItems.add(new SpinnerItem("1", "当天"));
- timeRangeItems.add(new SpinnerItem("2", "3天内"));
- timeRangeItems.add(new SpinnerItem("3", "未来一周"));
- timeRangeItems.add(new SpinnerItem("4", "未来一个月"));
- ******/

@@ -42,11 +42,14 @@ static int kMsgCount = 0;
     messageItem = [self barBtnWithIcon:@"message"];
     messageItem.badgeValue = kMsgCount==0?@"":[NSString stringWithFormat:@"%d", kMsgCount];
     messageItem.badgeBGColor = [UIColor redColor];
-    self.navigationItem.rightBarButtonItem=messageItem;}
+    self.navigationItem.rightBarButtonItem=messageItem;
+}
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
@@ -58,6 +61,17 @@ static int kMsgCount = 0;
         [self prefersStatusBarHidden];
         [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
     }
+    
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 - (void)addBadgeValue:(NSNotification *)notification
@@ -72,12 +86,6 @@ static int kMsgCount = 0;
 - (void)setBadgeValue:(int)newValue
 {
     messageItem.badgeValue = newValue==0?@"":[NSString stringWithFormat:@"%d", newValue];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)keyboardWillShow:(NSNotification *)note

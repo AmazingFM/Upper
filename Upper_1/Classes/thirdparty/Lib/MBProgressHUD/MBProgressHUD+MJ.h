@@ -8,6 +8,8 @@
 #import "MBProgressHUD.h"
 
 @interface MBProgressHUD (MJ)
+
++ (void)show:(NSString *)text icon:(NSString *)icon view:(UIView *)view;
 + (void)showSuccess:(NSString *)success toView:(UIView *)view;
 + (void)showError:(NSString *)error toView:(UIView *)view;
 

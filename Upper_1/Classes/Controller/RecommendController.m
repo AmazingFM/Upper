@@ -36,7 +36,7 @@
     // Do any additional setup after loading the view.
     self.title = @"推荐商户";
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"default_cover_gaussian"]];
-    
+    self.navigationItem.rightBarButtonItem=nil;
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,FirstLabelHeight,ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;

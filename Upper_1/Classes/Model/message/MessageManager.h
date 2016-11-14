@@ -8,13 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+@class UUMessage;
 @interface MessageManager : NSObject
 
 + (instancetype)shared;
 //- (void)pullMessage;
 - (NSMutableArray *)getMessageGroup;
 - (void)initEnv;
-- (NSMutableDictionary *)getMessageGroup:(NSRange)range;
+- (NSMutableArray *)getMessageGroup:(NSRange)range;
 - (BOOL)updateGropuMessageStatus:(NSString *)user_id;
 - (NSMutableArray *)getMessages:(NSRange)range withUserId:(NSString *)userId;
+- (BOOL)updateOneMessage:(UUMessage *)msg;
+
 @end

@@ -15,6 +15,11 @@
 @property (nonatomic, retain) NSString *companyId;
 @property (nonatomic, retain) NSString *emailSuffix;
 
+@property (nonatomic, retain) UISearchBar *searchBar;
+
+@property (nonatomic, retain) NSMutableArray *companyCategory;
+@property (nonatomic, retain) NSMutableArray *showCompany;
+
 - (void)loadCompanyData:(id)respData;
 - (void)buttonClick:(UIButton *)sender;
 - (void)resetSubView;

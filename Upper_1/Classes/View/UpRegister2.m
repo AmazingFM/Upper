@@ -47,7 +47,7 @@
     CGSize size = [industyStr sizeWithFont:[UIFont systemFontOfSize:12] constrainedToSize:CGSizeMake(100,10000.0f) lineBreakMode:UILineBreakModeWordWrap];
     
     
-    UILabel *industryL = [[UILabel alloc]initWithFrame:CGRectMake(0, frame.size.height-2-size.height-2, size.width, size.height)];
+    UILabel *industryL = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, frame.size.height-2-size.height-2, size.width, size.height)];
     industryL.textAlignment = NSTextAlignmentRight;
     industryL.numberOfLines = 0;
     industryL.text = industyStr;
@@ -55,13 +55,13 @@
     industryL.font = [UIFont systemFontOfSize:12];
     industryL.textColor = [UIColor whiteColor];
 
-    industryB = [[UIButton alloc]initWithFrame:CGRectMake(2+size.width, industryL.origin.y, frame.size.width-2-size.width, size.height)];
+    industryB = [[UIButton alloc]initWithFrame:CGRectMake(size.width+LeftRightPadding, industryL.origin.y, frame.size.width-2*LeftRightPadding-size.width, size.height)];
     industryB.backgroundColor = [UIColor clearColor];
     [industryB setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
     
 
-    UIImageView * seperatorV = [[UIImageView alloc]initWithFrame:CGRectMake(0, frame.size.height-2, frame.size.width, 1)];
+    UIImageView * seperatorV = [[UIImageView alloc]initWithFrame:CGRectMake(LeftRightPadding, frame.size.height-2, frame.size.width-2*LeftRightPadding, 1)];
     seperatorV.backgroundColor = [UIColor blackColor];
     
     _contentScro = [[UIScrollView alloc] initWithFrame:CGRectMake(LeftRightPadding, 0, frame.size.width-2*LeftRightPadding, industryB.origin.y-10)];
@@ -110,13 +110,14 @@
         [tmp setFrame:CGRectMake(nCount%4*(btnWidth+10), row*(btnHeight+15), btnWidth, btnHeight)];
         [tmp setTitle:obj.industry_name forState:UIControlStateNormal];
         tmp.tag = nCount;
+        tmp.titleLabel.adjustsFontSizeToFitWidth = YES;
         [tmp addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
         [industryButtonArr addObject:tmp];
         [_contentScro addSubview:tmp];
         nCount++;
     }
 
-    [_contentScro setContentSize:CGSizeMake(self.frame.size.width, (row+1)*(btnHeight+15))];
+    [_contentScro setContentSize:CGSizeMake(self.frame.size.width-2*LeftRightPadding, (row+1)*(btnHeight+15))];
 }
 
 -(void)buttonClick:(UIButton *)sender

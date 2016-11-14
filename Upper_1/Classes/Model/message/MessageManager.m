@@ -19,7 +19,7 @@
 }
 
 @property (nonatomic, retain) NSMutableArray<UUMessage *> *messageList;
-@property (nonatomic, retain) NSMutableDictionary *groupMessageList;
+@property (nonatomic, retain) NSMutableArray<UUMessage *> *groupMessageList;
 
 @end
 
@@ -44,7 +44,6 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logout:) name:kNotifierLogout object:nil];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pullMessage) name:kNotifierMessagePull object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendMessage:) name:kNotifierMessageSending object:nil];
     }
     return self;
 }
@@ -81,7 +80,7 @@
         NSLog(@"建表messages失败");
     }
     
-    [self test:@"20160825121212"];
+    [self test:@"20161111121212"];
     [messageDb close];
 }
 
@@ -95,10 +94,10 @@
     return _messageList;
 }
 
-- (NSMutableDictionary*)groupMessageList
+- (NSMutableArray *)groupMessageList
 {
     if (_groupMessageList==nil) {
-        _groupMessageList = [NSMutableDictionary new];
+        _groupMessageList = [NSMutableArray new];
     }
     return _groupMessageList;
 }
@@ -150,14 +149,17 @@
                         msg.strTime = dict[@"add_time"];
                         msg.status = dict[@"status"];
                         
-                        if (self.groupMessageList[msg.strId]==nil) {
-                            self.groupMessageList[msg.strId] = msg;
-                        } else {
-                            UUMessage *oldMsg = self.groupMessageList[msg.strId];
-                            if ([oldMsg.strTime compare:msg.strTime]==NSOrderedAscending) {
-                                self.groupMessageList[msg.strId] = msg;
+                        UUMessage *message = [self msgInGroup:msg.strId];
+                        if (message) {
+                            if ([message.strTime compare:msg.strTime]==NSOrderedAscending) {
+                                message.strContent = msg.strContent;
+                                message.strTime = msg.strTime;
+                                message.status = msg.status;
                             }
+                        } else {
+                            [self.groupMessageList addObject:msg];
                         }
+                        
                         [self.messageList addObject:msg];
                     }
                     
@@ -184,37 +186,29 @@
     }];
 }
 
-- (void)sendMessage:(NSNotification *)notification
+- (UUMessage *)msgInGroup:(NSString *)fromID
 {
-    UUMessage *msg = notification.object;
-    
-    NSDictionary *headParam1 = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params1 = [NSMutableDictionary dictionaryWithDictionary:headParam1];
-    [params1 setValue:@"MessageSend" forKey:@"a"];
-
-    [params1 setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
-    [params1 setValue:[UPDataManager shared].userInfo.ID forKey:@"from_id"];
-    [params1 setValue:[UPDataManager shared].userInfo.ID forKey:@"to_id"];
-    [params1 setValue:@"0"forKey:@"message_type"];
-    [params1 setValue:msg.strContent forKey:@"message_desc"];
-    [params1 setValue:@"" forKey:@"expire_time"];
-
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params1 success:^(id json) {
-
-        NSDictionary *dict = (NSDictionary *)json;
-        NSLog(@"MessageSend, %@", dict);
-        NSString *resp_id = dict[@"resp_id"];
-        if ([resp_id intValue]==0) {
-//            NSDictionary *resp_data = dict[@"resp_data"];
-            NSLog(@"send message successful!");
+    UUMessage *message = nil;
+    for (UUMessage *msg in self.groupMessageList) {
+        if ([msg.strId isEqualToString:fromID]) {
+            message = msg;
+            break;
         }
-    } failture:^(id error) {
-        NSLog(@"%@",error);
-    }];
-
+    }
+    return message;
 }
 
 #pragma mark - 操作表:消息detail
+- (BOOL)updateOneMessage:(UUMessage *)msg
+{
+    [messageDb open];
+    NSString *sql = @"insert into messages_detail (from_id, to_id, nick_name, message_desc, message_from, message_type, add_time, status) values(?,?,?,?,?,?,?,?)";
+    BOOL a = [messageDb executeUpdate:sql, msg.strId, msg.strToId, msg.strName, msg.strContent, [NSNumber numberWithInt:msg.from], [NSNumber numberWithInt:msg.type], msg.strTime, msg.status ];
+    [messageDb close];
+    return a;
+}
+
+
 - (BOOL)updateMessages
 {
     [messageDb open];
@@ -254,12 +248,13 @@
     long begin = range.location;
     long end = range.location+range.length;
     
-    NSString *querySql = [NSString stringWithFormat:@"select * from messages_detail order by add_time desc limit %ld,%ld", begin, end];
-    
+    NSString *to_id = [UPDataManager shared].userInfo.ID;
+    NSString *querySql = [NSString stringWithFormat:@"select * from messages_detail where from_id='%@' and to_id='%@' order by add_time desc limit %ld,%ld",userId, to_id,begin, end];
+        
     NSMutableArray *msglist = [NSMutableArray new];
     
     FMResultSet *s = [messageDb executeQuery:querySql];
-    if ([s next]) {
+    while (s.next) {
         UUMessage *msg = [[UUMessage alloc] init];
         
         msg.strId = [s stringForColumnIndex:1];
@@ -311,8 +306,7 @@
     BOOL isRollBack = NO;
     
     @try {
-        for (NSString *key in self.groupMessageList) {
-            UUMessage *msg = self.groupMessageList[key];
+        for (UUMessage *msg in self.groupMessageList) {
             NSString *sql = @"insert or replace into messages_group (from_id, to_id, nick_name, newest_message, add_time, status) values(?,?,?,?,?,?)";
 
             BOOL a = [messageDb executeUpdate:sql, msg.strId, msg.strToId, msg.strName, msg.strContent, msg.strTime, msg.status ];
@@ -320,7 +314,6 @@
                 NSLog(@"插入失败");
             }
         }
-        
     } @catch (NSException *exception) {
         isRollBack = YES;
         [messageDb rollback];
@@ -343,9 +336,11 @@
     
     NSMutableArray *messageGoup = [NSMutableArray new];
     
-    NSString *querySql = @"select * from messages_group order by add_time desc";
+    NSString *to_id = [UPDataManager shared].userInfo.ID;
+    NSString *querySql = [NSString stringWithFormat:@"select * from messages_group where to_id='%@' order by status asc, add_time desc", to_id];
+
     FMResultSet *s = [messageDb executeQuery:querySql];
-    if ([s next]) {
+    while ([s next]) {
         UUMessage *msg = [[UUMessage alloc] init];
         
         msg.strId = [s stringForColumnIndex:1];
@@ -364,19 +359,20 @@
 /**
  *根据参数获取指定位置的记录
  */
-- (NSMutableDictionary *)getMessageGroup:(NSRange)range;
+- (NSMutableArray *)getMessageGroup:(NSRange)range
 {
     [messageDb open];
     
     long begin = range.location;
     long end = range.location+range.length;
     
-    NSString *querySql = [NSString stringWithFormat:@"select * from messages_group order by add_time desc limit %ld,%ld", begin, end];
+    NSString *to_id = [UPDataManager shared].userInfo.ID;
+    NSString *querySql = [NSString stringWithFormat:@"select * from messages_group where to_id='%@'  order by status desc, add_time desc limit %ld,%ld", to_id, begin, end];
     
-    NSMutableDictionary *msgDict = [NSMutableDictionary new];
+    NSMutableArray *msglist = [NSMutableArray new];
     
     FMResultSet *s = [messageDb executeQuery:querySql];
-    if ([s next]) {
+    while ([s next]) {
         UUMessage *msg = [[UUMessage alloc] init];
         
         msg.strId = [s stringForColumnIndex:1];
@@ -386,10 +382,10 @@
         msg.strTime = [s stringForColumnIndex:5];
         msg.status = [s stringForColumnIndex:6];
         
-        msgDict[msg.strId] = msg;
+        [msglist addObject:msg];
     }
     [messageDb close];
-    return msgDict;
+    return msglist;
 }
 
 - (void)dealloc
@@ -401,28 +397,29 @@
 {
     [self.messageList removeAllObjects];
     [self.groupMessageList removeAllObjects];
-    for (int i=0; i<999; i++) {
+    for (int i=0; i<10; i++) {
         UUMessage *msg = [[UUMessage alloc] init];
         msg.from = UUMessageFromOther;
         msg.type = UUMessageTypeText;
-        msg.strId = [NSString stringWithFormat:@"%d", i+1000];
-        msg.strToId = @"2000";
+        msg.strId = [NSString stringWithFormat:@"%d", i+100];
+        msg.strToId = [UPDataManager shared].userInfo.ID;
         msg.strName = [NSString stringWithFormat:@"name_%d", i+1000];
-        msg.strContent = [NSString stringWithFormat:@"content_%d", i+1000];
+        msg.strContent = [NSString stringWithFormat:@"contentsfjsiefisjijsjffjief减肥法是否你是否是的发生你垫付未付金额覅是对方莫问面覅我分明的收费么偶IM法萨芬_%d", i+1000];
         msg.strTime = time;//@"20160825111111";
         msg.status = @"0";
         
         [self.messageList addObject:msg];
         
-        if (self.groupMessageList[msg.strId]==nil) {
-            self.groupMessageList[msg.strId] = msg;
-        } else {
-            UUMessage *oldMsg = self.groupMessageList[msg.strId];
-            if ([oldMsg.strTime compare:msg.strTime]==NSOrderedAscending) {
-                self.groupMessageList[msg.strId] = msg;
+        UUMessage *message = [self msgInGroup:msg.strId];
+        if (message) {
+            if ([message.strTime compare:msg.strTime]==NSOrderedAscending) {
+                message.strContent = msg.strContent;
+                message.strTime = msg.strTime;
+                message.status = msg.status;
             }
+        } else {
+            [self.groupMessageList addObject:msg];
         }
-
     }
     BOOL result = [self updateMessages];
     result = [self updateGroupMessage];

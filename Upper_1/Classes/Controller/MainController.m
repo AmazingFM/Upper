@@ -21,8 +21,9 @@
 #import "UpperController.h"
 #import "UPQRViewController.h"
 #import "QRCodeController.h"
-#import "ChatController.h"
+#import "BubbleChatViewController.h"
 #import "MessageCenterController.h"
+#import "UPMyFriendsViewController.h"
 
 #import "UPActivityAssistantController.h"
 #import "UpActView.h"
@@ -77,8 +78,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] init];
-    backItem.title = @"返回";
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = backItem;
     
     UIButton *titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -143,8 +143,8 @@
     msgCenterController = [[MessageCenterController alloc] init];
     msgCenterController.parentController = self;
     
-    chatController = [[ChatController alloc] init];
-    chatController.parentController = self;
+    myFriendsController = [[UPMyFriendsViewController alloc] init];
+    myFriendsController.parentController = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -409,6 +409,7 @@
     actDetailController.actData = actCellItem.itemData;
     actDetailController.sourceType = SourceTypeDaTing;
     [self.navigationController pushViewController:actDetailController animated:YES];
+    g_sideController.needSwipeShowMenu = YES;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -479,12 +480,12 @@
 
                 }
                     break;
-                case MY_LOCATION_VIEW:
+                case MY_Friends_View:
                 {
-                    if ([self isStack:launchActController]) {
-                        [self.navigationController popToViewController:launchActController animated:NO];
+                    if ([self isStack:myFriendsController]) {
+                        [self.navigationController popToViewController:myFriendsController animated:NO];
                     } else {
-                        [self.navigationController pushViewController:launchActController animated:YES];
+                        [self.navigationController pushViewController:myFriendsController animated:YES];
                     }
                 }
                     break;
@@ -575,16 +576,6 @@
                     [qrController setTitle:@"我的二维码"];
                 }
                     break;
-                case QR_SCAN_VIEW:
-                {
-                    if ([self isStack:qrCodeController]) {
-                        [self.navigationController popToViewController:qrCodeController animated:NO];
-                    } else {
-                        [self.navigationController pushViewController:qrCodeController animated:YES];
-                    }
-                    [qrCodeController setTitle:@"扫描"];
-                }
-                    break;
                 case LAUNCH_ACTIVITY_VIEW:
                 {
                     if ([self isStack:launchActController]) {
@@ -631,11 +622,6 @@
     }
 }
 
--(void)rightClick
-{
-    [self OnAction:self withType:CHANGE_VIEW toView:PERSON_CENTER_VIEW withArg:nil];
-}
-
 - (void)onButtonClick:(UIButton *)sender
 {
     if (sender.tag == kActivityAssitantTag) {
@@ -644,13 +630,4 @@
         [self.navigationController pushViewController:assistantController animated:YES];
     }
 }
-
-
-- (BOOL)prefersStatusBarHidden
-
-{
-    return YES; // 是否隐藏状态栏
-}
-
-
 @end

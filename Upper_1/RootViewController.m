@@ -29,115 +29,6 @@
 #define kYMSlideControllerWidth 200
 #define kYMSlideMenuItems 6
 
-@interface UPRootViewController()
-
-@property (nonatomic, retain) UpLoginController *loginController;
-@property (nonatomic, retain) YMRootViewController *mainSideController;
-@property (nonatomic, retain) UIViewController *currentVC;
-
-//
-
-@end
-
-@implementation UPRootViewController
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    [self addChildControllers];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showMainController) name:kNotifierLogin object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showLoginController) name:kNotifierLogout object:nil];
-    
-    [self cityInfoRequest];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [self setNeedsStatusBarAppearanceUpdate];
-}
-
-- (void)addChildControllers
-{
-    self.loginController = [[UpLoginController alloc] init];
-    [self addChildViewController:self.loginController];
-    
-    self.mainSideController = [[YMRootViewController alloc] init];
-    
-    [self addChildViewController:self.mainSideController];
-    g_sideController = self.mainSideController;
-    
-    self.loginController.view.frame = CGRectMake(0, 20, ScreenWidth, ScreenHeight-20);
-    self.mainSideController.view.frame = CGRectMake(0, 20, ScreenWidth, ScreenHeight-20);
-    
-    if ([UPDataManager shared].isLogin) {
-        [self.view addSubview:self.mainSideController.view];
-        self.currentVC = self.mainSideController;
-    } else {
-        [self.view addSubview:self.loginController.view];
-        self.currentVC = self.loginController;
-    }
-}
-
-- (void)showLoginController
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotifierLogout object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showLoginController) name:kNotifierLogout object:nil];
-    
-    if (self.currentVC!=self.loginController) {
-        [self transitionFromViewController:self.currentVC toViewController:self.loginController duration:1.0f options:UIViewAnimationOptionTransitionCrossDissolve animations:nil completion:^(BOOL finished) {
-            if (finished) {
-                self.currentVC = self.loginController;
-            }
-        }];
-    }
-}
-
-- (void)showMainController
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotifierLogin object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showMainController) name:kNotifierLogin object:nil];
-    
-    if (self.currentVC!=self.mainSideController) {
-        [self transitionFromViewController:self.currentVC toViewController:self.mainSideController duration:1.0f options:UIViewAnimationOptionTransitionCrossDissolve animations:nil completion:^(BOOL finished) {
-            if (finished) {
-                self.currentVC = self.mainSideController;
-            }
-        }];
-    }
-}
-
--(void)cityInfoRequest
-{
-    
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
-    [params setValue:@"CityQuery" forKey:@"a"];
-    
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
-        NSDictionary *dict = (NSDictionary *)json;
-        NSString *resp_id = dict[@"resp_id"];
-        
-        if ([resp_id intValue]==0) {
-            NSDictionary *respData = dict[@"resp_data"];
-            
-            NSMutableArray *allCities = respData[@"city_list"];
-            NSArray<CityItem *> *cityArr = [CityItem objectArrayWithKeyValuesArray:allCities];
-            [[UPDataManager shared] initWithCityItems:cityArr];
-        }
-    } failture:^(id error) {
-        NSLog(@"%@",error);
-    }];
-}
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-@end
-
 @interface YMRootViewController()
 {
     MainController *_mainViewController;
@@ -154,6 +45,7 @@
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:_mainViewController];
         nav.navigationBar.shadowImage = [[UIImage alloc] init];
         nav.interactivePopGestureRecognizer.enabled = NO;
+        nav.interactivePopGestureRecognizer.delegate = nil;
 
         self.rootViewController = nav;
         self.leftViewController = [[YMSlideViewController alloc] init];
@@ -251,7 +143,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellId = @"cellId";
-    NSArray *menuTitles = @[@"Upper", @"活动大厅", @"专家社区", @"发起活动",@"我的位置", @"我的活动"];
+    NSArray *menuTitles = @[@"Upper", @"活动大厅", @"专家社区", @"发起活动",@"我的好友", @"我的活动"];
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (cell==nil) {

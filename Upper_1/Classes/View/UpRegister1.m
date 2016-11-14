@@ -121,7 +121,6 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    //Return the number of sections
     return [_keyArray count];
 }
 
@@ -200,15 +199,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    //[tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-//    NSString *key = [_keyArray objectAtIndex:indexPath.section];
-//    CityItem *cityItem = [[_cityDict objectForKey:key] objectAtIndex:indexPath.row];
-//    _cityId = cityItem.city_code;
-    
-//    CityCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//    cell.selected = YES;
-    NSLog(@"Tablecell :%ld,%ld",indexPath.section,indexPath.row);
     CityCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [self cityCellSelected:cell didClickItem:cell.item];
 }

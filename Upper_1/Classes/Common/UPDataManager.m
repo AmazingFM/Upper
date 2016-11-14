@@ -31,6 +31,8 @@ NSString * const g_loginFileName = @"login.plist";
         _isLogin = NO;
         _reqSeq = 0;
         _hasLoadCities = NO;
+        
+        
     }
     return self;
 }
@@ -86,6 +88,32 @@ NSString * const g_loginFileName = @"login.plist";
     }
 }
 
+- (void)readSeqFromDefaults
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *rq = [userDefaults stringForKey:@"reqSeq"];
+    NSString *today = [UPTools dateString:[NSDate date] withFormat:@"yyyyMMdd"];
+    if (rq!=nil && rq.length>0) {
+        NSString * rqDate = [rq substringToIndex:8];
+        if ([rqDate isEqualToString:today]) {
+            NSString *rqNum = [rq substringWithRange:NSMakeRange(8, 6)];
+            _reqSeq = [rqNum intValue];
+        } else {
+            _reqSeq = 0;
+        }
+    } else {
+        _reqSeq = 0;
+    }
+}
+
+- (void)writeSeqToDefaults
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *reqSeq = [self reqSeqStr];
+    [userDefaults setObject:reqSeq forKey:@"reqSeq"];
+    [userDefaults synchronize];
+}
+
 - (NSMutableArray *)cityList
 {
     if (_cityList==nil) {
@@ -139,12 +167,6 @@ NSString * const g_loginFileName = @"login.plist";
     [self.cityList addObjectsFromArray:cityArr];
 }
 
-//- (void)initWithMessageItems:(NSArray *)msgArr
-//{
-//    [self.messageList addObjectsFromArray:msgArr];
-//}
-
-
 - (NSString *)uuid
 {
     if (_uuid==nil) {
@@ -158,16 +180,28 @@ NSString * const g_loginFileName = @"login.plist";
     return [UPTools dateString:[NSDate date] withFormat:@"yyyyMMddHHmmss"];
 }
 
-- (int)reqSeq
+- (NSString *)reqSeqStr
 {
-    return _reqSeq++;
+    int bitCount = 1;
+    int num = _reqSeq;
+    while (num/10) {
+        bitCount++;
+        num = num/10;
+    }
+    
+    NSMutableString *mStr = [NSMutableString stringWithString:@"000000"];
+    [mStr replaceCharactersInRange:NSMakeRange(6-bitCount, bitCount) withString:[NSString stringWithFormat:@"%d", _reqSeq]];
+    
+    return [NSString stringWithFormat:@"%@%@", [UPTools dateString:[NSDate date] withFormat:@"yyyyMMdd"],mStr];
 }
 
 - (NSDictionary *)getHeadParams
 {
     NSString *uuid = self.uuid;
     NSString *currentDate = self.currentDate;
-    NSString *reqSeq = [NSString stringWithFormat:@"%d", self.reqSeq];
+    
+    _reqSeq++;
+    NSString *reqSeq = [self reqSeqStr];
     NSString *md5Str = [UPTools md5HexDigest:[NSString stringWithFormat:@"upper%@%@%@upper", uuid, reqSeq, currentDate]];
     return @{@"app_id":uuid, @"req_seq":reqSeq, @"time_stamp":currentDate, @"sign":md5Str};
 }

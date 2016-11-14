@@ -26,8 +26,15 @@
     NSDictionary *navbarTitleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
     [[UINavigationBar appearance] setTitleTextAttributes:navbarTitleTextAttributes];
     [[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"back_shadow"] forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setTranslucent:YES];
+    
+    //自定义返回按钮
+//    UIImage *backButtonImage = [[UIImage imageNamed:@"fanhui.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 30, 0, 0)];
+//    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+//    //将返回按钮的文字position设置不在屏幕上显示
+//    [[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(NSIntegerMin, NSIntegerMin) forBarMetrics:UIBarMetricsDefault];
 
     self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
@@ -78,6 +85,16 @@
     g_sideController = mainController;
     self.window.rootViewController=mainController;
     [self.window makeKeyAndVisible];
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+    [[UPDataManager shared] readSeqFromDefaults];
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    [[UPDataManager shared] writeSeqToDefaults];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application

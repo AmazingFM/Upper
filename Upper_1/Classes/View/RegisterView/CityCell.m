@@ -39,7 +39,7 @@
 - (void)setCityItem:(CityItem *)cityItem
 {
     self.item = cityItem;
-    _cityNameBtn.frame = CGRectMake(LeftRightPadding, TopDownPadding, cityItem.width-4*LeftRightPadding, cityItem.height-2*TopDownPadding);
+    _cityNameBtn.frame = CGRectMake(LeftRightPadding, TopDownPadding, cityItem.width-2*LeftRightPadding, cityItem.height-2*TopDownPadding);
     _cityNameBtn.layer.cornerRadius = 5.0f;
     _cityNameBtn.layer.masksToBounds = YES;
     [_cityNameBtn setTitle:cityItem.city forState:UIControlStateNormal];

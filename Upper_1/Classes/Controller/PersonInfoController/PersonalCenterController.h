@@ -34,6 +34,7 @@
 @interface PersonalCenterController : UPBaseViewController
 
 @property (nonatomic, assign) int index;
-
+@property (nonatomic, copy) NSString *userID;
 @property (nonatomic, retain) OtherUserData *user;
+
 @end

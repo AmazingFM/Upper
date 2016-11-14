@@ -203,8 +203,7 @@
     NSString * toBeString = [textField.text stringByReplacingCharactersInRange:range withString:string];
     if (_userNameT == textField || _passwordT == textField)
     {
-        if ([toBeString length] > 10) {
-            //textField.text = [toBeString substringToIndex:5];
+        if ([toBeString length] > 25) {
             return NO;
         }
     }

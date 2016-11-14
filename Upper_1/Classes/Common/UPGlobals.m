@@ -47,13 +47,26 @@ void initialize()
     
     g_appDelegate = nil;
     
-    [[MessageManager shared] initEnv];//初始化
-    
     [UPDataManager shared].isLogin = NO;
     [[UPDataManager shared] readFromDefaults];
-    
-    
+    [[UPDataManager shared] readSeqFromDefaults];
+    [[MessageManager shared] initEnv];//初始化
 }
+
+UIBarButtonItem* createBarItemTitle(NSString* title ,id target, SEL selector){
+    UIBarButtonItem* barItem=nil;
+    
+    UIButton* btn=[UIButton buttonWithType:UIButtonTypeCustom];
+    [btn setTitle:title forState:UIControlStateNormal];
+    btn.frame=CGRectMake(0,0,40,32);
+    btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    [btn addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
+    barItem=[[UIBarButtonItem alloc] initWithCustomView:btn];
+    
+    return barItem;
+}
+
+
 @implementation UPGlobals
 
 @end

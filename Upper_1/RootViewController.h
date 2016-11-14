@@ -16,10 +16,6 @@
 
 @end
 
-@interface UPRootViewController : UPBaseViewController
-
-@end
-
 @interface YMSlideViewController : UIViewController
 
 @end

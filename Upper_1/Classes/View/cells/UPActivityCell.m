@@ -253,7 +253,7 @@
     [_img sd_setImageWithURL:[NSURL URLWithString:itemData.activity_image] placeholderImage:[UIImage imageNamed:@"me"]];
     _titleLab.text = itemData.activity_name;
     
-    NSString *freeStr = [NSString stringWithFormat:@"♀♂免费"];
+    NSString *freeStr = [NSString stringWithFormat:@"♂免费"];
     //富文本对象
     NSMutableAttributedString * aAttributedString = [[NSMutableAttributedString alloc] initWithString:freeStr];
     

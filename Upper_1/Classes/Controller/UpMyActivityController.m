@@ -77,7 +77,7 @@
     /*
      这个是设置按下按钮时的颜色
      */
-    segmentedControl.tintColor = [UIColor colorWithRed:49.0 / 256.0 green:148.0 / 256.0 blue:208.0 / 256.0 alpha:1];
+    segmentedControl.tintColor = [UIColor whiteColor];//[UIColor colorWithRed:49.0 / 256.0 green:148.0 / 256.0 blue:208.0 / 256.0 alpha:1];
     segmentedControl.selectedSegmentIndex = 0;//默认选中的按钮索引
     
     _selectedIndex = (int)segmentedControl.selectedSegmentIndex;

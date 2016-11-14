@@ -7,6 +7,7 @@
 //
 
 #import "UpRegisterController.h"
+#import "UPGoShareController.h"
 #import "MainController.h"
 #import "AppDelegate.h"
 #import "UPRegisterView.h"
@@ -44,6 +45,10 @@ typedef enum register_enum
     int whichStep;
     NSArray *steps;
     NSMutableArray<UPRegisterView *> *registerArr;
+    
+    UIBarButtonItem *leftBarItem;
+    
+    BOOL isLoading;
 }
 
 
@@ -63,16 +68,18 @@ typedef enum register_enum
     [super viewDidLoad];
     whichStep = 0;
  
-    UIButton *leftButton = [[UIButton alloc]initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, 22)];
-    [leftButton setTitle:@"注册 Register" forState:UIControlStateNormal];
-    [leftButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    leftButton.tag = 0;
-    leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [leftButton setContentEdgeInsets:UIEdgeInsetsMake(0, 20, 0, 0)];
+    self.navigationItem.title = @"注册";
+    
+    leftBarItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(leftClick)];
+    
+    self.navigationItem.leftBarButtonItem = leftBarItem;
+    self.navigationItem.rightBarButtonItem = nil;
+    
+    isLoading = NO;
     
     steps = [[NSArray alloc]initWithObjects:@"Step1:选择城市", @"Step2:选择行业", @"Step3:选择公司", @"Step4:完善资料", @"Step5:行业验证", nil];
     
-    CGFloat y = leftButton.frame.origin.y+leftButton.frame.size.height+5;
+    CGFloat y = FirstLabelHeight;
     
     NSString *tipsText = [steps objectAtIndex:whichStep];
     CGSize tipsSize = SizeWithFont(tipsText, [UIFont systemFontOfSize:12]);
@@ -86,11 +93,12 @@ typedef enum register_enum
 
     CGSize size = SizeWithFont(@"上一步",kUPThemeMiddleFont);
     size.width +=20;
+    size.height += 10;
     
     self.preBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.preBtn.titleLabel.font = kUPThemeMiddleFont;
     self.preBtn.tag = 11;
-    self.preBtn.frame = CGRectMake(BtnSpace, ScreenHeight-80, size.width, 35);
+    self.preBtn.frame = CGRectMake(BtnSpace, ScreenHeight-size.height-20, size.width, size.height);
     [self.preBtn.layer setMasksToBounds:YES];
     [self.preBtn.layer setCornerRadius:5.0]; //设置矩形四个圆角半径
     self.preBtn.backgroundColor = [UIColor whiteColor];
@@ -100,7 +108,7 @@ typedef enum register_enum
     self.nextBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.nextBtn.tag = 12;
     self.nextBtn.titleLabel.font = kUPThemeMiddleFont;
-    self.nextBtn.frame = CGRectMake(ScreenWidth-BtnSpace-size.width, ScreenHeight-80, size.width, 35);
+    self.nextBtn.frame = CGRectMake(ScreenWidth-BtnSpace-size.width, ScreenHeight-size.height-20, size.width, size.height);
     [self.nextBtn.layer setMasksToBounds:YES];
     [self.nextBtn.layer setCornerRadius:5.0]; //设置矩形四个圆角半径
     self.nextBtn.backgroundColor = [UIColor whiteColor];
@@ -108,32 +116,31 @@ typedef enum register_enum
     [self.nextBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.nextBtn addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
     
-    self.registerV1 = [[UpRegister1 alloc]initWithFrame:CGRectMake(0, _tipsLabel.origin.y+_tipsLabel.height+20, ScreenWidth, _nextBtn.origin.y-_tipsLabel.origin.y-_tipsLabel.height-40)];
+    self.registerV1 = [[UpRegister1 alloc]initWithFrame:CGRectMake(0, _tipsLabel.origin.y+_tipsLabel.height+10, ScreenWidth, _nextBtn.origin.y-_tipsLabel.origin.y-_tipsLabel.height-20)];
     self.registerV1.tag = 0;
     self.registerV1.hidden=YES;
     
-    self.registerV2 = [[UpRegister2 alloc]initWithFrame:CGRectMake(0, _tipsLabel.origin.y+_tipsLabel.height+20, ScreenWidth, _nextBtn.origin.y-_tipsLabel.origin.y-_tipsLabel.height-50)];
+    self.registerV2 = [[UpRegister2 alloc]initWithFrame:CGRectMake(0, _tipsLabel.origin.y+_tipsLabel.height+10, ScreenWidth, _nextBtn.origin.y-_tipsLabel.origin.y-_tipsLabel.height-20)];
     self.registerV2.tag = 1;
     self.registerV2.hidden=YES;
 
     
-    self.registerV3 = [[UpRegister3 alloc]initWithFrame:CGRectMake(0, _tipsLabel.origin.y+_tipsLabel.height+20, ScreenWidth, _nextBtn.origin.y-_tipsLabel.origin.y-_tipsLabel.height-50)];
+    self.registerV3 = [[UpRegister3 alloc]initWithFrame:CGRectMake(0, _tipsLabel.origin.y+_tipsLabel.height+10, ScreenWidth, _nextBtn.origin.y-_tipsLabel.origin.y-_tipsLabel.height-20)];
     self.registerV3.tag = 2;
     self.registerV3.hidden=YES;
 
     
-    self.registerV4 = [[UpRegister4 alloc]initWithFrame:CGRectMake(0, _tipsLabel.origin.y+_tipsLabel.height+20, ScreenWidth, _nextBtn.origin.y-_tipsLabel.origin.y-_tipsLabel.height-50)];
+    self.registerV4 = [[UpRegister4 alloc]initWithFrame:CGRectMake(0, _tipsLabel.origin.y+_tipsLabel.height+10, ScreenWidth, _nextBtn.origin.y-_tipsLabel.origin.y-_tipsLabel.height-20)];
     self.registerV4.tag = 3;
     self.registerV4.hidden=YES;
     self.registerV4.delegate=self;
     
-    self.registerV5 = [[UpRegister5 alloc]initWithFrame:CGRectMake(0, _tipsLabel.origin.y+_tipsLabel.height+20, ScreenWidth, _nextBtn.origin.y-_tipsLabel.origin.y-_tipsLabel.height-50)];
+    self.registerV5 = [[UpRegister5 alloc]initWithFrame:CGRectMake(0, _tipsLabel.origin.y+_tipsLabel.height+10, ScreenWidth, _nextBtn.origin.y-_tipsLabel.origin.y-_tipsLabel.height-20)];
     self.registerV5.tag = 4;
     self.registerV5.hidden=YES;
     
     registerArr = [[NSMutableArray alloc]initWithObjects:_registerV1, _registerV2, _registerV3,_registerV4,_registerV5, nil];
     
-    [self.view addSubview:leftButton];
     [self.view addSubview:_tipsLabel];
     [self.view addSubview:self.nextBtn];
     [self.view addSubview:self.preBtn];
@@ -153,6 +160,26 @@ typedef enum register_enum
         [self.registerV1 loadCityData2:[UPDataManager shared].cityList];
     } else {
         [self startRequest:0];
+    }
+}
+
+- (void)leftClick
+{
+    if (whichStep==0) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        if (whichStep==2) {
+            self.registerV3.searchBar.showsCancelButton = NO;
+            [self.registerV3.searchBar resignFirstResponder];
+        }
+        
+        int toStep = whichStep-1;
+        if (toStep==0) {
+            [leftBarItem setTitle:@"返回"];
+        } else {
+            [leftBarItem setTitle:@"上一步"];
+        }
+        [self showRegisterView:toStep];
     }
 }
 
@@ -181,6 +208,8 @@ typedef enum register_enum
             case 2:
                 _companyId = self.registerV3.companyId;
                 _emailSuffix = self.registerV3.emailSuffix;
+                self.registerV3.searchBar.showsCancelButton = NO;
+                [self.registerV3.searchBar resignFirstResponder];
                 break;
             case 3:
                 _name = self.registerV4.username;
@@ -207,6 +236,12 @@ typedef enum register_enum
 
 - (void)showRegisterView:(int)idx
 {
+    if (idx==0) {
+        [leftBarItem setTitle:@"返回"];
+    } else {
+        [leftBarItem setTitle:@"上一步"];
+    }
+
     CGSize size = SizeWithFont(@"上一步", kUPThemeMiddleFont);
     size.width +=20;
     
@@ -283,7 +318,7 @@ typedef enum register_enum
             
             //需要根据行业进行条件判断
             [params setValue:@"0" forKey:@"identify_type"];
-
+            
             break;
         default:
             return;
@@ -295,7 +330,15 @@ typedef enum register_enum
 // ------公共方法
 -(void)loadDataForType:(int)type withURL:(NSString *)url parameters:params
 {
+    if (isLoading) { //如果正在发送请求
+        return;
+    } else {
+        isLoading = YES;
+    }
+    
     [XWHttpTool getDetailWithUrl:url parms:params success:^(id json) {
+        isLoading = NO;
+        
         NSDictionary *dict = (NSDictionary *)json;
         NSString *resp_id = dict[@"resp_id"];
         
@@ -323,9 +366,11 @@ typedef enum register_enum
                     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"注册成功" message:resp_desc delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
                     [alertView show];
                     
+                    UPGoShareController *shareVC = [[UPGoShareController alloc] init];
+                    [self.navigationController pushViewController:shareVC animated:YES];
+                    
                     [self clearRegisterInfo];
-                    [UPDataManager shared].isLogin = YES;
-                    [self.parentController OnAction:self withType:CHANGE_VIEW toView:LOGIN_VIEW withArg:nil];
+                    
                     break;
                 }
                 default:
@@ -340,14 +385,16 @@ typedef enum register_enum
             UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"失败" message:resp_desc delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
             [alertView show];
         }
-
     } failture:^(id error) {
+        isLoading = NO;
+        
         NSLog(@"%@",error);
     }];
 }
 
 -(void)clearRegisterInfo
 {
+    whichStep = 0;
     for (UPRegisterView *view in registerArr) {
         [view clearValue];
     }

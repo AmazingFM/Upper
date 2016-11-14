@@ -14,8 +14,9 @@
 #import "Info.h"
 #import "UUMessage.h"
 #import "UPTheme.h"
+#import "UPMessageCell.h"
 
-#import "ChatController.h"
+#import "BubbleChatViewController.h"
 
 @implementation UserChatItem
 @end
@@ -24,7 +25,9 @@
 {
     UITableView *_messageTable;
     UILabel *tipsLabel ;
-    NSMutableArray *userList;
+    
+    NSMutableArray *sysMsgList;
+    NSMutableArray *usrMsgList;
 }
 
 @end
@@ -36,7 +39,7 @@
     self.title = @"消息列表";
     self.navigationItem.rightBarButtonItem = nil;
     
-    userList = [NSMutableArray array];
+    usrMsgList = [NSMutableArray array];
     
     tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, ScreenHeight/2, ScreenWidth-40, 40)];
     tipsLabel.text = @"暂时没有消息";
@@ -45,7 +48,7 @@
     tipsLabel.hidden = YES;
     [self.view addSubview:tipsLabel];
     
-    _messageTable = [[UITableView alloc] initWithFrame:CGRectMake(LeftRightPadding, FirstLabelHeight, ScreenWidth-2*LeftRightPadding, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
+    _messageTable = [[UITableView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
     _messageTable.backgroundColor = [UIColor clearColor];
     _messageTable.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     _messageTable.separatorColor = [UIColor grayColor];
@@ -72,6 +75,7 @@
 {
     [super viewWillAppear:animated];
     
+    [usrMsgList removeAllObjects];
     [self loadMessage];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageGroupUpdate object:nil];
 }
@@ -79,58 +83,59 @@
 - (void)loadMessage
 {
     NSRange range = NSMakeRange(0, 100);
-    NSMutableDictionary *msgDict = [[MessageManager shared] getMessageGroup:range];
-    [self fillMessage:msgDict];
+    NSMutableArray *groupMsgList = [[MessageManager shared] getMessageGroup:range];
+    [self fillMessage:groupMsgList];
 }
 
 - (void)updateMsg:(NSNotification *)notification
 {
-    NSDictionary *msgList = notification.object;
+    NSMutableArray *msgList = notification.object;
     
     [self fillMessage:msgList];
 }
 
-- (void)fillMessage:(NSDictionary *)userMsgDict
+- (void)fillMessage:(NSMutableArray *)groupMsgList
 {
     @synchronized (self) {
-        NSArray *users = [userMsgDict allKeys];
-        for (NSString *userId in users) {
-            UUMessage *msg = userMsgDict[userId];
-            
-            UserChatItem *item = [self getItem:userId];
+        for (UUMessage *msg in groupMsgList) {
+            UserChatItem *item = [self getItem:msg.strId];
             if (item==nil) {
                 item = [[UserChatItem alloc] init];
-                [userList insertObject:item atIndex:0];
+                [usrMsgList insertObject:item atIndex:0];
             }
-            item.userId = userId;
+            item.userId = msg.strId;
             item.userName = msg.strName;
             item.recentMsg = msg.strContent;
             item.time = msg.strTime;
             item.status = msg.status;
         }
     }
-    
+
     [_messageTable reloadData];
 }
 
+//调整收到的消息的位置
 - (UserChatItem *)getItem:(NSString *)userId
 {
     int hitIndex = -1;
-    UserChatItem *item = nil;
-    for (int i=0; i<userList.count; i++) {
-        item = userList[i];
-        if ([item.userId isEqualToString:userId]) {
+    UserChatItem *tmpItem = nil;
+    for (int i=0; i<usrMsgList.count; i++) {
+        tmpItem = usrMsgList[i];
+        if ([tmpItem.userId isEqualToString:userId]) {
             hitIndex = i;
             break;
         }
     }
     //调整到head位置
     if (hitIndex!=-1&&hitIndex>0) {
-        userList[hitIndex] = userList[0];
-        userList[0] = item;
+        [usrMsgList removeObject:tmpItem];
+        [usrMsgList insertObject:tmpItem atIndex:0];
+        return tmpItem;
+    } else {
+        return nil;
     }
-    return item;
 }
+
 #pragma mark UITableViewDelegate, datasource
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -140,55 +145,44 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (userList.count==0) {
+    if (usrMsgList.count==0) {
         tipsLabel.hidden = NO;
     } else {
         tipsLabel.hidden = YES;
     }
-    return userList.count;
+    return usrMsgList.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellId = @"cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    if (cell==nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        UILabel *badgeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        badgeLabel.size = CGSizeMake(20, 20);
-        badgeLabel.backgroundColor = [UIColor redColor];
-        badgeLabel.center = CGPointMake(ScreenWidth-30, 33);
-        badgeLabel.tag = 1001;
-        badgeLabel.hidden = YES;
-        [cell addSubview:badgeLabel];
-    }
-    UserChatItem *item = userList[indexPath.row];
-    cell.imageView.image = [UIImage imageNamed:@"head"];
-    cell.imageView.contentMode =UIViewContentModeScaleAspectFit;
-
-    cell.textLabel.text = item.userName;
-    cell.detailTextLabel.text = item.recentMsg;
-    if ([item.status intValue]==0) {
-        UILabel *badgeLb = [cell viewWithTag:1001];
-        badgeLb.hidden = NO;
-    } else {
-        UILabel *badgeLb = [cell viewWithTag:1001];
-        badgeLb.hidden = YES;
+    UPMessageCell *msgCell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    if (msgCell==nil) {
+        msgCell = [[UPMessageCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
+        msgCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
-    return cell;
+    UserChatItem *item = usrMsgList[indexPath.row];
+    
+    [msgCell.icon setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"head"]];
+    msgCell.nameLabel.text = item.userName;
+    msgCell.contentLabel.text = item.recentMsg;
+    if ([item.status intValue]==0) {
+        msgCell.badgeLabel.hidden = NO;
+    } else {
+        msgCell.badgeLabel.hidden = YES;
+    }
+    
+    return msgCell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UserChatItem *item = userList[indexPath.row];
+    UserChatItem *item = usrMsgList[indexPath.row];
     
     [[MessageManager shared] updateGropuMessageStatus:item.userId];//设置状态已读
     
-    ChatController *chatController = [[ChatController alloc]init];
-    chatController.toUserId = item.userId;
-    chatController.toUserName = item.userName;
-    chatController.title = chatController.toUserName;
+    
+    BubbleChatViewController *chatController = [[BubbleChatViewController alloc] initWithUserID:item.userId andUserName:item.userName];
     [self.navigationController pushViewController:chatController animated:YES];
 }
 

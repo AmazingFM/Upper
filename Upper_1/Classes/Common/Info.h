@@ -68,10 +68,10 @@
 typedef NS_ENUM(NSInteger, ViewType) {
     HOME_VIEW = 0,
     UPPER_VIEW,
-    ACTIVITY_VIEW,
+    ACTIVITY_VIEW, //活动大厅
     EXPERT_VIEW,
     LAUNCH_ACTIVITY_VIEW,
-    MY_LOCATION_VIEW,
+    MY_Friends_View,
     MY_ACTIVITY_VIEW,
     LOGIN_VIEW,
     REGISTER_VIEW,
