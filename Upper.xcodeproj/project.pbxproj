@@ -163,6 +163,7 @@
 		3A837D351DD884D100A9A0BB /* PlaceholderTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A837D2F1DD884D100A9A0BB /* PlaceholderTextView.m */; };
 		3A837D381DD88F6400A9A0BB /* MessageBubbleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A837D371DD88F6400A9A0BB /* MessageBubbleViewController.m */; };
 		3A837D3B1DD8920A00A9A0BB /* UPMsgBubbleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A837D3A1DD8920A00A9A0BB /* UPMsgBubbleCell.m */; };
+		3A837D4D1DDEDC9200A9A0BB /* UPActAsistDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A837D4C1DDEDC9200A9A0BB /* UPActAsistDetailController.m */; };
 		3A90746D1DD05E59000B2050 /* UPActTypeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A90746C1DD05E59000B2050 /* UPActTypeController.m */; };
 		3A9074701DD07ECF000B2050 /* UPGoShareController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A90746F1DD07ECF000B2050 /* UPGoShareController.m */; };
 		3AAF86391D6C193700248A45 /* YMImageLoadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAF86381D6C193700248A45 /* YMImageLoadView.m */; };
@@ -539,6 +540,8 @@
 		3A837D371DD88F6400A9A0BB /* MessageBubbleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageBubbleViewController.m; sourceTree = "<group>"; };
 		3A837D391DD8920A00A9A0BB /* UPMsgBubbleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPMsgBubbleCell.h; sourceTree = "<group>"; };
 		3A837D3A1DD8920A00A9A0BB /* UPMsgBubbleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPMsgBubbleCell.m; sourceTree = "<group>"; };
+		3A837D4B1DDEDC9200A9A0BB /* UPActAsistDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPActAsistDetailController.h; sourceTree = "<group>"; };
+		3A837D4C1DDEDC9200A9A0BB /* UPActAsistDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPActAsistDetailController.m; sourceTree = "<group>"; };
 		3A90746B1DD05E59000B2050 /* UPActTypeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPActTypeController.h; sourceTree = "<group>"; };
 		3A90746C1DD05E59000B2050 /* UPActTypeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPActTypeController.m; sourceTree = "<group>"; };
 		3A90746E1DD07ECF000B2050 /* UPGoShareController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPGoShareController.h; sourceTree = "<group>"; };
@@ -1232,6 +1235,17 @@
 			path = chat;
 			sourceTree = "<group>";
 		};
+		3A837D4A1DDEDAF600A9A0BB /* asistant */ = {
+			isa = PBXGroup;
+			children = (
+				2C621BEF1D85BBFE00068F76 /* UPActivityAssistantController.h */,
+				2C621BF01D85BBFE00068F76 /* UPActivityAssistantController.m */,
+				3A837D4B1DDEDC9200A9A0BB /* UPActAsistDetailController.h */,
+				3A837D4C1DDEDC9200A9A0BB /* UPActAsistDetailController.m */,
+			);
+			name = asistant;
+			sourceTree = "<group>";
+		};
 		3AB7372D1D9B55A000722380 /* plist */ = {
 			isa = PBXGroup;
 			children = (
@@ -1285,6 +1299,7 @@
 		EC3C16BF1CECB16D00223D6B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				3A837D4A1DDEDAF600A9A0BB /* asistant */,
 				3A837D1E1DD8832B00A9A0BB /* chat */,
 				3A7F62561DC44F480076E3E2 /* Regist */,
 				3A05508F1DB601D2009EA918 /* Friends */,
@@ -1329,8 +1344,6 @@
 				3A29398F1D2F798B005CB3F3 /* UPCommentController.m */,
 				3ACF2AF31D6AEDD30083E04E /* RecommendController.h */,
 				3ACF2AF41D6AEDD30083E04E /* RecommendController.m */,
-				2C621BEF1D85BBFE00068F76 /* UPActivityAssistantController.h */,
-				2C621BF01D85BBFE00068F76 /* UPActivityAssistantController.m */,
 				3A90746B1DD05E59000B2050 /* UPActTypeController.h */,
 				3A90746C1DD05E59000B2050 /* UPActTypeController.m */,
 				3A90746E1DD07ECF000B2050 /* UPGoShareController.h */,
@@ -1791,6 +1804,7 @@
 				2CDAD6C21D0EF42000C260F4 /* UIAlertView+AFNetworking.m in Sources */,
 				2CDAD6C51D0EF42000C260F4 /* UIProgressView+AFNetworking.m in Sources */,
 				2CDAD6461D0EEC4000C260F4 /* NSObject+MJCoding.m in Sources */,
+				3A837D4D1DDEDC9200A9A0BB /* UPActAsistDetailController.m in Sources */,
 				EC3C18921CECB16D00223D6B /* UpRegister1.m in Sources */,
 				EC3C181D1CECB16D00223D6B /* ActivityItem.m in Sources */,
 				3A837D211DD883B500A9A0BB /* BottomBarViewController.m in Sources */,
@@ -1958,7 +1972,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.yeoman.upper;
 				PRODUCT_NAME = Upper;
-				PROVISIONING_PROFILE = "1baac359-5909-48a0-9e75-b009658a5eb1";
+				PROVISIONING_PROFILE = "9da03c40-0ce1-494a-b9ac-0a29474ab6d3";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1967,8 +1981,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Yongming Zhang (V76QA6Q843)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yongming Zhang (V76QA6Q843)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Yongming Zhang (77565T989X)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yongming Zhang (77565T989X)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Upper_1/PrefixHeader.pch;
 				INFOPLIST_FILE = Upper_1/Info.plist;
@@ -1986,7 +2000,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.yeoman.upper;
 				PRODUCT_NAME = Upper;
-				PROVISIONING_PROFILE = "1baac359-5909-48a0-9e75-b009658a5eb1";
+				PROVISIONING_PROFILE = "9da03c40-0ce1-494a-b9ac-0a29474ab6d3";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

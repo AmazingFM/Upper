@@ -80,7 +80,7 @@
         NSLog(@"建表messages失败");
     }
     
-    [self test:@"20161111121212"];
+//    [self test:@"20161111121212"];
     [messageDb close];
 }
 
