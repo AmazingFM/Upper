@@ -26,6 +26,8 @@
 + (NSString *)getUPUUID;
 
 +(NSDictionary*)loadLocalDataWithName:(NSString*)fileName;
++(id)loadBundleFile:(NSString*)fileName;
+
 
 +(NSData*)dataFromJSON:(NSObject*)jsonObj;
 +(NSData*)dataFromGBKJSON:(NSObject*)jsonObj;

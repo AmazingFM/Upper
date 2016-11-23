@@ -129,10 +129,22 @@ NSString *kKeyChainUUIDAccessGroup = @"com.upper";
         NSError *error;
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
         return json;
-        //        return [data objectFromJSONData];
     }
     return nil;
 }
+
++(id)loadBundleFile:(NSString*)fileName{
+    NSString* sourcePath = [[NSBundle mainBundle] bundlePath];
+    NSString* filePath = [sourcePath stringByAppendingPathComponent:fileName];
+    if([[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+        NSData* data=[NSData dataWithContentsOfFile:filePath];
+        NSError *error;
+        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        return json;
+    }
+    return nil;
+}
+
 
 +(NSData*)dataFromJSON:(NSObject*)jsonObj{
     NSError* error=nil;

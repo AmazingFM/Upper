@@ -12,7 +12,7 @@
 #import "MJRefreshComponent.h"
 #import "UPActivityCell.h"
 
-@interface UPRefreshTableViewController : UPBaseViewController <UPItemButtonDelegate>
+@interface UPRefreshTableViewController : UIViewController <UPItemButtonDelegate>
 
 @property (nonatomic, retain) UITableView *mainTable;
 @property (nonatomic, retain) UILabel *tipsLabel;

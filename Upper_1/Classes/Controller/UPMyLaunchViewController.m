@@ -45,7 +45,7 @@
 
 - (void)startRequest
 {
-    [self checkNetStatus];
+//    [self checkNetStatus];
     
     NSDictionary *headParam = [UPDataManager shared].getHeadParams;
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
@@ -155,7 +155,7 @@
     actDetailController.actData = actCellItem.itemData;
     actDetailController.style = actCellItem.style;
     actDetailController.sourceType = SourceTypeWoFaqi;
-    [((UPBaseViewController *)self.parentController).navigationController pushViewController:actDetailController animated:YES];
+    [self.navigationController pushViewController:actDetailController animated:YES];
 }
 
 

@@ -17,7 +17,7 @@
     UIScrollView *_guideScrollView;
     UIButton *_ignoreBtn;
     UIButton *_finishBtn;
-    UIPageControl *_pageControl;
+//    UIPageControl *_pageControl;
 }
     
 @end
@@ -47,17 +47,16 @@
     
     
     _guideScrollView.delegate=self;
-    NSArray *array = [NSArray arrayWithObjects:@"guide_p1",@"guide_p2",@"guide_p3",@"guide_p4",nil];
+    NSArray *array = [NSArray arrayWithObjects:@"guide_p1",@"guide_p2",@"guide_p3",nil];
     
     
-    for (int i=0; i<4; i++) {
+    for (int i=0; i<array.count; i++) {
         UIImageView* imageView = [[UIImageView alloc]initWithFrame:CGRectMake(i*screenWidth, 0, screenWidth, screenHeight)];
-        //imageView.contentMode = UIViewContentModeScaleAspectFill;
         imageView.backgroundColor=[UIColor clearColor];
         imageView.image = [UIImage imageNamed:array[i]];
         [_guideScrollView addSubview:imageView];
     }
-    _guideScrollView.contentSize=CGSizeMake(screenWidth*4, screenHeight);
+    _guideScrollView.contentSize=CGSizeMake(screenWidth*array.count, screenHeight);
     [self.view addSubview:_guideScrollView];
     
     float btnWidth = screenWidth>320?80:60;
@@ -92,11 +91,11 @@
     [self.view addSubview:_ignoreBtn];
     [self.view addSubview:_finishBtn];
     
-    _pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, ScreenHeight-37, ScreenWidth, 37)];
-    _pageControl.numberOfPages=4;
-    _pageControl.backgroundColor=[UIColor redColor];
-    _pageControl.currentPage=0;
-    [self.view addSubview:_pageControl];
+//    _pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, ScreenHeight-37, ScreenWidth, 37)];
+//    _pageControl.numberOfPages=4;
+//    _pageControl.backgroundColor=[UIColor redColor];
+//    _pageControl.currentPage=0;
+//    [self.view addSubview:_pageControl];
 }
 
 - (void)buttonClick:(UIButton *)sender
@@ -121,7 +120,7 @@
     int  offset = scrollView.contentOffset.x;
     int width = ScreenWidth;
     if (offset % width == 0) {
-        _pageControl.currentPage=(int)scrollView.contentOffset.x/ScreenWidth;
+//        _pageControl.currentPage=(int)scrollView.contentOffset.x/ScreenWidth;
     }
 }
 
@@ -130,8 +129,8 @@
     CGPoint point=scrollView.contentOffset;
     int pageID=point.x/ScreenWidth;
     
-    _ignoreBtn.hidden=pageID!=3?NO:YES;
-    _finishBtn.hidden=pageID==3?NO:YES;
+    _ignoreBtn.hidden=pageID!=2?NO:YES;
+    _finishBtn.hidden=pageID==2?NO:YES;
 }
 
 - (void)didReceiveMemoryWarning {

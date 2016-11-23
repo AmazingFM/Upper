@@ -36,4 +36,6 @@ typedef NS_ENUM(NSInteger, UPActType)
 @property (nonatomic, retain) UITableView *mainTable;
 @property (nonatomic, retain) NSMutableArray<UPActHelpItem *> *itemArray;
 
+- (instancetype)initWithType:(UPActType)type andContents:(NSMutableArray *)contents;
+
 @end

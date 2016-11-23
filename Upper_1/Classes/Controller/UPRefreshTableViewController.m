@@ -23,6 +23,8 @@
     [super loadView];
     // Do any additional setup after loading the view.
     self.navigationController.navigationBarHidden = YES;
+    
+    self.view.backgroundColor = [UIColor whiteColor];
     self.lastPage = NO;
     isLoaded = NO;
     
@@ -39,7 +41,7 @@
     _mainTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     _mainTable.delegate = self;
     _mainTable.dataSource = self;
-    _mainTable.backgroundColor = [UIColor clearColor];
+    _mainTable.backgroundColor = [UIColor whiteColor];
     _mainTable.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
     _mainTable.footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
     
@@ -101,7 +103,8 @@
     if (!cell) {
         cell = [[UPActivityCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
         cell.delegate = self;
-    } else {
+    }
+    else {
         for (UIView *view in [cell.contentView subviews]) {
             [view removeFromSuperview];
         }

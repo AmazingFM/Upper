@@ -34,11 +34,6 @@
     
     [self initSegmentedControl];
     
-    UIImageView *backImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_cover_gaussian"]];
-    backImg.userInteractionEnabled = NO;
-    backImg.frame = self.view.bounds;
-    [self.view addSubview:backImg];
-    
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"back" highIcon:@"" target:self action:@selector(leftClick)];
 
     CGFloat y = FirstLabelHeight+20;
@@ -55,12 +50,12 @@
     
     
     UPMyLaunchViewController *myLaunch = [[UPMyLaunchViewController alloc] init];
-    myLaunch.parentController = self;
+//    myLaunch.parentController = self;
     myLaunch.view.frame = CGRectMake(0, CGRectGetMaxY(tipsButton.frame), ScreenWidth, ScreenHeight-CGRectGetMaxY(tipsButton.frame));
     [self addChildViewController:myLaunch];
     
     UPMyAnticipateViewController *myAnticipate = [[UPMyAnticipateViewController alloc] init];
-    myAnticipate.parentController = self;
+//    myAnticipate.parentController = self;
     myAnticipate.view.frame = CGRectMake(0, CGRectGetMaxY(tipsButton.frame), ScreenWidth, ScreenHeight-CGRectGetMaxY(tipsButton.frame));
     [self addChildViewController:myAnticipate];
     

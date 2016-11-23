@@ -7,10 +7,15 @@
 //
 
 #import "UPActivityAssistantController.h"
+#import "UPActAsistDetailController.h"
+
+#import "UPTools.h"
 
 @interface UPActivityAssistantController() <UIGestureRecognizerDelegate>
 {
     NSArray *assistBtnArr;
+    
+    NSMutableArray *itemsArr;
 }
 
 @end
@@ -20,7 +25,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
 
     UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight)];
     backView.backgroundColor = [UIColor clearColor];
@@ -48,14 +52,33 @@
         
         offsety += 2*verticalPadding+perHeight;
     }
+    
+    itemsArr = [[NSMutableArray alloc] initWithCapacity:3];
+    
+    NSDictionary *actDict = [UPTools loadBundleFile:@"introduce.json"];
+    
+    for (NSString *key in @[@"jhsj", @"xqsj", @"zysj"]) {
+        NSArray *tmpArr = actDict[key];
+        NSMutableArray *sjArr = [NSMutableArray new];
+        for (NSDictionary *dict in tmpArr) {
+            UPActHelpItem *item = [UPActHelpItem new];
+            item.name = dict[@"name"];
+            item.desc = dict[@"desc"];
+            item.place = dict[@"place"];
+            item.tips = dict[@"tips"];
+            [sjArr addObject:item];
+        }
+        [itemsArr addObject:sjArr];
+    }
 }
 
 - (void)tap:(UITapGestureRecognizer *)gesture
 {
     UIImageView *imageView = (UIImageView *)gesture.view;
     if ([gesture.view isKindOfClass:[UIImageView class]]) {
-        NSArray *title = @[@"兴趣社交", @"专业社交", @"聚会社交"];
-        [[[UIAlertView alloc]initWithTitle:@"提示" message:[NSString stringWithFormat:@"你点击了%@", title[imageView.tag-100]] delegate:nil cancelButtonTitle:@"确认" otherButtonTitles:nil] show];
+        int index = (int)imageView.tag-100;
+        UPActAsistDetailController *detailVC = [[UPActAsistDetailController alloc] initWithType:index andContents:itemsArr[index]];
+        [self.navigationController pushViewController:detailVC animated:YES];
     }
 }
 @end

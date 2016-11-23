@@ -164,10 +164,10 @@
 		3A837D381DD88F6400A9A0BB /* MessageBubbleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A837D371DD88F6400A9A0BB /* MessageBubbleViewController.m */; };
 		3A837D3B1DD8920A00A9A0BB /* UPMsgBubbleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A837D3A1DD8920A00A9A0BB /* UPMsgBubbleCell.m */; };
 		3A837D4D1DDEDC9200A9A0BB /* UPActAsistDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A837D4C1DDEDC9200A9A0BB /* UPActAsistDetailController.m */; };
+		3A837D4F1DE4407500A9A0BB /* introduce.json in Resources */ = {isa = PBXBuildFile; fileRef = 3A837D4E1DE4407500A9A0BB /* introduce.json */; };
 		3A90746D1DD05E59000B2050 /* UPActTypeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A90746C1DD05E59000B2050 /* UPActTypeController.m */; };
 		3A9074701DD07ECF000B2050 /* UPGoShareController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A90746F1DD07ECF000B2050 /* UPGoShareController.m */; };
 		3AAF86391D6C193700248A45 /* YMImageLoadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAF86381D6C193700248A45 /* YMImageLoadView.m */; };
-		3AB7372F1D9B55FA00722380 /* activities.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3AB7372E1D9B55FA00722380 /* activities.plist */; };
 		3ACF2AF51D6AEDD30083E04E /* RecommendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACF2AF41D6AEDD30083E04E /* RecommendController.m */; };
 		3AFCCDBD1D5C09BC0003F6F3 /* NewLaunchActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */; };
 		EC3C18011CECB16D00223D6B /* UPGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B21CECB16D00223D6B /* UPGlobals.m */; };
@@ -542,13 +542,13 @@
 		3A837D3A1DD8920A00A9A0BB /* UPMsgBubbleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPMsgBubbleCell.m; sourceTree = "<group>"; };
 		3A837D4B1DDEDC9200A9A0BB /* UPActAsistDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPActAsistDetailController.h; sourceTree = "<group>"; };
 		3A837D4C1DDEDC9200A9A0BB /* UPActAsistDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPActAsistDetailController.m; sourceTree = "<group>"; };
+		3A837D4E1DE4407500A9A0BB /* introduce.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = introduce.json; sourceTree = "<group>"; };
 		3A90746B1DD05E59000B2050 /* UPActTypeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPActTypeController.h; sourceTree = "<group>"; };
 		3A90746C1DD05E59000B2050 /* UPActTypeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPActTypeController.m; sourceTree = "<group>"; };
 		3A90746E1DD07ECF000B2050 /* UPGoShareController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPGoShareController.h; sourceTree = "<group>"; };
 		3A90746F1DD07ECF000B2050 /* UPGoShareController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPGoShareController.m; sourceTree = "<group>"; };
 		3AAF86371D6C193700248A45 /* YMImageLoadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMImageLoadView.h; sourceTree = "<group>"; };
 		3AAF86381D6C193700248A45 /* YMImageLoadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMImageLoadView.m; sourceTree = "<group>"; };
-		3AB7372E1D9B55FA00722380 /* activities.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = activities.plist; sourceTree = "<group>"; };
 		3ACF2AF31D6AEDD30083E04E /* RecommendController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecommendController.h; sourceTree = "<group>"; };
 		3ACF2AF41D6AEDD30083E04E /* RecommendController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecommendController.m; sourceTree = "<group>"; };
 		3AFCCDBB1D5C09BC0003F6F3 /* NewLaunchActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewLaunchActivityController.h; sourceTree = "<group>"; };
@@ -1249,7 +1249,7 @@
 		3AB7372D1D9B55A000722380 /* plist */ = {
 			isa = PBXGroup;
 			children = (
-				3AB7372E1D9B55FA00722380 /* activities.plist */,
+				3A837D4E1DE4407500A9A0BB /* introduce.json */,
 			);
 			path = plist;
 			sourceTree = "<group>";
@@ -1627,6 +1627,7 @@
 				2CDAD55B1D0EE23F00C260F4 /* chat_animation3.png in Resources */,
 				2CDAD5691D0EE23F00C260F4 /* 1.jpeg in Resources */,
 				2CDAD5621D0EE23F00C260F4 /* chat_send_message.png in Resources */,
+				3A837D4F1DE4407500A9A0BB /* introduce.json in Resources */,
 				2CDAD6681D0EEC4000C260F4 /* sdRefeshView_arrow@2x.png in Resources */,
 				EC3C18891CECB16D00223D6B /* FriendCell.xib in Resources */,
 				2CDAD6381D0EEC4000C260F4 /* detail.css in Resources */,
@@ -1643,7 +1644,6 @@
 				2CDAD55A1D0EE23F00C260F4 /* chat_animation2.png in Resources */,
 				2CDAD5611D0EE23F00C260F4 /* Chat_record_circle.png in Resources */,
 				2CDAD56A1D0EE23F00C260F4 /* headImage.jpeg in Resources */,
-				3AB7372F1D9B55FA00722380 /* activities.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

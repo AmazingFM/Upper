@@ -32,7 +32,7 @@
         return;
     }
 
-    [self checkNetStatus];
+//    [self checkNetStatus];
     
     NSDictionary *headParam = [UPDataManager shared].getHeadParams;
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
