@@ -50,7 +50,7 @@
         self.rootViewController = nav;
         self.leftViewController = [[YMSlideViewController alloc] init];
         self.leftViewShowWidth = kYMSlideControllerWidth;
-        self.needSwipeShowMenu = YES;
+        self.needSwipeShowMenu = NO;
         
         g_mainMenu = _mainViewController;
     }

@@ -58,7 +58,7 @@
 	// Do any additional setup after loading the view.
     _baseView              = self.view;
     [_baseView setBackgroundColor:[UIColor colorWithRed:0.5 green:0.6 blue:0.8 alpha:1]];
-    self.needSwipeShowMenu = true;
+    self.needSwipeShowMenu = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated{

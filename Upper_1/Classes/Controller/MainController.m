@@ -409,7 +409,7 @@
     actDetailController.actData = actCellItem.itemData;
     actDetailController.sourceType = SourceTypeDaTing;
     [self.navigationController pushViewController:actDetailController animated:YES];
-    g_sideController.needSwipeShowMenu = YES;
+    g_sideController.needSwipeShowMenu = NO;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
