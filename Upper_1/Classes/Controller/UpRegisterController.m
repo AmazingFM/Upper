@@ -201,6 +201,9 @@ typedef enum register_enum
         switch (whichStep) {
             case 0:
                 _cityId = self.registerV1.cityId;
+                _provCode = self.registerV1.provId;
+                _cityCode = self.registerV1.cityId;
+                _townCode = self.registerV1.townId;
                 break;
             case 1:
                 _industryId = self.registerV2.industryId;
@@ -218,11 +221,8 @@ typedef enum register_enum
                 break;
             case 4:
             {
-                NSString *emailPrefix = self.registerV5.emailPrefix;
-                _email = [NSString stringWithFormat:@"%@%@", emailPrefix, _emailSuffix];
+                _identifyID = self.registerV5.identifyID;
                 _telnum = self.registerV5.telenum;
-                _verifyCode = self.registerV5.verifyCode;
-                
                 [self startRequest:REGISTER_REQ];
                 return;
             }
@@ -314,10 +314,45 @@ typedef enum register_enum
             [params setValue:@"0" forKey:@"pass_type"];
             [params setValue:_sex forKey:@"sexual"];
             [params setValue:_telnum forKey:@"mobile"];
-            [params setValue:_email forKey:@"identify_id"];
             
+            [params setValue:_provCode forKey:@"province_code"];
+            [params setValue:_cityCode forKey:@"city_code"];
+            [params setValue:_townCode forKey:@"town_code"];
+            
+            /**
+             一、用户注册验证信息、激活方式、密码找回
+             case 1：有企业邮箱的公司员工。
+             验证信息：企业邮箱。
+             其它输入项：无。
+             激活方式：邮箱邮件激活链接。
+             密码找回：通过邮箱重置密码。
+             case 2： 医生
+             验证信息：好医生id。
+             其它输入项：手机号（必填），姓名（必填）。
+             case 3：非医生，且无企业邮箱的员工
+             验证信息：企业电话+手机号。
+             其它输入项：姓名（必填），工号（选填，可能没有）
+             
+             注册校验：验证信息+验证方式全局唯一
+             用户名全局唯一
+             不为空的手机号全局唯一。
+             1. 邮箱验证：identify_id 传邮箱值
+             2. 职业id验证：identify_id传职业id
+             identify_type传1
+             3.人工复核：identify_id传“企业电话|工号”
+             identify_type传2
+             employee_id传工号
+             mobile传手机
+             */
             //需要根据行业进行条件判断
-            [params setValue:@"0" forKey:@"identify_type"];
+            [params setValue:_identifyID forKey:@"identify_id"];
+            
+            if (_emailSuffix &&_emailSuffix.length>0) {
+                [params setValue:@"0" forKey:@"identify_type"];
+            } else {
+                 [params setValue:@"2" forKey:@"identify_type"];
+            }
+            
             
             break;
         default:

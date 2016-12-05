@@ -8,16 +8,30 @@
 
 #import "UPActTypeController.h"
 #import "UPGlobals.h"
+#import "AppDelegate.h"
 
 #define kRowHeight 40
 #define kSectionHeight 30
+@implementation ActInfo
+
+- (instancetype) init{
+    self = [super init];
+    if (self) {
+        _itemID = @"";
+        _actName = @"";
+        _femalFlag = NO;
+    }
+    return self;
+}
+
+@end
 
 @interface UPActTypeController () <UITableViewDelegate, UITableViewDataSource>
 {
     UITableView *_mainTableView;
     
     NSArray *titles;
-    NSArray *subTitles;
+    NSMutableArray *subTitles;
     
     NSMutableArray *foldArr;
 }
@@ -53,11 +67,33 @@
     [self.view addSubview:_mainTableView];
     
     titles = @[@"聚会社交", @"体育运动", @"休闲娱乐", @"文化艺术", @"专业社交"];
-    subTitles = @[@[@"聚餐", @"夜店派对", @"小酌", @"沙龙", @"家庭派对", @"唱K"],
-                  @[@"篮球", @"足球", @"羽毛球", @"游泳", @"高尔夫", @"攀岩", @"网球"],
-                  @[@"卡丁车", @"真人CS", @"棋牌", @"桌游", @"旅行户外", @"野餐烧烤", @"自驾游"],
-                  @[@"艺术展", @"音乐会", @"歌剧", @"话剧", @"演唱会", @"电影"],
-                  @[@"小型主题研讨", @"行业人脉分享酒会", @"行业间联谊"]];
+    subTitles = [NSMutableArray new];
+    for (int i=0; i<5; i++) {
+        [subTitles addObject:[NSMutableArray new]];
+    }
+    
+    [g_appDelegate.actTypeArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSDictionary *actInfoDict = (NSDictionary *)obj;
+        ActInfo *actInfo = [ActInfo new];
+        actInfo.actName = actInfoDict[@"Name"];
+        actInfo.itemID = actInfoDict[@"ItemID"];
+        
+        //夜店趴，家庭趴
+        if ([actInfo.itemID isEqualToString:@"102"] ||
+            [actInfo.itemID isEqualToString:@"105"]) {
+            actInfo.femalFlag = YES;
+        }
+        
+        unichar firstC = [actInfo.itemID characterAtIndex:0];
+        
+        if (firstC>='1' && firstC<='5') {
+            NSMutableArray *arr = subTitles[firstC-'1'];
+            [arr addObject:actInfo];
+        }
+        
+        *stop = NO;
+    }];
+    
     
     foldArr = [NSMutableArray array];
     for (int i = 0; i < [titles count]; i++){
@@ -147,16 +183,18 @@
     }
     NSArray *subArr = subTitles[indexPath.section];
     label.textColor = [UIColor lightGrayColor];
-    label.text = subArr[indexPath.row];
+    ActInfo *actInfo = subArr[indexPath.row];
+       
+    label.text = actInfo.actName;
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([self.delegate respondsToSelector:@selector(actionTypeDidSelect:andTypeName:)]) {
+    if ([self.delegate respondsToSelector:@selector(actionTypeDidSelect:)]) {
         
         NSArray *subArr = subTitles[indexPath.section];
-        [self.delegate actionTypeDidSelect:0 andTypeName:subArr[indexPath.row]];
+        [self.delegate actionTypeDidSelect:subArr[indexPath.row]];
     }
     [self dismiss];
 }

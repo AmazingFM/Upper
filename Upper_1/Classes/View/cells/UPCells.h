@@ -10,7 +10,7 @@
 
 #import "UPCellItems.h"
 
-#define kUPCellHeight 50
+#define kUPCellHeight 52
 #define kUPCellHBorder   15
 #define kUPCellVBorder   4
 
@@ -102,6 +102,7 @@
 @interface UPImageDetailCell : UPTitleCell
 {
     UIImageView *_imageDetail;
+    UISwitch *_switchView;
     UILabel *_titleLab;
     UILabel *_detailLab;
     UIView *_backView;

@@ -10,13 +10,13 @@
 
 @interface TableContents : NSObject
 
-@property (nonatomic, int) num;
-@property (nonatomic, retain) NSMutableArray *first;
+
+
 
 @end
 
 @interface MultiTables : UIView
 
-@property (nonatomic, int) num;
+
 
 @end

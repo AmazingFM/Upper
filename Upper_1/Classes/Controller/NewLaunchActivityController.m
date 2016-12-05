@@ -212,6 +212,7 @@ static CGFloat const FixRatio = 4/3.0;
 {
     UITableView *_tableView;
     CityItem *_selectedCity;
+    
     int _typeCode;
     
     NSString *_lowLimit;
@@ -242,6 +243,10 @@ static CGFloat const FixRatio = 4/3.0;
     [super viewDidLoad];
     self.navigationItem.title = @"发起活动";
     _typeCode = -1;
+    _lowLimit = 0;
+    _highLimit = 0;
+    _activityFee = 0;
+    _femaleLowLimit = 0;
     
     [self setNewData];
     
@@ -328,7 +333,7 @@ static CGFloat const FixRatio = 4/3.0;
     item8.title = @"活动场所";
     item8.placeholder = @"请输入活动场所";
     item8.more = YES;
-    item8.detail = @"推荐";
+    item8.detail = @"";
     item8.detailColor = [UIColor redColor];
     item8.key = @"activity_place";
     
@@ -357,10 +362,10 @@ static CGFloat const FixRatio = 4/3.0;
     活动募集：给夜店派对和家庭派对两种活动增加男女比例选项，男女需分别达到人数才能募集成功。男数量为硬上限，达到后男不能报名，女数量为不低于，达到后可继续报名挤占男数量。   另外发起时为这两种派对活动增加一项奖励机制。发起人可设定，男士携__名女士同行可免单。
      */
 
-    UPTitleCellItem *item17 = [[UPTitleCellItem alloc] init];  //使用 是否预付的 字段传参
-    item17.title = @"设定";
-    item17.style = UPItemStyleIndex;
-    item17.key = @"goodNum";
+//    UPTitleCellItem *item17 = [[UPTitleCellItem alloc] init];  //使用 是否预付的 字段传参
+//    item17.title = @"设定";
+//    item17.style = UPItemStyleIndex;
+//    item17.key = @"goodNum";
     
     UPTitleCellItem *item16 = [[UPTitleCellItem alloc] init];
     item16.key = @"activity_fee";
@@ -801,7 +806,7 @@ static CGFloat const FixRatio = 4/3.0;
             [alert show];
             return;
         }
-        [params setObject:[NSString stringWithFormat:@"%d", _typeCode] forKey:@"activity_place"];
+        [params setObject:[NSString stringWithFormat:@"%d", _typeCode] forKey:@"activity_class"];
         
         [params setObject:_selectedCity.province_code forKey:@"province_code"];
         [params setObject:_selectedCity.city_code forKey:@"city_code"];
@@ -1011,16 +1016,32 @@ static CGFloat const FixRatio = 4/3.0;
     
 }
 
-- (void)actionTypeDidSelect:(int)typeCode andTypeName:(NSString *)typeName{
+- (void)actionTypeDidSelect:(ActInfo *)actInfo {
     for (UPBaseCellItem *cellItem in self.itemList) {
         if ([cellItem.key isEqualToString:@"activity_class"]) {
             UPDetailCellItem *item = (UPDetailCellItem*)cellItem;
-            item.detail = typeName;
+            item.detail = actInfo.actName;
             [_tableView reloadRowsAtIndexPaths:@[item.indexPath] withRowAnimation:UITableViewRowAnimationNone];
             break;
         }
     }
-    _typeCode = typeCode;
+    
+    UPBaseCellItem *femaleItem = nil;
+    for (UPBaseCellItem *cellItem in self.itemList) {
+        if ([cellItem.key isEqualToString:@"fmale_low"]) {
+            femaleItem = cellItem;
+        }
+    }
+    if (actInfo.femalFlag) {
+        femaleItem.cellHeight=kUPCellDefaultHeight;
+        needFemale = YES;
+    } else {
+        femaleItem.cellHeight=0;
+        needFemale = NO;
+    }
+    [_tableView reloadRowsAtIndexPaths:@[femaleItem.indexPath] withRowAnimation:UITableViewRowAnimationNone];
+
+    _typeCode = [actInfo.itemID intValue];
 }
 
 - (void)resignKeyboard

@@ -181,6 +181,7 @@
         _mainTable.backgroundColor = [UIColor whiteColor];
         _mainTable.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         _mainTable.separatorColor = [UIColor lightGrayColor];
+        _mainTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
         
         if([_mainTable respondsToSelector:@selector(setSeparatorInset:)]){
             [_mainTable setSeparatorInset:UIEdgeInsetsZero];

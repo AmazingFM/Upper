@@ -11,7 +11,9 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-//@property (nonatomic) BOOL Login;
+
+@property (nonatomic, retain) NSMutableArray *actTypeArr;
+@property (nonatomic, retain) NSMutableArray *actStatusArr;
 
 - (void)setRootViewController;
 - (void)setRootViewControllerWithMain;

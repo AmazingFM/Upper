@@ -8,6 +8,10 @@
 
 #import "UPBaseModel.h"
 
+@interface Actv : NSObject
+
+@end
+
 @interface ActivityData : UPBaseModel
 
 @property (nonatomic, copy) NSString *activity_desc;

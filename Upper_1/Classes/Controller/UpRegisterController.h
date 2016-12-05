@@ -17,9 +17,15 @@
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *password;
 @property (nonatomic, copy) NSString *sex;
-@property (nonatomic, copy) NSString *email;
+//@property (nonatomic, copy) NSString *email;
 @property (nonatomic, copy) NSString *emailSuffix;
 @property (nonatomic, copy) NSString *telnum;
-@property (nonatomic, copy) NSString *verifyCode;
+//@property (nonatomic, copy) NSString *verifyCode;
+
+@property (nonatomic, copy) NSString *identifyID;
+@property (nonatomic, copy) NSString *empID;
+@property (nonatomic, copy) NSString *provCode;
+@property (nonatomic, copy) NSString *townCode;
+@property (nonatomic, copy) NSString *cityCode;
 
 @end

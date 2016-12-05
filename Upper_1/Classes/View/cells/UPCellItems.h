@@ -25,6 +25,7 @@ typedef NS_OPTIONS(NSInteger, UPItemStyle) {
     UPItemStyleUserNickName = 1<<13,
     UPItemStyleUserSexual   = 1<<14,
     UPItemStyleUserBirth    = 1<<15,
+    UPItemStyleUserAnonymous= 1<<16     //单位匿名
 };
 
 typedef enum{
@@ -51,6 +52,7 @@ typedef enum{
 @property (nonatomic, retain) NSIndexPath *indexPath;
 @property (nonatomic) float cellWidth;
 @property (nonatomic) float cellHeight;
+@property (nonatomic, copy) NSString *cellID;
 @property(nonatomic)BOOL                more;           //有更多记录
 @property (nonatomic) UPItemStyle style;
 - (void)reset;

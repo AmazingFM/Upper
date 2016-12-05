@@ -8,11 +8,21 @@
 
 #import "UPBaseViewController.h"
 
-@protocol UPActTypeSelectDelegate <NSObject>
+@interface ActInfo : NSObject
 
-- (void)actionTypeDidSelect:(int)typeCode andTypeName:(NSString *)typeName;
+@property (nonatomic, retain) NSString *itemID;
+@property (nonatomic, retain) NSString *actName;
+@property (nonatomic) BOOL femalFlag;//女性标志
 
 @end
+
+
+@protocol UPActTypeSelectDelegate <NSObject>
+
+- (void)actionTypeDidSelect:(ActInfo *)actInfo;
+
+@end
+
 
 @interface UPActTypeController : UPBaseViewController
 

@@ -330,11 +330,28 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        
         _imageDetail = [[UIImageView alloc] initWithFrame:CGRectZero];
-        _titleLab = [[UILabel alloc] initWithFrame:CGRectZero];
-        _detailLab = [[UILabel alloc] initWithFrame:CGRectZero];
-        _backView = [[UIView alloc] initWithFrame:CGRectZero];
+        [_imageDetail setContentMode:UIViewContentModeScaleToFill];
+        _imageDetail.tag = 100;
+        
+        _switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
+        [_switchView addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
+        _switchView.tag = 101;
 
+        _detailLab = [[UILabel alloc] initWithFrame:CGRectZero];
+        _detailLab.tag = 102;
+        
+        _titleLab = [[UILabel alloc] initWithFrame:CGRectZero];
+        _titleLab.backgroundColor = [UIColor clearColor];
+
+        _backView = [[UIView alloc] initWithFrame:CGRectZero];
+        
+         _backView.backgroundColor = [UIColor whiteColor];
+        _backView.layer.borderColor = [UIColor grayColor].CGColor;
+        _backView.layer.cornerRadius = 5.0f;
+        [_backView addSubview:_titleLab];
+        [self addSubview:_backView];
     }
     return self;
 }
@@ -344,60 +361,62 @@
     [super setItem:item];
     UPImageDetailCellItem *cellItem = (UPImageDetailCellItem *)item;
     
-    _backView = [[UIView alloc] initWithFrame:UPCellDefineWithWidth(cellItem.cellWidth, cellItem.cellHeight)];
-    _backView.backgroundColor = [UIColor whiteColor];
-    _backView.layer.borderColor = [UIColor grayColor].CGColor;
-    _backView.layer.cornerRadius = 5.0f;
-    
-    _titleLab = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, 100, _backView.height)];
+    _backView.frame = UPCellDefineWithWidth(cellItem.cellWidth, cellItem.cellHeight);
+    _titleLab.frame =CGRectMake(5, 0, 150, _backView.height);
     _titleLab.text = cellItem.title;
-    _titleLab.backgroundColor = [UIColor clearColor];
-    [_backView addSubview:_titleLab];
     
     switch (cellItem.style) {
         case UPItemStyleUserImg:
-            _imageDetail.frame = CGRectMake(_backView.width-_backView.height-15, 2, _backView.height-4, _backView.height-4);
-            _imageDetail.layer.masksToBounds = YES;
-            _imageDetail.layer.cornerRadius = (_backView.height-4)/2;
-            break;
         case UPItemStyleUserQrcode:
-            _imageDetail.frame = CGRectMake(_backView.width-_backView.height-15, 4, _backView.height-8, _backView.height-8);
+            if (![_backView viewWithTag:100]) {
+                [_backView addSubview:_imageDetail];
+            }
+            
+            if (cellItem.style==UPItemStyleUserImg) {
+                _imageDetail.frame = CGRectMake(_backView.width-_backView.height-15, 2, _backView.height-4, _backView.height-4);
+                _imageDetail.layer.cornerRadius = (_backView.height-4)/2;
+            } else {
+                _imageDetail.frame = CGRectMake(_backView.width-_backView.height-15, 4, _backView.height-8, _backView.height-8);
+            }
             _imageDetail.layer.masksToBounds = YES;
+            if (cellItem.imageData!=nil && cellItem.imageData.length!=0) {
+                NSData *_decodedImageData = [[NSData alloc] initWithBase64EncodedString:cellItem.imageData options:NSDataBase64DecodingIgnoreUnknownCharacters];
+                UIImage *detailImg = [UIImage imageWithData:_decodedImageData];
+                [_imageDetail setImage:detailImg];
+                
+            } else if (cellItem.imageName!=nil && cellItem.imageName.length>0) {
+                _imageDetail.layer.cornerRadius = 0;
+                [_imageDetail setImage:[UIImage imageNamed:cellItem.imageName]];
+            }
+            
+            break;
+        case UPItemStyleUserAnonymous:
+            self.accessoryView = _switchView;
             break;
         default:
-            _imageDetail.frame = CGRectZero;
             break;
     }
     
-    if (cellItem.imageData!=nil && cellItem.imageData.length!=0) {
-        NSData *_decodedImageData = [[NSData alloc] initWithBase64EncodedString:cellItem.imageData options:NSDataBase64DecodingIgnoreUnknownCharacters];
-        UIImage *detailImg = [UIImage imageWithData:_decodedImageData];
-        [_imageDetail setImage:detailImg];
-        
-    } else if (cellItem.imageName!=nil && cellItem.imageName.length>0) {
-        _imageDetail.layer.cornerRadius = 0;
-        [_imageDetail setImage:[UIImage imageNamed:cellItem.imageName]];
-    }
-
-    
-    [_imageDetail setContentMode:UIViewContentModeScaleToFill];
-    
-    [_backView addSubview:_imageDetail];
 
     if (cellItem.detail!=nil && cellItem.detail.length>0) {
-        _detailLab = [[UILabel alloc] initWithFrame:CGRectMake(_backView.width-30-200, 0, 200, _backView.height)];
+        if (![_backView viewWithTag:102]) {
+            [_backView addSubview:_detailLab];
+        }
+        _detailLab.frame= CGRectMake(_backView.width-30-200, 0, 200, _backView.height);
         _detailLab.textAlignment = NSTextAlignmentRight;
         _detailLab.text = cellItem.detail;
         _detailLab.font = [UIFont systemFontOfSize:15.0f];
         _detailLab.textColor = [UIColor grayColor];
         _detailLab.backgroundColor = [UIColor clearColor];
-        [_backView addSubview:_detailLab];
     }
-
-    [self addSubview:_backView];
-    self.backgroundColor = [UIColor clearColor];
 }
 
+- (void)switchChanged:(UISwitch *)switchView
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(switchOn:withIndexPath:)]) {
+        [self.delegate switchOn:switchView.isOn withIndexPath:self.item.indexPath];
+    }
+}
 
 -(void)updateTheme{
 }

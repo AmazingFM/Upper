@@ -22,11 +22,13 @@
 
 extern NSString * const g_loginFileName;
 
-@interface UpperController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, UINavigationControllerDelegate,UIImagePickerControllerDelegate>
+@interface UpperController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, UINavigationControllerDelegate,UIImagePickerControllerDelegate, UPCellDelegate>
 {
     UIButton *_quitBtn;
     
     NSMutableDictionary *paramsDict;
+    
+    BOOL _userAnony;
     
     UPBaseCellItem *selectedItem;
     UIView *_datePanelView;
@@ -78,49 +80,44 @@ extern NSString * const g_loginFileName;
     imageDetailItem1.imageName = @"head";
     imageDetailItem1.imageData = @"";
     imageDetailItem1.style = UPItemStyleUserImg;
+    imageDetailItem1.cellID = @"cellID1";
 
     UPImageDetailCellItem *imageDetailItem2 = [[UPImageDetailCellItem alloc] init];
     imageDetailItem2.title = @"我的二维码";
     imageDetailItem2.imageName = @"qrcode";
     imageDetailItem2.style = UPItemStyleUserQrcode;
+    imageDetailItem2.cellID = @"cellID2";
     
     UPImageDetailCellItem *imageDetailItem3 = [[UPImageDetailCellItem alloc] init];
     imageDetailItem3.title = @"昵称";
     imageDetailItem3.detail = @"设置一个昵称";
     imageDetailItem3.style = UPItemStyleUserNickName;
-    
+    imageDetailItem3.cellID = @"cellID3";
     
     UPImageDetailCellItem *imageDetailItem4 = [[UPImageDetailCellItem alloc] init];
     imageDetailItem4.title = @"性别";
     imageDetailItem4.detail = @"请选择";
     imageDetailItem4.style = UPItemStyleUserSexual;
+    imageDetailItem4.cellID = @"cellID4";
     
     UPImageDetailCellItem *imageDetailItem5 = [[UPImageDetailCellItem alloc] init];
     imageDetailItem5.title = @"出生日期";
     imageDetailItem5.detail = @"请选择日期";
     imageDetailItem5.style = UPItemStyleUserBirth;
+    imageDetailItem5.cellID = @"cellID5";
     
-    UPTitleCellItem *titleCellItem1 = [[UPTitleCellItem alloc] init];
-    titleCellItem1.title = @"社区";
-    titleCellItem1.iconName = @"shequ";
-//    titleCellItem1.more = YES;
-//    titleCellItem1.hasBackground = NO;
+    UPImageDetailCellItem *imageDetailItem6 = [[UPImageDetailCellItem alloc] init];
+    imageDetailItem6.title = @"是否公开单位信息";
+    imageDetailItem6.style = UPItemStyleUserAnonymous;
+    imageDetailItem6.cellID = @"cellID6";
     
-    UPTitleCellItem *titleCellItem2 = [[UPTitleCellItem alloc] init];
-    titleCellItem2.title = @"我的活动";
-    titleCellItem2.iconName = @"huodong";
-//    titleCellItem2.more = YES;
-//    titleCellItem2.hasBackground = NO;
-    
-    UPTitleCellItem *titleCellItem3 = [[UPTitleCellItem alloc] init];
-    titleCellItem3.title = @"设置";
-    titleCellItem3.iconName = @"shezhi";
     
     if ([UPDataManager shared].isLogin) {
         imageDetailItem1.imageName = @"head";
         imageDetailItem1.imageData=[UPDataManager shared].userInfo.user_icon;
         imageDetailItem3.detail = [UPDataManager shared].userInfo.nick_name;
         imageDetailItem4.detail = [[UPDataManager shared].userInfo.sexual intValue]==0?@"男":@"女";
+        
         
         NSString *birth = [UPDataManager shared].userInfo.birthday;
         if (birth==nil ||birth.length==0) {
@@ -141,19 +138,12 @@ extern NSString * const g_loginFileName;
     [self.itemList addObject:imageDetailItem3];
     [self.itemList addObject:imageDetailItem4];
     [self.itemList addObject:imageDetailItem5];
-    [self.itemList addObject:titleCellItem1];
-    [self.itemList addObject:titleCellItem2];
-    [self.itemList addObject:titleCellItem3];
+    [self.itemList addObject:imageDetailItem6];
     
     [_itemList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop){
         if ([obj isKindOfClass:[UPBaseCellItem class]]) {
             ((UPBaseCellItem *)obj).cellWidth = ScreenWidth;
-            if (idx<=4) {
-                ((UPBaseCellItem *)obj).cellHeight = kUPCellHeight+2;
-            } else {
-                ((UPBaseCellItem *)obj).cellHeight = kUPCellHeight;
-
-            }
+            ((UPBaseCellItem *)obj).cellHeight = kUPCellHeight;
         }
     }];
 
@@ -228,7 +218,9 @@ extern NSString * const g_loginFileName;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UPBaseCellItem *cellItem = (UPBaseCellItem *)_itemList[indexPath.row];
     cellItem.indexPath = indexPath;
+    
     UPBaseCell *itemCell = [self cellWithItem:cellItem];
+    itemCell.delegate = self;
     [itemCell setItem:cellItem];
     itemCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return itemCell;
@@ -254,8 +246,6 @@ extern NSString * const g_loginFileName;
                 break;
             case 1:
             {
-//                NSString *arg = @"0";
-//                [self.parentController OnAction:self withType:CHANGE_VIEW toView:(QR_VIEW) withArg:arg];
                 [self showQRCode];
                 break;
             }
@@ -303,31 +293,6 @@ extern NSString * const g_loginFileName;
                 alertView.delegate = self;
                 [alertView show];
             }
-                break;
-        }
-    }
-    
-    if (section == 1) {
-        switch (row) {
-            case 0: //我的社区
-            {
-                NSString *arg = @"1";
-                [self.parentController OnAction:self withType:CHANGE_VIEW toView:PERSON_CENTER_VIEW withArg:arg];
-            }
-                break;
-            case 1: //我的活动
-            {
-                [self.parentController OnAction:self withType:CHANGE_VIEW toView:MYACT_VIEW withArg:nil];
-            }
-                break;
-            case 2: //设置
-            {
-                [self.parentController OnAction:self withType:LEFT_MENU_CHANGE toView:SETTING_VIEW withArg:nil];
-
-            }
-                break;
-                
-            default:
                 break;
         }
     }
@@ -427,9 +392,12 @@ extern NSString * const g_loginFileName;
     NSLog(@"图片的路径是：%@", imagePath);
     
 }
-
-
-#pragma mark -panel view methods
+- (void)switchOn:(BOOL)isOn withIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row==5) {
+        _userAnony = isOn;
+    }
+}
 
 #pragma mark -UIAlertViewDelegate
 
@@ -540,17 +508,16 @@ extern NSString * const g_loginFileName;
 - (UPBaseCell *)cellWithItem:(UPBaseCellItem *)cellItem
 {
     NSString *className = NSStringFromClass([cellItem class]);
-    NSString *cellId = [className substringToIndex:className.length-4];
+    NSString *cellName = [className substringToIndex:className.length-4];
+    
+    NSString *cellId = cellItem.cellID;
     UPBaseCell *cell = [_tableView dequeueReusableCellWithIdentifier:cellId];
     if (cell == nil) {
-        cell = [(UPBaseCell *)[NSClassFromString(cellId) alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
+        cell = [(UPBaseCell *)[NSClassFromString(cellName) alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell setSeparatorInset:UIEdgeInsetsZero];
         
     }
-//    for (UIView *subView in cell.subviews) {
-//        [subView removeFromSuperview];
-//    }
     return cell;
 }
 

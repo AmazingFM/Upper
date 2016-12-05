@@ -206,6 +206,8 @@
 - (void)cityCellSelected:(CityCell *)cell didClickItem:(CityItem *)item
 {
     _cityId = item.city_code;
+    _provId = item.province_code;
+    _townId = item.town_code;
     
     for (CityButton *obj in _hotCityGV.buttons) {
         obj.selected = NO;
@@ -225,6 +227,9 @@
 -(void)ButtonGroupView:(ButtonGroupView *)buttonGroupView didClickedItem:(CityButton *)item
 {
     _cityId = item.cityItem.city_code;
+    _provId = item.cityItem.province_code;
+    _townId = item.cityItem.town_code;
+    
     for (CityButton *obj in buttonGroupView.buttons) {
         obj.selected = NO;
     }

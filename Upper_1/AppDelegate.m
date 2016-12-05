@@ -39,6 +39,9 @@
     self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
     initialize();
+    
+    [self readConfig];
+    
     g_appDelegate = self;
     
     [self setRootViewController];
@@ -100,4 +103,23 @@
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
 }
+
+- (void)readConfig
+{
+    NSString *actInfoPath = [[NSBundle mainBundle] pathForResource:@"ActInfo" ofType:@"plist"];
+    NSMutableArray *tmpArr = [[NSMutableArray alloc] initWithContentsOfFile:actInfoPath];
+    [self.actTypeArr addObjectsFromArray:tmpArr];
+    
+    NSDictionary *actDict = [UPTools loadBundleFile:@"ActStatus.json"];
+    
+}
+
+- (NSMutableArray *)actTypeArr
+{
+    if(_actTypeArr==nil) {
+        _actTypeArr = [NSMutableArray new];
+    }
+    return _actTypeArr;
+}
+
 @end

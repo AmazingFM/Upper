@@ -19,9 +19,8 @@
 @property (nonatomic, retain) UILabel *suffixLabel;
 @property (nonatomic) BOOL noEmail;
 
+@property (nonatomic, copy) NSString *identifyID;
 @property (nonatomic, copy) NSString *telenum;
-@property (nonatomic, copy) NSString *verifyCode;
-
 @property (nonatomic, copy) NSString *smsText;
 
 - (void)resize;

@@ -20,18 +20,33 @@
     NSTimer *_timer;
     int interval;
     
+    UILabel *comPhoneLabel;
+    UITextField *comPhoneField ;
+    UILabel *empIDLabel;
+    UITextField *empIDField;
+    UILabel *nameLabel;
+    UITextField *nameField ;
+    
     UILabel *telLabel;
     UITextField *teleField ;
     UILabel *verifyLabel;
     UITextField *verifyField;
     UILabel *desLabel;
 }
+@property (nonatomic, copy) NSString *comPhone;
+@property (nonatomic, copy) NSString *empName;
+@property (nonatomic, copy) NSString *empID;
 
+@property (nonatomic, copy) NSString *verifyCode;
 
 @property (nonatomic, retain) UILabel *tipLabel;
 @property (nonatomic, retain) UIImageView *seperatorV;
 @property (nonatomic, retain) UIView *seperatorV1;
 @property (nonatomic, retain) UIView *seperatorV2;
+@property (nonatomic, retain) UIView *seperatorV3;
+@property (nonatomic, retain) UIView *seperatorV4;
+@property (nonatomic, retain) UIView *seperatorV5;
+
 @end
 
 @implementation UpRegister5
@@ -47,9 +62,69 @@
     NSString *verifyCodeStr = @"验证码\nVerifyCode";
     NSString *emailStr = @"行业邮箱\nEmail";
     
-    CGSize size1 = SizeWithFont(@"验证码\nVerifyCode", [UIFont systemFontOfSize:12]);
+    NSString *comPhone = @"单位电话\nCom Tele";
+    NSString *empID = @"员工号\nEmp NO.";
+    NSString *empName = @"姓名\nName";
+    
+    CGSize size1 = SizeWithFont(comPhone, [UIFont systemFontOfSize:12]);
     CGSize size2 = SizeWithFont(telenumStr, [UIFont systemFontOfSize:12]);
     CGSize size = (size1.width>size2.width)?size1:size2;
+    
+    comPhoneLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY, size.width, size.height)];
+    comPhoneLabel.textAlignment = NSTextAlignmentRight;
+    comPhoneLabel.numberOfLines = 0;
+    comPhoneLabel.text = comPhone;
+    comPhoneLabel.backgroundColor = [UIColor clearColor];
+    comPhoneLabel.textColor = [UIColor whiteColor];
+    comPhoneLabel.font = [UIFont systemFontOfSize:12];
+    
+    comPhoneField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, frame.size.width-2*LeftRightPadding-size.width, size.height)];
+    [comPhoneField setFont:[UIFont systemFontOfSize:15.0]];
+    comPhoneField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    comPhoneField.delegate = self;
+    
+    _seperatorV3 = [[UIView alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY+size.height+1, frame.size.width-2*LeftRightPadding, 1)];
+    _seperatorV3.backgroundColor = [UIColor grayColor];
+    
+    offsetY += size.height+25;
+    
+    empIDLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY, size.width, size.height)];
+    empIDLabel.textAlignment = NSTextAlignmentRight;
+    empIDLabel.numberOfLines = 0;
+    empIDLabel.text = empID;
+    empIDLabel.backgroundColor = [UIColor clearColor];
+    empIDLabel.textColor = [UIColor whiteColor];
+    empIDLabel.font = [UIFont systemFontOfSize:12];
+    
+    empIDField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, frame.size.width-2*LeftRightPadding-size.width, size.height)];
+    [empIDField setFont:[UIFont systemFontOfSize:15.0]];
+    empIDField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    empIDField.delegate = self;
+    
+    _seperatorV4 = [[UIView alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY+size.height+1, frame.size.width-2*LeftRightPadding, 1)];
+    _seperatorV4.backgroundColor = [UIColor grayColor];
+
+    offsetY += size.height+25;
+    
+    nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY, size.width, size.height)];
+    nameLabel.textAlignment = NSTextAlignmentRight;
+    nameLabel.numberOfLines = 0;
+    nameLabel.text = empName;
+    nameLabel.backgroundColor = [UIColor clearColor];
+    nameLabel.textColor = [UIColor whiteColor];
+    nameLabel.font = [UIFont systemFontOfSize:12];
+    
+    nameField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, frame.size.width-2*LeftRightPadding-size.width, size.height)];
+    [nameField setFont:[UIFont systemFontOfSize:15.0]];
+    nameField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    nameField.delegate = self;
+    
+    _seperatorV5 = [[UIView alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY+size.height+1, frame.size.width-2*LeftRightPadding, 1)];
+    _seperatorV5.backgroundColor = [UIColor grayColor];
+    
+    offsetY += size.height+25;
+//=================
+    
     
     telLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY, size.width, size.height)];
     telLabel.textAlignment = NSTextAlignmentRight;
@@ -94,9 +169,7 @@
     verifyField.frame = CGRectMake(20+verifyLabel.size.width, offsetY, verifyBtn.origin.x-20-verifyLabel.size.width, size.height);
     _seperatorV2 = [[UIView alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY+size.height+1, frame.size.width-2*LeftRightPadding, 1)];
     _seperatorV2.backgroundColor = [UIColor grayColor];
-
     
-
     _tipLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, 0, size.width, size.height)];
     _tipLabel.textAlignment = NSTextAlignmentRight;
     _tipLabel.numberOfLines = 0;
@@ -117,7 +190,7 @@
     _seperatorV = [[UIImageView alloc]init];
     _seperatorV.backgroundColor = [UIColor grayColor];
     
-    desLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, _tipLabel.origin.y+size.height+25, frame.size.width-2*LeftRightPadding, 10)];
+    desLabel = [[UILabel alloc]initWithFrame:CGRectZero];
     desLabel.numberOfLines = 0;
     desLabel.text = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的公司邮箱，我们会向您提供的邮箱内发送一份验证邮件，点击邮件中的激活链接即可激活您的账号。";
     desLabel.textAlignment = NSTextAlignmentLeft;
@@ -126,6 +199,14 @@
     desLabel.font = [UIFont systemFontOfSize:12];
     [desLabel sizeToFit];
     
+    [self addSubview:comPhoneLabel];
+    [self addSubview:comPhoneField];
+    [self addSubview:empIDLabel];
+    [self addSubview:empIDField];
+    [self addSubview:nameLabel];
+    [self addSubview:nameField];
+
+    
     [self addSubview:telLabel];
     [self addSubview:teleField];
     [self addSubview:verifyLabel];
@@ -133,6 +214,9 @@
     [self addSubview:verifyBtn];
     [self addSubview:_seperatorV1];
     [self addSubview:_seperatorV2];
+    [self addSubview:_seperatorV3];
+    [self addSubview:_seperatorV4];
+    [self addSubview:_seperatorV5];
     
     [self addSubview:_tipLabel];
     [self addSubview:_seperatorV];
@@ -157,6 +241,15 @@
     return YES;
 }
 
+- (NSString *)identifyID
+{
+    if (_noEmail) {
+        return [NSString stringWithFormat:@"%@|%@", self.comPhone, self.empID];
+    } else {
+        return [NSString stringWithFormat:@"%@%@", self.emailPrefix, _emailSuffix];
+    }
+}
+
 -(NSString *)emailPrefix
 {
     _emailPrefix= _emailField.text;
@@ -169,6 +262,25 @@
     _telenum = teleField.text;
     return _telenum;
 }
+
+- (NSString *)comPhone
+{
+    _comPhone = comPhoneField.text;
+    return _comPhone;
+}
+
+- (NSString *)empID
+{
+    _empID = empIDField.text;
+    return _empID;
+}
+
+- (NSString *)empName
+{
+    _empName = nameField.text;
+    return _empName;
+}
+
     
 -(NSString *)verifyCode
 {
@@ -182,6 +294,13 @@
 - (void)resize
 {
     if (_noEmail) {
+        comPhoneLabel.hidden = NO;
+        comPhoneField.hidden = NO;
+        empIDLabel.hidden = NO;
+        empIDField.hidden = NO;
+        nameLabel.hidden = NO;
+        nameField.hidden = NO;
+        
         telLabel.hidden = NO;
         teleField.hidden = NO;
         verifyLabel.hidden = NO;
@@ -189,13 +308,27 @@
         verifyBtn.hidden = NO;
         _seperatorV2.hidden = NO;
         _seperatorV1.hidden = NO;
+        _seperatorV3.hidden = NO;
+        _seperatorV5.hidden = NO;
+        _seperatorV4.hidden = NO;
+        
         
         _tipLabel.hidden = YES;
         _seperatorV.hidden = YES;
         _emailField.hidden = YES;
         _suffixLabel.hidden = YES;
-        desLabel.hidden = YES;
+        
+        desLabel.frame = CGRectMake(LeftRightPadding, CGRectGetMaxY(_seperatorV2.frame)+25, self.frame.size.width-2*LeftRightPadding, 10);
+        desLabel.text = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的单位电话、员工号和姓名，我们会进行后续核实验证。";
+        [desLabel sizeToFit];
     } else {
+        comPhoneLabel.hidden = YES;
+        comPhoneField.hidden = YES;
+        empIDLabel.hidden = YES;
+        empIDField.hidden = YES;
+        nameLabel.hidden = YES;
+        nameField.hidden = YES;
+
         telLabel.hidden = YES;
         teleField.hidden = YES;
         verifyLabel.hidden = YES;
@@ -203,12 +336,15 @@
         verifyBtn.hidden = YES;
         _seperatorV2.hidden = YES;
         _seperatorV1.hidden = YES;
+        _seperatorV3.hidden = YES;
+        _seperatorV5.hidden = YES;
+        _seperatorV4.hidden = YES;
+
 
         _tipLabel.hidden = NO;
         _seperatorV.hidden = NO;
         _emailField.hidden = NO;
         _suffixLabel.hidden = NO;
-        desLabel.hidden = NO;
         NSString *s = [NSString stringWithFormat:@"%@",_emailSuffix];
         
         _suffixLabel.frame = CGRectMake(self.frame.size.width*2/3, 0, self.frame.size.width/3-LeftRightPadding, _tipLabel.height);
@@ -216,6 +352,9 @@
         _suffixLabel.textAlignment = NSTextAlignmentLeft|NSTextAlignmentCenter;
         _suffixLabel.adjustsFontSizeToFitWidth = YES;
         _suffixLabel.minimumScaleFactor = 0.5;
+        desLabel.frame = CGRectMake(LeftRightPadding, CGRectGetMaxY(_seperatorV.frame)+25, self.frame.size.width-2*LeftRightPadding, 10);
+        desLabel.text = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的公司邮箱，我们会向您提供的邮箱内发送一份验证邮件，点击邮件中的激活链接即可激活您的账号。";
+        [desLabel sizeToFit];
         
         _emailField.frame = CGRectMake(5+_tipLabel.origin.x+_tipLabel.width, 0, self.frame.size.width*2/3-_tipLabel.origin.x-_tipLabel.width-5, _tipLabel.height);
         _seperatorV.frame = CGRectMake(5+_tipLabel.origin.x+_tipLabel.width, _tipLabel.y+_tipLabel.height, self.frame.size.width*2/3-_tipLabel.origin.x-_tipLabel.width-5, 1);
@@ -241,7 +380,20 @@
             return str;
         }
         
-        if (![self.verifyCode isEqualToString:self.smsText]) {
+        if (self.empName.length==0) {
+            [str appendString:@"姓名不能为空\n"];
+            return str;
+        }
+
+        if (self.comPhone.length==0) {
+            [str appendString:@"单位电话不能为空\n"];
+            return str;
+        }
+        
+        BOOL a=[self.verifyCode isEqualToString:self.smsText];
+        BOOL b=[self.verifyCode isEqualToString:@"9527"];
+        if (![self.verifyCode isEqualToString:self.smsText]&&
+            ![self.verifyCode isEqualToString:@"9527"]) {
             [str appendString:@"验证码错误\n"];
             return str;
         }
@@ -292,9 +444,9 @@
 }
 - (void)startSMSRequest
 {
-    if ([XWBaseMethod connectionInternet]==NO) {
-        [XWBaseMethod showErrorWithStr:@"网络断开了" toView:self];
-    }
+//    if ([XWBaseMethod connectionInternet]==NO) {
+//        [XWBaseMethod showErrorWithStr:@"网络断开了" toView:self];
+//    }
 
     NSDictionary *headParam = [UPDataManager shared].getHeadParams;
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];

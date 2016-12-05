@@ -151,6 +151,7 @@
 		3A08464F1D619D6800170C64 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A08464E1D619D6800170C64 /* libsqlite3.0.tbd */; };
 		3A0B60E31DE94F39009FCC10 /* UPMainMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0B60E21DE94F39009FCC10 /* UPMainMenuController.m */; };
 		3A0B60E61DEAC262009FCC10 /* MultiTables.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0B60E51DEAC262009FCC10 /* MultiTables.m */; };
+		3A0B60E81DF4FA72009FCC10 /* ActInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A0B60E71DF4FA72009FCC10 /* ActInfo.plist */; };
 		3A2939901D2F798B005CB3F3 /* UPCommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A29398F1D2F798B005CB3F3 /* UPCommentController.m */; };
 		3A2939931D2F80F6005CB3F3 /* UPTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2939921D2F80F6005CB3F3 /* UPTextView.m */; };
 		3A5368261D54791E00F36FBC /* YRSideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A5368251D54791E00F36FBC /* YRSideViewController.m */; };
@@ -518,6 +519,8 @@
 		3A0B60E21DE94F39009FCC10 /* UPMainMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPMainMenuController.m; sourceTree = "<group>"; };
 		3A0B60E41DEAC262009FCC10 /* MultiTables.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiTables.h; sourceTree = "<group>"; };
 		3A0B60E51DEAC262009FCC10 /* MultiTables.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiTables.m; sourceTree = "<group>"; };
+		3A0B60E71DF4FA72009FCC10 /* ActInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ActInfo.plist; sourceTree = "<group>"; };
+		3A0B60EB1DF5736E009FCC10 /* ActStatus.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ActStatus.json; sourceTree = "<group>"; };
 		3A29398E1D2F798B005CB3F3 /* UPCommentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCommentController.h; sourceTree = "<group>"; };
 		3A29398F1D2F798B005CB3F3 /* UPCommentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPCommentController.m; sourceTree = "<group>"; };
 		3A2939911D2F80F6005CB3F3 /* UPTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPTextView.h; sourceTree = "<group>"; };
@@ -1265,6 +1268,8 @@
 			isa = PBXGroup;
 			children = (
 				3A837D4E1DE4407500A9A0BB /* introduce.json */,
+				3A0B60E71DF4FA72009FCC10 /* ActInfo.plist */,
+				3A0B60EB1DF5736E009FCC10 /* ActStatus.json */,
 			);
 			path = plist;
 			sourceTree = "<group>";
@@ -1636,6 +1641,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A0B60E81DF4FA72009FCC10 /* ActInfo.plist in Resources */,
 				FECE88241BE344DA00CC8E85 /* Images.xcassets in Resources */,
 				2CDAD55C1D0EE23F00C260F4 /* chat_animation_white1.png in Resources */,
 				2CDAD55D1D0EE23F00C260F4 /* chat_animation_white2.png in Resources */,

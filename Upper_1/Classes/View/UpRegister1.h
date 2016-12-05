@@ -20,6 +20,8 @@
 @property (nonatomic, retain) UITableView *tableView;
 
 @property (nonatomic, retain) NSString *cityId;
+@property (nonatomic, retain) NSString *provId;
+@property (nonatomic, retain) NSString *townId;
 - (void)loadCityData:(id)respData;
 - (void)loadCityData2:(NSArray *)cityArr;
 @end

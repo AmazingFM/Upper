@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>0</key>
+	<string>活动募集中</string>
+    <key>1</key>
+    <string>募集成功</string>
+    <key>2</key>
+    <string>男性满员</string>
+    <key>3</key>
+    <string>活动满员</string>
+    <key>4</key>
+    <string>募集成功</string>
+    <key>5</key>
+    <string>募集失败</string>
+    <key>6</key>
+    <string>活动进行中</string>
+    <key>7</key>
+    <string>活动待回顾</string>
+    <key>8</key>
+    <string>活动已回顾</string>
+    <key>9</key>
+    <string>活动取消</string>
+</dict>
+</plist>
