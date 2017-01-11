@@ -8,18 +8,11 @@
 
 #import "UPBaseViewController.h"
 
-@interface ActInfo : NSObject
-
-@property (nonatomic, retain) NSString *itemID;
-@property (nonatomic, retain) NSString *actName;
-@property (nonatomic) BOOL femalFlag;//女性标志
-
-@end
-
+#import "ActivityData.h"
 
 @protocol UPActTypeSelectDelegate <NSObject>
 
-- (void)actionTypeDidSelect:(ActInfo *)actInfo;
+- (void)actionTypeDidSelect:(ActTypeInfo *)actInfo;
 
 @end
 

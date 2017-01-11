@@ -58,12 +58,12 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Ming/Documents/Git/Upper/Upper_1/Classes/Controller/PersonInfoController/UPHerLaunchedActivityController.m"
-                  timestampString = "502642102.174764"
+                  timestampString = "505842228.93945"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "53"
                   endingLineNumber = "53"
-                  offsetFromSymbolStart = "1542">
+                  offsetFromSymbolStart = "1572">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -73,7 +73,7 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Ming/Documents/Git/Upper/Upper_1/Classes/Controller/PersonInfoController/UPHerLaunchedActivityController.m"
-                  timestampString = "502642102.174931"
+                  timestampString = "505842228.940747"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "54"
@@ -138,12 +138,12 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Ming/Documents/Git/Upper/Upper_1/Classes/Controller/PersonInfoController/UPHerParticipatedActivityController.m"
-                  timestampString = "502642102.180639"
+                  timestampString = "505842228.948679"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "53"
                   endingLineNumber = "53"
-                  offsetFromSymbolStart = "1542">
+                  offsetFromSymbolStart = "1572">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -153,7 +153,7 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Ming/Documents/Git/Upper/Upper_1/Classes/Controller/PersonInfoController/UPHerParticipatedActivityController.m"
-                  timestampString = "502642102.18073"
+                  timestampString = "505842228.950042"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "54"
@@ -186,11 +186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Upper_1/Classes/Controller/NewLaunchActivityController.m"
-            timestampString = "502618926.351774"
+            timestampString = "502814881.722981"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "783"
-            endingLineNumber = "783"
+            startingLineNumber = "787"
+            endingLineNumber = "787"
             landmarkName = "-buttonClicked:withIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -281,22 +281,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Upper_1/Classes/Common/UPTools.m"
-            timestampString = "501512972.658482"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "127"
-            endingLineNumber = "127"
-            landmarkName = "+loadLocalDataWithName:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Upper_1/Classes/Controller/UPActivityAssistantController.m"
             timestampString = "501513881.947665"
             startingColumnNumber = "9223372036854775807"
@@ -329,38 +313,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Upper_1/Classes/Controller/UPRefreshTableViewController.m"
-            timestampString = "501520053.767925"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
-            landmarkName = "-tableView:cellForRowAtIndexPath:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Upper_1/Classes/Controller/UpMyActivityController.m"
-            timestampString = "501520827.817294"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
-            landmarkName = "-viewDidLoad"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Upper_1/Classes/View/UpRegister5.m"
             timestampString = "502617849.171733"
             startingColumnNumber = "9223372036854775807"
@@ -378,12 +330,12 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Ming/Documents/Git/Upper/Upper_1/Classes/View/UpRegister5.m"
-                  timestampString = "502642102.186988"
+                  timestampString = "505842228.971929"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "460"
                   endingLineNumber = "460"
-                  offsetFromSymbolStart = "403">
+                  offsetFromSymbolStart = "411">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -393,7 +345,7 @@
                   moduleName = "Upper"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Ming/Documents/Git/Upper/Upper_1/Classes/View/UpRegister5.m"
-                  timestampString = "502642102.187089"
+                  timestampString = "505842228.97321"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "461"
@@ -508,11 +460,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Upper_1/Classes/Controller/NewLaunchActivityController.m"
-            timestampString = "502618926.351774"
+            timestampString = "502814881.722981"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "685"
-            endingLineNumber = "685"
+            startingLineNumber = "684"
+            endingLineNumber = "684"
             landmarkName = "-textFieldChanged:"
             landmarkType = "5">
          </BreakpointContent>
@@ -523,14 +475,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Upper_1/Classes/Controller/NewLaunchActivityController.m"
-            timestampString = "502627945.351245"
+            filePath = "Upper_1/Classes/Controller/UpRegisterController.m"
+            timestampString = "505726713.67737"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1029"
-            endingLineNumber = "1029"
-            landmarkName = "-actionTypeDidSelect:"
-            landmarkType = "5">
+            startingLineNumber = "293"
+            endingLineNumber = "293"
+            landmarkName = "-startRequest:"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -539,14 +491,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Upper_1/Classes/Controller/UpperController.m"
-            timestampString = "502641114.045869"
+            filePath = "Upper_1/Classes/Controller/UpRegisterController.m"
+            timestampString = "505726859.94048"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "397"
-            endingLineNumber = "397"
-            landmarkName = "-switchOn:withIndexPath:"
-            landmarkType = "5">
+            startingLineNumber = "159"
+            endingLineNumber = "159"
+            landmarkName = "-viewWillAppear:"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -555,14 +507,126 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Upper_1/Classes/View/cells/UPCells.m"
-            timestampString = "502642044.427284"
+            filePath = "Upper_1/Classes/View/UpRegister1.m"
+            timestampString = "505726925.493923"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "416"
-            endingLineNumber = "416"
-            landmarkName = "-switchChanged:"
-            landmarkType = "5">
+            startingLineNumber = "37"
+            endingLineNumber = "37"
+            landmarkName = "-initWithFrame:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Upper_1/Classes/Controller/UpRegisterController.m"
+            timestampString = "505727184.679411"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "374"
+            endingLineNumber = "374"
+            landmarkName = "-loadDataForType:withURL:parameters:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[UpRegisterController loadDataForType:withURL:parameters:]"
+                  moduleName = "Upper"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Ming/Documents/Git/Upper/Upper_1/Classes/Controller/UpRegisterController.m"
+                  timestampString = "505842229.004981"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "374"
+                  endingLineNumber = "374"
+                  offsetFromSymbolStart = "172">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__59-[UpRegisterController loadDataForType:withURL:parameters:]_block_invoke"
+                  moduleName = "Upper"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Ming/Documents/Git/Upper/Upper_1/Classes/Controller/UpRegisterController.m"
+                  timestampString = "505842229.006238"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "374"
+                  endingLineNumber = "374"
+                  offsetFromSymbolStart = "30">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Upper_1/Classes/Controller/UpLoginController.m"
+            timestampString = "505814748.695007"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "242"
+            endingLineNumber = "242"
+            landmarkName = "-handleSingleTap:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Upper_1/Classes/Controller/UpLoginController.m"
+            timestampString = "505814800.521063"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "291"
+            endingLineNumber = "291"
+            landmarkName = "-startLoginRequest"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Upper_1/Classes/Controller/UpLoginController.m"
+            timestampString = "505814809.549141"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "296"
+            endingLineNumber = "296"
+            landmarkName = "-startLoginRequest"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Upper_1/Classes/Controller/UpLoginController.m"
+            timestampString = "505814824.728002"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "311"
+            endingLineNumber = "311"
+            landmarkName = "-startLoginRequest"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

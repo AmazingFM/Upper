@@ -90,12 +90,6 @@
     [_finishBtn addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_ignoreBtn];
     [self.view addSubview:_finishBtn];
-    
-//    _pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, ScreenHeight-37, ScreenWidth, 37)];
-//    _pageControl.numberOfPages=4;
-//    _pageControl.backgroundColor=[UIColor redColor];
-//    _pageControl.currentPage=0;
-//    [self.view addSubview:_pageControl];
 }
 
 - (void)buttonClick:(UIButton *)sender

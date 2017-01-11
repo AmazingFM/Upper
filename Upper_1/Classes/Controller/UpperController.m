@@ -63,7 +63,8 @@ extern NSString * const g_loginFileName;
     
     self.title = @"Upper";
 
-    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"back" highIcon:@"" target:self action:@selector(goBack)];
+       self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
+//    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"back" highIcon:@"" target:self action:@selector(goBack)];
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithRightIcon:@"add" highIcon:@"" target:self action:@selector(scanQR)];
     
     _quitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -471,7 +472,10 @@ extern NSString * const g_loginFileName;
     return _myQRCodeImageView;
 }
 
-
+-(void)leftClick
+{
+    [g_sideController showLeftViewController:YES];
+}
 
 - (void)goBack
 {

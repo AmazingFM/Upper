@@ -217,6 +217,7 @@
     }
     return YES;
 }
+
 - (void)pan:(UIPanGestureRecognizer*)pan{
     if (_panGestureRecognizer.state==UIGestureRecognizerStateBegan) {
         _startPanPoint=_currentView.frame.origin;

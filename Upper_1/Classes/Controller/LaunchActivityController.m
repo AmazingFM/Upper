@@ -78,6 +78,8 @@ static CGFloat const FixRatio = 4/3.0;
     int _onlySee;
     
     CGRect textFieldFrame;
+    
+    
 }
 
 @property (nonatomic, retain) UIButton *leftButton;

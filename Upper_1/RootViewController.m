@@ -8,6 +8,7 @@
 
 #import "RootViewController.h"
 #import "MainController.h"
+#import "UPMainMenuController.h"
 #import "MessageManager.h"
 #import "XWHttpTool.h"
 #import "UUMessage.h"
@@ -31,7 +32,7 @@
 
 @interface YMRootViewController()
 {
-    MainController *_mainViewController;
+//    MainController *_mainViewController;
 }
 @end
 
@@ -41,18 +42,28 @@
 {
     self = [super init];
     if (self) {
-        _mainViewController = [[MainController alloc] init];
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:_mainViewController];
-        nav.navigationBar.shadowImage = [[UIImage alloc] init];
-        nav.interactivePopGestureRecognizer.enabled = NO;
-        nav.interactivePopGestureRecognizer.delegate = nil;
+//        _mainViewController = [[MainController alloc] init];
+//        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:_mainViewController];
+//        nav.navigationBar.shadowImage = [[UIImage alloc] init];
+//        nav.interactivePopGestureRecognizer.enabled = NO;
+//        nav.interactivePopGestureRecognizer.delegate = nil;
 
-        self.rootViewController = nav;
+        UPMainMenuController *mainMenuVC = [[UPMainMenuController alloc] init];
+        
+//        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:mainMenuVC];
+//        nav.navigationBar.shadowImage = [[UIImage alloc] init];
+//        nav.interactivePopGestureRecognizer.enabled = NO;
+//        nav.interactivePopGestureRecognizer.delegate = nil;
+
+        
+        self.rootViewController = mainMenuVC;
         self.leftViewController = [[YMSlideViewController alloc] init];
         self.leftViewShowWidth = kYMSlideControllerWidth;
-        self.needSwipeShowMenu = NO;
+        self.needSwipeShowMenu = YES;
+        self.panMovingRightOrLeft = NO;
         
-        g_mainMenu = _mainViewController;
+//        g_mainMenu = _mainViewController;
+        g_homeMenu = mainMenuVC;
     }
     return self;
 }
@@ -156,13 +167,14 @@
     cell.textLabel.textColor = [UIColor whiteColor];
     cell.textLabel.text = menuTitles[indexPath.row];
     cell.backgroundColor = [UIColor clearColor];
+    cell.textLabel.font = kUPThemeNormalFont;
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [g_mainMenu OnAction:nil withType:LEFT_MENU_CHANGE toView:indexPath.row+1 withArg:nil];
+//    [g_mainMenu OnAction:nil withType:LEFT_MENU_CHANGE toView:indexPath.row+1 withArg:nil];
     
-    
+    [g_homeMenu switchController:indexPath.row];
     [g_sideController hideSideViewController:YES];
 }
 @end

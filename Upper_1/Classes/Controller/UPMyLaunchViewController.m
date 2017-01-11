@@ -17,6 +17,7 @@
 #import "UPBaseItem.h"
 #import "ActivityData.h"
 #import "UPActivityCellItem.h"
+#import "UPCommentController.h"
 
 @interface UPMyLaunchViewController ()
 @end
@@ -159,9 +160,47 @@
 }
 
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void)onButtonSelected:(UPActivityCellItem *)cellItem withType:(int)type
+{
+    if (type==kUPActReviewTag) {
+        //发布回顾
+        UPCommentController *commentController = [[UPCommentController alloc]init];
+        commentController.actID = cellItem.itemData.ID;
+        commentController.title=@"我要回顾";
+        commentController.type = 0;
+        
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:commentController];
+        [nav.navigationBar setTintColor:[UIColor whiteColor]];
+        [nav.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+        [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"back_shadow"] forBarMetrics:UIBarMetricsDefault];
+        nav.navigationBar.shadowImage=[[UIImage alloc]init];  //隐藏掉导航栏底部的那条线
+        //2.设置导航栏barButton上面文字的颜色
+        UIBarButtonItem *item=[UIBarButtonItem appearance];
+        [item setTintColor:[UIColor whiteColor]];
+        [item setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]} forState:UIControlStateNormal];
+        [nav.navigationBar setTranslucent:YES];
+        [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+        [self presentViewController:nav animated:YES completion:nil];
+    } else if (type==kUPActCommentTag) {
+        //发布评论
+        UPCommentController *commentController = [[UPCommentController alloc]init];
+        commentController.actID = cellItem.itemData.ID;
+        commentController.title=@"我要评论";
+        commentController.type = 1;
+        
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:commentController];
+        [nav.navigationBar setTintColor:[UIColor whiteColor]];
+        [nav.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+        [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"back_shadow"] forBarMetrics:UIBarMetricsDefault];
+        nav.navigationBar.shadowImage=[[UIImage alloc]init];  //隐藏掉导航栏底部的那条线
+        //2.设置导航栏barButton上面文字的颜色
+        UIBarButtonItem *item=[UIBarButtonItem appearance];
+        [item setTintColor:[UIColor whiteColor]];
+        [item setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]} forState:UIControlStateNormal];
+        [nav.navigationBar setTranslucent:YES];
+        [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+        [self presentViewController:nav animated:YES completion:nil];
+        
+    }
 }
-
 @end

@@ -12,19 +12,6 @@
 
 #define kRowHeight 40
 #define kSectionHeight 30
-@implementation ActInfo
-
-- (instancetype) init{
-    self = [super init];
-    if (self) {
-        _itemID = @"";
-        _actName = @"";
-        _femalFlag = NO;
-    }
-    return self;
-}
-
-@end
 
 @interface UPActTypeController () <UITableViewDelegate, UITableViewDataSource>
 {
@@ -73,16 +60,7 @@
     }
     
     [g_appDelegate.actTypeArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSDictionary *actInfoDict = (NSDictionary *)obj;
-        ActInfo *actInfo = [ActInfo new];
-        actInfo.actName = actInfoDict[@"Name"];
-        actInfo.itemID = actInfoDict[@"ItemID"];
-        
-        //夜店趴，家庭趴
-        if ([actInfo.itemID isEqualToString:@"102"] ||
-            [actInfo.itemID isEqualToString:@"105"]) {
-            actInfo.femalFlag = YES;
-        }
+        ActTypeInfo *actInfo = (ActTypeInfo *)obj;
         
         unichar firstC = [actInfo.itemID characterAtIndex:0];
         
@@ -183,9 +161,9 @@
     }
     NSArray *subArr = subTitles[indexPath.section];
     label.textColor = [UIColor lightGrayColor];
-    ActInfo *actInfo = subArr[indexPath.row];
+    ActTypeInfo *actInfo = subArr[indexPath.row];
        
-    label.text = actInfo.actName;
+    label.text = actInfo.actTypeName;
     return cell;
 }
 

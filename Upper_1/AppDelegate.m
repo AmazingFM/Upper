@@ -11,6 +11,7 @@
 #import "UPGuideViewController.h"
 #import "UPGlobals.h"
 #import "UPTools.h"
+#import "ActivityData.h"
 
 #import "MessageManager.h"
 
@@ -30,12 +31,6 @@
     [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"back_shadow"] forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setTranslucent:YES];
     
-    //自定义返回按钮
-//    UIImage *backButtonImage = [[UIImage imageNamed:@"fanhui.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 30, 0, 0)];
-//    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:backButtonImage forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-//    //将返回按钮的文字position设置不在屏幕上显示
-//    [[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(NSIntegerMin, NSIntegerMin) forBarMetrics:UIBarMetricsDefault];
-
     self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
     initialize();
@@ -58,8 +53,6 @@
     {
         NSLog(@"第一次启动");
         //如果是第一次启动的话,使用GuideViewController (用户引导页面) 作为根视图
-//        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
-        
         UPGuideViewController *guideViewController = [[UPGuideViewController alloc] init];
         self.window.rootViewController = guideViewController;
     }
@@ -108,10 +101,28 @@
 {
     NSString *actInfoPath = [[NSBundle mainBundle] pathForResource:@"ActInfo" ofType:@"plist"];
     NSMutableArray *tmpArr = [[NSMutableArray alloc] initWithContentsOfFile:actInfoPath];
-    [self.actTypeArr addObjectsFromArray:tmpArr];
+    [tmpArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSDictionary *actTypeDict = (NSDictionary *)obj;
+        ActTypeInfo *actType = [[ActTypeInfo alloc] initWithDict:actTypeDict];
+        [self.actTypeArr addObject:actType];
+    }];
     
     NSDictionary *actDict = [UPTools loadBundleFile:@"ActStatus.json"];
     
+    [actDict enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        NSDictionary *actStatusDict = (NSDictionary *)obj;
+        ActStatusInfo *actStatus = [[ActStatusInfo alloc] initWithDict:actStatusDict withID:key];
+        
+        [self.actStatusDict setObject:actStatus forKey:key];
+    }];
+}
+
+- (NSMutableDictionary *)actStatusDict
+{
+    if (_actStatusDict==nil) {
+        _actStatusDict = [NSMutableDictionary new];
+    }
+    return _actStatusDict;
 }
 
 - (NSMutableArray *)actTypeArr

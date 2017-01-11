@@ -9,7 +9,6 @@
 #import "NewLaunchActivityController.h"
 #import "RecommendController.h"
 #import "UPActTypeController.h"
-
 #import "DrawSomething.h"
 #import "UPCellItems.h"
 #import "UPCells.h"
@@ -774,7 +773,12 @@ static CGFloat const FixRatio = 4/3.0;
                 if ([cellItem.key isEqualToString:@"industry_id"]) {
                     params[cellItem.key] = ((int)cellItem.value==1)?[UPDataManager shared].userInfo.industry_id:@"-1";
                 } else if([cellItem.key isEqualToString:@"start_time"]|[cellItem.key isEqualToString:@"end_time"]) {
-                    params[cellItem.key] = [UPTools dateTransform:cellItem.value fromFormat:@"yyyy-MM-dd" toFormat:@"yyyyMMddHHmmss"];
+                    if ([cellItem.key isEqualToString:@"start_time"]) {
+                        params[cellItem.key] = [UPTools dateTransform:cellItem.value fromFormat:@"yyyy-MM-dd" toFormat:@"yyyyMMdd000000"];
+                    } else {
+                        params[cellItem.key] = [UPTools dateTransform:cellItem.value fromFormat:@"yyyy-MM-dd" toFormat:@"yyyyMMdd235959"];
+                    }
+                    
                 } else {
                    [params setObject:cellItem.value forKey:cellItem.key];
                 }
@@ -1016,11 +1020,11 @@ static CGFloat const FixRatio = 4/3.0;
     
 }
 
-- (void)actionTypeDidSelect:(ActInfo *)actInfo {
+- (void)actionTypeDidSelect:(ActTypeInfo *)actInfo {
     for (UPBaseCellItem *cellItem in self.itemList) {
         if ([cellItem.key isEqualToString:@"activity_class"]) {
             UPDetailCellItem *item = (UPDetailCellItem*)cellItem;
-            item.detail = actInfo.actName;
+            item.detail = actInfo.actTypeName;
             [_tableView reloadRowsAtIndexPaths:@[item.indexPath] withRowAnimation:UITableViewRowAnimationNone];
             break;
         }

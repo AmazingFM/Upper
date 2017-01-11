@@ -37,6 +37,9 @@ extern AppDelegate *g_appDelegate;
 extern MainController *g_mainMenu;
 extern YRSideViewController* g_sideController;
 
+@class UPMainMenuController;
+extern UPMainMenuController *g_homeMenu;
+
 extern BOOL g_isLogin;
 
 extern void initialize();

@@ -9,6 +9,7 @@
 #import "UPActivityCell.h"
 #import "Info.h"
 #import "UPTools.h"
+#import "UPGlobals.h"
 #import "DrawSomething.h"
 #import "UPTheme.h"
 #import "MBProgressHUD+MJ.h"
@@ -105,6 +106,8 @@
     UIButton *_changeActBtn;
     UIButton *_commentActBtn;
     UIButton *_quitActBtn;
+    UIButton *_signActBtn;
+    UIButton *_joinActBtn;
     
     UPTimeLocationView *_timeLocationV;
 }
@@ -204,7 +207,7 @@
         [_commentActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
 
         _quitActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_quitActBtn setTitle:@"取消" forState:UIControlStateNormal];
+        [_quitActBtn setTitle:@"退出" forState:UIControlStateNormal];
         _quitActBtn.tag = kUPActQuitTag;
         [_quitActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         _quitActBtn.titleLabel.font = kUPThemeMinFont;
@@ -212,12 +215,34 @@
         _quitActBtn.layer.masksToBounds = YES;
         _quitActBtn.layer.borderWidth = 1.f;
         [_quitActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        _signActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_signActBtn setTitle:@"签到" forState:UIControlStateNormal];
+        _signActBtn.tag = kUPActSignTag;
+        [_signActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        _signActBtn.titleLabel.font = kUPThemeMinFont;
+        _signActBtn.layer.cornerRadius = 2.0f;
+        _signActBtn.layer.masksToBounds = YES;
+        _signActBtn.layer.borderWidth = 1.f;
+        [_signActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+
+        _joinActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_joinActBtn setTitle:@"报名" forState:UIControlStateNormal];
+        _joinActBtn.tag = kUPActJoinTag;
+        [_joinActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        _joinActBtn.titleLabel.font = kUPThemeMinFont;
+        _joinActBtn.layer.cornerRadius = 2.0f;
+        _joinActBtn.layer.masksToBounds = YES;
+        _joinActBtn.layer.borderWidth = 1.f;
+        [_joinActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
 
         [_btnContainerView addSubview:_reviewActBtn];
         [_btnContainerView addSubview:_cancelActBtn];
         [_btnContainerView addSubview:_changeActBtn];
         [_btnContainerView addSubview:_commentActBtn];
         [_btnContainerView addSubview:_quitActBtn];
+        [_btnContainerView addSubview:_signActBtn];
+        [_btnContainerView addSubview:_joinActBtn];
         
         _timeLocationV = [[UPTimeLocationView alloc] initWithFrame:CGRectZero];
         
@@ -282,7 +307,6 @@
     CGFloat perHeight = (height-offsety)/3;
     
     CGSize size;
-    NSArray*  actTypeArr = @[@"不限", @"派对、酒会", @"桌游、座谈、棋牌", @"KTV", @"户外烧烤", @"运动",@"交友、徒步"];
     
     /**
      二、活动状态时序
@@ -300,14 +324,31 @@
      8-活动已回顾： 13日以后，发起人回顾
      9-活动取消：1-10日期间，发起人主动取消
      **/
-    NSArray *actStatusArr = @[@"创建募集期", @"募集成功", @"报名截止", @"活动发生", @"活动结束", @"募集失败", @"", @"",@"", @"活动取消"];
+    
     NSArray *clothTypeArr = @[@"随性", @"西装领带", @"便装"];
 
     int selectIndex;
     selectIndex = [itemData.activity_class intValue];
-    if (selectIndex<actTypeArr.count) {
-        _typeLab.text = actTypeArr[selectIndex];
-        size = SizeWithFont(actTypeArr[selectIndex], kUPThemeSmallFont);
+    
+    __block NSString *actTypeTitle;
+    __block BOOL showFemale = NO;
+    [g_appDelegate.actTypeArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        ActTypeInfo *actInfo = (ActTypeInfo *)obj;
+        if ([actInfo.itemID intValue]==selectIndex) {
+            actTypeTitle = actInfo.actTypeName;
+            showFemale = actInfo.femalFlag;
+            *stop = YES;
+        }
+    }];
+    
+    if (showFemale) {
+        _freeTips.hidden = NO;
+    } else {
+        _freeTips.hidden = YES;
+    }
+    if (actTypeTitle.length!=0) {
+        _typeLab.text = actTypeTitle;
+        size = SizeWithFont(actTypeTitle, kUPThemeSmallFont);
         _typeLab.size = CGSizeMake(size.width+10, size.height+4);;
         _typeLab.center = CGPointMake(offsetx+size.width/2+5, offsety+perHeight/2);
     }
@@ -323,9 +364,21 @@
     offsety += perHeight;
     
     selectIndex = [itemData.activity_status intValue];
-    if (selectIndex<actStatusArr.count) {
-        _statusLab.text = actStatusArr[selectIndex];
-        size = SizeWithFont(actStatusArr[selectIndex], kUPThemeMinFont);
+    if (selectIndex<=9) {
+        ActStatusInfo *actStatusInfo = [g_appDelegate.actStatusDict objectForKey:(@(selectIndex).stringValue)];
+        
+        NSString *actStatusText = actStatusInfo.actStatusTitle;
+        if ([actStatusText isEqualToString:@"none"]) {
+            NSString *sexual = [UPDataManager shared].userInfo.sexual;
+            if ([sexual intValue]==0) {
+                actStatusText = @"满员";
+            } else {
+                actStatusText = @"火热募集中";
+            }
+        }
+        _statusLab.text = actStatusInfo.actStatusTitle;
+        
+        size = SizeWithFont(actStatusInfo.actStatusTitle, kUPThemeMinFont);
         _statusLab.size = CGSizeMake(size.width+10, size.height+4);;
         _statusLab.center = CGPointMake(offsetx+size.width/2+5, offsety+perHeight/2);
         
@@ -340,60 +393,123 @@
         size.width += 10;
         if (_actCellItem.type==SourceTypeWoFaqi) {
             switch (selectIndex) {
-                case 3: //针对 活动发生 回顾
-                    _reviewActBtn.frame = CGRectMake(0,0,size.width,perHeight);
-                    _cancelActBtn.frame = CGRectZero;
-                    _changeActBtn.frame = CGRectZero;
-                    _commentActBtn.frame = CGRectZero;
-                    _quitActBtn.frame = CGRectZero;
-                    break;
                 case 0:
                 case 1:
                 case 2:
-                    _cancelActBtn.frame = CGRectMake(0,0,size.width,perHeight);
-                    _changeActBtn.frame = CGRectMake(10+size.width,0,size.width,perHeight);
-                    _reviewActBtn.frame = CGRectZero;
-                    
-                    _commentActBtn.frame = CGRectZero;
-                    _quitActBtn.frame = CGRectZero;
-
+                case 3:
+                case 4:
+                    _changeActBtn.frame =   CGRectMake(0,0,size.width,perHeight);
+                    _cancelActBtn.frame =   CGRectMake(10+size.width,0,size.width,perHeight);
+                    _reviewActBtn.frame =   CGRectZero;
+                    _commentActBtn.frame =  CGRectZero;
+                    _quitActBtn.frame =     CGRectZero;
+                    _signActBtn.frame =     CGRectZero;
+                    _joinActBtn.frame =     CGRectZero;
                     break;
-                default:
-//                    _reviewActBtn.frame = CGRectMake(0,0,size.width,perHeight);
-                    _reviewActBtn.frame = CGRectZero;
-                    _cancelActBtn.frame = CGRectZero;
-                    _changeActBtn.frame = CGRectZero;
-                    _commentActBtn.frame = CGRectZero;
-                    _quitActBtn.frame = CGRectZero;
+                case 6:
+                    _signActBtn.frame =     CGRectMake(0,0,size.width,perHeight);
+                    _reviewActBtn.frame =   CGRectZero;
+                    _changeActBtn.frame =   CGRectZero;
+                    _cancelActBtn.frame =   CGRectZero;
+                    _commentActBtn.frame =  CGRectZero;
+                    _quitActBtn.frame =     CGRectZero;
+                    _joinActBtn.frame =     CGRectZero;
+                    break;
+                case 7:
+                    _reviewActBtn.frame =   CGRectMake(0,0,size.width,perHeight);
+                    _changeActBtn.frame =   CGRectZero;
+                    _cancelActBtn.frame =   CGRectZero;
+                    _commentActBtn.frame =  CGRectZero;
+                    _quitActBtn.frame =     CGRectZero;
+                    _signActBtn.frame =     CGRectZero;
+                    _joinActBtn.frame =     CGRectZero;
+                    break;
+                case 5:
+                case 8:
+                case 9:
+                    _reviewActBtn.frame =   CGRectZero;
+                    _changeActBtn.frame =   CGRectZero;
+                    _cancelActBtn.frame =   CGRectZero;
+                    _commentActBtn.frame =  CGRectZero;
+                    _quitActBtn.frame =     CGRectZero;
+                    _signActBtn.frame =     CGRectZero;
+                    _joinActBtn.frame =     CGRectZero;
                     break;
             }
         } else if(_actCellItem.type==SourceTypeWoCanyu) {
+            
+            int anticipateStatus = [itemData.activity_class intValue];
+            /**
+             ● 参与者状态
+             0：报名
+             1：签到
+             2：主动退出
+             4：因接受发起人转让而被动退出
+             5：已评价
+             ● 操作
+             活动状态		参与状态		操作
+             0-3			-1,2,4		报名 （满员是否可报，前台动态控制，后台有校验）
+             0-3			0			退出
+             4			0			退出
+             5						无操作
+             6			0			我要签到->弹个人中心二维码						
+             7-9			0,1			评价
+             其它						无操作             */
+            
             switch (selectIndex) {
-                case 3:
-                    _commentActBtn.frame = CGRectMake(0,0,size.width,perHeight);
-                    _quitActBtn.frame = CGRectZero;
-
-                    _reviewActBtn.frame = CGRectZero;
-                    _cancelActBtn.frame = CGRectZero;
-                    _changeActBtn.frame = CGRectZero;
-                    break;
+                    
                 case 0:
                 case 1:
                 case 2:
-                    _quitActBtn.frame = CGRectMake(0,0,size.width,perHeight);
-                    _commentActBtn.frame = CGRectMake(10+size.width,0,size.width,perHeight);
-                    
-                    _reviewActBtn.frame = CGRectZero;
-                    _cancelActBtn.frame = CGRectZero;
-                    _changeActBtn.frame = CGRectZero;
+                case 3:
+                    _reviewActBtn.frame =   CGRectZero;
+                    _changeActBtn.frame =   CGRectZero;
+                    _cancelActBtn.frame =   CGRectZero;
+                    _commentActBtn.frame =  CGRectZero;
+                    _quitActBtn.frame =     CGRectZero;
+                    _signActBtn.frame =     CGRectZero;
+                    _joinActBtn.frame =     CGRectZero;
                     break;
-                default:
-                    _commentActBtn.frame = CGRectZero;
-                    _quitActBtn.frame = CGRectZero;
+                case 4:
+                    _reviewActBtn.frame =   CGRectZero;
+                    _changeActBtn.frame =   CGRectZero;
+                    _cancelActBtn.frame =   CGRectZero;
+                    _commentActBtn.frame =  CGRectZero;
+                    _quitActBtn.frame =     CGRectZero;
+                    _signActBtn.frame =     CGRectZero;
+                    _joinActBtn.frame =     CGRectZero;
 
-                    _cancelActBtn.frame = CGRectZero;
-                    _changeActBtn.frame = CGRectZero;
-                    _reviewActBtn.frame = CGRectZero;
+                    break;
+                case 5:
+                    _reviewActBtn.frame =   CGRectZero;
+                    _changeActBtn.frame =   CGRectZero;
+                    _cancelActBtn.frame =   CGRectZero;
+                    _commentActBtn.frame =  CGRectZero;
+                    _quitActBtn.frame =     CGRectZero;
+                    _signActBtn.frame =     CGRectZero;
+                    _joinActBtn.frame =     CGRectZero;
+
+                    break;
+                case 6:
+                    _reviewActBtn.frame =   CGRectZero;
+                    _changeActBtn.frame =   CGRectZero;
+                    _cancelActBtn.frame =   CGRectZero;
+                    _commentActBtn.frame =  CGRectZero;
+                    _quitActBtn.frame =     CGRectZero;
+                    _signActBtn.frame =     CGRectZero;
+                    _joinActBtn.frame =     CGRectZero;
+
+                    break;
+                case 7:
+                case 8:
+                case 9:
+                    _reviewActBtn.frame =   CGRectZero;
+                    _changeActBtn.frame =   CGRectZero;
+                    _cancelActBtn.frame =   CGRectZero;
+                    _commentActBtn.frame =  CGRectZero;
+                    _quitActBtn.frame =     CGRectZero;
+                    _signActBtn.frame =     CGRectZero;
+                    _joinActBtn.frame =     CGRectZero;
                     break;
             }
 
@@ -432,14 +548,14 @@
         alertView.tag = sender.tag;
         [alertView show];
 
-    } else if (sender.tag==kUPActReviewTag||
-               sender.tag==kUPActCommentTag||
-               sender.tag==kUPActChangeTag)
+    } else if (sender.tag==kUPActReviewTag  ||
+               sender.tag==kUPActCommentTag ||
+               sender.tag==kUPActChangeTag  ||
+               sender.tag==kUPActSignTag)
     {
         if ([self.delegate respondsToSelector:@selector(onButtonSelected:withType:)]) {
             [self.delegate onButtonSelected:_actCellItem withType:sender.tag];
         }
-
     }
 }
 

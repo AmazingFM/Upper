@@ -447,15 +447,40 @@
         } else if (indexPath.row==7) {
             cell.textLabel.text = @"活动类型";
             
-            NSArray *types = @[@"不限", @"派对、酒会", @"桌游、座谈、棋牌", @"KTV", @"户外烧烤", @"运动",@"郊游、徒步"];
+            
             int index = [_actData.activity_class intValue];
-            cell.detailTextLabel.text = types[index];
+            
+            __block NSString *actTypeTitle;
+            __block BOOL showFemale = NO;
+
+            [g_appDelegate.actTypeArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                ActTypeInfo *actInfo = (ActTypeInfo *)obj;
+                if ([actInfo.itemID intValue]==index) {
+                    actTypeTitle = actInfo.actTypeName;
+                    showFemale = actInfo.femalFlag;
+                    *stop = YES;
+                }
+            }];
+
+            cell.detailTextLabel.text = actTypeTitle;
             
         }else if (indexPath.row==8) {
             cell.textLabel.text = @"报名状态";
-            NSArray *types = @[@"派对、酒会", @"桌游、座谈、棋牌", @"KTV", @"户外烧烤", @"运动",@"郊游、徒步"];
+            
             int index = [_actData.activity_status intValue];
-            cell.detailTextLabel.text = types[index];
+            ActStatusInfo *actStatusInfo = [g_appDelegate.actStatusDict objectForKey:(@(index).stringValue)];
+            
+            NSString *actStatusText = actStatusInfo.actStatusTitle;
+            if ([actStatusText isEqualToString:@"none"]) {
+                NSString *sexual = [UPDataManager shared].userInfo.sexual;
+                if ([sexual intValue]==0) {
+                    actStatusText = @"满员";
+                } else {
+                    actStatusText = @"火热募集中";
+                }
+            }
+            
+            cell.detailTextLabel.text = actStatusText;
         }
     } else if ([cellId isEqualToString:@"submit"]) {
         UIButton *submit = [cell viewWithTag:(DetailBtnTypeSubmit)];
