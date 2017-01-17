@@ -105,7 +105,7 @@
 
 -(void)leftClick
 {
-    [((MainController *)self.parentController).parentController leftClick];
+    [g_sideController showLeftViewController:YES];
 }
 
 - (void)makeAction:(id)sender

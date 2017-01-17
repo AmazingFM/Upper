@@ -27,6 +27,7 @@
     UILabel *tipsLabel ;
     
     NSMutableArray *sysMsgList;
+    NSMutableArray *inviteList;
     NSMutableArray *usrMsgList;
 }
 
@@ -39,6 +40,8 @@
     self.title = @"消息列表";
     self.navigationItem.rightBarButtonItem = nil;
     
+    sysMsgList = [NSMutableArray new];
+    inviteList = [NSMutableArray new];
     usrMsgList = [NSMutableArray array];
     
     tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, ScreenHeight/2, ScreenWidth-40, 40)];
@@ -47,6 +50,8 @@
     tipsLabel.backgroundColor = [UIColor whiteColor];
     tipsLabel.hidden = YES;
     [self.view addSubview:tipsLabel];
+    
+    [self loadMessage];//加载消息
     
     _messageTable = [[UITableView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
     _messageTable.backgroundColor = [UIColor clearColor];
@@ -76,7 +81,6 @@
     [super viewWillAppear:animated];
     
     [usrMsgList removeAllObjects];
-    [self loadMessage];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageGroupUpdate object:nil];
 }
 

@@ -37,6 +37,8 @@
     [super viewDidLoad];
     self.navigationItem.title = @"我的好友";
     
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:nil target:self action:@selector(leftClick)];
+    
     UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0,FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight)];
     backView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:backView];
@@ -67,6 +69,11 @@
 {
     [super viewWillAppear:animated];
     [self.mainTable.header beginRefreshing];
+}
+
+- (void)leftClick
+{
+    [g_sideController showLeftViewController:YES];
 }
 
 - (void)addFriendAction

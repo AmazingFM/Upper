@@ -48,9 +48,13 @@
 #import "XWHttpTool.h"
 #import "UPActivityCellItem.h"
 #import "ZouMaDengView.h"
+#import "UIBarButtonItem+Badge.h"
 
 #define kActivityPageSize 20
 #define kActivityAssitantTag 100
+
+static int kMsgCount = 0;
+
 @interface MainController ()<UIGestureRecognizerDelegate,XWTopMenuDelegate, UITableViewDelegate, UITableViewDataSource,UPItemButtonDelegate>
 {
     MJRefreshComponent *myRefreshView;
@@ -59,6 +63,8 @@
     NoticeBoard *noticeBoard;
     
     BOOL isLoaded;
+    
+    UIBarButtonItem *messageItem;
 }
 
 @property (nonatomic, retain) XWTopMenu *topMenu;
@@ -80,6 +86,13 @@
     
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = backItem;
+    
+    messageItem = [UIBarButtonItem itemWithRightIcon:@"" highIcon:nil target:self action:@selector(jumpToMessage)];
+    messageItem.badgeValue = kMsgCount==0?@"":[NSString stringWithFormat:@"%d", kMsgCount];
+    messageItem.badgeBGColor = [UIColor redColor];
+    messageItem.badgeOriginX=25;
+    messageItem.badgeOriginY=5;
+    self.navigationItem.rightBarButtonItem=messageItem;
     
     UIButton *titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [titleButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -140,11 +153,28 @@
     qrCodeController = [[QRCodeController alloc] init];
     qrCodeController.parentController = self;
     
-    msgCenterController = [[MessageCenterController alloc] init];
-    msgCenterController.parentController = self;
-    
     myFriendsController = [[UPMyFriendsViewController alloc] init];
     myFriendsController.parentController = self;
+}
+
+- (void)addBadgeValue:(NSNotification *)notification
+{
+    NSArray *msgArr = notification.object;
+    long addCount = msgArr.count;
+    kMsgCount += addCount;
+    
+    messageItem.badgeValue = [NSString stringWithFormat:@"%d", kMsgCount];
+}
+
+-(void)jumpToMessage
+{
+    MessageCenterController *msgCenterController = [[MessageCenterController alloc] init];
+    [self.navigationController pushViewController:msgCenterController animated:YES];
+}
+
+- (void)setBadgeValue:(int)newValue
+{
+    messageItem.badgeValue = newValue==0?@"":[NSString stringWithFormat:@"%d", newValue];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -591,15 +621,6 @@
                         [self.navigationController popToViewController:chatController animated:YES];
                     } else {
                         [self.navigationController pushViewController:chatController animated:YES];
-                    }
-                }
-                    break;
-                case MESSAGE_CENTER_VIEW:
-                {
-                    if ([self isStack:msgCenterController]) {
-                        [self.navigationController popToViewController:msgCenterController animated:YES];
-                    } else {
-                        [self.navigationController pushViewController:msgCenterController animated:YES];
                     }
                 }
                     break;

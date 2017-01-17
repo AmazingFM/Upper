@@ -7,15 +7,12 @@
 //
 
 #import "UPBaseViewController.h"
-#import "UIBarButtonItem+Badge.h"
 #import "MainController.h"
 #import "MessageCenterController.h"
 
-static int kMsgCount = 0;
-
 @interface UPBaseViewController ()
 {
-    UIBarButtonItem *messageItem;
+    
 }
 
 @end
@@ -38,11 +35,6 @@ static int kMsgCount = 0;
     backImg.userInteractionEnabled = NO;
     backImg.frame = self.view.bounds;
     [self.view addSubview:backImg];
-    
-    messageItem = [self barBtnWithIcon:@"message"];
-    messageItem.badgeValue = kMsgCount==0?@"":[NSString stringWithFormat:@"%d", kMsgCount];
-    messageItem.badgeBGColor = [UIColor redColor];
-    self.navigationItem.rightBarButtonItem=messageItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -74,20 +66,6 @@ static int kMsgCount = 0;
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
-- (void)addBadgeValue:(NSNotification *)notification
-{
-    NSArray *msgArr = notification.object;
-    long addCount = msgArr.count;
-    kMsgCount += addCount;
-
-    messageItem.badgeValue = [NSString stringWithFormat:@"%d", kMsgCount];
-}
-
-- (void)setBadgeValue:(int)newValue
-{
-    messageItem.badgeValue = newValue==0?@"":[NSString stringWithFormat:@"%d", newValue];
-}
-
 - (void)keyboardWillShow:(NSNotification *)note
 {
     //
@@ -98,28 +76,10 @@ static int kMsgCount = 0;
     //
 }
 
--(UIBarButtonItem*)barBtnWithIcon:(NSString*)iconName{
-    UIBarButtonItem* barItem=nil;//createBarItem(iconName, self, @selector(showSideController));
-    UIButton* btn=[UIButton buttonWithType:UIButtonTypeCustom];
-    [btn setImage:[UIImage imageNamed:iconName] forState:UIControlStateNormal];
-    btn.frame=CGRectMake(0,0,32,32);
-    [btn addTarget:self action:@selector(rightClick) forControlEvents:UIControlEventTouchUpInside];
-    barItem=[[UIBarButtonItem alloc] initWithCustomView:btn];
-    barItem.badgeOriginX=25;
-    barItem.badgeOriginY=5;
-    return barItem;
-}
-
 - (void)checkNetStatus{
 //    if ([XWBaseMethod connectionInternet]==NO) {
 //        [XWBaseMethod showErrorWithStr:@"网络断开了" toView:self.view];
 //    }
-}
-
--(void)rightClick
-{
-    MessageCenterController *msgCenterController = [[MessageCenterController alloc] init];
-    [self.navigationController pushViewController:msgCenterController animated:YES];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle

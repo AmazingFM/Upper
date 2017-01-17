@@ -63,8 +63,7 @@ extern NSString * const g_loginFileName;
     
     self.title = @"Upper";
 
-       self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
-//    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"back" highIcon:@"" target:self action:@selector(goBack)];
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithRightIcon:@"add" highIcon:@"" target:self action:@selector(scanQR)];
     
     _quitBtn = [UIButton buttonWithType:UIButtonTypeCustom];

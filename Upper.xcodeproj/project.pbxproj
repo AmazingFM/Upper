@@ -137,6 +137,7 @@
 		3A2939901D2F798B005CB3F3 /* UPCommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A29398F1D2F798B005CB3F3 /* UPCommentController.m */; };
 		3A2939931D2F80F6005CB3F3 /* UPTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2939921D2F80F6005CB3F3 /* UPTextView.m */; };
 		3A5368261D54791E00F36FBC /* YRSideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A5368251D54791E00F36FBC /* YRSideViewController.m */; };
+		3A6408931E279C940086CDCA /* UPLaunchActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A6408921E279C940086CDCA /* UPLaunchActivityController.m */; };
 		3A71CB8B1E26267700EBE0A2 /* act.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A71CB3B1E26267700EBE0A2 /* act.png */; };
 		3A71CB8C1E26267700EBE0A2 /* add.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A71CB3C1E26267700EBE0A2 /* add.png */; };
 		3A71CB8D1E26267700EBE0A2 /* add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A71CB3D1E26267700EBE0A2 /* add@2x.png */; };
@@ -563,6 +564,8 @@
 		3A2939921D2F80F6005CB3F3 /* UPTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPTextView.m; sourceTree = "<group>"; };
 		3A5368241D54791E00F36FBC /* YRSideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YRSideViewController.h; sourceTree = "<group>"; };
 		3A5368251D54791E00F36FBC /* YRSideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YRSideViewController.m; sourceTree = "<group>"; };
+		3A6408911E279C940086CDCA /* UPLaunchActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPLaunchActivityController.h; sourceTree = "<group>"; };
+		3A6408921E279C940086CDCA /* UPLaunchActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPLaunchActivityController.m; sourceTree = "<group>"; };
 		3A71CB3B1E26267700EBE0A2 /* act.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = act.png; sourceTree = "<group>"; };
 		3A71CB3C1E26267700EBE0A2 /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add.png; sourceTree = "<group>"; };
 		3A71CB3D1E26267700EBE0A2 /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add@2x.png"; sourceTree = "<group>"; };
@@ -1401,6 +1404,8 @@
 			children = (
 				3A7694DD1E26731F002715B4 /* UPMainMenuController.h */,
 				3A7694DE1E26731F002715B4 /* UPMainMenuController.m */,
+				3A6408911E279C940086CDCA /* UPLaunchActivityController.h */,
+				3A6408921E279C940086CDCA /* UPLaunchActivityController.m */,
 			);
 			path = home;
 			sourceTree = "<group>";
@@ -2107,6 +2112,7 @@
 				EC3C18041CECB16D00223D6B /* XWCommonHttpTool.m in Sources */,
 				EC3C181E1CECB16D00223D6B /* CityButton.m in Sources */,
 				2CC645371D04105200A07408 /* UPBaseViewController.m in Sources */,
+				3A6408931E279C940086CDCA /* UPLaunchActivityController.m in Sources */,
 				2CDAD63F1D0EEC4000C260F4 /* MBProgressHUD+MJ.m in Sources */,
 				3A837D1C1DD8123700A9A0BB /* UPMessageCell.m in Sources */,
 				2CDAD65A1D0EEC4000C260F4 /* UIScrollView+MJExtension.m in Sources */,
@@ -2271,7 +2277,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.yeoman.upper;
 				PRODUCT_NAME = Upper;
-				PROVISIONING_PROFILE = "141e6df9-a107-45f0-a8f5-8aa5d1d4d2df";
+				PROVISIONING_PROFILE = "df6ea972-4493-4deb-a7c4-5395ddf817a9";
 				PROVISIONING_PROFILE_SPECIFIER = YMWildPro_Adhoc;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

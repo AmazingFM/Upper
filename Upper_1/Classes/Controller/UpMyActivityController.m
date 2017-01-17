@@ -28,13 +28,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] init];
-    backItem.title = @"我的活动";
-    self.navigationItem.backBarButtonItem = backItem;
-    
     [self initSegmentedControl];
-    
-    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"back" highIcon:@"" target:self action:@selector(leftClick)];
+
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
 
     CGFloat y = FirstLabelHeight+20;
     
@@ -55,12 +51,16 @@
     [self addChildViewController:myLaunch];
     
     UPMyAnticipateViewController *myAnticipate = [[UPMyAnticipateViewController alloc] init];
-//    myAnticipate.parentController = self;
     myAnticipate.view.frame = CGRectMake(0, CGRectGetMaxY(tipsButton.frame), ScreenWidth, ScreenHeight-CGRectGetMaxY(tipsButton.frame));
     [self addChildViewController:myAnticipate];
     
     [self.view addSubview:tipsButton];
     [self.view addSubview:self.childViewControllers[_selectedIndex].view];
+}
+
+- (void)leftClick
+{
+    [g_sideController showLeftViewController:YES];
 }
 
 - (void)initSegmentedControl
@@ -96,10 +96,5 @@
         }];
     }
 }
-
-- (void)leftClick
- {
-     [self.navigationController popViewControllerAnimated:YES];
- }
 
 @end

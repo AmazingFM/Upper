@@ -13,6 +13,19 @@
 #import "Info.h"
 #import "UUMessage.h"
 
+@implementation GroupMessage
+
+- (NSMutableArray *)messageList
+{
+    if (_messageList==nil) {
+        _messageList = [NSMutableArray new];
+    }
+    return _messageList;
+}
+
+@end
+
+
 @interface MessageManager()
 {
     FMDatabase *messageDb;
@@ -70,17 +83,15 @@
     //建表消息列表
     flag = [messageDb executeUpdate:@"create table if not exists messages_detail (id integer primary key autoincrement, from_id text, to_id text, nick_name text, message_desc text, message_from integer, message_type integer, add_time text, status text)"];
     
-    flag = [messageDb executeUpdate:@"create table if not exists messages_group (id integer primary key autoincrement, from_id text unique, to_id text, nick_name text, newest_message text, add_time text, status text)"];
+    flag = [messageDb executeUpdate:@"create table if not exists messages_group (id integer primary key autoincrement, from_id text unique, to_id text, nick_name text, newest_message text, message_type integer, add_time text, status text)"];
     
-//    flag = [messageDb executeUpdate:@"create unique index from_id_index on messages_group(from_id)"];
     
     if (flag) {
         NSLog(@"建表messages成功");
     } else {
         NSLog(@"建表messages失败");
     }
-    
-//    [self test:@"20161111121212"];
+
     [messageDb close];
 }
 
@@ -140,16 +151,25 @@
                     NSMutableArray *msgArr = (NSMutableArray*)msglist;
                     for (NSDictionary *dict in msgArr) {
                         UUMessage *msg = [[UUMessage alloc] init];
-                        msg.from = UUMessageFromOther;
-                        msg.type = UUMessageTypeText;
-                        msg.strId = dict[@"from_id"];
+                        
+                        int msgType = [dict[@"message_type"] intValue];
+                        if (msgType==99) {
+                            msg.type = UUMessageTypeInvite;
+                        } else {
+                            msg.type = UUMessageTypeText;
+                        }
+                        
+                        NSString *fromId = dict[@"from_id"];
+                        msg.strId = fromId;
+                        msg.type = ([fromId intValue]==0)?UUMessageFromSys:UUMessageFromOther;
+                        
                         msg.strToId = dict[@"to_id"];
                         msg.strName = dict[@"nick_name"];
                         msg.strContent = dict[@"message_desc"];
                         msg.strTime = dict[@"add_time"];
                         msg.status = dict[@"status"];
                         
-                        UUMessage *message = [self msgInGroup:msg.strId];
+                        UUMessage *message = [self msgInGroup:msg.strId andType:msg.type];
                         if (message) {
                             if ([message.strTime compare:msg.strTime]==NSOrderedAscending) {
                                 message.strContent = msg.strContent;
@@ -186,11 +206,21 @@
     }];
 }
 
-- (UUMessage *)msgInGroup:(NSString *)fromID
+- (UUMessage *)msgInGroup:(NSString *)fromID andType:(MessageType)msgType
 {
     UUMessage *message = nil;
+    
+    BOOL isInvite = NO;
+    if(msgType==UUMessageTypeInvite) {
+        isInvite = YES;
+    }
+
     for (UUMessage *msg in self.groupMessageList) {
-        if ([msg.strId isEqualToString:fromID]) {
+        if (isInvite){
+            if (msg.type==UUMessageTypeInvite) {
+                message = msg;
+            }
+        } else if(msg.type!=UUMessageTypeInvite && [msg.strId isEqualToString:fromID]){
             message = msg;
             break;
         }
@@ -298,6 +328,7 @@
  select xxxxx
  end
  */
+
 - (BOOL)updateGroupMessage
 {
     [messageDb open];
@@ -307,9 +338,9 @@
     
     @try {
         for (UUMessage *msg in self.groupMessageList) {
-            NSString *sql = @"insert or replace into messages_group (from_id, to_id, nick_name, newest_message, add_time, status) values(?,?,?,?,?,?)";
+            NSString *sql = @"insert or replace into messages_group (from_id, to_id, nick_name, newest_message, message_type, add_time, status) values(?,?,?,?,?,?,?)";
 
-            BOOL a = [messageDb executeUpdate:sql, msg.strId, msg.strToId, msg.strName, msg.strContent, msg.strTime, msg.status ];
+            BOOL a = [messageDb executeUpdate:sql, msg.strId, msg.strToId, msg.strName, msg.strContent, [NSNumber numberWithInt:msg.type], msg.strTime, msg.status ];
             if (!a) {
                 NSLog(@"插入失败");
             }
@@ -347,8 +378,9 @@
         msg.strToId = [s stringForColumnIndex:2];
         msg.strName = [s stringForColumnIndex:3];
         msg.strContent = [s stringForColumnIndex:4];
-        msg.strTime = [s stringForColumnIndex:5];
-        msg.status = [s stringForColumnIndex:6];
+        msg.type = [s intForColumnIndex:5];
+        msg.strTime = [s stringForColumnIndex:6];
+        msg.status = [s stringForColumnIndex:7];
         
         [messageGoup addObject:msg];
     }
@@ -365,25 +397,44 @@
     
     long begin = range.location;
     long end = range.location+range.length;
+
+    GroupMessage *sysGroup = [[GroupMessage alloc] init];
+    sysGroup.groupID = kGroupMsgSys;
+    GroupMessage *invGroup = [[GroupMessage alloc] init];
+    sysGroup.groupID = kGroupMsgInv;
+    GroupMessage *usrGroup = [[GroupMessage alloc] init];
+    sysGroup.groupID = kGroupMsgUsr;
+    
+    NSMutableArray *msglist = [[NSMutableArray alloc] init];
+    [msglist addObject:sysGroup];
+    [msglist addObject:invGroup];
+    [msglist addObject:usrGroup];
     
     NSString *to_id = [UPDataManager shared].userInfo.ID;
     NSString *querySql = [NSString stringWithFormat:@"select * from messages_group where to_id='%@'  order by status desc, add_time desc limit %ld,%ld", to_id, begin, end];
     
-    NSMutableArray *msglist = [NSMutableArray new];
-    
     FMResultSet *s = [messageDb executeQuery:querySql];
     while ([s next]) {
+        
         UUMessage *msg = [[UUMessage alloc] init];
         
         msg.strId = [s stringForColumnIndex:1];
         msg.strToId = [s stringForColumnIndex:2];
         msg.strName = [s stringForColumnIndex:3];
         msg.strContent = [s stringForColumnIndex:4];
-        msg.strTime = [s stringForColumnIndex:5];
-        msg.status = [s stringForColumnIndex:6];
+        msg.type = [s intForColumnIndex:5];
+        msg.strTime = [s stringForColumnIndex:6];
+        msg.status = [s stringForColumnIndex:7];
         
-        [msglist addObject:msg];
+        if ([msg.strId isEqualToString:@"0"]) { //系统消息
+            [sysGroup.messageList addObject:msg];
+        } else {
+            if (msg.type) {
+                //
+            }
+        }
     }
+    
     [messageDb close];
     return msglist;
 }
@@ -410,7 +461,7 @@
         
         [self.messageList addObject:msg];
         
-        UUMessage *message = [self msgInGroup:msg.strId];
+        UUMessage *message = [self msgInGroup:msg.strId andType:msg.type];
         if (message) {
             if ([message.strTime compare:msg.strTime]==NSOrderedAscending) {
                 message.strContent = msg.strContent;

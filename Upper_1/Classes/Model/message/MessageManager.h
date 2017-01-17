@@ -9,6 +9,20 @@
 #import <Foundation/Foundation.h>
 
 @class UUMessage;
+
+
+typedef NS_ENUM(NSUInteger, UPGroupMsgType){
+    kGroupMsgSys = 0,
+    kGroupMsgInv,
+    kGroupMsgUsr
+};
+
+@interface GroupMessage : NSObject
+@property (nonatomic) UPGroupMsgType groupID;
+@property (nonatomic, retain) NSMutableArray *messageList;
+@end
+
+
 @interface MessageManager : NSObject
 
 + (instancetype)shared;

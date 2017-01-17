@@ -241,6 +241,9 @@ static CGFloat const FixRatio = 4/3.0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"发起活动";
+    
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:nil target:self action:@selector(leftClick)];
+    
     _typeCode = -1;
     _lowLimit = 0;
     _highLimit = 0;
@@ -1051,6 +1054,11 @@ static CGFloat const FixRatio = 4/3.0;
 - (void)resignKeyboard
 {
     [self.view endEditing:YES];
+}
+
+-(void)leftClick
+{
+    [g_sideController showLeftViewController:YES];
 }
 
 @end

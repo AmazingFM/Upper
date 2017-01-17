@@ -46,7 +46,6 @@
     UpperController *upperController;
     UPQRViewController *qrController;
     QRCodeController *qrCodeController;
-    MessageCenterController *msgCenterController;
     BubbleChatViewController *chatController;
     UPMyFriendsViewController *myFriendsController;
 }
