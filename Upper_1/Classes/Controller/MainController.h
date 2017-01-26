@@ -13,44 +13,7 @@
 #import "Info.h"
 #import "UPBaseViewController.h"
 
-@class UpRegisterController;
-@class LaunchActivityController;
-@class PersonalCenterController;
-@class EnrollPeopleController;
-@class UpActDetailController;
-@class GetPasswordController;
-@class UpperController;
-@class UPQRViewController;
-@class QRCodeController;
-@class BubbleChatViewController;
-@class MessageCenterController;
-@class NewLaunchActivityController;
-
-@class UpExpertController;
-@class UpMyActivityViewController;
-@class UpSettingController;
-@class UPMyFriendsViewController;
-
-
 @interface MainController : UPBaseViewController
-{
-    UpMyActivityViewController *myActController;
-    UpExpertController *expertController;
-    UpSettingController *settingController;
-    UpRegisterController *registerController;
-    LaunchActivityController *launchActController;
-    NewLaunchActivityController *newLaunchActController;
-    PersonalCenterController *personalCenterController;
-    EnrollPeopleController *enrollController;
-    GetPasswordController *getPasswordController;
-    UpperController *upperController;
-    UPQRViewController *qrController;
-    QRCodeController *qrCodeController;
-    BubbleChatViewController *chatController;
-    UPMyFriendsViewController *myFriendsController;
-}
-
-@property (nonatomic, retain) id parentController;
 
 - (void)OnAction:(id)mself withType:(ActionType)actionType toView:(ViewType)viewType withArg:(id)arg;
 - (void)rightClick;

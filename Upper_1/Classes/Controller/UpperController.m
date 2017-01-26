@@ -64,7 +64,6 @@ extern NSString * const g_loginFileName;
     self.title = @"Upper";
 
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithRightIcon:@"add" highIcon:@"" target:self action:@selector(scanQR)];
     
     _quitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _quitBtn.frame = CGRectMake(20, ScreenHeight-80, ScreenWidth-40, 35);
@@ -479,13 +478,6 @@ extern NSString * const g_loginFileName;
 - (void)goBack
 {
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)scanQR
-{
-    QRCodeController *qrController = [[QRCodeController alloc] init];
-    qrController.title = @"扫描";
-    [self.navigationController pushViewController:qrController animated:YES];
 }
 
 - (void)quit:(UIButton *)sender

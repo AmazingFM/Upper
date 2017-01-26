@@ -7,8 +7,7 @@
 //
 
 #import "YMNetwork.h"
-
-static NSString *const YMBaseURL = @"https://api.app.net/";
+#import "Info.h"
 
 @implementation YMNetwork
 
@@ -16,7 +15,7 @@ static NSString *const YMBaseURL = @"https://api.app.net/";
 
 @interface YMHttpNetwork ()
 
-@property (nonatomic, retain) AFHTTPSessionManager          *sessionManager;
+@property (nonatomic, retain) AFHTTPSessionManager *sessionManager;
 
 @end
 
@@ -36,10 +35,14 @@ static NSString *const YMBaseURL = @"https://api.app.net/";
 {
     self = [super init];
     if (self) {
-        
+        NSURL *url = [NSURL URLWithString:kUPBaseURL];
+        NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
         //默认是AFHTTPRequestSerialier, AFJSONResponseSerializer
-        AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:YMBaseURL]];
-        manager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
+        AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:url sessionConfiguration:sessionConfig];
+        manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+        manager.responseSerializer = [AFJSONResponseSerializer serializer];
+        manager.responseSerializer.acceptableContentTypes=[NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", nil];
+//        manager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];//针对https设置
         self.sessionManager = manager;
     }
     
@@ -50,12 +53,14 @@ static NSString *const YMBaseURL = @"https://api.app.net/";
                       success:(void (^)(id responseObject))success
                       failure:(void (^)(NSError *error))failure
 {
-    NSURLSessionTask *sessionTaks = [self.sessionManager GET:URLString parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
-        
-        success(responseObject);
+    [self.sessionManager GET:URLString parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+        if (success) {
+            success(responseObject);
+        }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        
-        failure(error);
+        if(failure) {
+            failure(error);
+        }
     }];
 }
 
@@ -63,12 +68,14 @@ static NSString *const YMBaseURL = @"https://api.app.net/";
     success:(void (^)(id responseObject))success
     failure:(void (^)(NSError *error))failure
 {
-    NSURLSessionTask *sessionTaks = [self.sessionManager POST:URLString parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
-        
-        success(responseObject);
+    [self.sessionManager POST:URLString parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+        if (success) {
+            success(responseObject);
+        }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        
-        failure(error);
+        if(failure) {
+            failure(error);
+        }
     }];
 }
 

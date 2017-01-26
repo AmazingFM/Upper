@@ -11,5 +11,4 @@
 @interface QRCodeController : UIViewController
 
 @property (nonatomic, copy) NSString *actId;
-@property (nonatomic, retain) id parentController;
 @end

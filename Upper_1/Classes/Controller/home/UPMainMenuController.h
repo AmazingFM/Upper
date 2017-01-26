@@ -9,7 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface UPMainMenuController : UIViewController
-
-
 - (void)switchController:(NSInteger)index;
 @end

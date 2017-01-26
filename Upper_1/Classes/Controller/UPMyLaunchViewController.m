@@ -18,6 +18,7 @@
 #import "ActivityData.h"
 #import "UPActivityCellItem.h"
 #import "UPCommentController.h"
+#import "QRCodeController.h"
 
 @interface UPMyLaunchViewController ()
 @end
@@ -147,7 +148,6 @@
     }];
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UPActivityCellItem *actCellItem = (UPActivityCellItem *)self.itemArray[indexPath.row];
@@ -200,7 +200,10 @@
         [nav.navigationBar setTranslucent:YES];
         [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
         [self presentViewController:nav animated:YES completion:nil];
-        
+    } else if (type==kUPActSignTag) {
+        QRCodeController *qrController = [[QRCodeController alloc] init];
+        qrController.title = @"扫描";
+        [self.navigationController pushViewController:qrController animated:YES];
     }
 }
 @end

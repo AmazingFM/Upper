@@ -248,9 +248,7 @@
         NSDictionary *dict = (NSDictionary *)json;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
-            NSString *resp_desc = dict[@"resp_desc"];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"🙏🏻，恭喜您" message:resp_desc delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [alert show];
+            showDefaultAlert(@"提示", @"活动报名成功，如果参与意向有变，请点击活动规则查看相关规则和操作方式。");
         }
         else
         {
@@ -298,7 +296,12 @@
             [self.navigationController pushViewController:editActivityController animated:YES];
         } else if (buttonIndex==2) {
             //取消
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"是否确认取消活动" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+            NSString *rules = @"取消规则：\n\
+            1、募集中的活动，随时可取消，一年内满十次，封停账号一个月（不可发起 可参与）\n\
+            2、募集成功的活动，如果发起者不能参加，建议先尝试寻找接替的发起人，将活动发起者身份转交给新的发起人。无法找到接替者也可以取消，一年满3次，封停账号半年。\n\
+            3、可以点击“更改发起人”按钮，向目前报名人员发送站内信，发送接受链接。可以在发送之前通过站内短信和参与人员沟通接收意向。\n";
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:rules delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
             alert.tag = AlertTagCancel;
             [alert show];
         }

@@ -28,12 +28,9 @@
 
 #define kYMMainMenuBarItemTag 3000
 #define kYMSlideControllerWidth 200
-#define kYMSlideMenuItems 6
+#define kYMSlideMenuItems 5
 
 @interface YMRootViewController()
-{
-//    MainController *_mainViewController;
-}
 @end
 
 @implementation YMRootViewController
@@ -154,7 +151,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellId = @"cellId";
-    NSArray *menuTitles = @[@"Upper", @"活动大厅", @"专家社区", @"发起活动",@"我的好友", @"我的活动"];
+    NSArray *menuTitles = @[@"Upper", @"活动大厅", @"发起活动",@"我的好友", @"我的活动"];
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (cell==nil) {
@@ -172,8 +169,6 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    [g_mainMenu OnAction:nil withType:LEFT_MENU_CHANGE toView:indexPath.row+1 withArg:nil];
-    
     [g_homeMenu switchController:indexPath.row];
     [g_sideController hideSideViewController:YES];
 }

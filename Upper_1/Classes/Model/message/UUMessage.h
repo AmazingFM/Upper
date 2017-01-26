@@ -8,18 +8,22 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, MessageSubType) {
+    UPMessageSubTypeText     = 0 , // 文字
+    UPMessageSubTypePicture  = 1 , // 图片
+    UPMessageSubTypeVoice    = 2 , // 语音
+};
+
 typedef NS_ENUM(NSInteger, MessageType) {
-    UUMessageTypeText     = 0 , // 文字
-    UUMessageTypePicture  = 1 , // 图片
-    UUMessageTypeVoice    = 2 , // 语音
-    UUMessageTypeInvite   = 99   //邀请
+    UPMessageTypeNormal     = 0,    //普通消息类型
+    UPMessageTypeInvite     = 1,    //活动邀请消息类
+    UPMessageTypeSys        = 2,    //系统消息类
 };
 
 
 typedef NS_ENUM(NSInteger, MessageFrom) {
-    UUMessageFromSys    = 0,   // 自己发的
-    UUMessageFromMe     = 1,
-    UUMessageFromOther  = 2    // 别人发得
+    UUMessageFromMe     = 0,    //自己发的
+    UUMessageFromOther  = 1     //别人发得
 };
 
 @interface UUMessage : NSObject
@@ -37,6 +41,7 @@ typedef NS_ENUM(NSInteger, MessageFrom) {
 
 @property (nonatomic, assign) MessageType type;
 @property (nonatomic, assign) MessageFrom from;
+@property (nonatomic, assign) MessageSubType subType;
 
 @property (nonatomic, copy) NSString *strToId;
 

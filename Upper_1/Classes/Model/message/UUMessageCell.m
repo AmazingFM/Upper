@@ -94,7 +94,7 @@
 
 - (void)btnContentClick{
     //play audio
-    if (self.messageFrame.message.type == UUMessageTypeVoice) {
+    if (self.messageFrame.message.subType == UPMessageSubTypeVoice) {
         if(!contentVoiceIsPlaying){
             [[NSNotificationCenter defaultCenter] postNotificationName:@"VoicePlayHasInterrupt" object:nil];
             contentVoiceIsPlaying = YES;
@@ -107,7 +107,7 @@
         }
     }
     //show the picture
-    else if (self.messageFrame.message.type == UUMessageTypePicture)
+    else if (self.messageFrame.message.subType == UPMessageSubTypePicture)
     {
         if (self.btnContent.backImageView) {
             [UUImageAvatarBrowser showImage:self.btnContent.backImageView];
@@ -117,7 +117,7 @@
         }
     }
     // show text and gonna copy that
-    else if (self.messageFrame.message.type == UUMessageTypeText)
+    else if (self.messageFrame.message.subType == UPMessageSubTypeText)
     {
         [self.btnContent becomeFirstResponder];
         UIMenuController *menu = [UIMenuController sharedMenuController];
@@ -205,11 +205,11 @@
     [self.btnContent setBackgroundImage:normal forState:UIControlStateNormal];
     [self.btnContent setBackgroundImage:normal forState:UIControlStateHighlighted];
 
-    switch (message.type) {
-        case UUMessageTypeText:
+    switch (message.subType) {
+        case UPMessageSubTypeText:
             [self.btnContent setTitle:message.strContent forState:UIControlStateNormal];
             break;
-        case UUMessageTypePicture:
+        case UPMessageSubTypePicture:
         {
             self.btnContent.backImageView.hidden = NO;
             self.btnContent.backImageView.image = message.picture;
@@ -217,7 +217,7 @@
             [self makeMaskView:self.btnContent.backImageView withImage:normal];
         }
             break;
-        case UUMessageTypeVoice:
+        case UPMessageSubTypeVoice:
         {
             self.btnContent.voiceBackView.hidden = NO;
             self.btnContent.second.text = [NSString stringWithFormat:@"%@'s Voice",message.strVoiceTime];

@@ -35,12 +35,14 @@
         _timeLabel.backgroundColor = [UIColor clearColor];
         _timeLabel.textColor = [UIColor whiteColor];
         _timeLabel.font = kUPThemeSmallFont;
+        _timeLabel.adjustsFontSizeToFitWidth = YES;
 
         _locationButton = [[UIButton alloc] initWithFrame:CGRectZero];
         [_locationButton setImage:[UIImage imageNamed:@"location"] forState:UIControlStateNormal];
         
         _locationButton.backgroundColor=[UIColor clearColor];
         _locationButton.titleLabel.textColor = [UIColor whiteColor];
+        _locationButton.titleLabel.adjustsFontSizeToFitWidth = YES;
         _locationButton.titleLabel.font = kUPThemeSmallFont;
         _locationButton.titleEdgeInsets=UIEdgeInsetsMake(0, 5, 0, 0);
         [_locationButton addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -145,6 +147,7 @@
         _typeLab.backgroundColor = [UPTools colorWithHex:0x79CDCD];
         _typeLab.textAlignment = NSTextAlignmentCenter;
         _typeLab.layer.cornerRadius = 2.0f;
+        _typeLab.adjustsFontSizeToFitWidth = YES;
         _typeLab.layer.masksToBounds = YES;
         
         _clothLab = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -153,7 +156,7 @@
         _clothLab.textAlignment = NSTextAlignmentCenter;
         _clothLab.layer.cornerRadius = 2.0f;
         _clothLab.layer.masksToBounds = YES;
-
+        _clothLab.adjustsFontSizeToFitWidth = YES;
         
         _statusLab = [[UILabel alloc] initWithFrame:CGRectZero];
         _statusLab.font = kUPThemeMinFont;
@@ -349,16 +352,29 @@
     if (actTypeTitle.length!=0) {
         _typeLab.text = actTypeTitle;
         size = SizeWithFont(actTypeTitle, kUPThemeSmallFont);
-        _typeLab.size = CGSizeMake(size.width+10, size.height+4);;
-        _typeLab.center = CGPointMake(offsetx+size.width/2+5, offsety+perHeight/2);
+        
+        float limitWidth = (ScreenWidth>320)?110:90;
+        if (size.width>limitWidth) {
+            size.width = limitWidth;
+        }
+        
+        _typeLab.size = CGSizeMake(size.width+10, size.height+4);
+        _typeLab.center = CGPointMake(offsetx+size.width/2+kUPThemeBorder, offsety+perHeight/2);
     }
     
     selectIndex = [itemData.clothes_need intValue];
+    selectIndex = 1;
     if (selectIndex<clothTypeArr.count) {
         _clothLab.text = clothTypeArr[selectIndex];
         size = SizeWithFont(clothTypeArr[selectIndex], kUPThemeSmallFont);
+        
+        float limitWidth = (ScreenWidth>320)?110:90;
+        if (size.width>limitWidth) {
+            size.width = limitWidth;
+        }
+
         _clothLab.size = CGSizeMake(size.width+10, size.height+4);;
-        _clothLab.center = CGPointMake(offsetx+size.width/2+5+_typeLab.size.width+kUPThemeBorder, offsety+perHeight/2);
+        _clothLab.center = CGPointMake(offsetx+size.width/2+kUPThemeBorder+_typeLab.size.width+kUPThemeBorder, offsety+perHeight/2);
     }
     
     offsety += perHeight;
@@ -534,6 +550,11 @@
     NSString *mergeStr = [NSString stringWithFormat:@"%@AAA%@", time, location];
     
     size = SizeWithFont(mergeStr, kUPThemeSmallFont);
+    
+    if (size.width>(width-height*4/3-2*kUPThemeBorder)) {
+        size.width = width-height*4/3-2*kUPThemeBorder;
+    }
+    
     _timeLocationV.size = CGSizeMake(size.width, size.height+4);
     _timeLocationV.center = CGPointMake(offsetx+size.width/2, offsety+perHeight/2);
     [_timeLocationV setTime:time andLocation:location];
@@ -543,7 +564,16 @@
 {
     if (sender.tag==kUPActQuitTag||
         sender.tag==kUPActCancelTag) {
-        NSString *msg = sender.tag==kUPActCancelTag?@"Hi,你准备取消活动?":@"Hi,你准备退出活动?";
+        NSString *cancleRules = @"取消规则：\n\
+        1、募集中的活动，随时可取消，一年内满十次，封停账号一个月（不可发起 可参与）\n\
+        2、募集成功的活动，如果发起者不能参加，建议先尝试寻找接替的发起人，将活动发起者身份转交给新的发起人。无法找到接替者也可以取消，一年满3次，封停账号半年。\n\
+        3、可以点击“更改发起人”按钮，向目前报名人员发送站内信，发送接受链接。可以在发送之前通过站内短信和参与人员沟通接收意向。\n";
+        
+        NSString *quitRules = @"退出规则：\n\
+        1、	募集中的活动，参与者随时可退出，一年内满十次，封停账号一个月（不可发起 不可参与）\n\
+        2、	成功的活动，参与者随时可退出，一年满三次，封停账号3个月。\n";
+        
+        NSString *msg = sender.tag==kUPActCancelTag?cancleRules:quitRules;
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         alertView.tag = sender.tag;
         [alertView show];

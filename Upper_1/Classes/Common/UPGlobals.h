@@ -46,6 +46,9 @@ extern void initialize();
 
 UIBarButtonItem* createBarItemTitle(NSString* title ,id target, SEL selector);
 
+void showDefaultAlert(NSString* title,NSString* msg);
+void showConfirmAlert(NSString* title,NSString* msg,id<UIAlertViewDelegate> delegate);
+void showConfirmTagAlert(NSString* title,NSString* msg,id<UIAlertViewDelegate> delegate,int tag);
 @interface UPGlobals : NSObject
 
 @end

@@ -24,10 +24,6 @@
 @interface MessageCenterController () <UITableViewDelegate, UITableViewDataSource>
 {
     UITableView *_messageTable;
-    UILabel *tipsLabel ;
-    
-    NSMutableArray *sysMsgList;
-    NSMutableArray *inviteList;
     NSMutableArray *usrMsgList;
 }
 
@@ -40,18 +36,26 @@
     self.title = @"消息列表";
     self.navigationItem.rightBarButtonItem = nil;
     
-    sysMsgList = [NSMutableArray new];
-    inviteList = [NSMutableArray new];
-    usrMsgList = [NSMutableArray array];
-    
-    tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, ScreenHeight/2, ScreenWidth-40, 40)];
-    tipsLabel.text = @"暂时没有消息";
-    tipsLabel.font = kUPThemeMiddleFont;
-    tipsLabel.backgroundColor = [UIColor whiteColor];
-    tipsLabel.hidden = YES;
-    [self.view addSubview:tipsLabel];
+    usrMsgList = [NSMutableArray new];
     
     [self loadMessage];//加载消息
+    
+    UILabel *sysLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,0,ScreenWidth-20,44)];
+    sysLabel.text = @"系统消息";
+    sysLabel.textColor = [UIColor blackColor];
+    sysLabel.font = [UIFont systemFontOfSize:20];
+    
+    UILabel *invLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,45,ScreenWidth-20,44.f)];
+    invLabel.textColor = [UIColor blackColor];
+    invLabel.text = @"邀请消息";
+    invLabel .font = [UIFont systemFontOfSize:20];
+
+    
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0,0,ScreenWidth, 90)];
+    tableHeaderView.backgroundColor = [UIColor whiteColor];
+    [tableHeaderView addSubview:sysLabel];
+    [tableHeaderView addSubview:invLabel];
+    
     
     _messageTable = [[UITableView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
     _messageTable.backgroundColor = [UIColor clearColor];
@@ -60,7 +64,9 @@
     _messageTable.separatorInset = UIEdgeInsetsMake(0,80, 0, 80);
     _messageTable.delegate = self;
     _messageTable.dataSource = self;
+    _messageTable.tableHeaderView = tableHeaderView;
     _messageTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    
     if ([_messageTable respondsToSelector:@selector(setSeparatorInset:)]) {
         
         [_messageTable setSeparatorInset:UIEdgeInsetsZero];
@@ -101,7 +107,10 @@
 - (void)fillMessage:(NSMutableArray *)groupMsgList
 {
     @synchronized (self) {
-        for (UUMessage *msg in groupMsgList) {
+        //获取第三个普通消息组
+        GroupMessage *usrGroup = groupMsgList[2];
+        
+        for (UUMessage *msg in usrGroup.messageList) {
             UserChatItem *item = [self getItem:msg.strId];
             if (item==nil) {
                 item = [[UserChatItem alloc] init];
@@ -149,11 +158,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (usrMsgList.count==0) {
-        tipsLabel.hidden = NO;
-    } else {
-        tipsLabel.hidden = YES;
-    }
     return usrMsgList.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

@@ -755,6 +755,117 @@ static CGFloat const FixRatio = 4/3.0;
     }
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag==1000) {
+        if (buttonIndex==1) {
+            [self doLaunchNewActivity];
+        }
+    }
+}
+
+- (void)doLaunchNewActivity
+{
+    //提交
+        
+    //industry_id, province_code, city_code, town_code, limit_count, limit_low
+    NSArray *paramKey = @[@"activity_name", @"activity_desc", @"end_time", @"start_time", @"activity_place_code", @"activity_place", @"is_prepaid", @"industry_id", @"clothes_need"];
+    
+    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
+    for (UPBaseCellItem *cellItem in self.itemList) {
+        if ([paramKey containsObject:cellItem.key]) {
+            if (![self check:cellItem]) {
+                return;
+            }
+            if ([cellItem.key isEqualToString:@"industry_id"]) {
+                params[cellItem.key] = ((int)cellItem.value==1)?[UPDataManager shared].userInfo.industry_id:@"-1";
+            } else if([cellItem.key isEqualToString:@"start_time"]|[cellItem.key isEqualToString:@"end_time"]) {
+                if ([cellItem.key isEqualToString:@"start_time"]) {
+                    params[cellItem.key] = [UPTools dateTransform:cellItem.value fromFormat:@"yyyy-MM-dd" toFormat:@"yyyyMMdd000000"];
+                } else {
+                    params[cellItem.key] = [UPTools dateTransform:cellItem.value fromFormat:@"yyyy-MM-dd" toFormat:@"yyyyMMdd235959"];
+                }
+                
+            } else {
+                [params setObject:cellItem.value forKey:cellItem.key];
+            }
+        }
+    }
+    
+    NSString *msg = nil;
+    if (_selectedCity==nil) {
+        msg = @"请选择城市";
+    } else if (_highLimit==nil || _highLimit.length==0) {
+        msg = @"请输入人数上限";
+    } else if (_highLimit==nil || _highLimit.length==0) {
+        msg = @"请输入人数下限";
+    } else if ((_femaleLowLimit==nil || _femaleLowLimit.length==0)&&needFemale) {
+        msg = @"请输入女性人数要求";
+    }
+    
+    if (msg) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    
+    if (_typeCode==-1) {
+        msg = @"请选择活动类型";
+    }
+    if (msg) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    
+    [params setObject:[NSString stringWithFormat:@"%d", _typeCode] forKey:@"activity_class"];
+    
+    [params setObject:_selectedCity.province_code forKey:@"province_code"];
+    [params setObject:_selectedCity.city_code forKey:@"city_code"];
+    [params setObject:_selectedCity.town_code forKey:@"town_code"];
+    [params setObject:_highLimit forKey:@"limit_count"];
+    [params setObject:_lowLimit forKey:@"limit_low"];
+    [params setObject:(_femaleLowLimit&&_femaleLowLimit.length>0)?_femaleLowLimit:@"0" forKey:@"fmale_low"];
+    [params setObject:_activityFee forKey:@"activity_fee"];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyyMMddHHmmss";
+    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"Asia/Shanghai"]];
+    NSString *begin_time = [formatter stringFromDate:[NSDate date]];
+    [params setObject:begin_time forKey:@"begin_time"];
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    //申明请求的数据是json类型
+    //manager.requestSerializer.HTTPMethodsEncodingParametersInURI = [NSSet setWithArray:@[@"POST", @"GET", @"HEAD"]];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager POST:kUPFilePostURL parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        if (_imgData!=nil) {
+            [formData appendPartWithFileData:_imgData name:@"file" fileName:@"act" mimeType:@"image/jpeg"];
+        }
+    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString *resp = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+
+        NSObject *jsonObj = [UPTools JSONFromString:resp];
+        if ([jsonObj isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *respDict = (NSDictionary *)jsonObj;
+            NSString *resp_id = respDict[@"resp_id"];
+            NSString *resp_desc = respDict[@"resp_desc"];
+            if ([resp_id intValue]==0) {
+                [self setNewData];
+                [_tableView reloadData];
+                
+            }
+            showDefaultAlert(@"提示", @"活动发起成功，如需修改变更或取消，请点击活动规则查看相关规则和操作方式。");
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
 - (void)buttonClicked:(UIButton *)btn withIndexPath:(NSIndexPath *)indexPath
 {
     UPBaseCellItem *cellItem = self.itemList[indexPath.row];
@@ -813,6 +924,7 @@ static CGFloat const FixRatio = 4/3.0;
             [alert show];
             return;
         }
+
         [params setObject:[NSString stringWithFormat:@"%d", _typeCode] forKey:@"activity_class"];
         
         [params setObject:_selectedCity.province_code forKey:@"province_code"];
@@ -852,11 +964,8 @@ static CGFloat const FixRatio = 4/3.0;
                     [self setNewData];
                     [_tableView reloadData];
                     
-                } else {
-                    //
                 }
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:resp_id message:resp_desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-                [alert show];
+                showDefaultAlert(@"提示", @"活动发起成功，如需修改变更或取消，请点击活动规则查看相关规则和操作方式。");
             }
             
             

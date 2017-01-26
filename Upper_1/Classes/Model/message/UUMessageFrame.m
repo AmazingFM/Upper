@@ -1,11 +1,11 @@
+////
+////  UUMessageFrame.m
+////  UUChatDemoForTextVoicePicture
+////
+////  Created by shake on 14-8-26.
+////  Copyright (c) 2014年 uyiuyao. All rights reserved.
+////
 //
-//  UUMessageFrame.m
-//  UUChatDemoForTextVoicePicture
-//
-//  Created by shake on 14-8-26.
-//  Copyright (c) 2014年 uyiuyao. All rights reserved.
-//
-
 #import "UUMessageFrame.h"
 #import "UUMessage.h"
 
@@ -44,15 +44,15 @@
    
     //根据种类分
     CGSize contentSize;
-    switch (_message.type) {
-        case UUMessageTypeText:
+    switch (_message.subType) {
+        case UPMessageSubTypeText:
             contentSize = [_message.strContent sizeWithFont:ChatContentFont  constrainedToSize:CGSizeMake(ChatContentW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
  
             break;
-        case UUMessageTypePicture:
+        case UPMessageSubTypePicture:
             contentSize = CGSizeMake(ChatPicWH, ChatPicWH);
             break;
-        case UUMessageTypeVoice:
+        case UPMessageSubTypeVoice:
             contentSize = CGSizeMake(120, 20);
             break;
         default:

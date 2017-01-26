@@ -100,7 +100,7 @@
     UUMessage *message = [[UUMessage alloc] init];
     
     message.from = UUMessageFromMe;
-    message.type = UUMessageTypeText;
+    message.type = UPMessageTypeNormal;
     message.strToId = [UPDataManager shared].userInfo.ID;
     message.strId = _toUserId;
     message.strContent = self.editingBar.editView.text;

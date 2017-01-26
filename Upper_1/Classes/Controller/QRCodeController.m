@@ -40,7 +40,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor grayColor];
+    self.view.backgroundColor = [UIColor clearColor];
     [self instanceDevice];
 }
 
@@ -55,7 +55,8 @@
     //获取摄像设备
     AVCaptureDevice * device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     //创建输入流
-    AVCaptureDeviceInput * input = [AVCaptureDeviceInput deviceInputWithDevice:device error:nil];
+    NSError *error;
+    AVCaptureDeviceInput * input = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
     //创建输出流
     AVCaptureMetadataOutput * output = [[AVCaptureMetadataOutput alloc]init];
     //设置代理 在主线程里刷新
@@ -72,6 +73,9 @@
     [session setSessionPreset:AVCaptureSessionPresetHigh];
     if (input) {
         [session addInput:input];
+    } else {
+        //摄像头不可用
+        showDefaultAlert(@"提示", error.localizedDescription);
     }
     if (output) {
         [session addOutput:output];

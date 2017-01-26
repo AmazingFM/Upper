@@ -9,6 +9,7 @@
 #import "UPGlobals.h"
 #import "UPDataManager.h"
 #import "MessageManager.h"
+#import <UIKit/UIKit.h>
 
 int  g_PageSize;
 
@@ -66,6 +67,23 @@ UIBarButtonItem* createBarItemTitle(NSString* title ,id target, SEL selector){
     barItem=[[UIBarButtonItem alloc] initWithCustomView:btn];
     
     return barItem;
+}
+
+void showDefaultAlert(NSString* title,NSString* msg)
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    [alertView show];
+}
+
+void showConfirmAlert(NSString* title,NSString* msg,id<UIAlertViewDelegate> delegate){
+    UIAlertView* alert=[[UIAlertView alloc] initWithTitle:title message:msg delegate:delegate cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
+    [alert show];
+}
+
+void showConfirmTagAlert(NSString* title,NSString* msg,id<UIAlertViewDelegate> delegate,int tag){
+    UIAlertView* alert=[[UIAlertView alloc] initWithTitle:title message:msg delegate:delegate cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
+    alert.tag=tag;
+    [alert show];
 }
 
 

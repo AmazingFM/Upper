@@ -7,29 +7,14 @@
 //
 
 #import "MainController.h"
-#import "UpExpertController.h"
-#import "UpMyActivityController.h"
-#import "UpSettingController.h"
-#import "ActivityData.h"
-#import "UpRegisterController.h"
-#import "LaunchActivityController.h"
-#import "NewLaunchActivityController.h"
-#import "PersonalCenterController.h"
-#import "EnrollPeopleController.h"
-#import "UpActDetailController.h"
-#import "GetPasswordController.h"
-#import "UpperController.h"
-#import "UPQRViewController.h"
-#import "QRCodeController.h"
-#import "BubbleChatViewController.h"
 #import "MessageCenterController.h"
-#import "UPMyFriendsViewController.h"
-
 #import "UPActivityAssistantController.h"
 #import "UpActView.h"
 #import "Info.h"
 #import "XWTopMenu.h"
 #import "XWHttpTool.h"
+#import "YMImageButton.h"
+
 #import "UPTheme.h"
 #import "MJRefresh.h"
 #import "MJExtension.h"
@@ -50,8 +35,9 @@
 #import "ZouMaDengView.h"
 #import "UIBarButtonItem+Badge.h"
 
+#import "YMNetwork.h"
 #define kActivityPageSize 20
-#define kActivityAssitantTag 100
+#define kMainButtonTag 1000
 
 static int kMsgCount = 0;
 
@@ -96,12 +82,11 @@ static int kMsgCount = 0;
     
     UIButton *titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [titleButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    titleButton.tag = kActivityAssitantTag;
-    [titleButton setTitle:@"活动助手" forState:UIControlStateNormal];
+    [titleButton setTitle:@"活动大厅" forState:UIControlStateNormal];
     self.navigationItem.titleView = titleButton;
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
     
-    
+    self.navigationItem.rightBarButtonItems = [self rightNavButtonItems];
     
     isLoaded = NO;
     lastPage = NO;
@@ -116,45 +101,39 @@ static int kMsgCount = 0;
     [self.view addSubview:self.topMenu];
     
     [self viewWillAppear:YES];
+}
 
-    myActController = [[UpMyActivityViewController alloc]init];
-    myActController.parentController = self;
+- (NSArray *)rightNavButtonItems
+{
+    YMImageButton *msgBtn = [[YMImageButton alloc] initWithFrame:CGRectMake(0,0,35,35)];
+    [msgBtn setImage:[UIImage imageNamed:@"message"] andTitle:@"消息"];
+    msgBtn.tag = kMainButtonTag;
+    [msgBtn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     
-    expertController = [[UpExpertController alloc]init];
-    expertController.parentController = self;
-        
-    settingController = [[UpSettingController alloc]init];
-    settingController.parentController = self;
+    YMImageButton *asisBtn = [[YMImageButton alloc] initWithFrame:CGRectMake(0,0,35,35)];
+    [asisBtn setImage:[UIImage imageNamed:@"asistant"] andTitle:@"活动助手"];
+    asisBtn.tag = kMainButtonTag+1;
+    [asisBtn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+
+    UIBarButtonItem *msgItem = [[UIBarButtonItem alloc] initWithCustomView:msgBtn];
+    UIBarButtonItem *asisItem = [[UIBarButtonItem alloc] initWithCustomView:asisBtn];
+    UIBarButtonItem *spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    spaceItem.width-=15;
     
-    registerController = [[UpRegisterController alloc]init];
-    registerController.parentController = self;
-    
-    launchActController = [[LaunchActivityController alloc]init];
-    launchActController.parentController = self;
-    
-    newLaunchActController = [[NewLaunchActivityController alloc]init];
-    newLaunchActController.parentController = self;
-    
-    personalCenterController = [[PersonalCenterController alloc]init];
-    personalCenterController.parentController = self;
-    
-    enrollController = [[EnrollPeopleController alloc]init];
-    enrollController.parentController = self;
-    
-    getPasswordController = [[GetPasswordController alloc]init];
-    getPasswordController.parentController = self;
-    
-    upperController = [[UpperController alloc]init];
-    upperController.parentController = self;
-    
-    qrController = [[UPQRViewController alloc] init];
-    qrController.parentController = self;
-        
-    qrCodeController = [[QRCodeController alloc] init];
-    qrCodeController.parentController = self;
-    
-    myFriendsController = [[UPMyFriendsViewController alloc] init];
-    myFriendsController.parentController = self;
+    return @[spaceItem, msgItem, asisItem];
+}
+
+- (void)onButtonClick:(UIButton *)sender
+{
+    if (sender.tag==kMainButtonTag) { //消息
+        MessageCenterController *msgCenterController = [[MessageCenterController alloc] init];
+        [self.navigationController pushViewController:msgCenterController animated:YES];
+    } else if (sender.tag==kMainButtonTag+1)//活动助手
+    {
+        UPActivityAssistantController *assistantController = [[UPActivityAssistantController alloc] init];
+        assistantController.title = @"活动助手";
+        [self.navigationController pushViewController:assistantController animated:YES];
+    }
 }
 
 - (void)addBadgeValue:(NSNotification *)notification
@@ -164,12 +143,6 @@ static int kMsgCount = 0;
     kMsgCount += addCount;
     
     messageItem.badgeValue = [NSString stringWithFormat:@"%d", kMsgCount];
-}
-
--(void)jumpToMessage
-{
-    MessageCenterController *msgCenterController = [[MessageCenterController alloc] init];
-    [self.navigationController pushViewController:msgCenterController animated:YES];
 }
 
 - (void)setBadgeValue:(int)newValue
@@ -184,7 +157,7 @@ static int kMsgCount = 0;
     [noticeBoard startAnimate];
     
     if (![UPDataManager shared].isLogin) {
-        //        [self showLogin];
+//                [self showLogin];
     } else {
         if (!isLoaded) {
             [_mainTable.header beginRefreshing];
@@ -268,7 +241,6 @@ static int kMsgCount = 0;
     [params setObject:[NSString stringWithFormat:@"%d", kActivityPageSize] forKey:@"page_size"];
     [params setObject:@"" forKey:@"activity_status"];
     [params setObject:@""forKey:@"activity_class"];
-    //    [params setObject:[UPDataManager shared].userInfo.industry_id forKey:@"industry_id"];
     [params setObject:@"4" forKey:@"industry_id"];
     [params setObject:@"" forKey:@"start_begin_time"];
     [params setObject:@"" forKey:@"province_code"];
@@ -277,8 +249,7 @@ static int kMsgCount = 0;
     [params setObject:@""forKey:@"creator_id"];
     [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
-    
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
+    [[YMHttpNetwork sharedNetwork] GET:kUPBaseURL parameters:params success:^(id json) {
         NSDictionary *dict = (NSDictionary *)json;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
@@ -343,7 +314,7 @@ static int kMsgCount = 0;
             [myRefreshView endRefreshing];
         }
         
-    } failture:^(id error) {
+    } failure:^(NSError *error) {
         NSLog(@"%@",error);
         [myRefreshView endRefreshing];
         
@@ -379,9 +350,6 @@ static int kMsgCount = 0;
 - (void)handleTap:(UITapGestureRecognizer *)recognizer
 {
     UpActView *actV = (UpActView *)recognizer.view;
-    
-    NSLog(@"tag:%d\n%@\n%@\n%@\n%@",actV.tag, actV.actTitle, actV.actContent, actV.actLocation, actV.actBeginTime);
-    
     [self makeAction:actV];
 }
 
@@ -402,8 +370,6 @@ static int kMsgCount = 0;
         case 2:
         case 3:
         {
-            //
-            
         }
             break;
     }
@@ -468,187 +434,5 @@ static int kMsgCount = 0;
         }
     }
     return NO;
-}
-- (void) OnAction:(id)mself withType:(ActionType)actionType toView:(ViewType)viewType withArg:(id)arg
-{
-    switch (actionType) {
-        case LEFT_MENU_CHANGE:
-        {
-            int nIndex = viewType;
-            switch (nIndex) {
-                case UPPER_VIEW:
-                {
-                    
-                    if ([self isStack:upperController]) {
-                        [self.navigationController popToViewController:upperController animated:NO];
-                    }
-                    else {
-                        [self.navigationController pushViewController:upperController animated:YES];
-                    }
-                    [upperController setTitle:@"Upper"];
-                    break;
-                }
-                case EXPERT_VIEW:
-                {
-                    if ([self isStack:expertController]) {
-                        [self.navigationController popToViewController:expertController animated:NO];
-                    }
-                    else {
-                        [self.navigationController pushViewController:expertController animated:YES];
-                    }
-                    [expertController setTitle:@"专家社区"];
-                    break;
-                }
-                case LAUNCH_ACTIVITY_VIEW:
-                {
-                    
-                    if ([self isStack:newLaunchActController]) {
-                        [self.navigationController popToViewController:newLaunchActController animated:NO];
-                    } else {
-                        [self.navigationController pushViewController:newLaunchActController animated:YES];
-                    }
-
-                }
-                    break;
-                case MY_Friends_View:
-                {
-                    if ([self isStack:myFriendsController]) {
-                        [self.navigationController popToViewController:myFriendsController animated:NO];
-                    } else {
-                        [self.navigationController pushViewController:myFriendsController animated:YES];
-                    }
-                }
-                    break;
-                case MY_ACTIVITY_VIEW:
-                {
-                    if ([self isStack:myActController]) {
-                        [self.navigationController popToViewController:myActController  animated:NO];
-                    } else {
-                        [self.navigationController pushViewController:myActController animated:YES];
-                    }
-                }
-                    break;
-            }
-        }
-            break;
-        case CHANGE_VIEW:
-        {
-            int nIndex = viewType;
-            switch (nIndex) {
-                case REGISTER_VIEW:
-                {
-                    if ([self isStack:registerController]) {
-                        [self.navigationController popToViewController:registerController animated:YES];
-                    } else {
-                        [self.navigationController pushViewController:registerController animated:YES];
-                    }
-                }
-                    break;
-                case SETTING_VIEW:
-                {
-                    if ([self isStack:settingController]) {
-                        [self.navigationController popToViewController:settingController animated:YES];
-                    }
-                    else {
-                        [self.navigationController pushViewController:settingController animated:YES];
-                    }
-                    [settingController setTitle:@"设置"];
-                    break;
-                }
-                case PERSON_CENTER_VIEW:
-                {
-                    if (arg!=nil) {
-                        personalCenterController.index = (int)[(NSString*)arg integerValue];
-                    }
-                    if ([self isStack:personalCenterController]) {
-                        [self.navigationController popToViewController:personalCenterController animated:YES];
-                    } else {
-                        [self.navigationController pushViewController:personalCenterController animated:YES];
-                    }
-                }
-                    break;
-                case ENROLL_PEOPLE_VIEW:
-                {
-                    if ([self isStack:enrollController]) {
-                        [self.navigationController popToViewController:enrollController animated:YES];
-                    } else {
-                        [self.navigationController pushViewController:enrollController animated:YES];
-                    }
-                }
-                    break;
-                case GET_PASSWORD_VIEW:
-                {
-                    if ([self isStack:getPasswordController]) {
-                        [self.navigationController popToViewController:getPasswordController animated:YES];
-                    } else {
-                        [self.navigationController pushViewController:getPasswordController animated:YES];
-                    }
-                    break;
-                }
-                case MYACT_VIEW:
-                {
-                    if ([self isStack:myActController]) {
-                        [self.navigationController popToViewController:myActController animated:YES];
-                    }
-                    else {
-                        [self.navigationController pushViewController:myActController animated:YES];
-                    }
-                    [myActController setTitle:@"我的活动"];
-                    break;
-                }
-                case QR_VIEW:
-                {
-                    if ([self isStack:qrController]) {
-                        [self.navigationController popToViewController:qrController animated:NO];
-                    } else {
-                        [self.navigationController pushViewController:qrController animated:YES];
-                    }
-                    [qrController setTitle:@"我的二维码"];
-                }
-                    break;
-                case LAUNCH_ACTIVITY_VIEW:
-                {
-                    if ([self isStack:launchActController]) {
-                        [self.navigationController popToViewController:launchActController animated:NO];
-                    } else {
-                        [self.navigationController pushViewController:launchActController animated:YES];
-                    }
-                }
-                    break;
-                case CHAT_VIEW:
-                {
-                    if ([self isStack:chatController]) {
-                        [self.navigationController popToViewController:chatController animated:YES];
-                    } else {
-                        [self.navigationController pushViewController:chatController animated:YES];
-                    }
-                }
-                    break;
-                case UPPER_VIEW:
-                {
-                    if ([self isStack:upperController]) {
-                        [self.navigationController popToViewController:upperController animated:NO];
-                    }
-                    else {
-                        [self.navigationController pushViewController:upperController animated:YES];
-                    }
-                    [upperController setTitle:@"Upper"];
-                    break;
-                }
-            }
-        }
-            break;
-        default:
-            break;
-    }
-}
-
-- (void)onButtonClick:(UIButton *)sender
-{
-    if (sender.tag == kActivityAssitantTag) {
-        UPActivityAssistantController *assistantController = [[UPActivityAssistantController alloc] init];
-        assistantController.title = @"活动助手";
-        [self.navigationController pushViewController:assistantController animated:YES];
-    }
 }
 @end

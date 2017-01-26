@@ -81,9 +81,14 @@
     }
     
     //建表消息列表
+//    flag = [messageDb executeUpdate:@"create table if not exists messages_detail (id integer primary key autoincrement, from_id text, to_id text, nick_name text, message_desc text, message_from integer, message_type integer, add_time text, status text)"];
+//    
+//    flag = [messageDb executeUpdate:@"create table if not exists messages_group (id integer primary key autoincrement, from_id text unique, to_id text, nick_name text, newest_message text, message_type integer, add_time text, status text)"];
+    
     flag = [messageDb executeUpdate:@"create table if not exists messages_detail (id integer primary key autoincrement, from_id text, to_id text, nick_name text, message_desc text, message_from integer, message_type integer, add_time text, status text)"];
     
     flag = [messageDb executeUpdate:@"create table if not exists messages_group (id integer primary key autoincrement, from_id text unique, to_id text, nick_name text, newest_message text, message_type integer, add_time text, status text)"];
+
     
     
     if (flag) {
@@ -152,18 +157,28 @@
                     for (NSDictionary *dict in msgArr) {
                         UUMessage *msg = [[UUMessage alloc] init];
                         
-                        int msgType = [dict[@"message_type"] intValue];
-                        if (msgType==99) {
-                            msg.type = UUMessageTypeInvite;
-                        } else {
-                            msg.type = UUMessageTypeText;
-                        }
                         
+                        //99为邀请类消息， from_id为0时为系统消息
                         NSString *fromId = dict[@"from_id"];
                         msg.strId = fromId;
-                        msg.type = ([fromId intValue]==0)?UUMessageFromSys:UUMessageFromOther;
                         
-                        msg.strToId = dict[@"to_id"];
+                        if ([fromId intValue]==0) {
+                            msg.type = UPMessageTypeSys;
+                        } else {
+                            int msgType = [dict[@"message_type"] intValue];
+                            if (msgType==99) {
+                                msg.type = UPMessageTypeInvite;
+                            } else {
+                                msg.type = UPMessageTypeNormal;
+                            }
+                        }
+                        
+                        msg.from = UUMessageFromOther;
+                        
+                        //后续需要完善，每次请求都需要考虑绑定用户id
+                        NSString *to_id = [UPDataManager shared].userInfo.ID;//
+                        msg.strToId = to_id;
+                        
                         msg.strName = dict[@"nick_name"];
                         msg.strContent = dict[@"message_desc"];
                         msg.strTime = dict[@"add_time"];
@@ -210,21 +225,27 @@
 {
     UUMessage *message = nil;
     
-    BOOL isInvite = NO;
-    if(msgType==UUMessageTypeInvite) {
-        isInvite = YES;
-    }
-
     for (UUMessage *msg in self.groupMessageList) {
-        if (isInvite){
-            if (msg.type==UUMessageTypeInvite) {
-                message = msg;
-            }
-        } else if(msg.type!=UUMessageTypeInvite && [msg.strId isEqualToString:fromID]){
-            message = msg;
-            break;
+        //处理三种类型的消息
+        switch (msgType) {
+            case UPMessageTypeNormal:
+                if ([msg.strId isEqualToString:fromID]) {
+                    message = msg;
+                }
+                break;
+            case UPMessageTypeSys:
+                if (msg.type==UPMessageTypeSys) {
+                    message = msg;
+                }
+                break;
+            case UPMessageTypeInvite:
+                if (msg.type==UPMessageTypeInvite) {
+                    message = msg;
+                }
+                break;
         }
     }
+    
     return message;
 }
 
@@ -271,35 +292,90 @@
 /**
  *根据参数获取指定位置的记录
  */
-- (NSMutableArray *)getMessages:(NSRange)range withUserId:(NSString *)userId
+- (NSMutableArray *)getMessages:(NSRange)range withUserId:(NSString *)userId andType:(MessageType)msgType
 {
     [messageDb open];
     
     long begin = range.location;
     long end = range.location+range.length;
     
-    NSString *to_id = [UPDataManager shared].userInfo.ID;
-    NSString *querySql = [NSString stringWithFormat:@"select * from messages_detail where from_id='%@' and to_id='%@' order by add_time desc limit %ld,%ld",userId, to_id,begin, end];
+    if (msgType==UPMessageTypeNormal) {
+        NSString *to_id = [UPDataManager shared].userInfo.ID;
+        NSString *querySql = [NSString stringWithFormat:@"select * from messages_detail where from_id='%@' and to_id='%@'and message_type=%ld order by add_time desc limit %ld,%ld",userId, to_id, UPMessageTypeNormal,begin, end];
         
-    NSMutableArray *msglist = [NSMutableArray new];
-    
-    FMResultSet *s = [messageDb executeQuery:querySql];
-    while (s.next) {
-        UUMessage *msg = [[UUMessage alloc] init];
+        NSMutableArray *msglist = [NSMutableArray new];
         
-        msg.strId = [s stringForColumnIndex:1];
-        msg.strToId = [s stringForColumnIndex:2];
-        msg.strName = [s stringForColumnIndex:3];
-        msg.strContent = [s stringForColumnIndex:4];
-        msg.from = [s intForColumnIndex:5];
-        msg.type = [s intForColumnIndex:6];
-        msg.strTime = [s stringForColumnIndex:7];
-        msg.status = [s stringForColumnIndex:8];
-    
-        [msglist addObject:msg];
+        FMResultSet *s = [messageDb executeQuery:querySql];
+        while (s.next) {
+            UUMessage *msg = [[UUMessage alloc] init];
+            
+            msg.strId = [s stringForColumnIndex:1];
+            msg.strToId = [s stringForColumnIndex:2];
+            msg.strName = [s stringForColumnIndex:3];
+            msg.strContent = [s stringForColumnIndex:4];
+            msg.from = [s intForColumnIndex:5];
+            msg.type = [s intForColumnIndex:6];
+            msg.strTime = [s stringForColumnIndex:7];
+            msg.status = [s stringForColumnIndex:8];
+            
+            msg.subType = UPMessageSubTypeText;
+            
+            [msglist addObject:msg];
+        }
+        [messageDb close];
+        return msglist;
+    } else if (msgType==UPMessageTypeInvite) {
+        NSString *to_id = [UPDataManager shared].userInfo.ID;
+        NSString *querySql = [NSString stringWithFormat:@"select * from messages_detail where and to_id='%@'and message_type=%ld order by add_time desc limit %ld,%ld", to_id, UPMessageTypeInvite,begin, end];
+        
+        NSMutableArray *msglist = [NSMutableArray new];
+        
+        FMResultSet *s = [messageDb executeQuery:querySql];
+        while (s.next) {
+            UUMessage *msg = [[UUMessage alloc] init];
+            
+            msg.strId = [s stringForColumnIndex:1];
+            msg.strToId = [s stringForColumnIndex:2];
+            msg.strName = [s stringForColumnIndex:3];
+            msg.strContent = [s stringForColumnIndex:4];
+            msg.from = [s intForColumnIndex:5];
+            msg.type = [s intForColumnIndex:6];
+            msg.strTime = [s stringForColumnIndex:7];
+            msg.status = [s stringForColumnIndex:8];
+            
+            msg.subType = UPMessageSubTypeText;
+            
+            [msglist addObject:msg];
+        }
+        [messageDb close];
+        return msglist;
+    } else if (msgType==UPMessageTypeSys) {
+        NSString *to_id = [UPDataManager shared].userInfo.ID;
+        NSString *querySql = [NSString stringWithFormat:@"select * from messages_detail where and to_id='%@'and message_type=%ld order by add_time desc limit %ld,%ld", to_id, UPMessageTypeSys,begin, end];
+        
+        NSMutableArray *msglist = [NSMutableArray new];
+        
+        FMResultSet *s = [messageDb executeQuery:querySql];
+        while (s.next) {
+            UUMessage *msg = [[UUMessage alloc] init];
+            
+            msg.strId = [s stringForColumnIndex:1];
+            msg.strToId = [s stringForColumnIndex:2];
+            msg.strName = [s stringForColumnIndex:3];
+            msg.strContent = [s stringForColumnIndex:4];
+            msg.from = [s intForColumnIndex:5];
+            msg.type = [s intForColumnIndex:6];
+            msg.strTime = [s stringForColumnIndex:7];
+            msg.status = [s stringForColumnIndex:8];
+            
+            msg.subType = UPMessageSubTypeText;
+            
+            [msglist addObject:msg];
+        }
+        [messageDb close];
+        return msglist;
     }
-    [messageDb close];
-    return msglist;
+    return nil;
 }
 
 #pragma mark - 操作表:消息组
@@ -401,9 +477,9 @@
     GroupMessage *sysGroup = [[GroupMessage alloc] init];
     sysGroup.groupID = kGroupMsgSys;
     GroupMessage *invGroup = [[GroupMessage alloc] init];
-    sysGroup.groupID = kGroupMsgInv;
+    invGroup.groupID = kGroupMsgInv;
     GroupMessage *usrGroup = [[GroupMessage alloc] init];
-    sysGroup.groupID = kGroupMsgUsr;
+    usrGroup.groupID = kGroupMsgUsr;
     
     NSMutableArray *msglist = [[NSMutableArray alloc] init];
     [msglist addObject:sysGroup];
@@ -411,7 +487,7 @@
     [msglist addObject:usrGroup];
     
     NSString *to_id = [UPDataManager shared].userInfo.ID;
-    NSString *querySql = [NSString stringWithFormat:@"select * from messages_group where to_id='%@'  order by status desc, add_time desc limit %ld,%ld", to_id, begin, end];
+    NSString *querySql = [NSString stringWithFormat:@"select * from messages_group where to_id='%@' and order by status desc, add_time desc limit %ld,%ld", to_id, begin, end];
     
     FMResultSet *s = [messageDb executeQuery:querySql];
     while ([s next]) {
@@ -426,12 +502,16 @@
         msg.strTime = [s stringForColumnIndex:6];
         msg.status = [s stringForColumnIndex:7];
         
-        if ([msg.strId isEqualToString:@"0"]) { //系统消息
-            [sysGroup.messageList addObject:msg];
-        } else {
-            if (msg.type) {
-                //
-            }
+        switch (msg.type) {
+            case UPMessageTypeSys:
+                [sysGroup.messageList addObject:msg];
+                break;
+            case UPMessageTypeInvite:
+                [invGroup.messageList addObject:msg];
+                break;
+            case UPMessageTypeNormal:
+                [usrGroup.messageList addObject:msg];
+                break;
         }
     }
     
@@ -451,7 +531,8 @@
     for (int i=0; i<10; i++) {
         UUMessage *msg = [[UUMessage alloc] init];
         msg.from = UUMessageFromOther;
-        msg.type = UUMessageTypeText;
+        msg.type = UPMessageTypeNormal;
+        msg.subType = UPMessageSubTypeText;
         msg.strId = [NSString stringWithFormat:@"%d", i+100];
         msg.strToId = [UPDataManager shared].userInfo.ID;
         msg.strName = [NSString stringWithFormat:@"name_%d", i+1000];

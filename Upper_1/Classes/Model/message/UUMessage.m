@@ -10,36 +10,36 @@
 #import "NSDate+Utils.h"
 
 @implementation UUMessage
-- (void)setWithDict:(NSDictionary *)dict{
-    
-    self.strIcon = dict[@"strIcon"];
-    self.strName = dict[@"strName"];
-    self.strId = dict[@"strId"];
-    self.strTime = [self changeTheDateString:dict[@"strTime"]];
-    self.from = [dict[@"from"] intValue];
-    
-    switch ([dict[@"type"] integerValue]) {
-        
-        case 0:
-            self.type = UUMessageTypeText;
-            self.strContent = dict[@"strContent"];
-            break;
-        
-        case 1:
-            self.type = UUMessageTypePicture;
-            self.picture = dict[@"picture"];
-            break;
-        
-        case 2:
-            self.type = UUMessageTypeVoice;
-            self.voice = dict[@"voice"];
-            self.strVoiceTime = dict[@"strVoiceTime"];
-            break;
-            
-        default:
-            break;
-    }
-}
+//- (void)setWithDict:(NSDictionary *)dict{
+//    
+//    self.strIcon = dict[@"strIcon"];
+//    self.strName = dict[@"strName"];
+//    self.strId = dict[@"strId"];
+//    self.strTime = [self changeTheDateString:dict[@"strTime"]];
+//    self.from = [dict[@"from"] intValue];
+//    
+//    switch ([dict[@"type"] integerValue]) {
+//        
+//        case 0:
+//            self.type = UUMessageTypeText;
+//            self.strContent = dict[@"strContent"];
+//            break;
+//        
+//        case 1:
+//            self.type = UUMessageTypePicture;
+//            self.picture = dict[@"picture"];
+//            break;
+//        
+//        case 2:
+//            self.type = UUMessageTypeVoice;
+//            self.voice = dict[@"voice"];
+//            self.strVoiceTime = dict[@"strVoiceTime"];
+//            break;
+//            
+//        default:
+//            break;
+//    }
+//}
 
 //"08-10 晚上08:09:41.0" ->
 //"昨天 上午10:09"或者"2012-08-10 凌晨07:09"
