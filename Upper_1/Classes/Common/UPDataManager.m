@@ -130,14 +130,6 @@ NSString * const g_loginFileName = @"login.plist";
     return _provinceDict;
 }
 
-//-(NSMutableArray *)messageList
-//{
-//    if (_messageList==nil) {
-//        _messageList = [[NSMutableArray alloc] init];
-//    }
-//    return _messageList;
-//}
-
 -(NSMutableArray *)activityList
 {
     if (_activityList==nil) {

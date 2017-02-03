@@ -136,6 +136,8 @@
 		3A0B60F51DF7A700009FCC10 /* YMNetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0B60F41DF7A700009FCC10 /* YMNetManager.m */; };
 		3A2939901D2F798B005CB3F3 /* UPCommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A29398F1D2F798B005CB3F3 /* UPCommentController.m */; };
 		3A2939931D2F80F6005CB3F3 /* UPTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2939921D2F80F6005CB3F3 /* UPTextView.m */; };
+		3A33A3021E44147300144D66 /* UPRulesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A33A3011E44147300144D66 /* UPRulesController.m */; };
+		3A33A3051E44168100144D66 /* UPPresentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A33A3041E44168100144D66 /* UPPresentViewController.m */; };
 		3A5368261D54791E00F36FBC /* YRSideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A5368251D54791E00F36FBC /* YRSideViewController.m */; };
 		3A6408931E279C940086CDCA /* UPLaunchActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A6408921E279C940086CDCA /* UPLaunchActivityController.m */; };
 		3A71CB8B1E26267700EBE0A2 /* act.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A71CB3B1E26267700EBE0A2 /* act.png */; };
@@ -211,9 +213,6 @@
 		3A71CBD41E26267700EBE0A2 /* introduce.json in Resources */ = {isa = PBXBuildFile; fileRef = 3A71CB881E26267700EBE0A2 /* introduce.json */; };
 		3A71CBD51E26267700EBE0A2 /* slide_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A71CB8A1E26267700EBE0A2 /* slide_bg.png */; };
 		3A7694DF1E26731F002715B4 /* UPMainMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A7694DE1E26731F002715B4 /* UPMainMenuController.m */; };
-		3A7F62591DC44FC70076E3E2 /* UPRegisterOneController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A7F62581DC44FC70076E3E2 /* UPRegisterOneController.m */; };
-		3A7F625C1DC44FF50076E3E2 /* UPNewRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A7F625B1DC44FF50076E3E2 /* UPNewRegisterViewController.m */; };
-		3A7F625F1DC450560076E3E2 /* UPRegisterTwoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A7F625E1DC450560076E3E2 /* UPRegisterTwoController.m */; };
 		3A837D1C1DD8123700A9A0BB /* UPMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A837D1B1DD8123700A9A0BB /* UPMessageCell.m */; };
 		3A837D211DD883B500A9A0BB /* BottomBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A837D201DD883B500A9A0BB /* BottomBarViewController.m */; };
 		3A837D301DD884D100A9A0BB /* EditingBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A837D251DD884D100A9A0BB /* EditingBar.m */; };
@@ -562,6 +561,10 @@
 		3A29398F1D2F798B005CB3F3 /* UPCommentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPCommentController.m; sourceTree = "<group>"; };
 		3A2939911D2F80F6005CB3F3 /* UPTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPTextView.h; sourceTree = "<group>"; };
 		3A2939921D2F80F6005CB3F3 /* UPTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPTextView.m; sourceTree = "<group>"; };
+		3A33A3001E44147300144D66 /* UPRulesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPRulesController.h; sourceTree = "<group>"; };
+		3A33A3011E44147300144D66 /* UPRulesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPRulesController.m; sourceTree = "<group>"; };
+		3A33A3031E44168100144D66 /* UPPresentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPPresentViewController.h; sourceTree = "<group>"; };
+		3A33A3041E44168100144D66 /* UPPresentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPPresentViewController.m; sourceTree = "<group>"; };
 		3A5368241D54791E00F36FBC /* YRSideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YRSideViewController.h; sourceTree = "<group>"; };
 		3A5368251D54791E00F36FBC /* YRSideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YRSideViewController.m; sourceTree = "<group>"; };
 		3A6408911E279C940086CDCA /* UPLaunchActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPLaunchActivityController.h; sourceTree = "<group>"; };
@@ -640,12 +643,6 @@
 		3A71CB8A1E26267700EBE0A2 /* slide_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slide_bg.png; sourceTree = "<group>"; };
 		3A7694DD1E26731F002715B4 /* UPMainMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPMainMenuController.h; sourceTree = "<group>"; };
 		3A7694DE1E26731F002715B4 /* UPMainMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPMainMenuController.m; sourceTree = "<group>"; };
-		3A7F62571DC44FC70076E3E2 /* UPRegisterOneController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPRegisterOneController.h; sourceTree = "<group>"; };
-		3A7F62581DC44FC70076E3E2 /* UPRegisterOneController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPRegisterOneController.m; sourceTree = "<group>"; };
-		3A7F625A1DC44FF50076E3E2 /* UPNewRegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPNewRegisterViewController.h; sourceTree = "<group>"; };
-		3A7F625B1DC44FF50076E3E2 /* UPNewRegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPNewRegisterViewController.m; sourceTree = "<group>"; };
-		3A7F625D1DC450560076E3E2 /* UPRegisterTwoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPRegisterTwoController.h; sourceTree = "<group>"; };
-		3A7F625E1DC450560076E3E2 /* UPRegisterTwoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPRegisterTwoController.m; sourceTree = "<group>"; };
 		3A837D1A1DD8123700A9A0BB /* UPMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPMessageCell.h; sourceTree = "<group>"; };
 		3A837D1B1DD8123700A9A0BB /* UPMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPMessageCell.m; sourceTree = "<group>"; };
 		3A837D1F1DD883B500A9A0BB /* BottomBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BottomBarViewController.h; sourceTree = "<group>"; };
@@ -1415,12 +1412,6 @@
 			children = (
 				EC3C16E81CECB16D00223D6B /* UpRegisterController.h */,
 				EC3C16E91CECB16D00223D6B /* UpRegisterController.m */,
-				3A7F62571DC44FC70076E3E2 /* UPRegisterOneController.h */,
-				3A7F62581DC44FC70076E3E2 /* UPRegisterOneController.m */,
-				3A7F625A1DC44FF50076E3E2 /* UPNewRegisterViewController.h */,
-				3A7F625B1DC44FF50076E3E2 /* UPNewRegisterViewController.m */,
-				3A7F625D1DC450560076E3E2 /* UPRegisterTwoController.h */,
-				3A7F625E1DC450560076E3E2 /* UPRegisterTwoController.m */,
 			);
 			name = Regist;
 			sourceTree = "<group>";
@@ -1562,6 +1553,10 @@
 				3A90746C1DD05E59000B2050 /* UPActTypeController.m */,
 				3A90746E1DD07ECF000B2050 /* UPGoShareController.h */,
 				3A90746F1DD07ECF000B2050 /* UPGoShareController.m */,
+				3A33A3001E44147300144D66 /* UPRulesController.h */,
+				3A33A3011E44147300144D66 /* UPRulesController.m */,
+				3A33A3031E44168100144D66 /* UPPresentViewController.h */,
+				3A33A3041E44168100144D66 /* UPPresentViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1960,10 +1955,10 @@
 				3A0B60F51DF7A700009FCC10 /* YMNetManager.m in Sources */,
 				2C38F96B1D26D2FE002CF240 /* UPRefreshTableViewController.m in Sources */,
 				EC3C18961CECB16D00223D6B /* UpRegister5.m in Sources */,
-				3A7F62591DC44FC70076E3E2 /* UPRegisterOneController.m in Sources */,
 				EC3C180F1CECB16D00223D6B /* PersonInfoController.m in Sources */,
 				2CDAD6661D0EEC4000C260F4 /* SDPhotoBrowser.m in Sources */,
 				EC3C18271CECB16D00223D6B /* NSString+Base64.m in Sources */,
+				3A33A3051E44168100144D66 /* UPPresentViewController.m in Sources */,
 				2CDAD6391D0EEC4000C260F4 /* UINavigationController+FDFullscreenPopGesture.m in Sources */,
 				2C10727D1CF32C9900D74AE1 /* UPDataManager.m in Sources */,
 				2CDAD63C1D0EEC4000C260F4 /* FMDatabasePool.m in Sources */,
@@ -1999,7 +1994,6 @@
 				2CDAD5011D0ED8A900C260F4 /* UUMessageContentButton.m in Sources */,
 				2CDAD4FC1D0ED8A900C260F4 /* UUAVAudioPlayer.m in Sources */,
 				2CDAD63B1D0EEC4000C260F4 /* FMDatabaseAdditions.m in Sources */,
-				3A7F625F1DC450560076E3E2 /* UPRegisterTwoController.m in Sources */,
 				EC3C181A1CECB16D00223D6B /* UPQRViewController.m in Sources */,
 				2CDAD63E1D0EEC4000C260F4 /* FMResultSet.m in Sources */,
 				2C621BF11D85BBFE00068F76 /* UPActivityAssistantController.m in Sources */,
@@ -2030,12 +2024,12 @@
 				EC3C18951CECB16D00223D6B /* UpRegister4.m in Sources */,
 				EC3C18061CECB16D00223D6B /* XWHttpTool.m in Sources */,
 				2CDAD6301D0EEC4000C260F4 /* AFNetworkReachabilityManager.m in Sources */,
+				3A33A3021E44147300144D66 /* UPRulesController.m in Sources */,
 				EC3C18981CECB16D00223D6B /* ZKSegment.m in Sources */,
 				2CDAD6441D0EEC4000C260F4 /* MJProperty.m in Sources */,
 				2C38F95F1D1FD464002CF240 /* UPMyLaunchViewController.m in Sources */,
 				2CDAD4DB1D05B90100C260F4 /* BubbleChatViewController.m in Sources */,
 				3A0550921DB602EC009EA918 /* UPAddFriendViewController.m in Sources */,
-				3A7F625C1DC44FF50076E3E2 /* UPNewRegisterViewController.m in Sources */,
 				2CDAD6C41D0EF42000C260F4 /* UIImageView+AFNetworking.m in Sources */,
 				2CDAD64A1D0EEC4000C260F4 /* MJRefreshAutoFooter.m in Sources */,
 				EC3C18141CECB16D00223D6B /* UpExpertController.m in Sources */,

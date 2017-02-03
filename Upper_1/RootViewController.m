@@ -9,6 +9,7 @@
 #import "RootViewController.h"
 #import "MainController.h"
 #import "UPMainMenuController.h"
+#import "UPRulesController.h"
 #import "MessageManager.h"
 #import "XWHttpTool.h"
 #import "UUMessage.h"
@@ -28,7 +29,7 @@
 
 #define kYMMainMenuBarItemTag 3000
 #define kYMSlideControllerWidth 200
-#define kYMSlideMenuItems 5
+#define kYMSlideMenuItems 6
 
 @interface YMRootViewController()
 @end
@@ -58,8 +59,6 @@
         self.leftViewShowWidth = kYMSlideControllerWidth;
         self.needSwipeShowMenu = YES;
         self.panMovingRightOrLeft = NO;
-        
-//        g_mainMenu = _mainViewController;
         g_homeMenu = mainMenuVC;
     }
     return self;
@@ -151,7 +150,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellId = @"cellId";
-    NSArray *menuTitles = @[@"Upper", @"活动大厅", @"发起活动",@"我的好友", @"我的活动"];
+    NSArray *menuTitles = @[@"Upper", @"活动大厅", @"发起活动",@"我的好友", @"我的活动", @"活动规则"];
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (cell==nil) {
@@ -169,8 +168,21 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row==5) {//活动规则
+        [self showRules];
+        return;
+    }
+    
     [g_homeMenu switchController:indexPath.row];
     [g_sideController hideSideViewController:YES];
 }
+
+- (void)showRules
+{
+    UPRulesController *rulesController = [[UPRulesController alloc] init];
+    rulesController.title = @"活动规则";
+    [self presentViewController:rulesController animated:YES completion:nil];
+}
+
 @end
 
