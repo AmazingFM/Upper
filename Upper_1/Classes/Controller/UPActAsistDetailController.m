@@ -193,6 +193,7 @@
     // Do any additional setup after loading the view.
     _mainTable = [[UITableView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
     _mainTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _mainTable.bounces = NO;
     _mainTable.delegate = self;
     _mainTable.dataSource = self;
     _mainTable.backgroundColor = [UIColor whiteColor];

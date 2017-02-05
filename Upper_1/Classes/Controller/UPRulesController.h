@@ -6,8 +6,8 @@
 //  Copyright © 2017年 aries365.com. All rights reserved.
 //
 
-#import "UPPresentViewController.h"
+#import "UPBaseViewController.h"
 
-@interface UPRulesController : UPPresentViewController
+@interface UPRulesController : UPBaseViewController
 
 @end

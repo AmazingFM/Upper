@@ -13,7 +13,7 @@
 #import "NewLaunchActivityController.h"
 #import "UPMyFriendsViewController.h"
 #import "UpMyActivityController.h"
-
+#import "UPRulesController.h"
 #import "UpExpertController.h"
 
 @interface UPMainMenuController ()
@@ -44,6 +44,7 @@
     NewLaunchActivityController *launchVC = [[NewLaunchActivityController alloc] init];
     UPMyFriendsViewController *friendVC = [[UPMyFriendsViewController alloc] init];
     UpMyActivityViewController *myActVC = [[UpMyActivityViewController alloc] init];
+    UPRulesController *ruleVC = [[UPRulesController alloc] init];
     
     UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:upperVC];
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:hallVC];
@@ -51,7 +52,7 @@
     UINavigationController *nav4 = [[UINavigationController alloc] initWithRootViewController:launchVC];
     UINavigationController *nav5 = [[UINavigationController alloc] initWithRootViewController:friendVC];
     UINavigationController *nav6 = [[UINavigationController alloc] initWithRootViewController:myActVC];
-    
+    UINavigationController *nav7 = [[UINavigationController alloc] initWithRootViewController:ruleVC];
     
     [self addChildViewController:nav1];
     [self addChildViewController:nav2];
@@ -59,6 +60,7 @@
     [self addChildViewController:nav4];
     [self addChildViewController:nav5];
     [self addChildViewController:nav6];
+    [self addChildViewController:nav7];
     
     [self.childViewControllers enumerateObjectsUsingBlock:^(UIViewController * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         obj.view.frame = CGRectMake(0, 0, ScreenWidth, ScreenHeight);

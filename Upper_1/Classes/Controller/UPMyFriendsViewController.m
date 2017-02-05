@@ -14,6 +14,7 @@
 #import "UPBaseItem.h"
 
 #define kActivityPageSize 20
+#define kDescHeight 30
 
 @implementation UPFriendItem
 
@@ -25,6 +26,8 @@
     BOOL lastPage;
     
     UILabel *tipsLabel;
+    
+    UIButton *addFriendButton;
 }
 @property (nonatomic, retain) UITableView *mainTable;
 @property (nonatomic, retain) NSMutableArray *friendlist;
@@ -44,15 +47,27 @@
     [self.view addSubview:backView];
     [self.view addSubview:self.mainTable];
     
-    UIButton *searchBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,ScreenHeight-FirstLabelHeight-kDescHeight,ScreenWidth, kDescHeight)];
+    descLabel.text = @"可以在活动现场通过扫描对方用户二维码来添加";
+    descLabel.font = [UIFont systemFontOfSize:14.f];
+    descLabel.textColor = [UIColor grayColor];
+    descLabel.textAlignment = NSTextAlignmentCenter;
+    descLabel.backgroundColor = [UIColor clearColor];
+    [backView addSubview:descLabel];
     
-    searchBtn.frame=CGRectMake(0, 0, 35, 35);
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0,ScreenHeight-FirstLabelHeight-kDescHeight+1, ScreenWidth,1)];
+    lineView.backgroundColor = [UIColor grayColor];
+    [backView addSubview:lineView];
+    
+    addFriendButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    
+    addFriendButton.frame=CGRectMake(0, 0, 35, 35);
     UIImage *image = [UIImage imageNamed:@"add"];
     UIImage *stretchableButtonImage = [image resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
-    [searchBtn setBackgroundImage:stretchableButtonImage forState:UIControlStateNormal];
-    [searchBtn addTarget:self action:@selector(addFriendAction) forControlEvents:UIControlEventTouchUpInside];
+    [addFriendButton setBackgroundImage:stretchableButtonImage forState:UIControlStateNormal];
+    [addFriendButton addTarget:self action:@selector(addFriendAction:) forControlEvents:UIControlEventTouchUpInside];
     
-    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithCustomView:searchBtn];
+    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithCustomView:addFriendButton];
 
     tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0, ScreenWidth, 100)];
     tipsLabel.text = @"暂无好友";
@@ -69,6 +84,7 @@
 {
     [super viewWillAppear:animated];
     [self.mainTable.header beginRefreshing];
+    addFriendButton.enabled = YES;
 }
 
 - (void)leftClick
@@ -76,16 +92,23 @@
     [g_sideController showLeftViewController:YES];
 }
 
-- (void)addFriendAction
+- (void)addFriendAction:(UIButton *)sender
 {
+    sender.enabled = NO;
+    
     UPAddFriendViewController *addFriend = [[UPAddFriendViewController alloc] init];
     [self.navigationController pushViewController:addFriend animated:YES];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    addFriendButton.enabled = YES;
 }
 
 - (UITableView *)mainTable
 {
     if (!_mainTable) {
-        _mainTable = [[UITableView alloc] initWithFrame:CGRectMake(0,FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
+        _mainTable = [[UITableView alloc] initWithFrame:CGRectMake(0,FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight-kDescHeight) style:UITableViewStylePlain];
         _mainTable.separatorColor = [UIColor grayColor];
         _mainTable.delegate = self;
         _mainTable.dataSource = self;
@@ -94,7 +117,7 @@
         _mainTable.separatorColor = [UIColor lightGrayColor];
         _mainTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0,0,ScreenWidth, CGFLOAT_MIN)];
         
-        //..下拉刷新
+           //..下拉刷新
         _mainTable.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
             if (lastPage) {
                 [_mainTable.footer resetNoMoreData];

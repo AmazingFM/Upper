@@ -17,6 +17,8 @@
 #import "NSObject+MJKeyValue.h"
 #import "AFHTTPRequestOperationManager.h"
 #import "UPTools.h"
+#import "UPMainMenuController.h"
+#import "UPGlobals.h"
 
 #define kUPFilePostURL @"http://api.qidianzhan.com.cn/AppServ/index.php?a=ActivityAdd"
 
@@ -512,9 +514,9 @@ static CGFloat const FixRatio = 4/3.0;
     }else if ([cellItem.key isEqualToString:@"activity_fee"]) {
         CGFloat cellWidth = cellItem.cellWidth;
         if (malePay) {
-            itemCell.textLabel.text = @"预估费用(按男女比例调整)";
+            itemCell.textLabel.text = @"预估人均费用(按男女比例调整)";
         } else {
-            itemCell.textLabel.text = @"预估费用";
+            itemCell.textLabel.text = @"预估人均费用";
         }
         
         UIView *detailView = itemCell.accessoryView;
@@ -757,11 +759,16 @@ static CGFloat const FixRatio = 4/3.0;
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (alertView.tag==1000) {
+    if (alertView.tag ==1000) {
         if (buttonIndex==1) {
-            [self doLaunchNewActivity];
+            [self jumpToMyAct];
         }
     }
+}
+
+- (void)jumpToMyAct
+{
+    [g_homeMenu switchController:4];//4跳转到我的活动
 }
 
 - (void)doLaunchNewActivity
@@ -853,7 +860,6 @@ static CGFloat const FixRatio = 4/3.0;
         if ([jsonObj isKindOfClass:[NSDictionary class]]) {
             NSDictionary *respDict = (NSDictionary *)jsonObj;
             NSString *resp_id = respDict[@"resp_id"];
-            NSString *resp_desc = respDict[@"resp_desc"];
             if ([resp_id intValue]==0) {
                 [self setNewData];
                 [_tableView reloadData];
@@ -965,7 +971,8 @@ static CGFloat const FixRatio = 4/3.0;
                     [_tableView reloadData];
                     
                 }
-                showDefaultAlert(@"提示", @"活动发起成功，如需修改变更或取消，请点击活动规则查看相关规则和操作方式。");
+                
+                showConfirmTagAlert(@"提示", @"活动发起成功，如需修改变更或取消，请点击活动规则查看相关规则和操作方式。", self, 1000);
             }
             
             

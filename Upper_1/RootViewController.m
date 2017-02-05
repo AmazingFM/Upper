@@ -168,20 +168,8 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row==5) {//活动规则
-        [self showRules];
-        return;
-    }
-    
     [g_homeMenu switchController:indexPath.row];
     [g_sideController hideSideViewController:YES];
-}
-
-- (void)showRules
-{
-    UPRulesController *rulesController = [[UPRulesController alloc] init];
-    rulesController.title = @"活动规则";
-    [self presentViewController:rulesController animated:YES completion:nil];
 }
 
 @end

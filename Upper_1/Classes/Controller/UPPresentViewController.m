@@ -32,7 +32,7 @@
     _navigationBar.topItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithCustomView:dismissBtn];
     
     if([[UIDevice currentDevice].systemVersion intValue]>=7){
-        _navigationBar.barTintColor=[UIColor clearColor];
+        _navigationBar.barTintColor=[UIColor whiteColor];
         _navigationBar.translucent=YES;
         _navigationBar.tintColor=[UIColor blackColor];
         NSDictionary* navTitleAttr=[NSDictionary dictionaryWithObjectsAndKeys:
@@ -65,6 +65,11 @@
     [self dismissModalViewController];
 }
 
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    _navigationBar.frame = CGRectMake(0, 0, ScreenWidth, 64);
+}
 /*
 #pragma mark - Navigation
 
