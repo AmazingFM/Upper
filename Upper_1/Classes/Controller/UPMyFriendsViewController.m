@@ -14,7 +14,7 @@
 #import "UPBaseItem.h"
 
 #define kActivityPageSize 20
-#define kDescHeight 30
+#define kDescHeight 44
 
 @implementation UPFriendItem
 
@@ -49,8 +49,8 @@
     
     UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,ScreenHeight-FirstLabelHeight-kDescHeight,ScreenWidth, kDescHeight)];
     descLabel.text = @"可以在活动现场通过扫描对方用户二维码来添加";
-    descLabel.font = [UIFont systemFontOfSize:14.f];
-    descLabel.textColor = [UIColor grayColor];
+    descLabel.font = [UIFont systemFontOfSize:15.f];
+    descLabel.textColor = [UIColor blackColor];
     descLabel.textAlignment = NSTextAlignmentCenter;
     descLabel.backgroundColor = [UIColor clearColor];
     [backView addSubview:descLabel];

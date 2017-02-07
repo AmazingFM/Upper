@@ -209,7 +209,7 @@ static CGFloat const FixRatio = 4/3.0;
 @end
 
 
-@interface NewLaunchActivityController () <UITableViewDelegate, UITableViewDataSource, UPCellDelegate, UITextFieldDelegate, UIAlertViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UPActTypeSelectDelegate>
+@interface NewLaunchActivityController () <UITableViewDelegate, UITableViewDataSource, UPCellDelegate, UITextFieldDelegate, UIAlertViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UPActTypeSelectDelegate, UIActionSheetDelegate>
 {
     UITableView *_tableView;
     CityItem *_selectedCity;
@@ -965,7 +965,6 @@ static CGFloat const FixRatio = 4/3.0;
             if ([jsonObj isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *respDict = (NSDictionary *)jsonObj;
                 NSString *resp_id = respDict[@"resp_id"];
-                NSString *resp_desc = respDict[@"resp_desc"];
                 if ([resp_id intValue]==0) {
                     [self setNewData];
                     [_tableView reloadData];
@@ -1031,32 +1030,43 @@ static CGFloat const FixRatio = 4/3.0;
 }
 
 #pragma mark take photo methods
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex==0) {
+        [self localPhoto];
+    } else if (buttonIndex==1) {
+        [self takePhoto];
+    }
+}
+
 - (void)openMenu
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"上传活动图片" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    UIAlertAction *action = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        NSLog(@"取消");
-    }];
-    [alertController addAction:action];
-    
-    [alertController addAction:({
-        UIAlertAction *action = [UIAlertAction actionWithTitle:@"从手机相册中获取" style:UIAlertActionStyleDestructive  handler:^(UIAlertAction *action) {
-            NSLog(@"从手机相册中获取");
-            [self localPhoto];
-        }];
-        action;
-    })];
-    
-    [alertController addAction:({
-        UIAlertAction *action = [UIAlertAction actionWithTitle:@"打开照相机" style:UIAlertActionStyleDestructive  handler:^(UIAlertAction *action) {
-            NSLog(@"打开照相机");
-            [self takePhoto];
-        }];
-        action;
-    })];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"上传活动图片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"从手机相册中获取", @"打开照相机", nil];
+    [actionSheet showInView: self.view];
+//    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"上传活动图片" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+//    
+//    UIAlertAction *action = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+//        NSLog(@"取消");
+//    }];
+//    [alertController addAction:action];
+//    
+//    [alertController addAction:({
+//        UIAlertAction *action = [UIAlertAction actionWithTitle:@"从手机相册中获取" style:UIAlertActionStyleDefault  handler:^(UIAlertAction *action) {
+//            NSLog(@"从手机相册中获取");
+//            [self localPhoto];
+//        }];
+//        action;
+//    })];
+//    
+//    [alertController addAction:({
+//        UIAlertAction *action = [UIAlertAction actionWithTitle:@"打开照相机" style:UIAlertActionStyleDefault  handler:^(UIAlertAction *action) {
+//            NSLog(@"打开照相机");
+//            [self takePhoto];
+//        }];
+//        action;
+//    })];
+//    
+//    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 //开始拍照
@@ -1083,6 +1093,9 @@ static CGFloat const FixRatio = 4/3.0;
     picker.delegate = self;
     //设置选择后的图片可被编辑
     picker.allowsEditing = YES;
+    
+    picker.edgesForExtendedLayout = UIRectEdgeNone;
+    
     [self presentViewController:picker animated:YES completion:nil];
 }
 
@@ -1128,8 +1141,15 @@ static CGFloat const FixRatio = 4/3.0;
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
-    NSLog(@"您取消了选择图片");
     [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if ([navigationController isKindOfClass:[UIImagePickerController class]]) {
+        viewController.navigationController.navigationBar.translucent = NO;
+        viewController.edgesForExtendedLayout = UIRectEdgeNone;
+    }
 }
 
 //pragma mark - 上传图片

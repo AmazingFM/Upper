@@ -228,6 +228,7 @@
 		3AAF86391D6C193700248A45 /* YMImageLoadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAF86381D6C193700248A45 /* YMImageLoadView.m */; };
 		3ACF2AF51D6AEDD30083E04E /* RecommendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACF2AF41D6AEDD30083E04E /* RecommendController.m */; };
 		3AFCCDBD1D5C09BC0003F6F3 /* NewLaunchActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */; };
+		85F368101E4A144000AE3006 /* UPDropDownMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 85F3680F1E4A144000AE3006 /* UPDropDownMenu.m */; };
 		EC3C18011CECB16D00223D6B /* UPGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B21CECB16D00223D6B /* UPGlobals.m */; };
 		EC3C18021CECB16D00223D6B /* UPTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B41CECB16D00223D6B /* UPTheme.m */; };
 		EC3C18031CECB16D00223D6B /* XWBaseMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B61CECB16D00223D6B /* XWBaseMethod.m */; };
@@ -672,6 +673,8 @@
 		3ACF2AF41D6AEDD30083E04E /* RecommendController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecommendController.m; sourceTree = "<group>"; };
 		3AFCCDBB1D5C09BC0003F6F3 /* NewLaunchActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewLaunchActivityController.h; sourceTree = "<group>"; };
 		3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewLaunchActivityController.m; sourceTree = "<group>"; };
+		85F3680E1E4A144000AE3006 /* UPDropDownMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPDropDownMenu.h; sourceTree = "<group>"; };
+		85F3680F1E4A144000AE3006 /* UPDropDownMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPDropDownMenu.m; sourceTree = "<group>"; };
 		EC3C16AF1CECB16D00223D6B /* Info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Info.h; sourceTree = "<group>"; };
 		EC3C16B11CECB16D00223D6B /* UPGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPGlobals.h; sourceTree = "<group>"; };
 		EC3C16B21CECB16D00223D6B /* UPGlobals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPGlobals.m; sourceTree = "<group>"; };
@@ -1679,6 +1682,8 @@
 				3A2939921D2F80F6005CB3F3 /* UPTextView.m */,
 				3A0B60E41DEAC262009FCC10 /* MultiTables.h */,
 				3A0B60E51DEAC262009FCC10 /* MultiTables.m */,
+				85F3680E1E4A144000AE3006 /* UPDropDownMenu.h */,
+				85F3680F1E4A144000AE3006 /* UPDropDownMenu.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2114,6 +2119,7 @@
 				2CDAD64D1D0EEC4000C260F4 /* MJRefreshFooter.m in Sources */,
 				2CC645341D040B8200A07408 /* UIBarButtonItem+Badge.m in Sources */,
 				2CDAD64B1D0EEC4000C260F4 /* MJRefreshBackFooter.m in Sources */,
+				85F368101E4A144000AE3006 /* UPDropDownMenu.m in Sources */,
 				2CDAD6481D0EEC4000C260F4 /* NSObject+MJProperty.m in Sources */,
 				2C38F9621D1FD483002CF240 /* UPMyAnticipateViewController.m in Sources */,
 				2C9F755E1D5B855C006FEDF9 /* DrawSomething.m in Sources */,

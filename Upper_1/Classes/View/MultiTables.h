@@ -10,8 +10,10 @@
 
 @interface TableContents : NSObject
 
+@property (nonatomic) int type;//0普通菜单， 1-二级菜单
 
-
+@property (nonatomic, retain) NSMutableArray *firstArr;
+@property (nonatomic, retain) NSMutableArray *secondArr;
 
 @end
 
