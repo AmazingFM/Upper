@@ -11,7 +11,10 @@
 #import "UPActivityAssistantController.h"
 #import "UpActView.h"
 #import "Info.h"
+
 #import "XWTopMenu.h"
+#import "JSDropDownMenu.h"
+
 #import "XWHttpTool.h"
 #import "YMImageButton.h"
 
@@ -41,12 +44,20 @@
 
 static int kMsgCount = 0;
 
-@interface MainController ()<UIGestureRecognizerDelegate,XWTopMenuDelegate, UITableViewDelegate, UITableViewDataSource,UPItemButtonDelegate>
+@interface MainController ()<UIGestureRecognizerDelegate,XWTopMenuDelegate, UITableViewDelegate, UITableViewDataSource,UPItemButtonDelegate, JSDropDownMenuDataSource, JSDropDownMenuDelegate>
 {
+    NSMutableArray *_data1;
+    NSMutableArray *_data2;
+    NSMutableArray *_data3;
+    
+    NSInteger _currentData1Index;
+    NSInteger _currentData2Index;
+    NSInteger _currentData3Index;
+
     MJRefreshComponent *myRefreshView;
     int pageNum;
     BOOL lastPage;
-    NoticeBoard *noticeBoard;
+//    NoticeBoard *noticeBoard;
     
     BOOL isLoaded;
     
@@ -73,12 +84,12 @@ static int kMsgCount = 0;
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = backItem;
     
-    messageItem = [UIBarButtonItem itemWithRightIcon:@"" highIcon:nil target:self action:@selector(jumpToMessage)];
-    messageItem.badgeValue = kMsgCount==0?@"":[NSString stringWithFormat:@"%d", kMsgCount];
-    messageItem.badgeBGColor = [UIColor redColor];
-    messageItem.badgeOriginX=25;
-    messageItem.badgeOriginY=5;
-    self.navigationItem.rightBarButtonItem=messageItem;
+//    messageItem = [UIBarButtonItem itemWithRightIcon:@"" highIcon:nil target:self action:@selector(jumpToMessage)];
+//    messageItem.badgeValue = kMsgCount==0?@"":[NSString stringWithFormat:@"%d", kMsgCount];
+//    messageItem.badgeBGColor = [UIColor redColor];
+//    messageItem.badgeOriginX=25;
+//    messageItem.badgeOriginY=5;
+//    self.navigationItem.rightBarButtonItem=messageItem;
     
     UIButton *titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [titleButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -91,14 +102,28 @@ static int kMsgCount = 0;
     isLoaded = NO;
     lastPage = NO;
     
-    noticeBoard = [[NoticeBoard alloc] initWithFrame:CGRectMake(LeftRightPadding,FirstLabelHeight, ScreenWidth-LeftRightPadding*2, 17)];
-    [noticeBoard setNoticeMessage:@[@"Yeoman Zhang发起了一个活动",@"总冠军狂喜之夜",@"帅哥、美女high翻天"]];
-    [self.view addSubview:noticeBoard];
+//    noticeBoard = [[NoticeBoard alloc] initWithFrame:CGRectMake(LeftRightPadding,FirstLabelHeight, ScreenWidth-LeftRightPadding*2, 17)];
+//    [noticeBoard setNoticeMessage:@[@"Yeoman Zhang发起了一个活动",@"总冠军狂喜之夜",@"帅哥、美女high翻天"]];
+//    [self.view addSubview:noticeBoard];
     
-    [self addSelectMenu];
+//    [self addSelectMenu];
     
     [self.view addSubview:self.mainTable];
-    [self.view addSubview:self.topMenu];
+//    [self.view addSubview:self.topMenu];
+    NSArray *food = @[@"全部美食", @"火锅", @"川菜", @"西餐", @"自助餐"];
+    NSArray *travel = @[@"全部旅游", @"周边游", @"景点门票", @"国内游", @"境外游"];
+    
+    _data1 = [NSMutableArray arrayWithObjects:@{@"title":@"美食", @"data":food}, @{@"title":@"旅游", @"data":travel}, nil];
+    _data2 = [NSMutableArray arrayWithObjects:@"智能排序", @"离我最近", @"评价最高", @"最新发布", @"人气最高", @"价格最低", @"价格最高", nil];
+    _data3 = [NSMutableArray arrayWithObjects:@"不限人数", @"单人餐", @"双人餐", @"3~4人餐", nil];
+    
+    JSDropDownMenu *menu = [[JSDropDownMenu alloc] initWithOrigin:CGPointMake(0, FirstLabelHeight) andHeight:45];
+    menu.indicatorColor = [UIColor colorWithRed:175.0f/255.0f green:175.0f/255.0f blue:175.0f/255.0f alpha:1.0];
+    menu.separatorColor = [UIColor colorWithRed:210.0f/255.0f green:210.0f/255.0f blue:210.0f/255.0f alpha:1.0];
+    menu.textColor = [UIColor colorWithRed:83.f/255.0f green:83.f/255.0f blue:83.f/255.0f alpha:1.0f];
+    menu.dataSource = self;
+    menu.delegate = self;
+    [self.view addSubview:menu];
     
     [self viewWillAppear:YES];
 }
@@ -154,7 +179,7 @@ static int kMsgCount = 0;
 {
     [super viewWillAppear:animated];
     
-    [noticeBoard startAnimate];
+//    [noticeBoard startAnimate];
     
     if (![UPDataManager shared].isLogin) {
 //                [self showLogin];
@@ -170,13 +195,13 @@ static int kMsgCount = 0;
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [noticeBoard stopAnimate];
+//    [noticeBoard stopAnimate];
 }
 
 - (UITableView *)mainTable
 {
     if (!_mainTable) {
-        CGRect bounds = CGRectMake(0, _topMenu.origin.y+_topMenu.height, ScreenWidth, ScreenHeight-_topMenu.origin.y-_topMenu.height);
+        CGRect bounds = CGRectMake(0, FirstLabelHeight+45, ScreenWidth, ScreenHeight-FirstLabelHeight-45);
         _mainTable = [[UITableView alloc] initWithFrame:bounds style:UITableViewStylePlain];
         _mainTable.separatorColor = [UIColor grayColor];
         _mainTable.delegate = self;
@@ -321,33 +346,33 @@ static int kMsgCount = 0;
     }];
 }
 
--(void)addSelectMenu
-{
-    
-    
-    NSArray *menuTitleArray = [[NSArray alloc]initWithObjects:@"类型", @"时间", @"区域", nil];
-    NSArray *firstArr = [NSArray arrayWithObjects:@"不限", @"派对、酒会", @"桌游、座谈、棋牌", @"KTV", @"户外烧烤", @"运动", @"郊游、徒步", nil];
-    NSArray *twoArr = [NSArray arrayWithObjects:@"不限", @"最近1天", @"最近2天", @"最近1周", @"最近1月", nil];
-    NSArray *threeArr = [NSArray arrayWithObjects:@"不限", @"上海市", @"北京市", @"广州市", @"深圳市", nil];
-    
-    NSArray *dataArr = [NSArray arrayWithObjects:firstArr,twoArr,threeArr,nil];
-    
-    
-    XWTopMenu *topMenu=[[XWTopMenu alloc]init];
-    topMenu.delegate = self;
-    
-    CGFloat menuH=selectMenuH;
-    CGFloat menuW=ScreenWidth;
-    CGFloat menuY=noticeBoard.origin.y+noticeBoard.height+10;
-    CGFloat menuX=(ScreenWidth-menuW)*0.5;
-    
-    topMenu.frame=CGRectMake(menuX, menuY, menuW, menuH);
-    topMenu.layer.cornerRadius = 5.0f;
-    //    [self.view addSubview:topMenu];
-    self.topMenu=topMenu;
-    
-    [topMenu createMenuTitleArray:menuTitleArray dataSource:dataArr];
-}
+//-(void)addSelectMenu
+//{
+//    
+//    
+//    NSArray *menuTitleArray = [[NSArray alloc]initWithObjects:@"类型", @"时间", @"区域", nil];
+//    NSArray *firstArr = [NSArray arrayWithObjects:@"不限", @"派对、酒会", @"桌游、座谈、棋牌", @"KTV", @"户外烧烤", @"运动", @"郊游、徒步", nil];
+//    NSArray *twoArr = [NSArray arrayWithObjects:@"不限", @"最近1天", @"最近2天", @"最近1周", @"最近1月", nil];
+//    NSArray *threeArr = [NSArray arrayWithObjects:@"不限", @"上海市", @"北京市", @"广州市", @"深圳市", nil];
+//    
+//    NSArray *dataArr = [NSArray arrayWithObjects:firstArr,twoArr,threeArr,nil];
+//    
+//    
+//    XWTopMenu *topMenu=[[XWTopMenu alloc]init];
+//    topMenu.delegate = self;
+//    
+//    CGFloat menuH=selectMenuH;
+//    CGFloat menuW=ScreenWidth;
+//    CGFloat menuY=noticeBoard.origin.y+noticeBoard.height+10;
+//    CGFloat menuX=(ScreenWidth-menuW)*0.5;
+//    
+//    topMenu.frame=CGRectMake(menuX, menuY, menuW, menuH);
+//    topMenu.layer.cornerRadius = 5.0f;
+//    //    [self.view addSubview:topMenu];
+//    self.topMenu=topMenu;
+//    
+//    [topMenu createMenuTitleArray:menuTitleArray dataSource:dataArr];
+//}
 
 - (void)handleTap:(UITapGestureRecognizer *)recognizer
 {
@@ -437,4 +462,117 @@ static int kMsgCount = 0;
     }
     return NO;
 }
+
+#pragma mark JSDropDownMenuDatasource, JSDropDownMenuDelegate
+
+- (NSInteger)menu:(JSDropDownMenu *)menu numberOfRowsInColumn:(NSInteger)column leftOrRight:(NSInteger)leftOrRight leftRow:(NSInteger)leftRow
+{
+    if (column==0) {
+        if (leftOrRight==0) {
+            return _data1.count;
+        } else {
+            NSDictionary *menuDict = [_data1 objectAtIndex:leftRow];
+            return [[menuDict objectForKey:@"data"] count];
+        }
+    } else if (column==1) {
+        return _data2.count;
+    } else if (column==2) {
+        return _data3.count;
+    }
+    return 0;
+}
+
+- (NSString *)menu:(JSDropDownMenu *)menu titleForRowAtIndexPath:(JSIndexPath *)indexPath
+{
+    if (indexPath.column==0) {
+        if (indexPath.leftOrRight==0) {
+            NSDictionary *menuDic = [_data1 objectAtIndex:indexPath.row];
+            return [menuDic objectForKey:@"title"];
+        } else {
+            NSInteger leftRow = indexPath.leftRow;
+            NSDictionary *menuDic = [_data1 objectAtIndex:leftRow];
+            return [[menuDic objectForKey:@"data"] objectAtIndex:indexPath.row];
+        }
+    } else if (indexPath.column==1) {
+        return _data2[indexPath.row];
+    } else {
+        return _data3[indexPath.row];
+    }
+}
+
+- (NSString *)menu:(JSDropDownMenu *)menu titleForColumn:(NSInteger)column
+{
+    switch (column) {
+        case 0:
+            return [[_data1[0] objectForKey:@"data"] objectAtIndex:0];
+        case 1:
+            return _data2[0];
+        case 2:
+            return _data3[0];
+        default:
+            return nil;
+    }
+}
+/**
+ * 表视图显示时，左边表显示比例
+ */
+- (CGFloat)widthRatioOfLeftColumn:(NSInteger)column
+{
+    if (column==0) {
+        return 0.3;
+    }
+    return 1;
+}
+
+/**
+ * 表视图显示时，是否需要两个表显示
+ */
+- (BOOL)haveRightTableViewInColumn:(NSInteger)column
+{
+    if (column==0) {
+        return YES;
+    }
+    
+    return NO;
+}
+
+/**
+ * 返回当前菜单左边表选中行
+ */
+- (NSInteger)currentLeftSelectedRow:(NSInteger)column
+{
+    if (column==0) {
+        return _currentData1Index;
+    }
+    
+    if (column==1) {
+        return _currentData2Index;
+    }
+    
+    return 0;
+}
+
+//default value is 1
+- (NSInteger)numberOfColumnsInMenu:(JSDropDownMenu *)menu
+{
+    return 3;
+}
+
+/**
+ * 是否需要显示为UICollectionView 默认为否
+ */
+- (BOOL)displayByCollectionViewInColumn:(NSInteger)column
+{
+    if (column==2) {
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (void)menu:(JSDropDownMenu *)menu didSelectRowAtIndexPath:(JSIndexPath *)indexPath
+{
+    
+}
+
 @end

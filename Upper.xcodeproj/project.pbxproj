@@ -131,7 +131,6 @@
 		3A05508E1DB5EB99009EA918 /* UPMyFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A05508D1DB5EB99009EA918 /* UPMyFriendsViewController.m */; };
 		3A0550921DB602EC009EA918 /* UPAddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0550911DB602EC009EA918 /* UPAddFriendViewController.m */; };
 		3A08464F1D619D6800170C64 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A08464E1D619D6800170C64 /* libsqlite3.0.tbd */; };
-		3A0B60E61DEAC262009FCC10 /* MultiTables.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0B60E51DEAC262009FCC10 /* MultiTables.m */; };
 		3A0B60EF1DF5B92E009FCC10 /* YMNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0B60EE1DF5B92E009FCC10 /* YMNetwork.m */; };
 		3A0B60F51DF7A700009FCC10 /* YMNetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0B60F41DF7A700009FCC10 /* YMNetManager.m */; };
 		3A2939901D2F798B005CB3F3 /* UPCommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A29398F1D2F798B005CB3F3 /* UPCommentController.m */; };
@@ -228,7 +227,8 @@
 		3AAF86391D6C193700248A45 /* YMImageLoadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAF86381D6C193700248A45 /* YMImageLoadView.m */; };
 		3ACF2AF51D6AEDD30083E04E /* RecommendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACF2AF41D6AEDD30083E04E /* RecommendController.m */; };
 		3AFCCDBD1D5C09BC0003F6F3 /* NewLaunchActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */; };
-		85F368101E4A144000AE3006 /* UPDropDownMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 85F3680F1E4A144000AE3006 /* UPDropDownMenu.m */; };
+		857DA6741E4CA2C400250605 /* ico_make.png in Resources */ = {isa = PBXBuildFile; fileRef = 857DA6711E4CA2C400250605 /* ico_make.png */; };
+		857DA6751E4CA2C400250605 /* JSDropDownMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 857DA6731E4CA2C400250605 /* JSDropDownMenu.m */; };
 		EC3C18011CECB16D00223D6B /* UPGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B21CECB16D00223D6B /* UPGlobals.m */; };
 		EC3C18021CECB16D00223D6B /* UPTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B41CECB16D00223D6B /* UPTheme.m */; };
 		EC3C18031CECB16D00223D6B /* XWBaseMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B61CECB16D00223D6B /* XWBaseMethod.m */; };
@@ -552,8 +552,6 @@
 		3A0550901DB602EC009EA918 /* UPAddFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPAddFriendViewController.h; sourceTree = "<group>"; };
 		3A0550911DB602EC009EA918 /* UPAddFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPAddFriendViewController.m; sourceTree = "<group>"; };
 		3A08464E1D619D6800170C64 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
-		3A0B60E41DEAC262009FCC10 /* MultiTables.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiTables.h; sourceTree = "<group>"; };
-		3A0B60E51DEAC262009FCC10 /* MultiTables.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiTables.m; sourceTree = "<group>"; };
 		3A0B60ED1DF5B92E009FCC10 /* YMNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMNetwork.h; sourceTree = "<group>"; };
 		3A0B60EE1DF5B92E009FCC10 /* YMNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMNetwork.m; sourceTree = "<group>"; };
 		3A0B60F31DF7A700009FCC10 /* YMNetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMNetManager.h; sourceTree = "<group>"; };
@@ -673,8 +671,9 @@
 		3ACF2AF41D6AEDD30083E04E /* RecommendController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecommendController.m; sourceTree = "<group>"; };
 		3AFCCDBB1D5C09BC0003F6F3 /* NewLaunchActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewLaunchActivityController.h; sourceTree = "<group>"; };
 		3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewLaunchActivityController.m; sourceTree = "<group>"; };
-		85F3680E1E4A144000AE3006 /* UPDropDownMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPDropDownMenu.h; sourceTree = "<group>"; };
-		85F3680F1E4A144000AE3006 /* UPDropDownMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPDropDownMenu.m; sourceTree = "<group>"; };
+		857DA6711E4CA2C400250605 /* ico_make.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ico_make.png; sourceTree = "<group>"; };
+		857DA6721E4CA2C400250605 /* JSDropDownMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSDropDownMenu.h; sourceTree = "<group>"; };
+		857DA6731E4CA2C400250605 /* JSDropDownMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSDropDownMenu.m; sourceTree = "<group>"; };
 		EC3C16AF1CECB16D00223D6B /* Info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Info.h; sourceTree = "<group>"; };
 		EC3C16B11CECB16D00223D6B /* UPGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPGlobals.h; sourceTree = "<group>"; };
 		EC3C16B21CECB16D00223D6B /* UPGlobals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPGlobals.m; sourceTree = "<group>"; };
@@ -1460,6 +1459,16 @@
 			name = asistant;
 			sourceTree = "<group>";
 		};
+		857DA6701E4CA2C400250605 /* JSDropDownMenu */ = {
+			isa = PBXGroup;
+			children = (
+				857DA6711E4CA2C400250605 /* ico_make.png */,
+				857DA6721E4CA2C400250605 /* JSDropDownMenu.h */,
+				857DA6731E4CA2C400250605 /* JSDropDownMenu.m */,
+			);
+			path = JSDropDownMenu;
+			sourceTree = "<group>";
+		};
 		EC3C16AD1CECB16D00223D6B /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -1614,6 +1623,7 @@
 		EC3C16FD1CECB16D00223D6B /* thirdparty */ = {
 			isa = PBXGroup;
 			children = (
+				857DA6701E4CA2C400250605 /* JSDropDownMenu */,
 				3A5368241D54791E00F36FBC /* YRSideViewController.h */,
 				3A5368251D54791E00F36FBC /* YRSideViewController.m */,
 				2CDAD67E1D0EF42000C260F4 /* MessageLib */,
@@ -1680,10 +1690,6 @@
 				2C38F9671D23FEFD002CF240 /* ZouMaDengView.m */,
 				3A2939911D2F80F6005CB3F3 /* UPTextView.h */,
 				3A2939921D2F80F6005CB3F3 /* UPTextView.m */,
-				3A0B60E41DEAC262009FCC10 /* MultiTables.h */,
-				3A0B60E51DEAC262009FCC10 /* MultiTables.m */,
-				85F3680E1E4A144000AE3006 /* UPDropDownMenu.h */,
-				85F3680F1E4A144000AE3006 /* UPDropDownMenu.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1845,6 +1851,7 @@
 				3A71CBCF1E26267700EBE0A2 /* top_navigation_lefticon@2x.png in Resources */,
 				3A71CB971E26267700EBE0A2 /* chat_animation2.png in Resources */,
 				3A71CBCC1E26267700EBE0A2 /* sidebar_ad.png in Resources */,
+				857DA6741E4CA2C400250605 /* ico_make.png in Resources */,
 				3A71CB8E1E26267700EBE0A2 /* arrow.png in Resources */,
 				3A71CB951E26267700EBE0A2 /* camera.png in Resources */,
 				3A71CBC71E26267700EBE0A2 /* search_btn_line@2x.png in Resources */,
@@ -2074,7 +2081,6 @@
 				2CDAD6C51D0EF42000C260F4 /* UIProgressView+AFNetworking.m in Sources */,
 				2CDAD6461D0EEC4000C260F4 /* NSObject+MJCoding.m in Sources */,
 				3A837D4D1DDEDC9200A9A0BB /* UPActAsistDetailController.m in Sources */,
-				3A0B60E61DEAC262009FCC10 /* MultiTables.m in Sources */,
 				EC3C18921CECB16D00223D6B /* UpRegister1.m in Sources */,
 				EC3C181D1CECB16D00223D6B /* ActivityItem.m in Sources */,
 				3A837D211DD883B500A9A0BB /* BottomBarViewController.m in Sources */,
@@ -2119,13 +2125,13 @@
 				2CDAD64D1D0EEC4000C260F4 /* MJRefreshFooter.m in Sources */,
 				2CC645341D040B8200A07408 /* UIBarButtonItem+Badge.m in Sources */,
 				2CDAD64B1D0EEC4000C260F4 /* MJRefreshBackFooter.m in Sources */,
-				85F368101E4A144000AE3006 /* UPDropDownMenu.m in Sources */,
 				2CDAD6481D0EEC4000C260F4 /* NSObject+MJProperty.m in Sources */,
 				2C38F9621D1FD483002CF240 /* UPMyAnticipateViewController.m in Sources */,
 				2C9F755E1D5B855C006FEDF9 /* DrawSomething.m in Sources */,
 				EC3C180C1CECB16D00223D6B /* MainController.m in Sources */,
 				EC3C180E1CECB16D00223D6B /* PersonalCenterController.m in Sources */,
 				2CDAD4FE1D0ED8A900C260F4 /* UUInputFunctionView.m in Sources */,
+				857DA6751E4CA2C400250605 /* JSDropDownMenu.m in Sources */,
 				3A5368261D54791E00F36FBC /* YRSideViewController.m in Sources */,
 				3A90746D1DD05E59000B2050 /* UPActTypeController.m in Sources */,
 				3A9074701DD07ECF000B2050 /* UPGoShareController.m in Sources */,
