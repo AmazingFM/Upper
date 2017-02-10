@@ -29,7 +29,8 @@
 @required
 - (NSInteger)menu:(JSDropDownMenu *)menu numberOfRowsInColumn:(NSInteger)column leftOrRight:(NSInteger)leftOrRight leftRow:(NSInteger)leftRow;
 - (NSString *)menu:(JSDropDownMenu *)menu titleForRowAtIndexPath:(JSIndexPath *)indexPath;
-- (NSString *)menu:(JSDropDownMenu *)menu titleForColumn:(NSInteger)column;
+- (NSString *)menu:(JSDropDownMenu *)menu titleForColumn:(NSInteger)column atIndexPath:(JSIndexPath *)indexPath
+;
 /**
  * 表视图显示时，左边表显示比例
  */

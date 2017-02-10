@@ -37,7 +37,7 @@
 #import "UPActivityCellItem.h"
 #import "ZouMaDengView.h"
 #import "UIBarButtonItem+Badge.h"
-
+#import "UPConfig.h"
 #import "YMNetwork.h"
 #define kActivityPageSize 20
 #define kMainButtonTag 1000
@@ -57,7 +57,6 @@ static int kMsgCount = 0;
     MJRefreshComponent *myRefreshView;
     int pageNum;
     BOOL lastPage;
-//    NoticeBoard *noticeBoard;
     
     BOOL isLoaded;
     
@@ -67,8 +66,6 @@ static int kMsgCount = 0;
 @property (nonatomic, retain) XWTopMenu *topMenu;
 @property (nonatomic, retain) UITableView *mainTable;
 @property (nonatomic, retain) NSMutableArray<UPActivityCellItem *> *actArray;
-
-//@property (nonatomic, retain) NSMutableArray *listArray;
 
 - (void)leftClick;
 - (void)makeAction:(id)sender;
@@ -102,20 +99,34 @@ static int kMsgCount = 0;
     isLoaded = NO;
     lastPage = NO;
     
-//    noticeBoard = [[NoticeBoard alloc] initWithFrame:CGRectMake(LeftRightPadding,FirstLabelHeight, ScreenWidth-LeftRightPadding*2, 17)];
-//    [noticeBoard setNoticeMessage:@[@"Yeoman Zhang发起了一个活动",@"总冠军狂喜之夜",@"帅哥、美女high翻天"]];
-//    [self.view addSubview:noticeBoard];
-    
-//    [self addSelectMenu];
-    
     [self.view addSubview:self.mainTable];
-//    [self.view addSubview:self.topMenu];
-    NSArray *food = @[@"全部美食", @"火锅", @"川菜", @"西餐", @"自助餐"];
-    NSArray *travel = @[@"全部旅游", @"周边游", @"景点门票", @"国内游", @"境外游"];
     
-    _data1 = [NSMutableArray arrayWithObjects:@{@"title":@"美食", @"data":food}, @{@"title":@"旅游", @"data":travel}, nil];
-    _data2 = [NSMutableArray arrayWithObjects:@"智能排序", @"离我最近", @"评价最高", @"最新发布", @"人气最高", @"价格最低", @"价格最高", nil];
-    _data3 = [NSMutableArray arrayWithObjects:@"不限人数", @"单人餐", @"双人餐", @"3~4人餐", nil];
+    _data1 = [NSMutableArray new];
+    NSDictionary *nolimitOne = @{@"title":@"不限", @"data":@[@"不限"]};
+    [_data1 addObject:nolimitOne];
+    for (ActivityCategory *actCategory in [UPConfig sharedInstance].activityCategoryArr) {
+        NSMutableArray *actTypeNames = [NSMutableArray new];
+        [actCategory.activityTypeArr enumerateObjectsUsingBlock:^(ActivityType * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [actTypeNames addObject:obj.name];
+        }];
+        NSDictionary *menuOne = @{@"title":actCategory.name, @"data":actTypeNames};
+        [_data1 addObject:menuOne];
+    }
+
+    _data2 = [NSMutableArray new];
+    nolimitOne = @{@"title":@"不限", @"data":@[@"不限"]};
+    [_data2 addObject:nolimitOne];
+    for (ActivityCategory *actCategory in [UPConfig sharedInstance].activityCategoryArr) {
+        NSMutableArray *actTypeNames = [NSMutableArray new];
+        [actCategory.activityTypeArr enumerateObjectsUsingBlock:^(ActivityType * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [actTypeNames addObject:obj.name];
+        }];
+        NSDictionary *menuOne = @{@"title":actCategory.name, @"data":actTypeNames};
+        [_data2 addObject:menuOne];
+    }
+    
+    _data3 = [NSMutableArray new];
+    _data3 = [NSMutableArray arrayWithObjects:@"不限时间", @"三天内", @"一周内", @"一个月内", nil];
     
     JSDropDownMenu *menu = [[JSDropDownMenu alloc] initWithOrigin:CGPointMake(0, FirstLabelHeight) andHeight:45];
     menu.indicatorColor = [UIColor colorWithRed:175.0f/255.0f green:175.0f/255.0f blue:175.0f/255.0f alpha:1.0];
@@ -447,12 +458,19 @@ static int kMsgCount = 0;
             return [[menuDict objectForKey:@"data"] count];
         }
     } else if (column==1) {
-        return _data2.count;
+        if (leftOrRight==0) {
+            return _data2.count;
+        } else {
+            NSDictionary *menuDict = [_data2 objectAtIndex:leftRow];
+            return [[menuDict objectForKey:@"data"] count];
+        }
     } else if (column==2) {
         return _data3.count;
     }
     return 0;
 }
+
+
 
 - (NSString *)menu:(JSDropDownMenu *)menu titleForRowAtIndexPath:(JSIndexPath *)indexPath
 {
@@ -466,31 +484,59 @@ static int kMsgCount = 0;
             return [[menuDic objectForKey:@"data"] objectAtIndex:indexPath.row];
         }
     } else if (indexPath.column==1) {
-        return _data2[indexPath.row];
+        if (indexPath.leftOrRight==0) {
+            NSDictionary *menuDic = [_data2 objectAtIndex:indexPath.row];
+            return [menuDic objectForKey:@"title"];
+        } else {
+            NSInteger leftRow = indexPath.leftRow;
+            NSDictionary *menuDic = [_data2 objectAtIndex:leftRow];
+            return [[menuDic objectForKey:@"data"] objectAtIndex:indexPath.row];
+        }
     } else {
         return _data3[indexPath.row];
     }
 }
 
-- (NSString *)menu:(JSDropDownMenu *)menu titleForColumn:(NSInteger)column
+- (NSString *)menu:(JSDropDownMenu *)menu titleForColumn:(NSInteger)column atIndexPath:(JSIndexPath *)indexPath
 {
-    switch (column) {
-        case 0:
-            return [[_data1[0] objectForKey:@"data"] objectAtIndex:0];
-        case 1:
-            return _data2[0];
-        case 2:
-            return _data3[0];
-        default:
-            return nil;
-    }
-}
+    if (indexPath.column==0) {
+        if (indexPath.leftOrRight==0) {
+            NSDictionary *menuDic = [_data1 objectAtIndex:indexPath.row];
+            return [menuDic objectForKey:@"title"];
+        } else {
+            if (indexPath.leftRow==0 && indexPath.row==0) {
+                return @"城市";
+            }
+            NSInteger leftRow = indexPath.leftRow;
+            NSDictionary *menuDic = [_data1 objectAtIndex:leftRow];
+            return [[menuDic objectForKey:@"data"] objectAtIndex:indexPath.row];
+        }
+    } else if (indexPath.column==1) {
+        if (indexPath.leftOrRight==0) {
+            NSDictionary *menuDic = [_data2 objectAtIndex:indexPath.row];
+            return [menuDic objectForKey:@"title"];
+        } else {
+            if (indexPath.leftRow==0 && indexPath.row==0) {
+                return @"活动类型";
+            }
+
+            NSInteger leftRow = indexPath.leftRow;
+            NSDictionary *menuDic = [_data2 objectAtIndex:leftRow];
+            return [[menuDic objectForKey:@"data"] objectAtIndex:indexPath.row];
+        }
+    } else {
+        if (indexPath.row==0){
+            return @"时间";
+        }
+        
+        return _data3[indexPath.row];
+    }}
 /**
  * 表视图显示时，左边表显示比例
  */
 - (CGFloat)widthRatioOfLeftColumn:(NSInteger)column
 {
-    if (column==0) {
+    if (column==0 || column==1) {
         return 0.3;
     }
     return 1;
@@ -501,7 +547,7 @@ static int kMsgCount = 0;
  */
 - (BOOL)haveRightTableViewInColumn:(NSInteger)column
 {
-    if (column==0) {
+    if (column==0 ||column==1) {
         return YES;
     }
     
