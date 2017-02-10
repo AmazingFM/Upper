@@ -274,7 +274,7 @@ static int kMsgCount = 0;
     [params setObject:@""forKey:@"creator_id"];
     [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
-    [[YMHttpNetwork sharedNetwork] GET:kUPBaseURL parameters:params success:^(id json) {
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id json) {
         NSDictionary *dict = (NSDictionary *)json;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
@@ -345,34 +345,6 @@ static int kMsgCount = 0;
         
     }];
 }
-
-//-(void)addSelectMenu
-//{
-//    
-//    
-//    NSArray *menuTitleArray = [[NSArray alloc]initWithObjects:@"类型", @"时间", @"区域", nil];
-//    NSArray *firstArr = [NSArray arrayWithObjects:@"不限", @"派对、酒会", @"桌游、座谈、棋牌", @"KTV", @"户外烧烤", @"运动", @"郊游、徒步", nil];
-//    NSArray *twoArr = [NSArray arrayWithObjects:@"不限", @"最近1天", @"最近2天", @"最近1周", @"最近1月", nil];
-//    NSArray *threeArr = [NSArray arrayWithObjects:@"不限", @"上海市", @"北京市", @"广州市", @"深圳市", nil];
-//    
-//    NSArray *dataArr = [NSArray arrayWithObjects:firstArr,twoArr,threeArr,nil];
-//    
-//    
-//    XWTopMenu *topMenu=[[XWTopMenu alloc]init];
-//    topMenu.delegate = self;
-//    
-//    CGFloat menuH=selectMenuH;
-//    CGFloat menuW=ScreenWidth;
-//    CGFloat menuY=noticeBoard.origin.y+noticeBoard.height+10;
-//    CGFloat menuX=(ScreenWidth-menuW)*0.5;
-//    
-//    topMenu.frame=CGRectMake(menuX, menuY, menuW, menuH);
-//    topMenu.layer.cornerRadius = 5.0f;
-//    //    [self.view addSubview:topMenu];
-//    self.topMenu=topMenu;
-//    
-//    [topMenu createMenuTitleArray:menuTitleArray dataSource:dataArr];
-//}
 
 - (void)handleTap:(UITapGestureRecognizer *)recognizer
 {

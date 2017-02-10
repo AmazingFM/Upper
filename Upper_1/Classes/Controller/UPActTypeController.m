@@ -17,9 +17,6 @@
 {
     UITableView *_mainTableView;
     
-    NSArray *titles;
-    NSMutableArray *subTitles;
-    
     NSMutableArray *foldArr;
 }
 
@@ -53,28 +50,8 @@
     
     [self.view addSubview:_mainTableView];
     
-    titles = @[@"聚会社交", @"体育运动", @"休闲娱乐", @"文化艺术", @"专业社交"];
-    subTitles = [NSMutableArray new];
-    for (int i=0; i<5; i++) {
-        [subTitles addObject:[NSMutableArray new]];
-    }
-    
-    [g_appDelegate.actTypeArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        ActTypeInfo *actInfo = (ActTypeInfo *)obj;
-        
-        unichar firstC = [actInfo.itemID characterAtIndex:0];
-        
-        if (firstC>='1' && firstC<='5') {
-            NSMutableArray *arr = subTitles[firstC-'1'];
-            [arr addObject:actInfo];
-        }
-        
-        *stop = NO;
-    }];
-    
-    
     foldArr = [NSMutableArray array];
-    for (int i = 0; i < [titles count]; i++){
+    for (int i = 0; i < [[UPConfig sharedInstance].activityCategoryArr count]; i++){
         [foldArr addObject:[NSNumber numberWithBool:i==0?NO:YES]];
     }
 }
@@ -107,6 +84,7 @@
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+    ActivityCategory *actCategory = [UPConfig sharedInstance].activityCategoryArr[section];
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0,0,ScreenWidth, kSectionHeight)];
     bgView.backgroundColor = [UIColor lightGrayColor];
     
@@ -115,7 +93,7 @@
     titleButton.frame = CGRectMake(5, 0, ScreenWidth-5, kSectionHeight);
     titleButton.backgroundColor = [UIColor clearColor];
     titleButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.f];
-    [titleButton setTitle:titles[section] forState:UIControlStateNormal];
+    [titleButton setTitle:actCategory.name forState:UIControlStateNormal];
     titleButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [titleButton addTarget:self action:@selector(sectionClick:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -126,7 +104,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     
-    return titles.count;
+    return [UPConfig sharedInstance].activityCategoryArr.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -135,8 +113,8 @@
     if ([foldState boolValue]) {
         return 0;
     } else {
-        NSArray *subArr = subTitles[section];
-        return subArr.count;
+        ActivityCategory *actCategory = [UPConfig sharedInstance].activityCategoryArr[section];
+        return actCategory.activityTypeArr.count;
     }
 }
 
@@ -159,27 +137,28 @@
         label.tag =1000;
         [cell addSubview:label];
     }
-    NSArray *subArr = subTitles[indexPath.section];
+    
+    ActivityCategory *actCategory = [UPConfig sharedInstance].activityCategoryArr[indexPath.section];
+    ActivityType *actType = actCategory.activityTypeArr[indexPath.row];
+    
     label.textColor = [UIColor lightGrayColor];
-    ActTypeInfo *actInfo = subArr[indexPath.row];
-       
-    label.text = actInfo.actTypeName;
+    label.text = actType.name;
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([self.delegate respondsToSelector:@selector(actionTypeDidSelect:)]) {
-        
-        NSArray *subArr = subTitles[indexPath.section];
-        [self.delegate actionTypeDidSelect:subArr[indexPath.row]];
+        ActivityCategory *actCategory = [UPConfig sharedInstance].activityCategoryArr[indexPath.section];
+        ActivityType *actType = actCategory.activityTypeArr[indexPath.row];
+        [self.delegate actionTypeDidSelect:actType];
     }
     [self dismiss];
 }
 
 - (void)sectionClick:(UIButton *)sender
 {
-    int section = sender.tag-100;
+    NSInteger section = sender.tag-100;
     NSNumber *foldState = [foldArr objectAtIndex:section];
     
     [foldArr replaceObjectAtIndex:section withObject:[NSNumber numberWithBool:![foldState boolValue]]];

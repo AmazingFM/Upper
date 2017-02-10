@@ -12,9 +12,6 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (nonatomic, retain) NSMutableArray *actTypeArr;
-@property (nonatomic, retain) NSMutableDictionary *actStatusDict;
-
 - (void)setRootViewController;
 - (void)setRootViewControllerWithMain;
 

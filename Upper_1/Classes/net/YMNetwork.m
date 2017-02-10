@@ -7,9 +7,27 @@
 //
 
 #import "YMNetwork.h"
-#import "Info.h"
+#import "UPConfig.h"
+
+#define kBaseURL @"http://api.qidianzhan.com.cn/AppServ/index.php"
+
+@interface YMNetwork()
+{
+    @public
+    UPConfig *config;
+}
+@end
 
 @implementation YMNetwork
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        config = [[UPConfig alloc] init];
+    }
+    return self;
+}
 
 @end
 
@@ -35,7 +53,7 @@
 {
     self = [super init];
     if (self) {
-        NSURL *url = [NSURL URLWithString:kUPBaseURL];
+        NSURL *url = [NSURL URLWithString:kBaseURL];
         NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
         //默认是AFHTTPRequestSerialier, AFJSONResponseSerializer
         AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:url sessionConfiguration:sessionConfig];
@@ -49,10 +67,17 @@
     return self;
 }
 
+- (NSDictionary *)addDescParams:(NSDictionary *)parameters
+{
+    return nil;
+}
+
 - (void)GET:(NSString *)URLString parameters:(id)parameters
                       success:(void (^)(id responseObject))success
                       failure:(void (^)(NSError *error))failure
 {
+    NSDictionary *paramsDic = [self addDescParams:parameters];
+    
     [self.sessionManager GET:URLString parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
         if (success) {
             success(responseObject);

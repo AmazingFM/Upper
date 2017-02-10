@@ -13,6 +13,7 @@
 #import "DrawSomething.h"
 #import "UPTheme.h"
 #import "MBProgressHUD+MJ.h"
+#import "UPConfig.h"
 
 @interface UPTimeLocationView()
 {
@@ -328,22 +329,12 @@
      9-活动取消：1-10日期间，发起人主动取消
      **/
     
-    NSArray *clothTypeArr = @[@"随性", @"西装领带", @"便装"];
+    NSString *actTypeID = itemData.activity_class;
+    ActivityType *activityType = [[UPConfig sharedInstance] getActivityTypeByID:actTypeID];
+    
+    NSString *actTypeTitle = activityType.name;
+    BOOL showFemale = activityType.femaleFlag;
 
-    int selectIndex;
-    selectIndex = [itemData.activity_class intValue];
-    
-    __block NSString *actTypeTitle;
-    __block BOOL showFemale = NO;
-    [g_appDelegate.actTypeArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        ActTypeInfo *actInfo = (ActTypeInfo *)obj;
-        if ([actInfo.itemID intValue]==selectIndex) {
-            actTypeTitle = actInfo.actTypeName;
-            showFemale = actInfo.femalFlag;
-            *stop = YES;
-        }
-    }];
-    
     if (showFemale) {
         _freeTips.hidden = NO;
     } else {
@@ -362,39 +353,41 @@
         _typeLab.center = CGPointMake(offsetx+size.width/2+kUPThemeBorder, offsety+perHeight/2);
     }
     
-    selectIndex = [itemData.clothes_need intValue];
-    selectIndex = 1;
-    if (selectIndex<clothTypeArr.count) {
-        _clothLab.text = clothTypeArr[selectIndex];
-        size = SizeWithFont(clothTypeArr[selectIndex], kUPThemeSmallFont);
+    NSString *clothID = itemData.clothes_need;
+    BaseType *baseType = [[UPConfig sharedInstance] getClothTypeByID:clothID];
+    
+    NSString *clothName = baseType.name;
+    if (clothName.length!=0) {
+        _clothLab.text = clothName;
+        size = SizeWithFont(clothName, kUPThemeSmallFont);
         
         float limitWidth = (ScreenWidth>320)?110:90;
         if (size.width>limitWidth) {
             size.width = limitWidth;
         }
-
+        
         _clothLab.size = CGSizeMake(size.width+10, size.height+4);;
         _clothLab.center = CGPointMake(offsetx+size.width/2+kUPThemeBorder+_typeLab.size.width+kUPThemeBorder, offsety+perHeight/2);
     }
     
     offsety += perHeight;
     
-    selectIndex = [itemData.activity_status intValue];
-    if (selectIndex<=9) {
-        ActStatusInfo *actStatusInfo = [g_appDelegate.actStatusDict objectForKey:(@(selectIndex).stringValue)];
-        
-        NSString *actStatusText = actStatusInfo.actStatusTitle;
-        if ([actStatusText isEqualToString:@"none"]) {
+    NSString *actStatusID = itemData.activity_status;
+    ActivityStatus *actStatus = [[UPConfig sharedInstance] getActivityStatusByID:actStatusID];
+    
+
+    if (actStatus) {
+        NSString *statusName = actStatus.name;
+        if ([statusName isEqualToString:@"none"]) {
             NSString *sexual = [UPDataManager shared].userInfo.sexual;
             if ([sexual intValue]==0) {
-                actStatusText = @"满员";
+                statusName = @"满员";
             } else {
-                actStatusText = @"火热募集中";
+                statusName = @"火热募集中";
             }
         }
-        _statusLab.text = actStatusInfo.actStatusTitle;
-        
-        size = SizeWithFont(actStatusInfo.actStatusTitle, kUPThemeMinFont);
+        _statusLab.text = statusName;
+        size = SizeWithFont(statusName, kUPThemeMinFont);
         _statusLab.size = CGSizeMake(size.width+10, size.height+4);;
         _statusLab.center = CGPointMake(offsetx+size.width/2+5, offsety+perHeight/2);
         
@@ -407,8 +400,10 @@
         
         CGSize size = SizeWithFont(@"回顾", kUPThemeMinFont);
         size.width += 10;
+        
+        
         if (_actCellItem.type==SourceTypeWoFaqi) {
-            switch (selectIndex) {
+            switch ([actStatusID intValue]) {
                 case 0:
                 case 1:
                 case 2:
@@ -472,7 +467,7 @@
              7-9			0,1			评价
              其它						无操作             */
             
-            switch (selectIndex) {
+            switch ([actStatusID intValue]) {
                     
                 case 0:
                 case 1:

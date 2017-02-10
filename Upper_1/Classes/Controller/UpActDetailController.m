@@ -20,6 +20,7 @@
 #import "UPActivityCell.h"
 #import "UPTools.h"
 #import "DrawSomething.h"
+#import "UPConfig.h"
 
 #define LabelHeight 17
 #define AlertTagEdit    0
@@ -450,40 +451,29 @@
         } else if (indexPath.row==7) {
             cell.textLabel.text = @"活动类型";
             
+            NSString *actTypeID = _actData.activity_class;
+            ActivityType *activityType = [[UPConfig sharedInstance] getActivityTypeByID:actTypeID];
             
-            int index = [_actData.activity_class intValue];
-            
-            __block NSString *actTypeTitle;
-            __block BOOL showFemale = NO;
-
-            [g_appDelegate.actTypeArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                ActTypeInfo *actInfo = (ActTypeInfo *)obj;
-                if ([actInfo.itemID intValue]==index) {
-                    actTypeTitle = actInfo.actTypeName;
-                    showFemale = actInfo.femalFlag;
-                    *stop = YES;
-                }
-            }];
-
-            cell.detailTextLabel.text = actTypeTitle;
+            if (activityType) {
+                cell.detailTextLabel.text = activityType.name;
+            }
             
         }else if (indexPath.row==8) {
             cell.textLabel.text = @"报名状态";
             
-            int index = [_actData.activity_status intValue];
-            ActStatusInfo *actStatusInfo = [g_appDelegate.actStatusDict objectForKey:(@(index).stringValue)];
+            NSString *actStatusID = _actData.activity_status;
+            ActivityStatus *activityStatus = [[UPConfig sharedInstance] getActivityStatusByID:actStatusID];
             
-            NSString *actStatusText = actStatusInfo.actStatusTitle;
-            if ([actStatusText isEqualToString:@"none"]) {
+            NSString *statusName = activityStatus.name;
+            if ([statusName isEqualToString:@"none"]) {
                 NSString *sexual = [UPDataManager shared].userInfo.sexual;
                 if ([sexual intValue]==0) {
-                    actStatusText = @"满员";
+                    statusName = @"满员";
                 } else {
-                    actStatusText = @"火热募集中";
+                    statusName = @"火热募集中";
                 }
             }
-            
-            cell.detailTextLabel.text = actStatusText;
+            cell.detailTextLabel.text = statusName;
         }
     } else if ([cellId isEqualToString:@"submit"]) {
         UIButton *submit = [cell viewWithTag:(DetailBtnTypeSubmit)];

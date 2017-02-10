@@ -9,10 +9,11 @@
 #import "UPBaseViewController.h"
 
 #import "ActivityData.h"
+#import "UPConfig.h"
 
 @protocol UPActTypeSelectDelegate <NSObject>
 
-- (void)actionTypeDidSelect:(ActTypeInfo *)actInfo;
+- (void)actionTypeDidSelect:(ActivityType *)actType;
 
 @end
 

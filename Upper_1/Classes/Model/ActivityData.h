@@ -8,25 +8,6 @@
 
 #import "UPBaseModel.h"
 
-
-@interface ActTypeInfo : NSObject
-
-@property (nonatomic, copy) NSString *itemID;
-@property (nonatomic, copy) NSString *actTypeName;
-@property (nonatomic) BOOL femalFlag;//女性标志
-
-- (instancetype) initWithDict:(NSDictionary *)aDict;
-@end
-
-@interface ActStatusInfo : NSObject
-
-@property (nonatomic, copy) NSString *itemID;
-@property (nonatomic, copy) NSString *actStatusName;
-@property (nonatomic, copy) NSString *actStatusTitle;
-
-- (instancetype) initWithDict:(NSDictionary *)aDict withID:(NSString *)itemID;
-@end
-
 /**
  {
  "activity_class" = 104;

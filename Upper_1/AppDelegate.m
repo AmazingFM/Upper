@@ -34,9 +34,6 @@
     self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
     initialize();
-    
-    [self readConfig];
-    
     g_appDelegate = self;
     
     [self setRootViewController];
@@ -81,56 +78,6 @@
     g_sideController = mainController;
     self.window.rootViewController=mainController;
     [self.window makeKeyAndVisible];
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    [[UPDataManager shared] readSeqFromDefaults];
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
-    [[UPDataManager shared] writeSeqToDefaults];
-}
-
-- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
-{
-}
-
-- (void)readConfig
-{
-    NSString *actInfoPath = [[NSBundle mainBundle] pathForResource:@"ActInfo" ofType:@"plist"];
-    NSMutableArray *tmpArr = [[NSMutableArray alloc] initWithContentsOfFile:actInfoPath];
-    [tmpArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSDictionary *actTypeDict = (NSDictionary *)obj;
-        ActTypeInfo *actType = [[ActTypeInfo alloc] initWithDict:actTypeDict];
-        [self.actTypeArr addObject:actType];
-    }];
-    
-    NSDictionary *actDict = [UPTools loadBundleFile:@"ActStatus.json"];
-    
-    [actDict enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSDictionary *actStatusDict = (NSDictionary *)obj;
-        ActStatusInfo *actStatus = [[ActStatusInfo alloc] initWithDict:actStatusDict withID:key];
-        
-        [self.actStatusDict setObject:actStatus forKey:key];
-    }];
-}
-
-- (NSMutableDictionary *)actStatusDict
-{
-    if (_actStatusDict==nil) {
-        _actStatusDict = [NSMutableDictionary new];
-    }
-    return _actStatusDict;
-}
-
-- (NSMutableArray *)actTypeArr
-{
-    if(_actTypeArr==nil) {
-        _actTypeArr = [NSMutableArray new];
-    }
-    return _actTypeArr;
 }
 
 @end
