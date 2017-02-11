@@ -14,12 +14,14 @@
 @class ActivityType;
 @class ActivityStatus;
 @class BaseType;
+@class CityContainer;
 
 @interface UPConfig : NSObject
-
 @property (nonatomic) NSString *uuid;
 @property (nonatomic) NSString *currentDate;
 @property (nonatomic) int reqSeq;
+
+@property (nonatomic, retain) CityContainer *cityContainer;
 
 @property (nonatomic, retain) NSMutableArray<ActivityCategory *> *activityCategoryArr;
 @property (nonatomic, retain) NSMutableArray<ActivityType *> *activityTypeArr;
@@ -34,6 +36,8 @@
 - (BaseType *)getPlaceTypeByID:(NSString *)ID;
 - (ActivityStatus *)getActivityStatusByID:(NSString *)ID;
 - (ActivityType *)getActivityTypeByID:(NSString *)ID;
+
+- (NSString *)newReqSeqStr;//获取递增后的request序列号
 @end
 
 
@@ -55,4 +59,45 @@
 @property (nonatomic, copy) NSString *activityDescription;
 @end
 
+@interface CityInfo : NSObject
+@property (nonatomic, copy) NSString *province_code;
+@property (nonatomic, copy) NSString *city_code;
+@property (nonatomic, copy) NSString *town_code;
+@property (nonatomic, copy) NSString *province;
+@property (nonatomic, copy) NSString *city;
+@property (nonatomic, copy) NSString *town;
+@property (nonatomic, copy) NSString *level;
+@property (nonatomic, copy) NSString *first_letter;
+@property (nonatomic, copy) NSString *note;
+
+- (instancetype)initWithDict:(NSDictionary *)aDict;
+@end
+
+@interface ProvinceInfo : NSObject
+@property (nonatomic, copy) NSString *province_code;
+@property (nonatomic, copy) NSString *province;
+@property (nonatomic, retain) NSMutableArray<CityInfo *> *citylist;
+
+- (void)addCityInfo:(CityInfo *)cityInfo;
+@end
+
+@interface AlphabetCityInfo : NSObject
+@property (nonatomic, copy) NSString *firstLetter;
+@property (nonatomic, retain) NSMutableArray<CityInfo *> *citylist;
+
+- (void)addCityInfo:(CityInfo *)cityInfo;
+
+@end
+
+@interface CityContainer : NSObject
+{
+    NSString *localFilePath;
+}
+
+@property (nonatomic, retain) NSMutableArray<ProvinceInfo *> *provinceInfoArr;
+@property (nonatomic, retain) NSMutableArray<AlphabetCityInfo *> *alphaCityInfoArr;
+@property (nonatomic, retain) NSMutableArray<CityInfo *> *cityInfoArr;
+
+- (void)updateCityInfoArr:(NSArray *)cityArr;
+@end
 

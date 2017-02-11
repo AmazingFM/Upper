@@ -231,6 +231,7 @@
 		3AAF86391D6C193700248A45 /* YMImageLoadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAF86381D6C193700248A45 /* YMImageLoadView.m */; };
 		3ACF2AF51D6AEDD30083E04E /* RecommendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACF2AF41D6AEDD30083E04E /* RecommendController.m */; };
 		3AFCCDBD1D5C09BC0003F6F3 /* NewLaunchActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */; };
+		856A4CED1E4F76AF0051ED4E /* cityInfo.json in Resources */ = {isa = PBXBuildFile; fileRef = 856A4CEC1E4F76AF0051ED4E /* cityInfo.json */; };
 		857DA6741E4CA2C400250605 /* ico_make.png in Resources */ = {isa = PBXBuildFile; fileRef = 857DA6711E4CA2C400250605 /* ico_make.png */; };
 		857DA6751E4CA2C400250605 /* JSDropDownMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 857DA6731E4CA2C400250605 /* JSDropDownMenu.m */; };
 		EC3C18011CECB16D00223D6B /* UPGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B21CECB16D00223D6B /* UPGlobals.m */; };
@@ -680,6 +681,7 @@
 		3ACF2AF41D6AEDD30083E04E /* RecommendController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecommendController.m; sourceTree = "<group>"; };
 		3AFCCDBB1D5C09BC0003F6F3 /* NewLaunchActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewLaunchActivityController.h; sourceTree = "<group>"; };
 		3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewLaunchActivityController.m; sourceTree = "<group>"; };
+		856A4CEC1E4F76AF0051ED4E /* cityInfo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cityInfo.json; sourceTree = "<group>"; };
 		857DA6711E4CA2C400250605 /* ico_make.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ico_make.png; sourceTree = "<group>"; };
 		857DA6721E4CA2C400250605 /* JSDropDownMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSDropDownMenu.h; sourceTree = "<group>"; };
 		857DA6731E4CA2C400250605 /* JSDropDownMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSDropDownMenu.m; sourceTree = "<group>"; };
@@ -1392,6 +1394,7 @@
 		3A71CB851E26267700EBE0A2 /* plist */ = {
 			isa = PBXGroup;
 			children = (
+				856A4CEC1E4F76AF0051ED4E /* cityInfo.json */,
 				3A71CB881E26267700EBE0A2 /* introduce.json */,
 				3A44D7E11E4D8C7B004ADA08 /* ActivityType.plist */,
 				3A44D7E31E4D9320004ADA08 /* ActivityStatus.plist */,
@@ -1923,6 +1926,7 @@
 				3A71CBB51E26267700EBE0A2 /* love.png in Resources */,
 				3A71CB941E26267700EBE0A2 /* bubble.png in Resources */,
 				3A71CBC51E26267700EBE0A2 /* scanrect.png in Resources */,
+				856A4CED1E4F76AF0051ED4E /* cityInfo.json in Resources */,
 				3A71CBA51E26267700EBE0A2 /* checkbox.png in Resources */,
 				3A71CB9B1E26267700EBE0A2 /* chat_animation_white3.png in Resources */,
 				3A71CBA91E26267700EBE0A2 /* done@3x.png in Resources */,
@@ -2249,6 +2253,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Yongming Zhang (V76QA6Q843)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yongming Zhang (V76QA6Q843)";
 				DEVELOPMENT_TEAM = 77565T989X;
@@ -2279,6 +2284,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Yongming Zhang (77565T989X)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yongming Zhang (77565T989X)";
 				DEVELOPMENT_TEAM = 77565T989X;

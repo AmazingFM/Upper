@@ -7,6 +7,7 @@
 //
 
 #import "UPConfig.h"
+#import "YMNetwork.h"
 
 @implementation UPConfig
 
@@ -37,11 +38,30 @@
         _activityStatusArr = [NSMutableArray<ActivityStatus *> new];;
         _clothTypeArr = [NSMutableArray<BaseType *> new];;
         _payTypeArr = [NSMutableArray<BaseType *> new];;
-        _placeTypeArr = [NSMutableArray<BaseType *> new];;
+        _placeTypeArr = [NSMutableArray<BaseType *> new];
+        
+        _cityContainer = [[CityContainer alloc] init];
 
         [self readActivityConfig];
+        
+        [self performSelectorInBackground:@selector(requestCityInfo) withObject:nil];
     }
     return self;
+}
+
+- (void)requestCityInfo
+{
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:@{@"a":@"CityQuery"} success:^(id responseObject) {
+        NSDictionary *respDict = (NSDictionary *)responseObject;
+        
+        if ([respDict[@"resp_id"] intValue]==0) {
+            
+            
+            NSArray *cityArr = respDict[@"resp_data"][@"city_list"];
+            [self.cityContainer updateCityInfoArr:cityArr];
+        }
+    } failure:^(NSError *error) {
+    }];
 }
 
 - (void)readActivityConfig
@@ -169,6 +189,18 @@
     return [formatter stringFromDate:[NSDate date]];
 }
 
+- (NSString *)newReqSeqStr
+{
+    NSString *reqStr = [NSString stringWithFormat:@"%06d", ++_reqSeq];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyyMMdd";
+    formatter.timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
+    NSString *today = [formatter stringFromDate:[NSDate date]];
+    
+    return [NSString stringWithFormat:@"%@%@", today, reqStr];
+}
+
 - (NSString *)reqSeqStr
 {
     NSString *reqStr = [NSString stringWithFormat:@"%6d", _reqSeq];
@@ -290,4 +322,180 @@
     return self;
 }
 
+@end
+
+@implementation CityInfo
+
+- (instancetype)initWithDict:(NSDictionary *)aDict
+{
+    if (self = [super init]) {
+        _province_code = [aDict objectForKey:@"province_code"];
+        _city_code = [aDict objectForKey:@"city_code"];
+        _town_code = [aDict objectForKey:@"town_code"];
+        _province = [aDict objectForKey:@"province"];
+        _city = [aDict objectForKey:@"city"];
+        _town = [aDict objectForKey:@"town"];
+        _level = [aDict objectForKey:@"level"];
+        _first_letter = [aDict objectForKey:@"first_letter"];
+        _note = [aDict objectForKey:@"note"];
+    }
+    return self;
+}
+
+@end
+
+
+@implementation ProvinceInfo
+
+- (instancetype)initWithDict:(NSDictionary *)aDict
+{
+    if (self=[super init]) {
+        
+    }
+    return self;
+}
+
+- (NSMutableArray<CityInfo *> *)citylist
+{
+    if (_citylist==nil) {
+        _citylist = [NSMutableArray<CityInfo *> new];
+    }
+    return _citylist;
+}
+
+- (void)addCityInfo:(CityInfo *)cityInfo
+{
+    self.province_code = cityInfo.province_code;
+    self.province = cityInfo.province;
+    [self.citylist addObject:cityInfo];
+}
+@end
+
+@implementation AlphabetCityInfo
+- (NSMutableArray<CityInfo *> *)citylist
+{
+    if (_citylist==nil) {
+        _citylist = [NSMutableArray<CityInfo *> new];
+    }
+    return _citylist;
+}
+
+- (void)addCityInfo:(CityInfo *)cityInfo
+{
+    self.firstLetter = cityInfo.first_letter;
+    [self.citylist addObject:cityInfo];
+}
+@end
+
+#define CityInfoFileName @"cityInfo.json"
+
+@implementation CityContainer
+
+- (instancetype)init
+{
+    if (self=[super init]) {
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentPath = paths[0];
+        localFilePath = [documentPath stringByAppendingPathComponent:CityInfoFileName];
+
+        _cityInfoArr = [NSMutableArray<CityInfo *> new];
+        _provinceInfoArr = [NSMutableArray<ProvinceInfo *> new];
+        _alphaCityInfoArr = [NSMutableArray<AlphabetCityInfo *> new];
+        
+        [self loadLocalCityInfo];
+    }
+    return self;
+}
+
+- (void)loadLocalCityInfo
+{
+    if (![[NSFileManager defaultManager] fileExistsAtPath:localFilePath]) {
+        NSArray *cityArr = [UPTools loadBundleFile:CityInfoFileName];
+        [self loadCityInfoArr:cityArr];
+        [self saveToLocalFile:cityArr];
+    } else  {
+        NSArray *cityArr = [UPTools loadLocalDataWithName:CityInfoFileName];
+        [self loadCityInfoArr:cityArr];
+    }
+}
+
+- (void)saveToLocalFile:(NSArray *)cityArr
+{
+    //保存到document目录下
+    NSString *cityArrStr = [UPTools stringFromJSON:cityArr];
+    [cityArrStr writeToFile:localFilePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+}
+
+- (void)updateCityInfoArr:(NSArray *)cityArr
+{
+    [self saveToLocalFile:cityArr];
+    [self loadCityInfoArr:cityArr];
+}
+
+- (void)clearAllInfo
+{
+    [self.cityInfoArr removeAllObjects];
+    [self.provinceInfoArr removeAllObjects];
+    [self.alphaCityInfoArr removeAllObjects];
+}
+
+- (void)loadCityInfoArr:(NSArray *)cityArr
+{
+    [self clearAllInfo];
+    for (NSDictionary *cityDic in cityArr) {
+        CityInfo *cityInfo = [[CityInfo alloc] initWithDict:cityDic];
+        [self.cityInfoArr addObject:cityInfo];
+        
+        [self addCityToAlphabet:cityInfo];
+        [self addCityToProvince:cityInfo];
+        
+        NSLog(@"%@:%@:%@", cityInfo.city, cityInfo.province, cityInfo.province_code);
+    }
+}
+
+- (void)addCityToAlphabet:(CityInfo *)cityInfo
+{
+    AlphabetCityInfo *alphabetCityInfo = [self getAlphabetCityInfo:cityInfo.first_letter];
+    [alphabetCityInfo addCityInfo:cityInfo];
+}
+
+- (void)addCityToProvince:(CityInfo *)cityInfo
+{
+    ProvinceInfo *provinceInfo = [self getProvinceInfo:cityInfo.province_code];
+    [provinceInfo addCityInfo:cityInfo];
+}
+
+- (AlphabetCityInfo *)getAlphabetCityInfo:(NSString *)firstLetter
+{
+    __block AlphabetCityInfo *alphabetCityInfo = nil;
+    [self.alphaCityInfoArr enumerateObjectsUsingBlock:^(AlphabetCityInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj.firstLetter isEqualToString:firstLetter]) {
+            alphabetCityInfo = obj;
+            *stop = YES;
+        }
+    }];
+    
+    if (alphabetCityInfo==nil) {
+        alphabetCityInfo = [[AlphabetCityInfo alloc] init];
+        [self.alphaCityInfoArr addObject:alphabetCityInfo];
+    }
+    return alphabetCityInfo;
+}
+
+- (ProvinceInfo *)getProvinceInfo:(NSString *)proviceCode
+{
+    __block ProvinceInfo *provinceInfo = nil;
+    [self.provinceInfoArr enumerateObjectsUsingBlock:^(ProvinceInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj.province_code isEqualToString:proviceCode]) {
+            provinceInfo = obj;
+            *stop = YES;
+        }
+    }];
+    
+    if (provinceInfo==nil) {
+        provinceInfo = [[ProvinceInfo alloc] init];
+        [self.provinceInfoArr addObject:provinceInfo];
+    }
+    return provinceInfo;
+}
 @end

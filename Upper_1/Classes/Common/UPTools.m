@@ -122,7 +122,7 @@ NSString *kKeyChainUUIDAccessGroup = @"com.upper";
 {
     return  [SFHFKeychainUtils deleteItemForUsername:kKeychainUUIDItemIdentifier andServiceName:kKeyChainUUIDAccessGroup error:nil];
 }
-+(NSDictionary*)loadLocalDataWithName:(NSString*)fileName{
++(id)loadLocalDataWithName:(NSString*)fileName{
     NSString* saveFilePath=[UPTools documentFilePathWithName:fileName];
     if([[NSFileManager defaultManager] fileExistsAtPath:saveFilePath]){
         NSData* data=[NSData dataWithContentsOfFile:saveFilePath];

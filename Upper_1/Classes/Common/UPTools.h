@@ -25,7 +25,7 @@
  */
 + (NSString *)getUPUUID;
 
-+(NSDictionary*)loadLocalDataWithName:(NSString*)fileName;
++(id)loadLocalDataWithName:(NSString*)fileName;
 +(id)loadBundleFile:(NSString*)fileName;
 
 

@@ -24,7 +24,7 @@
 {
     self = [super init];
     if (self) {
-        config = [[UPConfig alloc] init];
+        config = [UPConfig sharedInstance];
     }
     return self;
 }
@@ -63,13 +63,21 @@
 //        manager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];//针对https设置
         self.sessionManager = manager;
     }
-    
     return self;
 }
 
 - (NSDictionary *)addDescParams:(NSDictionary *)parameters
 {
-    return nil;
+    NSString *uuid = config.uuid;
+    NSString *currentDate = config.currentDate;
+    NSString *reqSeq = config.newReqSeqStr;
+    
+    NSString *md5Str = [UPTools md5HexDigest:[NSString stringWithFormat:@"upper%@%@%@upper", uuid, reqSeq, currentDate]];
+    
+    NSMutableDictionary *newParamsDic = [NSMutableDictionary dictionaryWithDictionary:@{@"app_id":uuid, @"req_seq":reqSeq, @"time_stamp":currentDate, @"sign":md5Str}];
+    [newParamsDic addEntriesFromDictionary:parameters];
+    
+    return newParamsDic;
 }
 
 - (void)GET:(NSString *)URLString parameters:(id)parameters
@@ -78,7 +86,7 @@
 {
     NSDictionary *paramsDic = [self addDescParams:parameters];
     
-    [self.sessionManager GET:URLString parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+    [self.sessionManager GET:URLString parameters:paramsDic success:^(NSURLSessionDataTask *task, id responseObject) {
         if (success) {
             success(responseObject);
         }

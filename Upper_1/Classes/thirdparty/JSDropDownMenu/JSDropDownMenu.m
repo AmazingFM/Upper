@@ -254,7 +254,7 @@
         [self.layer addSublayer:title];
         [tempTitles addObject:title];
         //indicator
-        CAShapeLayer *indicator = [self createIndicatorWithColor:self.indicatorColor andPosition:CGPointMake(titlePosition.x + title.bounds.size.width / 2 + 8, self.frame.size.height / 2)];
+        CAShapeLayer *indicator = [self createIndicatorWithColor:self.indicatorColor andPosition:CGPointMake(titlePosition.x + title.bounds.size.width / 2 + 6, self.frame.size.height / 2)];
         [self.layer addSublayer:indicator];
         [tempIndicators addObject:indicator];
         
@@ -391,12 +391,13 @@
     CGSize size = [self calculateTitleSizeWithString:string];
     
     CATextLayer *layer = [CATextLayer new];
-    CGFloat sizeWidth = (size.width < (self.frame.size.width / _numOfMenu) - 25) ? size.width : self.frame.size.width / _numOfMenu - 25;
+    CGFloat sizeWidth = (size.width < (self.frame.size.width / _numOfMenu) - 30) ? size.width : self.frame.size.width / _numOfMenu - 30;
     layer.bounds = CGRectMake(0, 0, sizeWidth, size.height);
     layer.string = string;
     layer.fontSize = 14.0;
     layer.alignmentMode = kCAAlignmentCenter;
     layer.foregroundColor = color.CGColor;
+    layer.truncationMode = kCATruncationEnd;
     
     layer.contentsScale = [[UIScreen mainScreen] scale];
     
@@ -702,7 +703,7 @@
 
 - (void)animateTitle:(CATextLayer *)title show:(BOOL)show complete:(void(^)())complete {
     CGSize size = [self calculateTitleSizeWithString:title.string];
-    CGFloat sizeWidth = (size.width < (self.frame.size.width / _numOfMenu) - 25) ? size.width : self.frame.size.width / _numOfMenu - 25;
+    CGFloat sizeWidth = (size.width < (self.frame.size.width / _numOfMenu) - 30) ? size.width : self.frame.size.width / _numOfMenu - 30;
     title.bounds = CGRectMake(0, 0, sizeWidth, size.height);
     complete();
 }
@@ -775,6 +776,8 @@
     titleLabel.textColor = self.textColor;
     titleLabel.tag = 1;
     titleLabel.font = [UIFont systemFontOfSize:14.0];
+    titleLabel.adjustsFontSizeToFitWidth = YES;
+    titleLabel.minimumScaleFactor = 0.5;
         
     [cell addSubview:titleLabel];
     
@@ -805,7 +808,7 @@
     
     if (leftOrRight == 1) {
         
-        CGFloat marginX = 20;
+        CGFloat marginX = 10;
         
         titleLabel.frame = CGRectMake(marginX, 0, textSize.width, cell.frame.size.height);
         //右边tableview
@@ -826,9 +829,14 @@
         
         CGFloat ratio = [_dataSource widthRatioOfLeftColumn:_currentSelectedMenudIndex];
         
-        CGFloat marginX = (self.frame.size.width*ratio-textSize.width)/2;
+        CGFloat marginX = 0;
+        if (self.frame.size.width*ratio>textSize.width+10) {
+            marginX = (self.frame.size.width*ratio-textSize.width)/2;;
+        } else {
+            marginX = 5;
+        }
         
-        titleLabel.frame = CGRectMake(marginX, 0, textSize.width, cell.frame.size.height);
+        titleLabel.frame = CGRectMake(marginX, 0, self.frame.size.width*ratio-2*marginX, cell.frame.size.height);
         
         if (!_hadSelected && _leftSelectedRow == indexPath.row) {
             cell.backgroundColor = BackColor;
@@ -897,7 +905,7 @@
     [(CALayer *)self.bgLayers[_currentSelectedMenudIndex] setBackgroundColor:BackColor.CGColor];
     
     CAShapeLayer *indicator = (CAShapeLayer *)_indicators[_currentSelectedMenudIndex];
-    indicator.position = CGPointMake(title.position.x + title.frame.size.width / 2 + 8, indicator.position.y);
+    indicator.position = CGPointMake(title.position.x + title.frame.size.width / 2 + 6, indicator.position.y);
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -931,6 +939,7 @@
     cell.selectedBackgroundView.backgroundColor = BackColor;
     cell.textLabel.font = [UIFont systemFontOfSize:14.0];
     cell.textLabel.textColor = self.textColor;
+    cell.textLabel.adjustsFontSizeToFitWidth = YES;
     
     if ([cell.textLabel.text isEqualToString:[(CATextLayer *)[_titles objectAtIndex:_currentSelectedMenudIndex] string]]) {
         cell.backgroundColor = BackColor;

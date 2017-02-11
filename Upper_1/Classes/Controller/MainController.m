@@ -81,13 +81,6 @@ static int kMsgCount = 0;
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = backItem;
     
-//    messageItem = [UIBarButtonItem itemWithRightIcon:@"" highIcon:nil target:self action:@selector(jumpToMessage)];
-//    messageItem.badgeValue = kMsgCount==0?@"":[NSString stringWithFormat:@"%d", kMsgCount];
-//    messageItem.badgeBGColor = [UIColor redColor];
-//    messageItem.badgeOriginX=25;
-//    messageItem.badgeOriginY=5;
-//    self.navigationItem.rightBarButtonItem=messageItem;
-    
     UIButton *titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [titleButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [titleButton setTitle:@"活动大厅" forState:UIControlStateNormal];
@@ -104,12 +97,12 @@ static int kMsgCount = 0;
     _data1 = [NSMutableArray new];
     NSDictionary *nolimitOne = @{@"title":@"不限", @"data":@[@"不限"]};
     [_data1 addObject:nolimitOne];
-    for (ActivityCategory *actCategory in [UPConfig sharedInstance].activityCategoryArr) {
-        NSMutableArray *actTypeNames = [NSMutableArray new];
-        [actCategory.activityTypeArr enumerateObjectsUsingBlock:^(ActivityType * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [actTypeNames addObject:obj.name];
+    for (ProvinceInfo *provinceInfo in [UPConfig sharedInstance].cityContainer.provinceInfoArr) {
+        NSMutableArray *cityNames = [NSMutableArray new];
+        [provinceInfo.citylist enumerateObjectsUsingBlock:^(CityInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [cityNames addObject:obj.city];
         }];
-        NSDictionary *menuOne = @{@"title":actCategory.name, @"data":actTypeNames};
+        NSDictionary *menuOne = @{@"title":provinceInfo.province, @"data":cityNames};
         [_data1 addObject:menuOne];
     }
 
@@ -270,8 +263,7 @@ static int kMsgCount = 0;
     [self checkNetStatus];
     
     // 上海31， 071， “”
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"ActivityList"forKey:@"a"];
     [params setObject:[NSString stringWithFormat:@"%d", pageNum] forKey:@"current_page"];
     [params setObject:[NSString stringWithFormat:@"%d", kActivityPageSize] forKey:@"page_size"];
