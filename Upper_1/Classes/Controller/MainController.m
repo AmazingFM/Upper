@@ -53,6 +53,9 @@ static int kMsgCount = 0;
     NSInteger _currentData1Index;
     NSInteger _currentData2Index;
     NSInteger _currentData3Index;
+    
+    NSInteger _currentData1RightIndex;
+    NSInteger _currentData2RightIndex;
 
     MJRefreshComponent *myRefreshView;
     int pageNum;
@@ -91,6 +94,12 @@ static int kMsgCount = 0;
     
     isLoaded = NO;
     lastPage = NO;
+    
+    _currentData1Index = 0;
+    _currentData2Index = 0;
+    _currentData3Index = 0;
+    _currentData1RightIndex = 0;
+    _currentData2RightIndex = 0;
     
     [self.view addSubview:self.mainTable];
     
@@ -182,11 +191,8 @@ static int kMsgCount = 0;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-//    [noticeBoard startAnimate];
-    
     if (![UPDataManager shared].isLogin) {
-//                [self showLogin];
+        
     } else {
         if (!isLoaded) {
             [_mainTable.header beginRefreshing];
@@ -232,7 +238,8 @@ static int kMsgCount = 0;
             pageNum = 1;
             myRefreshView = _mainTable.header;
             [_mainTable.footer endRefreshing];
-            [self loadData];
+            
+            [self loadActivityList];
         }];
         
         //..上拉刷新
@@ -243,7 +250,8 @@ static int kMsgCount = 0;
             }
             
             [_mainTable.header endRefreshing];
-            [self loadData];
+            
+            [self loadActivityList];
         }];
     }
     return _mainTable;
@@ -258,25 +266,77 @@ static int kMsgCount = 0;
 }
 
 #pragma mark - 请求活动列表
-- (void)loadData
+
+- (void)loadActivityList
 {
-    [self checkNetStatus];
-    
+    NSDictionary *params = [self createParameters];
+    [self loadData:params];
+}
+
+
+- (NSDictionary *)createParameters
+{
     // 上海31， 071， “”
     NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"ActivityList"forKey:@"a"];
     [params setObject:[NSString stringWithFormat:@"%d", pageNum] forKey:@"current_page"];
     [params setObject:[NSString stringWithFormat:@"%d", kActivityPageSize] forKey:@"page_size"];
     [params setObject:@"" forKey:@"activity_status"];
-    [params setObject:@""forKey:@"activity_class"];
-    [params setObject:@"4" forKey:@"industry_id"];
-    [params setObject:@"" forKey:@"start_begin_time"];
-    [params setObject:@"" forKey:@"province_code"];
-    [params setObject:@"" forKey:@"city_code"];
-    [params setObject:@""forKey:@"town_code"];
+    [params setObject:@"0" forKey:@"industry_id"];
     [params setObject:@""forKey:@"creator_id"];
     [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
+
+    //复合条件查询
+    if (_currentData1Index==0){
+        [params setObject:@"" forKey:@"province_code"];
+        [params setObject:@"" forKey:@"city_code"];
+        [params setObject:@""forKey:@"town_code"];
+    } else {
+        ProvinceInfo *provinceInfo = [UPConfig sharedInstance].cityContainer.provinceInfoArr[_currentData1Index-1];
+        CityInfo *cityInfo = provinceInfo.citylist[_currentData1RightIndex];
+        
+        [params setObject:cityInfo.province_code forKey:@"province_code"];
+        [params setObject:cityInfo.city_code forKey:@"city_code"];
+        [params setObject:cityInfo.town_code forKey:@"town_code"];
+    }
+    
+    if (_currentData2Index==0) {
+        [params setObject:@""forKey:@"activity_class"];
+    } else {
+        ActivityCategory *activityCategory = [UPConfig sharedInstance].activityCategoryArr[_currentData2Index-1];
+        ActivityType *activityType = activityCategory.activityTypeArr[_currentData2RightIndex];
+        
+        [params setObject:activityType.ID forKey:@"activity_class"];
+    }
+    
+    if (_currentData3Index==0) {
+        [params setObject:@"" forKey:@"start_begin_time"];
+    } else {
+        //@"不限时间", @"三天内", @"一周内", @"一个月内"
+        NSDate *startDate = [NSDate date];
+        NSString *startTime = [UPTools dateString:startDate withFormat:@"yyyyMMddHHmmss"];
+        
+        int intervalDays = 1;
+        if (_currentData3Index==1) {
+            intervalDays = 3;
+        } else if (_currentData3Index==2) {
+            intervalDays = 7;
+        } else if (_currentData3Index==3) {
+            intervalDays = 30;
+        }
+        NSDate *endDate = [startDate dateByAddingTimeInterval:24*3600*intervalDays];
+        
+        NSString *endTime = [UPTools dateString:endDate withFormat:@"yyyyMMddHHmmss"];
+        
+        [params setObject:startTime forKey:@"start_begin_time"];
+        [params setObject:endTime forKey:@"start_end_time"];
+    }
+    
+    return params;
+}
+- (void)loadData:(NSDictionary *)params
+{
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id json) {
         NSDictionary *dict = (NSDictionary *)json;
         NSString *resp_id = dict[@"resp_id"];
@@ -582,7 +642,25 @@ static int kMsgCount = 0;
 
 - (void)menu:(JSDropDownMenu *)menu didSelectRowAtIndexPath:(JSIndexPath *)indexPath
 {
+    if (indexPath.column == 0) {
+        if(indexPath.leftOrRight==0){
+            _currentData1Index = indexPath.row;
+            return;
+        } else {
+            _currentData1RightIndex = indexPath.row;
+        }
+    } else if(indexPath.column == 1){
+        if(indexPath.leftOrRight==0){
+            _currentData2Index = indexPath.row;
+            return;
+        } else {
+            _currentData2RightIndex = indexPath.row;
+        }
+    } else{
+        _currentData3Index = indexPath.row;
+    }
     
+    [self.mainTable.header beginRefreshing];//刷新
 }
 
 @end
