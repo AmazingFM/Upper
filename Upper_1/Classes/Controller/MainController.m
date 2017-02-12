@@ -44,7 +44,7 @@
 
 static int kMsgCount = 0;
 
-@interface MainController ()<UIGestureRecognizerDelegate,XWTopMenuDelegate, UITableViewDelegate, UITableViewDataSource,UPItemButtonDelegate, JSDropDownMenuDataSource, JSDropDownMenuDelegate>
+@interface MainController ()<UIGestureRecognizerDelegate,XWTopMenuDelegate, UITableViewDelegate, UITableViewDataSource, JSDropDownMenuDataSource, JSDropDownMenuDelegate>
 {
     NSMutableArray *_data1;
     NSMutableArray *_data2;
@@ -61,7 +61,7 @@ static int kMsgCount = 0;
     int pageNum;
     BOOL lastPage;
     
-    BOOL isLoaded;
+    BOOL firstLoad;
     
     UIBarButtonItem *messageItem;
 }
@@ -72,7 +72,6 @@ static int kMsgCount = 0;
 
 - (void)leftClick;
 - (void)makeAction:(id)sender;
-- (void)handleTap:(UITapGestureRecognizer *)sender;
 
 @end
 
@@ -92,8 +91,9 @@ static int kMsgCount = 0;
     
     self.navigationItem.rightBarButtonItems = [self rightNavButtonItems];
     
-    isLoaded = NO;
+    firstLoad = YES;
     lastPage = NO;
+    
     
     _currentData1Index = 0;
     _currentData2Index = 0;
@@ -104,7 +104,7 @@ static int kMsgCount = 0;
     [self.view addSubview:self.mainTable];
     
     _data1 = [NSMutableArray new];
-    NSDictionary *nolimitOne = @{@"title":@"不限", @"data":@[@"不限"]};
+    NSDictionary *nolimitOne = @{@"title":@"不限", @"data":@[@"全部"]};
     [_data1 addObject:nolimitOne];
     for (ProvinceInfo *provinceInfo in [UPConfig sharedInstance].cityContainer.provinceInfoArr) {
         NSMutableArray *cityNames = [NSMutableArray new];
@@ -137,8 +137,6 @@ static int kMsgCount = 0;
     menu.dataSource = self;
     menu.delegate = self;
     [self.view addSubview:menu];
-    
-    [self viewWillAppear:YES];
 }
 
 - (NSArray *)rightNavButtonItems
@@ -194,18 +192,9 @@ static int kMsgCount = 0;
     if (![UPDataManager shared].isLogin) {
         
     } else {
-        if (!isLoaded) {
-            [_mainTable.header beginRefreshing];
-            isLoaded = YES;
-        }
+        firstLoad = YES;
+        [_mainTable.header beginRefreshing];
     }
-    
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-//    [noticeBoard stopAnimate];
 }
 
 - (UITableView *)mainTable
@@ -289,7 +278,11 @@ static int kMsgCount = 0;
 
     //复合条件查询
     if (_currentData1Index==0){
-        [params setObject:@"" forKey:@"province_code"];
+        if (firstLoad) {
+            [params setObject:[UPDataManager shared].userInfo.province_code forKey:@"province_code"];
+        } else {
+            [params setObject:@"" forKey:@"province_code"];
+        }
         [params setObject:@"" forKey:@"city_code"];
         [params setObject:@""forKey:@"town_code"];
     } else {
@@ -342,10 +335,6 @@ static int kMsgCount = 0;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             NSDictionary *resp_data = dict[@"resp_data"];
-            
-            NSString *resp_desc = dict[@"resp_desc"];
-            NSLog(@"%@", resp_desc);
-            /***************/
             NSMutableDictionary *pageNav = resp_data[@"page_nav"];
             
             PageItem *pageItem = [[PageItem alloc] init];
@@ -398,29 +387,13 @@ static int kMsgCount = 0;
         }
         else
         {
-            NSLog(@"%@", @"获取失败");
             [myRefreshView endRefreshing];
         }
         
     } failure:^(NSError *error) {
-        NSLog(@"%@",error);
         [myRefreshView endRefreshing];
         
     }];
-}
-
-- (void)handleTap:(UITapGestureRecognizer *)recognizer
-{
-    UpActView *actV = (UpActView *)recognizer.view;
-    [self makeAction:actV];
-}
-
-- (void)makeAction:(id)sender
-{
-    if ([sender isKindOfClass:[UpActView class]]) {
-        UpActView *actView = (UpActView *)sender;
-        [self.parentController OnAction:self withType:CHANGE_VIEW toView:ACTIVITY_DETAIL_VIEW withArg:actView];
-    }
 }
 
 #pragma mark 头像下面菜单的点击代理
@@ -648,6 +621,7 @@ static int kMsgCount = 0;
             return;
         } else {
             _currentData1RightIndex = indexPath.row;
+            firstLoad = NO;
         }
     } else if(indexPath.column == 1){
         if(indexPath.leftOrRight==0){

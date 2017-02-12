@@ -20,6 +20,7 @@
 #import "UPMainMenuController.h"
 #import "UPGlobals.h"
 #import "YMNetWork.h"
+#import "UPConfig.h"
 
 #define kUPFilePostURL @"http://api.qidianzhan.com.cn/AppServ/index.php?a=ActivityAdd"
 
@@ -34,10 +35,7 @@ static CGFloat const FixRatio = 4/3.0;
 
 
 @interface UPCitySelectController() <UITableViewDelegate, UITableViewDataSource>
-@property (nonatomic, retain) NSMutableArray *cityItems;
 @property (nonatomic, retain) UITableView *tableView;
-@property (retain, nonatomic) NSMutableDictionary *cityDict;
-@property (retain, nonatomic) NSArray *keyArray;
 @end
 @implementation UPCitySelectController
 
@@ -58,78 +56,11 @@ static CGFloat const FixRatio = 4/3.0;
     self.tableView.dataSource = self;
     
     [self.view addSubview:self.tableView];
-    
-    if (![UPDataManager shared].hasLoadCities) {
-        [self cityInfoRequest];
-    } else {
-        [self loadCityData:[UPDataManager shared].cityList];
-    }
 }
 
 - (void)backView
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (NSMutableArray *)cityItems
-{
-    if (_cityItems==nil) {
-        _cityItems = [NSMutableArray array];
-    }
-    return _cityItems;
-}
-
--(void)cityInfoRequest
-{
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
-    [params setValue:@"CityQuery" forKey:@"a"];
-
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
-        NSDictionary *dict = (NSDictionary *)json;
-        NSString *resp_id = dict[@"resp_id"];
-        
-        if ([resp_id intValue]==0) {
-            NSDictionary *respData = dict[@"resp_data"];
-            
-            NSMutableArray *allCities = respData[@"city_list"];
-            NSArray<CityItem *> *cityArr = [CityItem objectArrayWithKeyValuesArray:allCities];
-            [[UPDataManager shared] initWithCityItems:cityArr];
-            
-            [self loadCityData:cityArr];
-        }
-    } failture:^(id error) {
-        NSLog(@"%@",error);
-    }];
-}
-
-- (void)loadCityData:(NSArray *)cityArr
-{
-    NSMutableArray *tmpKeyList = [NSMutableArray array];
-    
-    _cityDict = [NSMutableDictionary dictionary];
-    for (int i=0; i<cityArr.count; i++) {
-        CityItem *city = cityArr[i];
-        NSString *firstLetter = city.first_letter;
-        
-        if (NSNotFound == [tmpKeyList indexOfObject:firstLetter]) {
-            [tmpKeyList addObject:firstLetter];
-            NSMutableArray *tmpArr = [NSMutableArray array];
-            [_cityDict setObject:tmpArr forKey:firstLetter];
-        }
-    }
-    _keyArray = [tmpKeyList sortedArrayUsingSelector:@selector(compare:)];
-    
-    for (int i=0; i<cityArr.count; i++) {
-        CityItem *city = cityArr[i];
-        city.width = ScreenWidth;
-        city.height = CellHeightDefault;
-        
-        if ([[_cityDict objectForKey:city.first_letter] isKindOfClass:[NSMutableArray class]]) {
-            [[_cityDict objectForKey:city.first_letter] addObject:city];
-        }
-    }
-    [_tableView reloadData];
 }
 
 #pragma mark UITableViewDelegate, UITableViewDataSource
@@ -146,7 +77,7 @@ static CGFloat const FixRatio = 4/3.0;
     titleLabel.backgroundColor = [UIColor clearColor];
     titleLabel.textColor = [UIColor whiteColor];
     titleLabel.font = [UIFont boldSystemFontOfSize:17];
-    titleLabel.text = [_keyArray objectAtIndex:section];
+    titleLabel.text = [UPConfig sharedInstance].cityContainer.alphaCityInfoArr[section].firstLetter;
     [bgView addSubview:titleLabel];
     
     return bgView;
@@ -160,25 +91,25 @@ static CGFloat const FixRatio = 4/3.0;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _keyArray.count;
+    return [[UPConfig sharedInstance].cityContainer.alphaCityInfoArr count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSString *key = _keyArray[section];
-    NSArray *cities = [_cityDict objectForKey:key];
-    return cities.count;
+    AlphabetCityInfo *alphaCityInfo = [UPConfig sharedInstance].cityContainer.alphaCityInfoArr[section];
+    return [alphaCityInfo.citylist count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *key = [_keyArray objectAtIndex:indexPath.section];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cityCell"];
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cityCell"];
     }
-    CityItem *rowCityItem = [[_cityDict objectForKey:key] objectAtIndex:indexPath.row];
-    cell.textLabel.text = rowCityItem.city;
+    
+    AlphabetCityInfo *alphaCityInfo = [UPConfig sharedInstance].cityContainer.alphaCityInfoArr[indexPath.section];
+    CityInfo *cityInfo = [alphaCityInfo.citylist objectAtIndex:indexPath.row];
+    cell.textLabel.text = cityInfo.city;
     cell.textLabel.font= kUPThemeNormalFont;
     return cell;
 }
@@ -188,18 +119,21 @@ static CGFloat const FixRatio = 4/3.0;
     _tableView.sectionIndexBackgroundColor = [UIColor clearColor];
     _tableView.sectionIndexTrackingBackgroundColor = [UIColor clearColor];
     
-    NSMutableArray *indexNumber = [NSMutableArray arrayWithArray:_keyArray];
+    __block NSMutableArray *indexNumber = [NSMutableArray new];
+    [[UPConfig sharedInstance].cityContainer.alphaCityInfoArr enumerateObjectsUsingBlock:^(AlphabetCityInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [indexNumber addObject:obj.firstLetter];
+    }];
     //添加搜索前的＃号
     return indexNumber;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *key = [_keyArray objectAtIndex:indexPath.section];
-    CityItem *rowCityItem = [[_cityDict objectForKey:key] objectAtIndex:indexPath.row];
+    AlphabetCityInfo *alphaCityInfo = [UPConfig sharedInstance].cityContainer.alphaCityInfoArr[indexPath.section];
+    CityInfo *cityInfo = [alphaCityInfo.citylist objectAtIndex:indexPath.row];
     
     if ([self.delegate respondsToSelector:@selector(cityDidSelect:)]) {
-        [self.delegate cityDidSelect:rowCityItem];
+        [self.delegate cityDidSelect:cityInfo];
     }
     
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -213,7 +147,9 @@ static CGFloat const FixRatio = 4/3.0;
 @interface NewLaunchActivityController () <UITableViewDelegate, UITableViewDataSource, UPCellDelegate, UITextFieldDelegate, UIAlertViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UPActTypeSelectDelegate, UIActionSheetDelegate>
 {
     UITableView *_tableView;
-    CityItem *_selectedCity;
+    CityInfo *_selectedCity;
+    BaseType *_clothType;
+    BaseType *_payType;
     
     NSString *_actTypeID;
     
@@ -249,10 +185,13 @@ static CGFloat const FixRatio = 4/3.0;
 
     _actTypeID = @"";
     
-    _lowLimit = 0;
-    _highLimit = 0;
-    _activityFee = 0;
-    _femaleLowLimit = 0;
+    _lowLimit = @"0";
+    _highLimit = @"0";
+    _activityFee = @"0";
+    _femaleLowLimit = @"0";
+    _selectedCity = nil;
+    _clothType = nil;
+    _payType = nil;
     
     [self setNewData];
     
@@ -351,14 +290,21 @@ static CGFloat const FixRatio = 4/3.0;
     UPComboxCellItem *item10 = [[UPComboxCellItem alloc] init];
     item10.title = @"着装要求";
     item10.style = UPItemStyleIndex;
-    item10.comboxItems = @[@"随性", @"西装领带", @"便装"];
+    __block NSMutableArray *clothNames = [NSMutableArray new];
+    [[UPConfig sharedInstance].clothTypeArr enumerateObjectsUsingBlock:^(BaseType * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [clothNames addObject:obj.name];
+    }];
+    item10.comboxItems = clothNames;
     item10.style = UPItemStyleIndex;
     item10.key = @"clothes_need";
-    
     UPComboxCellItem *item11 = [[UPComboxCellItem alloc] init];  //使用 是否预付的 字段传参
     item11.title = @"付费方式";
     item11.style = UPItemStyleIndex;
-    item11.comboxItems = @[@"现场AA", @"本壕请客", @"绅士均摊"];
+    __block NSMutableArray *payNames = [NSMutableArray new];
+    [[UPConfig sharedInstance].payTypeArr enumerateObjectsUsingBlock:^(BaseType * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [payNames addObject:obj.name];
+    }];
+    item11.comboxItems = payNames;
     item11.style = UPItemStyleIndex;
     item11.key = @"is_prepaid";
     
@@ -716,19 +662,19 @@ static CGFloat const FixRatio = 4/3.0;
 
 
 #pragma mark Other Delegate
-- (void)cityDidSelect:(CityItem *)cityItem
+- (void)cityDidSelect:(CityInfo *)cityInfo
 {
     for (UPBaseCellItem *cellItem in self.itemList) {
         if ([cellItem.key isEqualToString:@"activity_area"]) {
             UPDetailCellItem *item = (UPDetailCellItem*)cellItem;
-            NSString *area = [NSString stringWithFormat:@"%@ %@", cityItem.province, cityItem.city];
+            NSString *area = [NSString stringWithFormat:@"%@ %@", cityInfo.province, cityInfo.city];
             item.detail = area;
             [_tableView reloadRowsAtIndexPaths:@[item.indexPath] withRowAnimation:UITableViewRowAnimationNone];
             break;
         }
     }
     
-    _selectedCity = cityItem;
+    _selectedCity = cityInfo;
 }
 
 - (void)comboxSelected:(int)selectedIndex withIndexPath:(NSIndexPath *)indexPath
@@ -736,27 +682,6 @@ static CGFloat const FixRatio = 4/3.0;
     UPBaseCellItem *cellItem = self.itemList[indexPath.row];
     UPComboxCellItem *comboxItem = (UPComboxCellItem*)cellItem;
     [comboxItem setSelectedIndex:selectedIndex];
-    
-    if ([cellItem.key isEqualToString:@"activity_class"]) {
-        [self.itemList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            UPBaseCellItem *cellItem = (UPBaseCellItem *)obj;
-            if ([cellItem.key isEqualToString:@"fmale_low"]) {
-                if (selectedIndex==1||selectedIndex==2) { //夜店派对，家庭派对
-                    cellItem.cellHeight=kUPCellDefaultHeight;
-                    needFemale = YES;
-                } else {
-                    cellItem.cellHeight=0;
-                    needFemale = NO;
-                }
-                *stop = YES;
-            } else {
-                *stop = NO;
-            }
-        }];
-        
-        NSIndexPath *indexP = [NSIndexPath indexPathForRow:indexPath.row+1 inSection:0];
-        [_tableView reloadRowsAtIndexPaths:@[indexP] withRowAnimation:UITableViewRowAnimationNone];
-    }
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -901,6 +826,10 @@ static CGFloat const FixRatio = 4/3.0;
                         params[cellItem.key] = [UPTools dateTransform:cellItem.value fromFormat:@"yyyy-MM-dd" toFormat:@"yyyyMMdd235959"];
                     }
                     
+                } else if([cellItem.key isEqualToString:@"clothes_need"]) {
+                    _clothType = [UPConfig sharedInstance].clothTypeArr[[cellItem.value intValue]];
+                } else if([cellItem.key isEqualToString:@"is_prepaid"]) {
+                    _payType = [UPConfig sharedInstance].payTypeArr[[cellItem.value intValue]];
                 } else {
                    [params setObject:cellItem.value forKey:cellItem.key];
                 }
@@ -917,22 +846,25 @@ static CGFloat const FixRatio = 4/3.0;
         } else if ((_femaleLowLimit==nil || _femaleLowLimit.length==0)&&needFemale) {
             msg = @"请输入女性人数要求";
         }
-
-        if (msg) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-            [alert show];
-            return;
-        }
         
+        if (_clothType==nil) {
+            msg = @"请选择着装";
+        }
+        if (_payType==nil) {
+            msg = @"请选择付款方式";
+        }
         if (_actTypeID.length==0) {
             msg = @"请选择活动类型";
         }
+
         if (msg) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
             [alert show];
             return;
         }
 
+        [params setObject:_clothType.ID forKey:@"clothes_need"];
+        [params setObject:_payType.ID forKey:@"is_prepaid"];
         [params setObject:_actTypeID forKey:@"activity_class"];
         
         [params setObject:_selectedCity.province_code forKey:@"province_code"];
@@ -970,13 +902,10 @@ static CGFloat const FixRatio = 4/3.0;
                 if ([resp_id intValue]==0) {
                     [self setNewData];
                     [_tableView reloadData];
-                    
                 }
                 
                 showConfirmTagAlert(@"提示", @"活动发起成功，如需修改变更或取消，请点击活动规则查看相关规则和操作方式。", self, 1000);
             }
-            
-            
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"Error: %@", error);
         }];
@@ -1045,30 +974,6 @@ static CGFloat const FixRatio = 4/3.0;
 {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"上传活动图片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"从手机相册中获取", @"打开照相机", nil];
     [actionSheet showInView: self.view];
-//    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"上传活动图片" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-//    
-//    UIAlertAction *action = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-//        NSLog(@"取消");
-//    }];
-//    [alertController addAction:action];
-//    
-//    [alertController addAction:({
-//        UIAlertAction *action = [UIAlertAction actionWithTitle:@"从手机相册中获取" style:UIAlertActionStyleDefault  handler:^(UIAlertAction *action) {
-//            NSLog(@"从手机相册中获取");
-//            [self localPhoto];
-//        }];
-//        action;
-//    })];
-//    
-//    [alertController addAction:({
-//        UIAlertAction *action = [UIAlertAction actionWithTitle:@"打开照相机" style:UIAlertActionStyleDefault  handler:^(UIAlertAction *action) {
-//            NSLog(@"打开照相机");
-//            [self takePhoto];
-//        }];
-//        action;
-//    })];
-//    
-//    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 //开始拍照

@@ -99,8 +99,9 @@
     UILabel *_titleLab;
     UILabel *_freeTips;
     UILabel *_typeLab;
-    UILabel *_clothLab;
+    UILabel *_payLab;
     UILabel *_statusLab;
+    UILabel *_sponserLab;
     
     UIView *_btnContainerView;
     
@@ -112,7 +113,8 @@
     UIButton *_signActBtn;
     UIButton *_joinActBtn;
     
-    UPTimeLocationView *_timeLocationV;
+//    UPTimeLocationView *_timeLocationV;
+    UILabel *_timeLabel;
 }
 
 @end
@@ -143,6 +145,22 @@
 
         _img = [[UIImageView alloc] initWithFrame:CGRectZero];
         
+        _timeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _timeLabel.font = kUPThemeSmallFont;
+        _timeLabel.backgroundColor = [UIColor redColor];
+        _timeLabel.textAlignment = NSTextAlignmentCenter;
+        _timeLabel.layer.cornerRadius = 2.0f;
+        _timeLabel.adjustsFontSizeToFitWidth = YES;
+        _timeLabel.layer.masksToBounds = YES;
+        _timeLabel.textColor = [UIColor whiteColor];
+        
+        _statusLab = [[UILabel alloc] initWithFrame:CGRectZero];
+        _statusLab.font = kUPThemeMinFont;
+        _statusLab.textAlignment = NSTextAlignmentCenter;
+        _statusLab.textColor = [UIColor redColor];
+        _statusLab.layer.cornerRadius = 2.0f;
+        _statusLab.layer.masksToBounds = YES;
+        
         _typeLab = [[UILabel alloc] initWithFrame:CGRectZero];
         _typeLab.font = kUPThemeSmallFont;
         _typeLab.backgroundColor = [UPTools colorWithHex:0x79CDCD];
@@ -151,21 +169,21 @@
         _typeLab.adjustsFontSizeToFitWidth = YES;
         _typeLab.layer.masksToBounds = YES;
         
-        _clothLab = [[UILabel alloc] initWithFrame:CGRectZero];
-        _clothLab.font = kUPThemeSmallFont;
-        _clothLab.backgroundColor = [UPTools colorWithHex:0x79CDCD];
-        _clothLab.textAlignment = NSTextAlignmentCenter;
-        _clothLab.layer.cornerRadius = 2.0f;
-        _clothLab.layer.masksToBounds = YES;
-        _clothLab.adjustsFontSizeToFitWidth = YES;
+        _payLab = [[UILabel alloc] initWithFrame:CGRectZero];
+        _payLab.font = kUPThemeSmallFont;
+        _payLab.backgroundColor = [UPTools colorWithHex:0x79CDCD];
+        _payLab.textAlignment = NSTextAlignmentCenter;
+        _payLab.layer.cornerRadius = 2.0f;
+        _payLab.layer.masksToBounds = YES;
+        _payLab.adjustsFontSizeToFitWidth = YES;
         
-        _statusLab = [[UILabel alloc] initWithFrame:CGRectZero];
-        _statusLab.font = kUPThemeMinFont;
-        _statusLab.backgroundColor = [UIColor clearColor];
-        _statusLab.textColor = [UIColor redColor];
-        _statusLab.textAlignment = NSTextAlignmentCenter;
-        _statusLab.layer.cornerRadius = 2.0f;
-        _statusLab.layer.masksToBounds = YES;
+        _sponserLab = [[UILabel alloc] initWithFrame:CGRectZero];
+        _sponserLab.font = kUPThemeSmallFont;
+//        _sponserLab.backgroundColor = [UPTools colorWithHex:0x79CDCD];
+        _sponserLab.textAlignment = NSTextAlignmentCenter;
+        _sponserLab.layer.cornerRadius = 2.0f;
+        _sponserLab.layer.masksToBounds = YES;
+        _sponserLab.adjustsFontSizeToFitWidth = YES;
         
         _btnContainerView = [[UIView alloc] initWithFrame:CGRectZero];
         _btnContainerView.backgroundColor = [UIColor clearColor];
@@ -248,16 +266,17 @@
         [_btnContainerView addSubview:_signActBtn];
         [_btnContainerView addSubview:_joinActBtn];
         
-        _timeLocationV = [[UPTimeLocationView alloc] initWithFrame:CGRectZero];
-        
+//        _timeLocationV = [[UPTimeLocationView alloc] initWithFrame:CGRectZero];
+
         [backView addSubview:_img];
         [backView addSubview:_titleLab];
         [backView addSubview:_freeTips];
         [backView addSubview:_typeLab];
-        [backView addSubview:_clothLab];
+        [backView addSubview:_payLab];
         [backView addSubview:_statusLab];
         [backView addSubview:_btnContainerView];
-        [self addSubview:_timeLocationV];
+        [backView addSubview:_timeLabel];
+        [backView addSubview:_sponserLab];
     }
     return self;
 }
@@ -312,6 +331,13 @@
     
     CGSize size;
     
+    NSString *begin_time = [UPTools dateStringTransform:itemData.begin_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy.MM.dd"];
+    _timeLabel.text = begin_time;
+    size = SizeWithFont(begin_time, kUPThemeSmallFont);
+    
+    _timeLabel.size = CGSizeMake(size.width+kUPThemeBorder*2, size.height+4);
+    _timeLabel.center = CGPointMake(offsetx+size.width/2+kUPThemeBorder, offsety+perHeight/2);
+    
     /**
      二、活动状态时序
      活动背景：1日创建，10日报名截止，12日开始
@@ -329,52 +355,9 @@
      9-活动取消：1-10日期间，发起人主动取消
      **/
     
-    NSString *actTypeID = itemData.activity_class;
-    ActivityType *activityType = [[UPConfig sharedInstance] getActivityTypeByID:actTypeID];
-    
-    NSString *actTypeTitle = activityType.name;
-    BOOL showFemale = activityType.femaleFlag;
 
-    if (showFemale) {
-        _freeTips.hidden = NO;
-    } else {
-        _freeTips.hidden = YES;
-    }
-    if (actTypeTitle.length!=0) {
-        _typeLab.text = actTypeTitle;
-        size = SizeWithFont(actTypeTitle, kUPThemeSmallFont);
-        
-        float limitWidth = (ScreenWidth>320)?110:90;
-        if (size.width>limitWidth) {
-            size.width = limitWidth;
-        }
-        
-        _typeLab.size = CGSizeMake(size.width+10, size.height+4);
-        _typeLab.center = CGPointMake(offsetx+size.width/2+kUPThemeBorder, offsety+perHeight/2);
-    }
-    
-    NSString *clothID = itemData.clothes_need;
-    BaseType *baseType = [[UPConfig sharedInstance] getClothTypeByID:clothID];
-    
-    NSString *clothName = baseType.name;
-    if (clothName.length!=0) {
-        _clothLab.text = clothName;
-        size = SizeWithFont(clothName, kUPThemeSmallFont);
-        
-        float limitWidth = (ScreenWidth>320)?110:90;
-        if (size.width>limitWidth) {
-            size.width = limitWidth;
-        }
-        
-        _clothLab.size = CGSizeMake(size.width+10, size.height+4);;
-        _clothLab.center = CGPointMake(offsetx+size.width/2+kUPThemeBorder+_typeLab.size.width+kUPThemeBorder, offsety+perHeight/2);
-    }
-    
-    offsety += perHeight;
-    
     NSString *actStatusID = itemData.activity_status;
     ActivityStatus *actStatus = [[UPConfig sharedInstance] getActivityStatusByID:actStatusID];
-    
 
     if (actStatus) {
         NSString *statusName = actStatus.name;
@@ -388,10 +371,63 @@
         }
         _statusLab.text = statusName;
         size = SizeWithFont(statusName, kUPThemeMinFont);
-        _statusLab.size = CGSizeMake(size.width+10, size.height+4);;
-        _statusLab.center = CGPointMake(offsetx+size.width/2+5, offsety+perHeight/2);
-        
-        offsetx = CGRectGetMaxX(_statusLab.frame);
+        _statusLab.size = CGSizeMake(size.width+kUPThemeBorder*2, size.height+4);;
+        _statusLab.center = CGPointMake(offsetx+size.width/2+kUPThemeBorder+_timeLabel.size.width+kUPThemeBorder, offsety+perHeight/2);
+    }
+    
+    offsety += perHeight;
+    NSString *actTypeID = itemData.activity_class;
+    ActivityType *activityType = [[UPConfig sharedInstance] getActivityTypeByID:actTypeID];
+    
+    NSString *actTypeTitle = activityType.name;
+    BOOL showFemale = activityType.femaleFlag;
+    if (showFemale) {
+        _freeTips.hidden = NO;
+    } else {
+        _freeTips.hidden = YES;
+    }
+    if (actTypeTitle.length!=0) {
+        _typeLab.text = actTypeTitle;
+        size = SizeWithFont(actTypeTitle, kUPThemeSmallFont);
+        _typeLab.size = CGSizeMake(size.width+kUPThemeBorder*2, size.height+4);
+        _typeLab.center = CGPointMake(offsetx+size.width/2+kUPThemeBorder, offsety+perHeight/2);
+    } else {
+        _typeLab.frame = CGRectZero;
+    }
+    
+    NSString *payTypeID = itemData.is_prepaid;
+    BaseType *baseType = [[UPConfig sharedInstance] getPayTypeByID:payTypeID];
+    
+    NSString *payName = baseType.name;
+    if (payName.length!=0) {
+        _payLab.text = payName;
+        size = SizeWithFont(payName, kUPThemeSmallFont);
+
+        _payLab.size = CGSizeMake(size.width+kUPThemeBorder*2, size.height+4);;
+        _payLab.center = CGPointMake(offsetx+size.width/2+kUPThemeBorder+_typeLab.size.width+kUPThemeBorder, offsety+perHeight/2);
+    } else {
+        _payLab.frame = CGRectZero;
+    }
+    
+    offsety += perHeight;
+    if (_actCellItem.type==SourceTypeDaTing) {
+        NSString *sponser = itemData.nick_name;
+        if (sponser.length!=0) {
+            NSString *showStr = [NSString stringWithFormat:@"策划人：%@", sponser];
+            _sponserLab.text = showStr;
+            size = SizeWithFont(showStr, kUPThemeSmallFont);
+            
+            _sponserLab.size = CGSizeMake(size.width, size.height+4);;
+            _sponserLab.center = CGPointMake(offsetx+size.width/2, offsety+perHeight/2);
+        } else {
+            _sponserLab.frame = CGRectZero;
+        }
+    } else {
+        _sponserLab.frame = CGRectZero;
+    }
+    
+    if (actStatus) {
+        offsetx = height*4/3+kUPThemeBorder;
         
         _btnContainerView.size = CGSizeMake( width-offsetx, perHeight);
         _btnContainerView.center = CGPointMake((width+offsetx)/2, offsety+perHeight/2);
@@ -400,7 +436,6 @@
         
         CGSize size = SizeWithFont(@"回顾", kUPThemeMinFont);
         size.width += 10;
-        
         
         if (_actCellItem.type==SourceTypeWoFaqi) {
             switch ([actStatusID intValue]) {
@@ -448,7 +483,6 @@
                     break;
             }
         } else if(_actCellItem.type==SourceTypeWoCanyu) {
-            
             int anticipateStatus = [itemData.activity_class intValue];
             /**
              ● 参与者状态
@@ -535,24 +569,23 @@
             _commentActBtn.frame = CGRectZero;
             _quitActBtn.frame = CGRectZero;
         }
-        
         offsety += perHeight;
     }
     
-    offsetx = height*4/3+kUPThemeBorder;
-    NSString *time = [UPTools dateStringTransform:itemData.begin_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy.MM.dd"];
-    NSString *location = itemData.activity_place;
-    NSString *mergeStr = [NSString stringWithFormat:@"%@AAA%@", time, location];
+//    offsetx = height*4/3+kUPThemeBorder;
+//    NSString *time = [UPTools dateStringTransform:itemData.begin_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy.MM.dd"];
+//    NSString *location = itemData.activity_place;
+//    NSString *mergeStr = [NSString stringWithFormat:@"%@AAA%@", time, location];
+//    
+//    size = SizeWithFont(mergeStr, kUPThemeSmallFont);
+//    
+//    if (size.width>(width-height*4/3-2*kUPThemeBorder)) {
+//        size.width = width-height*4/3-2*kUPThemeBorder;
+//    }
     
-    size = SizeWithFont(mergeStr, kUPThemeSmallFont);
-    
-    if (size.width>(width-height*4/3-2*kUPThemeBorder)) {
-        size.width = width-height*4/3-2*kUPThemeBorder;
-    }
-    
-    _timeLocationV.size = CGSizeMake(size.width, size.height+4);
-    _timeLocationV.center = CGPointMake(offsetx+size.width/2, offsety+perHeight/2);
-    [_timeLocationV setTime:time andLocation:location];
+//    _timeLocationV.size = CGSizeMake(size.width, size.height+4);
+//    _timeLocationV.center = CGPointMake(offsetx+size.width/2, offsety+perHeight/2);
+//    [_timeLocationV setTime:time andLocation:location];
 }
 
 - (void)onClick:(UIButton *)sender

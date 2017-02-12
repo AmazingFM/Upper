@@ -8,10 +8,11 @@
 
 #import "UPBaseViewController.h"
 
-@class CityItem;
+@class CityInfo;
+@class ActivityData;
 @protocol CitySelectDelegate <NSObject>
 
-- (void)cityDidSelect:(CityItem *)cityItem;
+- (void)cityDidSelect:(CityInfo *)cityInfo;
 
 @end
 @interface UPCitySelectController : UPBaseViewController
@@ -19,5 +20,5 @@
 @end
 
 @interface NewLaunchActivityController : UPBaseViewController <CitySelectDelegate>
-
+@property (nonatomic, retain) ActivityData *actData;
 @end

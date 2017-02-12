@@ -287,12 +287,14 @@
         //tableView init
         _leftTableView = [[UITableView alloc] initWithFrame:CGRectMake(origin.x, self.frame.origin.y + self.frame.size.height, 0, 0) style:UITableViewStyleGrouped];
         _leftTableView.rowHeight = 38;
+        _leftTableView.bounces = NO;
         _leftTableView.separatorColor = [UIColor colorWithRed:220.f/255.0f green:220.f/255.0f blue:220.f/255.0f alpha:1.0];
         _leftTableView.dataSource = self;
         _leftTableView.delegate = self;
         
         _rightTableView = [[UITableView alloc] initWithFrame:CGRectMake(self.frame.size.width, self.frame.origin.y + self.frame.size.height, 0, 0) style:UITableViewStyleGrouped];
         _rightTableView.rowHeight = 38;
+        _rightTableView.bounces = NO;
         _rightTableView.separatorColor = [UIColor colorWithRed:220.f/255.0f green:220.f/255.0f blue:220.f/255.0f alpha:1.0];
         _rightTableView.dataSource = self;
         _rightTableView.delegate = self;
@@ -474,7 +476,6 @@
     } else{
         
         BOOL haveRightTableView = [_dataSource haveRightTableViewInColumn:tapIndex];
-//        UITableView *leftTableView = _leftTableView;
         UITableView *rightTableView = nil;
         
         if (haveRightTableView) {
@@ -617,7 +618,7 @@
             leftTableView.frame = CGRectMake(_origin.x, self.frame.origin.y + self.frame.size.height, self.frame.size.width*ratio, 0);
             [self.superview addSubview:leftTableView];
             
-            leftTableViewHeight = ([leftTableView numberOfRowsInSection:0] > 5) ? (5 * leftTableView.rowHeight) : ([leftTableView numberOfRowsInSection:0] * leftTableView.rowHeight);
+            leftTableViewHeight = ([leftTableView numberOfRowsInSection:0] > 8) ? (8 * leftTableView.rowHeight) : ([leftTableView numberOfRowsInSection:0] * leftTableView.rowHeight);
 
         }
         
@@ -627,7 +628,7 @@
             
             [self.superview addSubview:rightTableView];
             
-            rightTableViewHeight = ([rightTableView numberOfRowsInSection:0] > 5) ? (5 * rightTableView.rowHeight) : ([rightTableView numberOfRowsInSection:0] * rightTableView.rowHeight);
+            rightTableViewHeight = ([rightTableView numberOfRowsInSection:0] > 8) ? (8 * rightTableView.rowHeight) : ([rightTableView numberOfRowsInSection:0] * rightTableView.rowHeight);
         }
         
         CGFloat tableViewHeight = MAX(leftTableViewHeight, rightTableViewHeight);

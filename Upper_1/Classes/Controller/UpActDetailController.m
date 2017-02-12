@@ -15,12 +15,12 @@
 #import "UPDataManager.h"
 #import "ZouMaDengView.h"
 #import "MBProgressHUD+MJ.h"
-#import "LaunchActivityController.h"
 #import "EnrollPeopleController.h"
 #import "UPActivityCell.h"
 #import "UPTools.h"
 #import "DrawSomething.h"
 #import "UPConfig.h"
+#import "NewLaunchActivityController.h"
 
 #define LabelHeight 17
 #define AlertTagEdit    0
@@ -292,7 +292,7 @@
             
         } else if (buttonIndex==1) {
             //编辑
-            LaunchActivityController *editActivityController = [[LaunchActivityController alloc] init];
+            NewLaunchActivityController *editActivityController = [[NewLaunchActivityController alloc] init];
             editActivityController.actData = self.actData;
             [self.navigationController pushViewController:editActivityController animated:YES];
         } else if (buttonIndex==2) {

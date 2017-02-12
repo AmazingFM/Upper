@@ -26,6 +26,7 @@
 #import "UPGlobals.h"
 #import "UPTools.h"
 #import "DrawSomething.h"
+#import "UPConfig.h"
 
 
 #define BtnSpace 40
@@ -155,12 +156,7 @@ typedef enum register_enum
 {
     [super viewWillAppear:animated];
     [self showRegisterView:whichStep];
-    
-    if ([UPDataManager shared].hasLoadCities) {
-        [self.registerV1 loadCityData2:[UPDataManager shared].cityList];
-    } else {
-        [self startRequest:0];
-    }
+    [self.registerV1 loadAlphabetCitInfo];
 }
 
 - (void)leftClick
@@ -221,8 +217,6 @@ typedef enum register_enum
                 break;
             case 4:
             {
-                _identifyID = self.registerV5.identifyID;
-                _telnum = self.registerV5.telenum;
                 [self startRequest:REGISTER_REQ];
                 return;
             }
@@ -270,6 +264,8 @@ typedef enum register_enum
             self.registerV5.noEmail = YES;
         }
         
+        self.registerV5.industryID = _industryId;
+        
         [self.registerV5 resize];
         [self.nextBtn setTitle:@"提交" forState:UIControlStateNormal];
     }
@@ -291,9 +287,6 @@ typedef enum register_enum
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
     
     switch (type) {
-        case CITY_REQ:
-            [params setValue:@"CityQuery" forKey:@"a"];
-            break;
         case INDUSTRY_REQ:
             [params setValue:@"IndustryQuery" forKey:@"a"];
             [params setValue:_cityId forKey:@"cityId"];
@@ -308,17 +301,18 @@ typedef enum register_enum
         case REGISTER_REQ:
             [params setValue:@"Register" forKey:@"a"];
             [params setValue:_companyId forKey:@"node_id"];
-            [params setValue:_industryId forKey:@"industry_id"];
             [params setValue:_name forKey:@"user_name"];
             [params setValue:[UPTools md5HexDigest:_password] forKey:@"user_pass"];
             [params setValue:@"0" forKey:@"pass_type"];
+            [params setValue:_industryId forKey:@"industry_id"];
+            [params setValue:self.registerV5.telenum forKey:@"mobile"];
             [params setValue:_sex forKey:@"sexual"];
-            [params setValue:_telnum forKey:@"mobile"];
             
             [params setValue:_provCode forKey:@"province_code"];
             [params setValue:_cityCode forKey:@"city_code"];
             [params setValue:_townCode forKey:@"town_code"];
             
+
             /**
              一、用户注册验证信息、激活方式、密码找回
              case 1：有企业邮箱的公司员工。
@@ -345,14 +339,10 @@ typedef enum register_enum
              mobile传手机
              */
             //需要根据行业进行条件判断
-            [params setValue:_identifyID forKey:@"identify_id"];
-            
-            if (_emailSuffix &&_emailSuffix.length>0) {
-                [params setValue:@"0" forKey:@"identify_type"];
-            } else {
-                 [params setValue:@"2" forKey:@"identify_type"];
-            }
-            
+            [params setValue:self.registerV5.empName forKey:@"true_name"];
+            [params setValue:self.registerV5.empID forKey:@"employee_id"];
+            [params setValue:self.registerV5.identifyType forKey:@"identify_type"];
+            [params setValue:self.registerV5.identifyID forKey:@"identify_id"];
             
             break;
         default:
@@ -382,7 +372,6 @@ typedef enum register_enum
             switch (type) {
                 case CITY_REQ:
                 {
-                    [self.registerV1 loadCityData:resp_data];
                     break;
                 }
                 case INDUSTRY_REQ:

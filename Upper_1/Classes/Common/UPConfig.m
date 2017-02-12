@@ -448,8 +448,6 @@
         
         [self addCityToAlphabet:cityInfo];
         [self addCityToProvince:cityInfo];
-        
-        NSLog(@"%@:%@:%@", cityInfo.city, cityInfo.province, cityInfo.province_code);
     }
 }
 

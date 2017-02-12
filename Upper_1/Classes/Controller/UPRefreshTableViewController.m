@@ -39,6 +39,7 @@
     _mainTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     _mainTable.delegate = self;
     _mainTable.dataSource = self;
+    _mainTable.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     _mainTable.backgroundColor = [UIColor whiteColor];
     _mainTable.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
     _mainTable.footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];

@@ -23,6 +23,7 @@
 @property (nonatomic,copy) NSString *user_image;
 @property (nonatomic,copy) NSString *user_status;
 @property (nonatomic,copy) NSString *birthday;
+@property (nonatomic,copy) NSString *province_code;
 
 @property (nonatomic,copy) NSString *token;
 

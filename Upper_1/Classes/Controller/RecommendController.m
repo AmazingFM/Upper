@@ -19,10 +19,11 @@
 
 #define kUPShopPostURL @"http://api.qidianzhan.com.cn/AppServ/index.php?a=ShopAdd"
 
-@interface RecommendController () <UITableViewDelegate, UITableViewDataSource, CitySelectDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface RecommendController () <UITableViewDelegate, UITableViewDataSource, CitySelectDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate>
 {
     UITableView *_tableView;
-    CityItem *_selectedCity;
+    CityInfo *_selectedCity;
+    BaseType *_placeType;
     YMImageLoadView *_imageLoadView;
 }
 @property (nonatomic, retain) NSMutableArray *itemList;
@@ -34,6 +35,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    _selectedCity = nil;
+    _placeType = nil;
+    
     self.title = @"推荐商户";
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"default_cover_gaussian"]];
     self.navigationItem.rightBarButtonItem=nil;
@@ -59,11 +63,15 @@
     item1.title = @"商户名称";
     item1.placeholder = @"添加商户名称";
     item1.key = @"shop_name";
+    [item1 fillWithValue:@""];
     
-    NSArray *types = @[@"餐厅", @"咖啡馆", @"夜店Club", @"酒吧Pub", @"Lounge Bar", @"威士忌/雪茄吧",@"会所",@"公园", @"KTV", @"茶馆/下午茶", @"户外", @"农家乐",@"赛车场/卡丁车馆", @"攀岩", @"射箭/射击",@"健身会所/舞蹈",@"滑雪/溜冰", @"真人CS", @"密室脱逃", @"体育场馆",@"其他"];
     UPComboxCellItem *item2 = [[UPComboxCellItem alloc] init];
     item2.title = @"商家分类";
-    item2.comboxItems = types;
+    __block NSMutableArray *placeNames = [NSMutableArray new];
+    [[UPConfig sharedInstance].placeTypeArr enumerateObjectsUsingBlock:^(BaseType * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [placeNames addObject:obj.name];
+    }];
+    item2.comboxItems = placeNames;
     item2.style = UPItemStyleIndex;
     item2.comboxType = UPComboxTypePicker;
     item2.key = @"shop_class";
@@ -77,18 +85,21 @@
     item4.title = @"商户地址";
     item4.placeholder = @"请输入地址";
     item4.key = @"shop_address";
+    [item4 fillWithValue:@""];
     
     UPFieldCellItem *item5 = [[UPFieldCellItem alloc] init];
     item5.title = @"联系电话";
     item5.placeholder = @"请输入联系电话";
     item5.fieldType = UPFieldTypeNumber;
     item5.key = @"contact_no";
+    [item5 fillWithValue:@""];
 
     UPFieldCellItem *item6 = [[UPFieldCellItem alloc] init];
     item6.title = @"人均消费";
     item6.placeholder = @"请输入人均消费";
     item6.fieldType = UPFieldTypeNumber;
     item6.key = @"avg_cost";
+    [item6 fillWithValue:@""];
     
     UPTextCellItem *item7 = [[UPTextCellItem alloc] init];
     item7.placeholder = @"一句话描述";
@@ -185,19 +196,19 @@
 }
 
 #pragma mark Other Delegate
-- (void)cityDidSelect:(CityItem *)cityItem
+- (void)cityDidSelect:(CityInfo *)cityInfo
 {
     for (UPBaseCellItem *cellItem in self.itemList) {
         if ([cellItem.key isEqualToString:@"activity_area"]) {
             UPDetailCellItem *item = (UPDetailCellItem*)cellItem;
-            NSString *area = [NSString stringWithFormat:@"%@ %@", cityItem.province, cityItem.city];
+            NSString *area = [NSString stringWithFormat:@"%@ %@", cityInfo.province, cityInfo.city];
             item.detail = area;
             [_tableView reloadRowsAtIndexPaths:@[item.indexPath] withRowAnimation:UITableViewRowAnimationNone];
             break;
         }
     }
     
-    _selectedCity = cityItem;
+    _selectedCity = cityInfo;
 }
 
 
@@ -218,7 +229,6 @@
     
     //提交
     if([cellItem.key isEqualToString:@"submit"]){
-        //industry_id, province_code, city_code, town_code, limit_count, limit_low
         NSArray *paramKey = @[@"shop_name", @"shop_desc", @"shop_address", @"shop_class", @"contact_no", @"avg_cost"];
         
         NSDictionary *headParam = [UPDataManager shared].getHeadParams;
@@ -229,10 +239,29 @@
                 if (![self check:cellItem]) {
                     return;
                 }
-                [params setObject:cellItem.value forKey:cellItem.key];
+                
+                if([cellItem.key isEqualToString:@"shop_class"]) {
+                    _placeType = [UPConfig sharedInstance].placeTypeArr[[cellItem.value intValue]];
+                } else {
+                    [params setObject:cellItem.value forKey:cellItem.key];
+                }
             }
         }
         
+        NSString *msg = nil;
+        if (_selectedCity==nil) {
+            msg = @"请选择城市";
+        }
+        if (_placeType==nil) {
+            msg = @"请选择商户类型";
+        }
+        if (msg) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alert show];
+            return;
+        }
+        
+        [params setObject:_placeType.ID forKey:@"shop_class"];
         [params setObject:_selectedCity.province_code forKey:@"province_code"];
         [params setObject:_selectedCity.city_code forKey:@"city_code"];
         [params setObject:_selectedCity.town_code forKey:@"town_code"];
@@ -268,11 +297,9 @@
             NSObject *jsonObj = [UPTools JSONFromString:resp];
             if ([jsonObj isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *respDict = (NSDictionary *)jsonObj;
-                NSString *resp_id = respDict[@"resp_id"];
                 NSString *resp_desc = respDict[@"resp_desc"];
                 
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:resp_id message:resp_desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-                [alert show];
+                showConfirmAlert(@"提示", resp_desc, self);
             }
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"Error: %@", error);
@@ -280,6 +307,13 @@
         }];
     } else if([cellItem.key isEqualToString:@"imageUpload"]){
         [self openMenu];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex==1) {
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
@@ -393,9 +427,21 @@
 
 - (BOOL)check:(UPBaseCellItem *)cellItem
 {
-    if (cellItem.value==nil) {
-        //
+    NSDictionary *paramKey = @{@"shop_name":@"请输入商户名称", @"shop_desc":@"请输入商户描述", @"shop_address":@"请输入商户地址", @"contact_no":@"", @"avg_cost":@""};
+    
+    NSLog(@"%@",cellItem.key);
+    NSString *valueStr = cellItem.value;
+    NSString *msg = nil;
+    if (valueStr==nil || valueStr.length==0) {
+        msg = paramKey[cellItem.key];
     }
+    
+    if (msg!=nil && msg.length!=0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alert show];
+        return NO;
+    }
+    
     return YES;
 }
 

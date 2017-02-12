@@ -138,27 +138,6 @@ NSString * const g_loginFileName = @"login.plist";
     return _activityList;
 }
 
-
-
-
-- (void)initWithCityItems:(NSArray *)cityArr
-{
-    self.hasLoadCities = YES;
-    [cityArr enumerateObjectsUsingBlock: ^(CityItem *obj,NSUInteger idx, BOOL *stop)
-    {
-        if (obj.province&&obj.province.length>0) {
-            if (![self.provinceDict objectForKey:obj.province]) {
-                NSMutableArray *cityArr = [NSMutableArray array];
-                [self.provinceDict setObject:cityArr forKey:obj.province];
-            }
-            [[self.provinceDict objectForKey:obj.province] addObject:obj];
-        }
-    }];
-    
-    [self.cityList removeAllObjects];
-    [self.cityList addObjectsFromArray:cityArr];
-}
-
 - (NSString *)uuid
 {
     if (_uuid==nil) {

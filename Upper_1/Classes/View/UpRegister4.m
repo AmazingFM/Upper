@@ -65,7 +65,7 @@
             [rad1 setWidth:80 andHeight:size.height];
             [rad1 setText:@"男"];
             rad1 = [rad1 initWithGroupId:@"mygroup" index:0];
-            rad1.frame = CGRectMake(0, 0, 80, size.height);
+            rad1.frame = CGRectMake(0, 0, 100, size.height);
             
             [radioBackView addSubview:rad1];
             
@@ -73,7 +73,7 @@
             [rad2 setWidth:80 andHeight:size.height];
             [rad2 setText:@"女"];
             rad2 = [rad2 initWithGroupId:@"mygroup" index:1];
-            rad2.frame = CGRectMake(150, 0, 80, size.height);
+            rad2.frame = CGRectMake(120, 0, 80, size.height);
             [radioBackView addSubview:rad2];
             
             [rad1 handleButtonTap:rad1];
@@ -103,20 +103,6 @@
             [tmpField setKeyboardType:UIKeyboardTypeNumberPad];
         }
         
-//        if(i==5) {
-//            verifyBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//            verifyBtn.frame = CGRectMake(frame.size.width-LeftRightPadding-VerifyBtnWidth, tmpLabel.origin.y, VerifyBtnWidth, size.height);
-//            verifyBtn.layer.cornerRadius = 5.0f;
-//            verifyBtn.layer.borderWidth = 1;
-//            [verifyBtn setTitle:@"发送验证码" forState:UIControlStateNormal];
-//            verifyBtn.titleLabel.font = [UIFont systemFontOfSize:15.0f];
-//            [verifyBtn setBackgroundColor:[UIColor lightGrayColor]];
-//            [verifyBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-//            [verifyBtn addTarget:self action:@selector(sendSMS:) forControlEvents:UIControlEventTouchUpInside];
-//            tmpField.frame = CGRectMake(20+tmpLabel.size.width, tmpLabel.origin.y, verifyBtn.origin.x-20-tmpLabel.size.width, size.height);
-//            [contentScro addSubview:verifyBtn];
-//        }
-//        
         tmpField.delegate = self;
         tmpField.tag = 10+i;
     
@@ -253,21 +239,6 @@
         [str appendString:@"密码不一致\n"];
         return str;
     }
-
-//    if (self.telenum.length==0) {
-//        [str appendString:@"手机号不正确\n"];
-//        return str;
-//    }
-//
-//    if (self.verifyCode.length==0) {
-//        [str appendString:@"验证码不能为空\n"];
-//        return str;
-//    }
-    
-//    if (![self.verifyCode isEqualToString:self.smsText]) {
-//        [str appendString:@"验证码错误\n"];
-//        return str;
-//    }
     
     return @"";
 }

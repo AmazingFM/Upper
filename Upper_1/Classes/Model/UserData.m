@@ -32,6 +32,7 @@
         _user_status = [aDecoder decodeObjectForKey:@"user_status"];
         _birthday = [aDecoder decodeObjectForKey:@"birthday"];
         _token = [aDecoder decodeObjectForKey:@"token"];
+        _province_code = [aDecoder decodeObjectForKey:@"province_code"];
     }
     return self;
 }
@@ -51,6 +52,7 @@
     [aCoder encodeObject:_user_status forKey:@"user_status"];
     [aCoder encodeObject:_birthday forKey:@"birthday"];
     [aCoder encodeObject:_token forKey:@"token"];
+    [aCoder encodeObject:_province_code forKey:@"province_code"];
 }
 
 - (void)setWithUserData:(UserData *)userData;
@@ -69,6 +71,7 @@
         self.user_status = userData.user_status==nil?@"":userData.user_status;
         self.birthday = userData.birthday==nil?@"":userData.birthday;
         self.token = userData.token==nil?@"":userData.token;
+        self.province_code = userData.province_code==nil?@"":userData.province_code;
     }
 }
 @end

@@ -12,6 +12,8 @@
 #import "CityCell.h"
 #import "UPDataManager.h"
 
+#import "UPConfig.h"
+
 
 @interface UpRegister1 ()<ButtonGroupViewDelegate>
 {
@@ -23,9 +25,9 @@
 @property (nonatomic, retain) ButtonGroupView *locatingCityGV;
 @property (nonatomic, retain) ButtonGroupView *hotCityGV;
 @property (nonatomic, retain) UIView *tableHeaderView;
-@property (retain, nonatomic) NSMutableArray *allCities;
-@property (retain, nonatomic) NSMutableDictionary *cityDict;
-@property (retain, nonatomic) NSArray *keyArray;
+//@property (retain, nonatomic) NSMutableArray *allCities;
+//@property (retain, nonatomic) NSMutableDictionary *cityDict;
+//@property (retain, nonatomic) NSArray *keyArray;
 
 @end
 @implementation UpRegister1
@@ -60,7 +62,7 @@
     [_tableHeaderView addSubview:title3];
     
     [_arrayHotCity removeAllObjects];
-    [_arrayHotCity addObjectsFromArray:[self GetCityDataSoucre:[UPDataManager shared].cityList count:10]];
+    [_arrayHotCity addObjectsFromArray:[self GetCityDataSoucre:[UPConfig sharedInstance].cityContainer.cityInfoArr count:10]];
     long row = _arrayHotCity.count/3;
     if (_arrayHotCity.count%3 > 0) {
         row += 1;
@@ -83,7 +85,11 @@
 {
     NSMutableArray *cityAry = [[NSMutableArray alloc]init];
     for (int i=0; i<nCount&&i<ary.count; i++) {
-        [cityAry addObject: ary[i]];
+        CityInfo *cityInfo = ary[i];
+        CityItem *cityItem = [[CityItem alloc] init];
+        cityItem.cityInfo = cityInfo;
+
+        [cityAry addObject:cityItem];
     }
     
     return cityAry;
@@ -103,7 +109,7 @@
     titleLabel.backgroundColor = [UIColor clearColor];
     titleLabel.textColor = [UIColor whiteColor];
     titleLabel.font = [UIFont boldSystemFontOfSize:17];
-    titleLabel.text = [_keyArray objectAtIndex:section];
+    titleLabel.text = [UPConfig sharedInstance].cityContainer.alphaCityInfoArr[section].firstLetter;
     [bgView addSubview:titleLabel];
     
     return bgView;
@@ -114,14 +120,16 @@
     _tableView.sectionIndexBackgroundColor = [UIColor clearColor];
     _tableView.sectionIndexTrackingBackgroundColor = [UIColor clearColor];
     
-    NSMutableArray *indexNumber = [NSMutableArray arrayWithArray:_keyArray];
-    //添加搜索前的＃号
+    __block NSMutableArray *indexNumber = [NSMutableArray new];
+    [[UPConfig sharedInstance].cityContainer.alphaCityInfoArr enumerateObjectsUsingBlock:^(AlphabetCityInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [indexNumber addObject:obj.firstLetter];
+    }];
     return indexNumber;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [_keyArray count];
+    return [[UPConfig sharedInstance].cityContainer.alphaCityInfoArr count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
@@ -176,23 +184,27 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSString *key = [_keyArray objectAtIndex:section];
-    NSArray *citySection = [_cityDict objectForKey:key];
-    return [citySection count];
+    AlphabetCityInfo *alphaCityInfo = [UPConfig sharedInstance].cityContainer.alphaCityInfoArr[section];
+    return [alphaCityInfo.citylist count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *key = [_keyArray objectAtIndex:indexPath.section];
     CityCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cityCell"];
     if (cell == nil) {
         cell = [[CityCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cityCell"];
         
         cell.delegate = self;
     }
-    CityItem *rowCityItem = [[_cityDict objectForKey:key] objectAtIndex:indexPath.row];
-    rowCityItem.indexPath = indexPath;
-    [cell setCityItem:rowCityItem];
+    
+    AlphabetCityInfo *alphaCityInfo = [UPConfig sharedInstance].cityContainer.alphaCityInfoArr[indexPath.section];
+    CityInfo *cityInfo = [alphaCityInfo.citylist objectAtIndex:indexPath.row];
+    CityItem *cityItem = [[CityItem alloc] init];
+    cityItem.cityInfo = cityInfo;
+    cityItem.width = ScreenWidth;
+    cityItem.height = CellHeightDefault;
+    cityItem.indexPath = indexPath;
+    [cell setCityItem:cityItem];
 
     return cell;
 }
@@ -205,9 +217,9 @@
 
 - (void)cityCellSelected:(CityCell *)cell didClickItem:(CityItem *)item
 {
-    _cityId = item.city_code;
-    _provId = item.province_code;
-    _townId = item.town_code;
+    _cityId = item.cityInfo.city_code;
+    _provId = item.cityInfo.province_code;
+    _townId = item.cityInfo.town_code;
     
     for (CityButton *obj in _hotCityGV.buttons) {
         obj.selected = NO;
@@ -216,19 +228,16 @@
     if (_indexPath!=nil) {
         CityCell *lastCell = [self.tableView cellForRowAtIndexPath:_indexPath];
         [lastCell setSelected:NO animated:YES];
-//        NSLog(@"last :%ld,%ld, %@",_indexPath.section,_indexPath.row, lastCell.item.city);
     }
     [cell setSelected:YES animated:YES];
-//    NSLog(@"now :%ld,%ld, %@",item.indexPath.section,item.indexPath.row, item.city);
-
     _indexPath = item.indexPath;
 }
 
 -(void)ButtonGroupView:(ButtonGroupView *)buttonGroupView didClickedItem:(CityButton *)item
 {
-    _cityId = item.cityItem.city_code;
-    _provId = item.cityItem.province_code;
-    _townId = item.cityItem.town_code;
+    _cityId = item.cityItem.cityInfo.city_code;
+    _provId = item.cityItem.cityInfo.province_code;
+    _townId = item.cityItem.cityInfo.town_code;
     
     for (CityButton *obj in buttonGroupView.buttons) {
         obj.selected = NO;
@@ -240,74 +249,8 @@
     item.selected = YES;
 }
 
-- (void)loadCityData:(id)respData
+- (void)loadAlphabetCitInfo
 {
-    NSDictionary *dict = (NSDictionary *)respData;
-    NSString *total_count = dict[@"total_count"];
-    int nCount = [total_count intValue];
-    
-    _allCities = respData[@"city_list"];
-    NSArray<CityItem *> *cityArr = [CityItem objectArrayWithKeyValuesArray:_allCities];
-    
-    [[UPDataManager shared] initWithCityItems:cityArr];
-    
-    
-    NSMutableArray *tmpKeyList = [NSMutableArray array];
-    
-    _cityDict = [NSMutableDictionary dictionary];
-    for (int i=0; i<nCount; i++) {
-        CityItem *city = cityArr[i];
-        NSLog(@"省：%@,市：%@", city.province, city.city);
-        NSString *firstLetter = city.first_letter;
-        
-        if (NSNotFound == [tmpKeyList indexOfObject:firstLetter]) {
-            [tmpKeyList addObject:firstLetter];
-            NSMutableArray *tmpArr = [NSMutableArray array];
-            [_cityDict setObject:tmpArr forKey:firstLetter];
-        }
-    }
-    _keyArray = [tmpKeyList sortedArrayUsingSelector:@selector(compare:)];
-    
-    for (int i=0; i<nCount; i++) {
-        CityItem *city = cityArr[i];
-        city.width = ScreenWidth;
-        city.height = CellHeightDefault;
-        
-        if ([[_cityDict objectForKey:city.first_letter] isKindOfClass:[NSMutableArray class]]) {
-            [[_cityDict objectForKey:city.first_letter] addObject:city];
-        }
-    }
-    [self initHeaderView];
-    [_tableView reloadData];
-}
-
-- (void)loadCityData2:(NSArray *)cityArr
-{
-    NSMutableArray *tmpKeyList = [NSMutableArray array];
-    
-    _cityDict = [NSMutableDictionary dictionary];
-    for (int i=0; i<cityArr.count; i++) {
-        CityItem *city = cityArr[i];
-        NSLog(@"省：%@,市：%@", city.province, city.city);
-        NSString *firstLetter = city.first_letter;
-        
-        if (NSNotFound == [tmpKeyList indexOfObject:firstLetter]) {
-            [tmpKeyList addObject:firstLetter];
-            NSMutableArray *tmpArr = [NSMutableArray array];
-            [_cityDict setObject:tmpArr forKey:firstLetter];
-        }
-    }
-    _keyArray = [tmpKeyList sortedArrayUsingSelector:@selector(compare:)];
-    
-    for (int i=0; i<cityArr.count; i++) {
-        CityItem *city = cityArr[i];
-        city.width = ScreenWidth;
-        city.height = CellHeightDefault;
-        
-        if ([[_cityDict objectForKey:city.first_letter] isKindOfClass:[NSMutableArray class]]) {
-            [[_cityDict objectForKey:city.first_letter] addObject:city];
-        }
-    }
     [self initHeaderView];
     [_tableView reloadData];
 }

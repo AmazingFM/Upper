@@ -14,7 +14,4 @@
 #import "UPBaseViewController.h"
 
 @interface MainController : UPBaseViewController
-
-- (void)OnAction:(id)mself withType:(ActionType)actionType toView:(ViewType)viewType withArg:(id)arg;
-- (void)rightClick;
 @end

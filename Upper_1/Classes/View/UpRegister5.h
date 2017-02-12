@@ -18,11 +18,16 @@
 
 @property (nonatomic, retain) UILabel *suffixLabel;
 @property (nonatomic) BOOL noEmail;
+@property (nonatomic) NSString *industryID;
 
-@property (nonatomic, copy) NSString *identifyID;
+@property (nonatomic, copy) NSString *comPhone;
+@property (nonatomic, copy) NSString *empName;
+@property (nonatomic, copy) NSString *empID;
 @property (nonatomic, copy) NSString *telenum;
 @property (nonatomic, copy) NSString *smsText;
 
+- (NSString *)identifyID;
+- (NSString *)identifyType;
 - (void)resize;
 -(void)stopTimer;
 

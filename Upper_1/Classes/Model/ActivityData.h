@@ -64,7 +64,4 @@
 @property (nonatomic, copy) NSString *town;
 @property (nonatomic, copy) NSString *town_code;
 @property (nonatomic, copy) NSString *nick_name;
-
-//@property (nonatomic, copy) NSString *nick_name;
-
 @end

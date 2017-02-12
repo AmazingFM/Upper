@@ -74,7 +74,7 @@
     _cityItem = cityItem;
     
     if (!IsNilOrNull(_cityItem)) {
-        self.titleName.text = _cityItem.city;
+        self.titleName.text = _cityItem.cityInfo.city;
     }
 }
 

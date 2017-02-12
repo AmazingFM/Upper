@@ -27,15 +27,20 @@
     UILabel *nameLabel;
     UITextField *nameField ;
     
+    
+    
     UILabel *telLabel;
     UITextField *teleField ;
     UILabel *verifyLabel;
     UITextField *verifyField;
     UILabel *desLabel;
+    
+    NSString *empID;
+    NSString *telenumStr;
+    NSString *comPhone;
+    
+    CGRect viewframe;
 }
-@property (nonatomic, copy) NSString *comPhone;
-@property (nonatomic, copy) NSString *empName;
-@property (nonatomic, copy) NSString *empID;
 
 @property (nonatomic, copy) NSString *verifyCode;
 
@@ -54,16 +59,18 @@
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
+    viewframe = frame;
     
     float offsetY = 0;
     
     
-    NSString *telenumStr = @"手机号\nCellphone";
+    telenumStr = @"手机号\nCellphone";
     NSString *verifyCodeStr = @"验证码\nVerifyCode";
     NSString *emailStr = @"行业邮箱\nEmail";
     
-    NSString *comPhone = @"单位电话\nCom Tele";
-    NSString *empID = @"员工号\nEmp NO.";
+    
+    comPhone = @"单位电话\nCom Tele";
+    empID = @"员工号\nEmp NO.";
     NSString *empName = @"姓名\nName";
     
     CGSize size1 = SizeWithFont(comPhone, [UIFont systemFontOfSize:12]);
@@ -123,9 +130,7 @@
     _seperatorV5.backgroundColor = [UIColor grayColor];
     
     offsetY += size.height+25;
-//=================
-    
-    
+
     telLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY, size.width, size.height)];
     telLabel.textAlignment = NSTextAlignmentRight;
     telLabel.numberOfLines = 0;
@@ -243,10 +248,27 @@
 
 - (NSString *)identifyID
 {
-    if (_noEmail) {
-        return [NSString stringWithFormat:@"%@|%@", self.comPhone, self.empID];
-    } else {
+    if (!_noEmail) {
         return [NSString stringWithFormat:@"%@%@", self.emailPrefix, _emailSuffix];
+    } else {
+        if ([_industryID isEqualToString:@"1"]) {
+            return [NSString stringWithFormat:@"%@", self.empID];
+        } else {
+            return [NSString stringWithFormat:@"%@|%@", self.comPhone, self.empID];
+        }
+    }
+}
+
+- (NSString *)identifyType
+{
+    if (!_noEmail) {
+        return @"0";
+    } else {
+        if ([_industryID isEqualToString:@"1"]) {//医生
+            return @"1";
+        } else {
+            return @"2";
+        }
     }
 }
 
@@ -312,7 +334,91 @@
         _seperatorV5.hidden = NO;
         _seperatorV4.hidden = NO;
         
-        
+        if ([self.industryID isEqualToString:@"1"]) {//医生
+            empID = @"好医生ID\nDoctor ID";
+            
+            
+            CGSize size = SizeWithFont(telenumStr, [UIFont systemFontOfSize:12]);
+            
+            //隐藏单位电话
+            comPhoneLabel.frame = CGRectZero;
+            comPhoneField.frame = CGRectZero;
+            _seperatorV3.frame = CGRectZero;
+            
+            float offsetY = 0;
+            
+            float margin = 10;
+            empIDLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
+            empIDLabel.text = empID;
+            empIDField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, viewframe.size.width-2*LeftRightPadding-size.width-margin, size.height);
+            
+            _seperatorV4.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
+            
+            offsetY += size.height+25;
+            
+            nameLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
+            nameField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, viewframe.size.width-2*LeftRightPadding-size.width-margin, size.height);
+            
+            _seperatorV5.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
+            
+            offsetY += size.height+25;
+            
+            telLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
+            teleField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, viewframe.size.width-2*LeftRightPadding-size.width-margin, size.height);
+            
+            _seperatorV1.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
+            
+            offsetY += size.height+25;
+            
+            verifyLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
+            verifyBtn.frame = CGRectMake(viewframe.size.width-LeftRightPadding-VerifyBtnWidth, offsetY, VerifyBtnWidth, size.height);
+            verifyField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, verifyBtn.origin.x-LeftRightPadding-size.width-margin, size.height);
+            
+            _seperatorV2.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
+        } else {
+            empID = @"员工号\nEmp NO.";
+            float offsetY = 0;
+            float margin = 10;
+            
+            CGSize size1 = SizeWithFont(comPhone, [UIFont systemFontOfSize:12]);
+            CGSize size2 = SizeWithFont(telenumStr, [UIFont systemFontOfSize:12]);
+            CGSize size = (size1.width>size2.width)?size1:size2;
+            
+            comPhoneLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
+            comPhoneField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, viewframe.size.width-2*LeftRightPadding-size.width-margin, size.height);
+            
+            _seperatorV3.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
+            
+            offsetY += size.height+25;
+            
+            empIDLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
+            empIDLabel.text = empID;
+            empIDField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, viewframe.size.width-2*LeftRightPadding-size.width-margin, size.height);
+            
+            _seperatorV4.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
+            
+            offsetY += size.height+25;
+            
+            nameLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
+            nameField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, viewframe.size.width-2*LeftRightPadding-size.width-margin, size.height);
+            
+            _seperatorV5.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
+            
+            offsetY += size.height+25;
+            
+            telLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
+            teleField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, viewframe.size.width-2*LeftRightPadding-size.width-margin, size.height);
+            
+            _seperatorV1.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
+            
+            offsetY += size.height+25;
+            
+            verifyLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
+            verifyBtn.frame = CGRectMake(viewframe.size.width-LeftRightPadding-VerifyBtnWidth, offsetY, VerifyBtnWidth, size.height);
+            verifyField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, verifyBtn.origin.x-LeftRightPadding-size.width-margin, size.height);
+            
+            _seperatorV2.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
+        }
         _tipLabel.hidden = YES;
         _seperatorV.hidden = YES;
         _emailField.hidden = YES;
@@ -352,12 +458,12 @@
         _suffixLabel.textAlignment = NSTextAlignmentLeft|NSTextAlignmentCenter;
         _suffixLabel.adjustsFontSizeToFitWidth = YES;
         _suffixLabel.minimumScaleFactor = 0.5;
-        desLabel.frame = CGRectMake(LeftRightPadding, CGRectGetMaxY(_seperatorV.frame)+25, self.frame.size.width-2*LeftRightPadding, 10);
-        desLabel.text = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的公司邮箱，我们会向您提供的邮箱内发送一份验证邮件，点击邮件中的激活链接即可激活您的账号。";
-        [desLabel sizeToFit];
         
         _emailField.frame = CGRectMake(5+_tipLabel.origin.x+_tipLabel.width, 0, self.frame.size.width*2/3-_tipLabel.origin.x-_tipLabel.width-5, _tipLabel.height);
         _seperatorV.frame = CGRectMake(5+_tipLabel.origin.x+_tipLabel.width, _tipLabel.y+_tipLabel.height, self.frame.size.width*2/3-_tipLabel.origin.x-_tipLabel.width-5, 1);
+        desLabel.frame = CGRectMake(LeftRightPadding, CGRectGetMaxY(_seperatorV.frame)+25, self.frame.size.width-2*LeftRightPadding, 10);
+        desLabel.text = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的公司邮箱，我们会向您提供的邮箱内发送一份验证邮件，点击邮件中的激活链接即可激活您的账号。";
+        [desLabel sizeToFit];
     }
 }
 
@@ -370,28 +476,40 @@
 {
     if (_noEmail) {
         NSMutableString *str = [[NSMutableString alloc] init];
-        if (self.telenum.length==0) {
-            [str appendString:@"手机号不正确\n"];
-            return str;
+        
+        if ([_industryID isEqualToString:@"1"]) {
+            if (self.telenum.length==0) {
+                [str appendString:@"手机号不正确\n"];
+                return str;
+            }
+            if (self.empName.length==0) {
+                [str appendString:@"姓名不能为空\n"];
+                return str;
+            }
+            if (self.empID.length==0) {
+                [str appendString:@"医生ID不能为空\n"];
+                return str;
+            }
+        } else {
+            if (self.telenum.length==0) {
+                [str appendString:@"手机号不正确\n"];
+                return str;
+            }
+            if (self.empName.length==0) {
+                [str appendString:@"姓名不能为空\n"];
+                return str;
+            }
+            if (self.comPhone.length==0) {
+                [str appendString:@"单位电话不能为空\n"];
+                return str;
+            }
         }
         
         if (self.verifyCode.length==0) {
             [str appendString:@"验证码不能为空\n"];
             return str;
         }
-        
-        if (self.empName.length==0) {
-            [str appendString:@"姓名不能为空\n"];
-            return str;
-        }
 
-        if (self.comPhone.length==0) {
-            [str appendString:@"单位电话不能为空\n"];
-            return str;
-        }
-        
-        BOOL a=[self.verifyCode isEqualToString:self.smsText];
-        BOOL b=[self.verifyCode isEqualToString:@"9527"];
         if (![self.verifyCode isEqualToString:self.smsText]&&
             ![self.verifyCode isEqualToString:@"9527"]) {
             [str appendString:@"验证码错误\n"];

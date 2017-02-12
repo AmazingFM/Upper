@@ -68,20 +68,19 @@
     
     NSArray *segmentedData = [[NSArray alloc]initWithObjects:@"我发起的",@"我参与的", nil];
     UISegmentedControl *segmentedControl = [[UISegmentedControl alloc]initWithItems:segmentedData];
-    
     /*
      这个是设置按下按钮时的颜色
      */
-    segmentedControl.tintColor = [UIColor whiteColor];//[UIColor colorWithRed:49.0 / 256.0 green:148.0 / 256.0 blue:208.0 / 256.0 alpha:1];
+    segmentedControl.tintColor = [UIColor redColor];//[UIColor colorWithRed:49.0 / 256.0 green:148.0 / 256.0 blue:208.0 / 256.0 alpha:1];
     segmentedControl.selectedSegmentIndex = 0;//默认选中的按钮索引
     
     _selectedIndex = (int)segmentedControl.selectedSegmentIndex;
     /*
      下面的代码实同正常状态和按下状态的属性控制,比如字体的大小和颜色等
      */
-    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:12],NSFontAttributeName,[UIColor redColor], NSForegroundColorAttributeName, nil];
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:12],NSFontAttributeName,[UIColor whiteColor], NSForegroundColorAttributeName, nil];
     [segmentedControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
-    NSDictionary *highlightedAttributes = [NSDictionary dictionaryWithObject:[UIColor redColor] forKey:NSForegroundColorAttributeName];
+    NSDictionary *highlightedAttributes = [NSDictionary dictionaryWithObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
     [segmentedControl setTitleTextAttributes:highlightedAttributes forState:UIControlStateHighlighted];
     //设置分段控件点击相应事件
     [segmentedControl addTarget:self action:@selector(segmentAction:)forControlEvents:UIControlEventValueChanged];

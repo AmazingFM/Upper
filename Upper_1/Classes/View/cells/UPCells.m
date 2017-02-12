@@ -875,7 +875,7 @@
 }
 
 #pragma mark UITextViewDelegate
-- (void)textViewDidEndEditing:(UITextView *)textView
+- (void)textViewDidChange:(UITextView *)textView
 {
     UPTextCellItem *cellItem = (UPTextCellItem *)self.item;
     cellItem.fieldText = textView.text;

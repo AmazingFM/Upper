@@ -42,7 +42,7 @@
     _cityNameBtn.frame = CGRectMake(LeftRightPadding, TopDownPadding, cityItem.width-2*LeftRightPadding, cityItem.height-2*TopDownPadding);
     _cityNameBtn.layer.cornerRadius = 5.0f;
     _cityNameBtn.layer.masksToBounds = YES;
-    [_cityNameBtn setTitle:cityItem.city forState:UIControlStateNormal];
+    [_cityNameBtn setTitle:cityItem.cityInfo.city forState:UIControlStateNormal];
     [_cityNameBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     _cityNameBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     _cityNameBtn.contentEdgeInsets = UIEdgeInsetsMake(0,10, 0, 0);
@@ -55,7 +55,7 @@
 - (void)btnClicked:(UIButton *)btn
 {
     //btn.selected = !btn.selected;
-    NSLog(@"btnClick:%@",_item.city);
+    NSLog(@"btnClick:%@",_item.cityInfo.city);
 
     if ([self.delegate respondsToSelector:@selector(cityCellSelected:didClickItem:)]) {
         [self.delegate cityCellSelected:self didClickItem:_item];

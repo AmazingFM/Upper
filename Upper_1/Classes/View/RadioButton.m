@@ -133,7 +133,8 @@ static NSMutableDictionary *rb_observers=nil;
     _button = [UIButton buttonWithType:UIButtonTypeCustom];
     [_button setSize:CGSizeMake(_width*0.8, _height*0.8)];
     [_button setCenter:CGPointMake(_width*0.5, _height*0.5)];
-    _button.adjustsImageWhenHighlighted = NO; 
+    _button.adjustsImageWhenHighlighted = NO;
+    [_button.imageView setContentMode:UIViewContentModeScaleAspectFit];
     
     if (self.selectedIcon && self.unselectedIcon) {
         [_button setImage:[UIImage imageNamed:_selectedIcon] forState:UIControlStateNormal];

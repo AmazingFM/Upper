@@ -110,24 +110,7 @@
 
 - (void)makeAction:(id)sender
 {
-    UIButton *button = (UIButton*)sender;
-    int tag = button.tag;
-    switch (tag) {
-        case 0:
-        {
-            //do nothing
-            
-        }
-            break;
-        case 1:
-        {
-            [self.parentController OnAction:self withType:CHANGE_VIEW toView:LAUNCH_ACTIVITY_VIEW withArg:nil];
-        }
-            
-        default:
-            break;
-    }
-    
+
 }
 
 @end
