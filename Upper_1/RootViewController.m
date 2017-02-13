@@ -10,7 +10,6 @@
 #import "MainController.h"
 #import "UPMainMenuController.h"
 #import "UPRulesController.h"
-#import "MessageManager.h"
 #import "XWHttpTool.h"
 #import "UUMessage.h"
 #import "UserData.h"
@@ -40,20 +39,7 @@
 {
     self = [super init];
     if (self) {
-//        _mainViewController = [[MainController alloc] init];
-//        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:_mainViewController];
-//        nav.navigationBar.shadowImage = [[UIImage alloc] init];
-//        nav.interactivePopGestureRecognizer.enabled = NO;
-//        nav.interactivePopGestureRecognizer.delegate = nil;
-
         UPMainMenuController *mainMenuVC = [[UPMainMenuController alloc] init];
-        
-//        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:mainMenuVC];
-//        nav.navigationBar.shadowImage = [[UIImage alloc] init];
-//        nav.interactivePopGestureRecognizer.enabled = NO;
-//        nav.interactivePopGestureRecognizer.delegate = nil;
-
-        
         self.rootViewController = mainMenuVC;
         self.leftViewController = [[YMSlideViewController alloc] init];
         self.leftViewShowWidth = kYMSlideControllerWidth;

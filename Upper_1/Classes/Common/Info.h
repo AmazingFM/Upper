@@ -9,15 +9,6 @@
 #ifndef Upper_1_Info_h
 #define Upper_1_Info_h
 
-//#define kHugeFont      [UIFont systemFontOfSize:26]
-//#define kBigBigFont    [UIFont systemFontOfSize:22]
-//#define kBigFont       [UIFont systemFontOfSize:20]
-//#define kMiddleFont    [UIFont systemFontOfSize:16]
-//#define kNomalFont     [UIFont systemFontOfSize:14]
-//#define kSmallFont     [UIFont systemFontOfSize:10]
-//#define kMinFont       [UIFont systemFontOfSize:8]
-
-
 #define kNotifierLogin    @"kNotifierLoginIdentifier"    //登录
 #define kNotifierLogout   @"kNotifierLogoutIdentifier"    //登出
 

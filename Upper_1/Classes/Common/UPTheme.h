@@ -105,7 +105,7 @@
 #define kUPThemeSmallFont     [UIFont systemFontOfSize:14]
 #define kUPThemeMinFont       [UIFont systemFontOfSize:12]
 
-#define kUPThemeTitleFont     [UIFont systemFontOfSize:18]
+#define kUPThemeTitleFont     [UIFont systemFontOfSize:17]
 #define kUPThemeInfoTimeFont  [UIFont systemFontOfSize:15]
 
 extern UIButton* createSubmitButton(CGFloat fontSize);

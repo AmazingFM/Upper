@@ -10,7 +10,5 @@
 
 @interface UPRegisterView : UIView
 
-
--(void)clearValue;
 -(NSString *)alertMsg;
 @end

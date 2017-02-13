@@ -128,6 +128,7 @@
 		2CDAD6C61D0EF42000C260F4 /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CDAD6A51D0EF42000C260F4 /* UIRefreshControl+AFNetworking.m */; };
 		2CDAD6C71D0EF42000C260F4 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CDAD6A71D0EF42000C260F4 /* UIWebView+AFNetworking.m */; };
 		3A00689C1D864CDE00BC08CD /* UPHerParticipatedActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A00689B1D864CDE00BC08CD /* UPHerParticipatedActivityController.m */; };
+		3A04D6911E51A5ED004396D2 /* MessageListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A04D6901E51A5ED004396D2 /* MessageListController.m */; };
 		3A05508E1DB5EB99009EA918 /* UPMyFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A05508D1DB5EB99009EA918 /* UPMyFriendsViewController.m */; };
 		3A0550921DB602EC009EA918 /* UPAddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0550911DB602EC009EA918 /* UPAddFriendViewController.m */; };
 		3A08464F1D619D6800170C64 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A08464E1D619D6800170C64 /* libsqlite3.0.tbd */; };
@@ -144,6 +145,12 @@
 		3A44D7E81E4D96BB004ADA08 /* PlaceType.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A44D7E71E4D96BB004ADA08 /* PlaceType.plist */; };
 		3A44D7EA1E4D9C75004ADA08 /* PayType.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A44D7E91E4D9C75004ADA08 /* PayType.plist */; };
 		3A5368261D54791E00F36FBC /* YRSideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A5368251D54791E00F36FBC /* YRSideViewController.m */; };
+		3A6944CD1E51615F00F1BEF5 /* messageComment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A6944CA1E51615F00F1BEF5 /* messageComment@2x.png */; };
+		3A6944CE1E51615F00F1BEF5 /* messageInvite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A6944CB1E51615F00F1BEF5 /* messageInvite@2x.png */; };
+		3A6944CF1E51615F00F1BEF5 /* messageSystem@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A6944CC1E51615F00F1BEF5 /* messageSystem@2x.png */; };
+		3A6944D21E51853C00F1BEF5 /* PrivateMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A6944D11E51853C00F1BEF5 /* PrivateMessage.m */; };
+		3A6944D51E5195E700F1BEF5 /* UIBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A6944D41E5195E700F1BEF5 /* UIBadgeView.m */; };
+		3A6944D81E5195F200F1BEF5 /* UIColor+expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A6944D71E5195F200F1BEF5 /* UIColor+expanded.m */; };
 		3A71CB8B1E26267700EBE0A2 /* act.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A71CB3B1E26267700EBE0A2 /* act.png */; };
 		3A71CB8C1E26267700EBE0A2 /* add.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A71CB3C1E26267700EBE0A2 /* add.png */; };
 		3A71CB8D1E26267700EBE0A2 /* add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A71CB3D1E26267700EBE0A2 /* add@2x.png */; };
@@ -550,6 +557,8 @@
 		2CDAD6A71D0EF42000C260F4 /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
 		3A00689A1D864CDE00BC08CD /* UPHerParticipatedActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPHerParticipatedActivityController.h; sourceTree = "<group>"; };
 		3A00689B1D864CDE00BC08CD /* UPHerParticipatedActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPHerParticipatedActivityController.m; sourceTree = "<group>"; };
+		3A04D68F1E51A5ED004396D2 /* MessageListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageListController.h; sourceTree = "<group>"; };
+		3A04D6901E51A5ED004396D2 /* MessageListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageListController.m; sourceTree = "<group>"; };
 		3A05508C1DB5EB99009EA918 /* UPMyFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPMyFriendsViewController.h; sourceTree = "<group>"; };
 		3A05508D1DB5EB99009EA918 /* UPMyFriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPMyFriendsViewController.m; sourceTree = "<group>"; };
 		3A0550901DB602EC009EA918 /* UPAddFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPAddFriendViewController.h; sourceTree = "<group>"; };
@@ -576,6 +585,15 @@
 		3A44D7E91E4D9C75004ADA08 /* PayType.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PayType.plist; sourceTree = "<group>"; };
 		3A5368241D54791E00F36FBC /* YRSideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YRSideViewController.h; sourceTree = "<group>"; };
 		3A5368251D54791E00F36FBC /* YRSideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YRSideViewController.m; sourceTree = "<group>"; };
+		3A6944CA1E51615F00F1BEF5 /* messageComment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "messageComment@2x.png"; sourceTree = "<group>"; };
+		3A6944CB1E51615F00F1BEF5 /* messageInvite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "messageInvite@2x.png"; sourceTree = "<group>"; };
+		3A6944CC1E51615F00F1BEF5 /* messageSystem@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "messageSystem@2x.png"; sourceTree = "<group>"; };
+		3A6944D01E51853C00F1BEF5 /* PrivateMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrivateMessage.h; sourceTree = "<group>"; };
+		3A6944D11E51853C00F1BEF5 /* PrivateMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrivateMessage.m; sourceTree = "<group>"; };
+		3A6944D31E5195E700F1BEF5 /* UIBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBadgeView.h; sourceTree = "<group>"; };
+		3A6944D41E5195E700F1BEF5 /* UIBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBadgeView.m; sourceTree = "<group>"; };
+		3A6944D61E5195F200F1BEF5 /* UIColor+expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+expanded.h"; sourceTree = "<group>"; };
+		3A6944D71E5195F200F1BEF5 /* UIColor+expanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+expanded.m"; sourceTree = "<group>"; };
 		3A71CB3B1E26267700EBE0A2 /* act.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = act.png; sourceTree = "<group>"; };
 		3A71CB3C1E26267700EBE0A2 /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add.png; sourceTree = "<group>"; };
 		3A71CB3D1E26267700EBE0A2 /* add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add@2x.png"; sourceTree = "<group>"; };
@@ -874,6 +892,8 @@
 				3A837D1B1DD8123700A9A0BB /* UPMessageCell.m */,
 				3A837D391DD8920A00A9A0BB /* UPMsgBubbleCell.h */,
 				3A837D3A1DD8920A00A9A0BB /* UPMsgBubbleCell.m */,
+				3A6944D01E51853C00F1BEF5 /* PrivateMessage.h */,
+				3A6944D11E51853C00F1BEF5 /* PrivateMessage.m */,
 			);
 			path = message;
 			sourceTree = "<group>";
@@ -1356,6 +1376,9 @@
 		3A71CB461E26267700EBE0A2 /* chat */ = {
 			isa = PBXGroup;
 			children = (
+				3A6944CA1E51615F00F1BEF5 /* messageComment@2x.png */,
+				3A6944CB1E51615F00F1BEF5 /* messageInvite@2x.png */,
+				3A6944CC1E51615F00F1BEF5 /* messageSystem@2x.png */,
 				3A71CB471E26267700EBE0A2 /* chat_animation1.png */,
 				3A71CB481E26267700EBE0A2 /* chat_animation2.png */,
 				3A71CB491E26267700EBE0A2 /* chat_animation3.png */,
@@ -1436,6 +1459,8 @@
 				2CDAD4DA1D05B90100C260F4 /* BubbleChatViewController.m */,
 				3A837D361DD88F6400A9A0BB /* MessageBubbleViewController.h */,
 				3A837D371DD88F6400A9A0BB /* MessageBubbleViewController.m */,
+				3A04D68F1E51A5ED004396D2 /* MessageListController.h */,
+				3A04D6901E51A5ED004396D2 /* MessageListController.m */,
 			);
 			name = chat;
 			sourceTree = "<group>";
@@ -1630,6 +1655,8 @@
 		EC3C16FD1CECB16D00223D6B /* thirdparty */ = {
 			isa = PBXGroup;
 			children = (
+				3A6944D31E5195E700F1BEF5 /* UIBadgeView.h */,
+				3A6944D41E5195E700F1BEF5 /* UIBadgeView.m */,
 				857DA6701E4CA2C400250605 /* JSDropDownMenu */,
 				3A5368241D54791E00F36FBC /* YRSideViewController.h */,
 				3A5368251D54791E00F36FBC /* YRSideViewController.m */,
@@ -1647,6 +1674,8 @@
 		EC3C16FE1CECB16D00223D6B /* Gategoary */ = {
 			isa = PBXGroup;
 			children = (
+				3A6944D61E5195F200F1BEF5 /* UIColor+expanded.h */,
+				3A6944D71E5195F200F1BEF5 /* UIColor+expanded.m */,
 				EC3C16FF1CECB16D00223D6B /* NSData+Base64.h */,
 				EC3C17001CECB16D00223D6B /* NSData+Base64.m */,
 				EC3C17011CECB16D00223D6B /* NSDate+CH.h */,
@@ -1864,6 +1893,7 @@
 				3A71CB8E1E26267700EBE0A2 /* arrow.png in Resources */,
 				3A71CB951E26267700EBE0A2 /* camera.png in Resources */,
 				3A71CBC71E26267700EBE0A2 /* search_btn_line@2x.png in Resources */,
+				3A6944CF1E51615F00F1BEF5 /* messageSystem@2x.png in Resources */,
 				3A44D7EA1E4D9C75004ADA08 /* PayType.plist in Resources */,
 				2CDAD6681D0EEC4000C260F4 /* sdRefeshView_arrow@2x.png in Resources */,
 				3A71CBAD1E26267700EBE0A2 /* gou.png in Resources */,
@@ -1917,8 +1947,10 @@
 				3A71CB941E26267700EBE0A2 /* bubble.png in Resources */,
 				3A71CBC51E26267700EBE0A2 /* scanrect.png in Resources */,
 				856A4CED1E4F76AF0051ED4E /* cityInfo.json in Resources */,
+				3A6944CD1E51615F00F1BEF5 /* messageComment@2x.png in Resources */,
 				3A71CBA51E26267700EBE0A2 /* checkbox.png in Resources */,
 				3A71CB9B1E26267700EBE0A2 /* chat_animation_white3.png in Resources */,
+				3A6944CE1E51615F00F1BEF5 /* messageInvite@2x.png in Resources */,
 				3A71CBA91E26267700EBE0A2 /* done@3x.png in Resources */,
 				3A71CB9A1E26267700EBE0A2 /* chat_animation_white2.png in Resources */,
 				3A71CBB41E26267700EBE0A2 /* logo.png in Resources */,
@@ -2020,6 +2052,7 @@
 				2CDAD63B1D0EEC4000C260F4 /* FMDatabaseAdditions.m in Sources */,
 				EC3C181A1CECB16D00223D6B /* UPQRViewController.m in Sources */,
 				2CDAD63E1D0EEC4000C260F4 /* FMResultSet.m in Sources */,
+				3A6944D81E5195F200F1BEF5 /* UIColor+expanded.m in Sources */,
 				2C621BF11D85BBFE00068F76 /* UPActivityAssistantController.m in Sources */,
 				2CDAD6311D0EEC4000C260F4 /* AFSecurityPolicy.m in Sources */,
 				EC3C18821CECB16D00223D6B /* UPCells.m in Sources */,
@@ -2095,6 +2128,7 @@
 				3A837D4D1DDEDC9200A9A0BB /* UPActAsistDetailController.m in Sources */,
 				EC3C18921CECB16D00223D6B /* UpRegister1.m in Sources */,
 				EC3C181D1CECB16D00223D6B /* ActivityItem.m in Sources */,
+				3A6944D21E51853C00F1BEF5 /* PrivateMessage.m in Sources */,
 				3A837D211DD883B500A9A0BB /* BottomBarViewController.m in Sources */,
 				EC3C18261CECB16D00223D6B /* NSDate+CH.m in Sources */,
 				2CDAD6701D0EEC4000C260F4 /* SDWebImageCompat.m in Sources */,
@@ -2110,6 +2144,7 @@
 				2C1072861CFC97A700D74AE1 /* UPBaseModel.m in Sources */,
 				EC3C188D1CECB16D00223D6B /* UPDatePickView.m in Sources */,
 				EC3C180D1CECB16D00223D6B /* UPHerLaunchedActivityController.m in Sources */,
+				3A6944D51E5195E700F1BEF5 /* UIBadgeView.m in Sources */,
 				2CDAD65F1D0EEC4000C260F4 /* TAAnimatedDotView.m in Sources */,
 				EC3C188A1CECB16D00223D6B /* MyActCell.m in Sources */,
 				2CDAD6751D0EEC4000C260F4 /* SDWebImagePrefetcher.m in Sources */,
@@ -2127,6 +2162,7 @@
 				EC3C18041CECB16D00223D6B /* XWCommonHttpTool.m in Sources */,
 				EC3C181E1CECB16D00223D6B /* CityButton.m in Sources */,
 				2CC645371D04105200A07408 /* UPBaseViewController.m in Sources */,
+				3A04D6911E51A5ED004396D2 /* MessageListController.m in Sources */,
 				2CDAD63F1D0EEC4000C260F4 /* MBProgressHUD+MJ.m in Sources */,
 				3A837D1C1DD8123700A9A0BB /* UPMessageCell.m in Sources */,
 				2CDAD65A1D0EEC4000C260F4 /* UIScrollView+MJExtension.m in Sources */,
