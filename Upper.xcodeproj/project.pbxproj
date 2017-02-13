@@ -237,9 +237,13 @@
 		3AAF86391D6C193700248A45 /* YMImageLoadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAF86381D6C193700248A45 /* YMImageLoadView.m */; };
 		3ACF2AF51D6AEDD30083E04E /* RecommendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACF2AF41D6AEDD30083E04E /* RecommendController.m */; };
 		3AFCCDBD1D5C09BC0003F6F3 /* NewLaunchActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */; };
+		850D79211E51FA670082D944 /* NSString+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 850D79201E51FA670082D944 /* NSString+Common.m */; };
 		856A4CED1E4F76AF0051ED4E /* cityInfo.json in Resources */ = {isa = PBXBuildFile; fileRef = 856A4CEC1E4F76AF0051ED4E /* cityInfo.json */; };
 		857DA6741E4CA2C400250605 /* ico_make.png in Resources */ = {isa = PBXBuildFile; fileRef = 857DA6711E4CA2C400250605 /* ico_make.png */; };
 		857DA6751E4CA2C400250605 /* JSDropDownMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 857DA6731E4CA2C400250605 /* JSDropDownMenu.m */; };
+		85B344EF1E51FCD3002E69A9 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 85B344E61E51FCD3002E69A9 /* LICENSE */; };
+		85B344F01E51FCD3002E69A9 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 85B344E71E51FCD3002E69A9 /* README.md */; };
+		85B344F11E51FCD3002E69A9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B344EA1E51FCD3002E69A9 /* TTTAttributedLabel.m */; };
 		EC3C18011CECB16D00223D6B /* UPGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B21CECB16D00223D6B /* UPGlobals.m */; };
 		EC3C18021CECB16D00223D6B /* UPTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B41CECB16D00223D6B /* UPTheme.m */; };
 		EC3C18031CECB16D00223D6B /* XWBaseMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B61CECB16D00223D6B /* XWBaseMethod.m */; };
@@ -695,10 +699,16 @@
 		3ACF2AF41D6AEDD30083E04E /* RecommendController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecommendController.m; sourceTree = "<group>"; };
 		3AFCCDBB1D5C09BC0003F6F3 /* NewLaunchActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewLaunchActivityController.h; sourceTree = "<group>"; };
 		3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewLaunchActivityController.m; sourceTree = "<group>"; };
+		850D791F1E51FA670082D944 /* NSString+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Common.h"; sourceTree = "<group>"; };
+		850D79201E51FA670082D944 /* NSString+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Common.m"; sourceTree = "<group>"; };
 		856A4CEC1E4F76AF0051ED4E /* cityInfo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cityInfo.json; sourceTree = "<group>"; };
 		857DA6711E4CA2C400250605 /* ico_make.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ico_make.png; sourceTree = "<group>"; };
 		857DA6721E4CA2C400250605 /* JSDropDownMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSDropDownMenu.h; sourceTree = "<group>"; };
 		857DA6731E4CA2C400250605 /* JSDropDownMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSDropDownMenu.m; sourceTree = "<group>"; };
+		85B344E61E51FCD3002E69A9 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		85B344E71E51FCD3002E69A9 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		85B344E91E51FCD3002E69A9 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
+		85B344EA1E51FCD3002E69A9 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
 		EC3C16AF1CECB16D00223D6B /* Info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Info.h; sourceTree = "<group>"; };
 		EC3C16B11CECB16D00223D6B /* UPGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPGlobals.h; sourceTree = "<group>"; };
 		EC3C16B21CECB16D00223D6B /* UPGlobals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPGlobals.m; sourceTree = "<group>"; };
@@ -1501,6 +1511,25 @@
 			path = JSDropDownMenu;
 			sourceTree = "<group>";
 		};
+		85B344E51E51FCD3002E69A9 /* TTTAttributedLabel */ = {
+			isa = PBXGroup;
+			children = (
+				85B344E61E51FCD3002E69A9 /* LICENSE */,
+				85B344E71E51FCD3002E69A9 /* README.md */,
+				85B344E81E51FCD3002E69A9 /* TTTAttributedLabel */,
+			);
+			path = TTTAttributedLabel;
+			sourceTree = "<group>";
+		};
+		85B344E81E51FCD3002E69A9 /* TTTAttributedLabel */ = {
+			isa = PBXGroup;
+			children = (
+				85B344E91E51FCD3002E69A9 /* TTTAttributedLabel.h */,
+				85B344EA1E51FCD3002E69A9 /* TTTAttributedLabel.m */,
+			);
+			path = TTTAttributedLabel;
+			sourceTree = "<group>";
+		};
 		EC3C16AD1CECB16D00223D6B /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -1655,6 +1684,7 @@
 		EC3C16FD1CECB16D00223D6B /* thirdparty */ = {
 			isa = PBXGroup;
 			children = (
+				85B344E51E51FCD3002E69A9 /* TTTAttributedLabel */,
 				3A6944D31E5195E700F1BEF5 /* UIBadgeView.h */,
 				3A6944D41E5195E700F1BEF5 /* UIBadgeView.m */,
 				857DA6701E4CA2C400250605 /* JSDropDownMenu */,
@@ -1674,6 +1704,8 @@
 		EC3C16FE1CECB16D00223D6B /* Gategoary */ = {
 			isa = PBXGroup;
 			children = (
+				850D791F1E51FA670082D944 /* NSString+Common.h */,
+				850D79201E51FA670082D944 /* NSString+Common.m */,
 				3A6944D61E5195F200F1BEF5 /* UIColor+expanded.h */,
 				3A6944D71E5195F200F1BEF5 /* UIColor+expanded.m */,
 				EC3C16FF1CECB16D00223D6B /* NSData+Base64.h */,
@@ -1952,6 +1984,7 @@
 				3A71CB9B1E26267700EBE0A2 /* chat_animation_white3.png in Resources */,
 				3A6944CE1E51615F00F1BEF5 /* messageInvite@2x.png in Resources */,
 				3A71CBA91E26267700EBE0A2 /* done@3x.png in Resources */,
+				85B344EF1E51FCD3002E69A9 /* LICENSE in Resources */,
 				3A71CB9A1E26267700EBE0A2 /* chat_animation_white2.png in Resources */,
 				3A71CBB41E26267700EBE0A2 /* logo.png in Resources */,
 				3A71CBD11E26267700EBE0A2 /* unselect_bg.png in Resources */,
@@ -2056,6 +2089,7 @@
 				2C621BF11D85BBFE00068F76 /* UPActivityAssistantController.m in Sources */,
 				2CDAD6311D0EEC4000C260F4 /* AFSecurityPolicy.m in Sources */,
 				EC3C18821CECB16D00223D6B /* UPCells.m in Sources */,
+				850D79211E51FA670082D944 /* NSString+Common.m in Sources */,
 				EC3C18071CECB16D00223D6B /* XWNetworkLabel.m in Sources */,
 				EC3C187F1CECB16D00223D6B /* UPActivityCell.m in Sources */,
 				EC3C188F1CECB16D00223D6B /* YMImageButton.m in Sources */,
@@ -2121,6 +2155,7 @@
 				2CDAD62F1D0EEC4000C260F4 /* AFHTTPSessionManager.m in Sources */,
 				3A837D331DD884D100A9A0BB /* GrowingTextView.m in Sources */,
 				2CDAD64F1D0EEC4000C260F4 /* MJRefreshAutoGifFooter.m in Sources */,
+				85B344F01E51FCD3002E69A9 /* README.md in Sources */,
 				2CDAD6641D0EEC4000C260F4 /* UIView+SDExtension.m in Sources */,
 				2CDAD6C21D0EF42000C260F4 /* UIAlertView+AFNetworking.m in Sources */,
 				2CDAD6C51D0EF42000C260F4 /* UIProgressView+AFNetworking.m in Sources */,
@@ -2147,6 +2182,7 @@
 				3A6944D51E5195E700F1BEF5 /* UIBadgeView.m in Sources */,
 				2CDAD65F1D0EEC4000C260F4 /* TAAnimatedDotView.m in Sources */,
 				EC3C188A1CECB16D00223D6B /* MyActCell.m in Sources */,
+				85B344F11E51FCD3002E69A9 /* TTTAttributedLabel.m in Sources */,
 				2CDAD6751D0EEC4000C260F4 /* SDWebImagePrefetcher.m in Sources */,
 				2CDAD6C71D0EF42000C260F4 /* UIWebView+AFNetworking.m in Sources */,
 				EC3C180A1CECB16D00223D6B /* GetPasswordController.m in Sources */,

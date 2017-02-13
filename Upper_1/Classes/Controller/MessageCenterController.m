@@ -123,7 +123,7 @@
 {
     [super layoutSubviews];
     self.imageView.frame = CGRectMake(LeftRightPadding, ([ToMessageCell cellHeight]-48)/2, 48, 48);
-    self.textLabel.frame = CGRectMake(75, ([ToMessageCell cellHeight]-48)/2, ScreenWidth-120, 30);
+    self.textLabel.frame = CGRectMake(75, ([ToMessageCell cellHeight]-30)/2, ScreenWidth-120, 30);
     NSString *badgeTip = @"";
     if (_unreadCount && _unreadCount.integerValue > 0) {
         if (_unreadCount.integerValue > 99) {
@@ -167,12 +167,13 @@
     
     _messageTable = ({
         UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
-        tableView.backgroundColor = [UIColor clearColor];
+        tableView.backgroundColor = [UIColor whiteColor];
         tableView.dataSource = self;
         tableView.delegate = self;
         tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         [tableView registerClass:[ConversationCell class] forCellReuseIdentifier:kCellIdentifier_Conversation];
         [tableView registerClass:[ToMessageCell class] forCellReuseIdentifier:kCellIdentifier_ToMessage];
+        tableView.tableFooterView = [UIView new];
         [self.view addSubview:tableView];
         tableView;
     });

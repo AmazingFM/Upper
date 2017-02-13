@@ -11,6 +11,10 @@
 #define kBadgePading 2.0
 
 #import "UIBadgeView.h"
+#import "NSString+Common.h"
+
+#define  kBadgeTipStr @"badgeTip"
+
 @interface UIBadgeView ()
 /**
  * Color used for badge's background.

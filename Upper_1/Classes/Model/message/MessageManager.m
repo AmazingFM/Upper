@@ -25,7 +25,6 @@
 
 @end
 
-
 @interface MessageManager()
 {
     FMDatabase *messageDb;
