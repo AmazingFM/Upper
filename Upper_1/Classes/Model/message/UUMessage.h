@@ -14,7 +14,7 @@ typedef NS_ENUM(NSInteger, MessageSubType) {
     UPMessageSubTypeVoice    = 2 , // 语音
 };
 
-typedef NS_ENUM(NSInteger, MessageType) {
+typedef NS_ENUM(NSInteger, UUMessageType) {
     UPMessageTypeNormal     = 0,    //普通消息类型
     UPMessageTypeInvite     = 1,    //活动邀请消息类
     UPMessageTypeSys        = 2,    //系统消息类
@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger, MessageFrom) {
 @property (nonatomic, copy) NSData   *voice;
 @property (nonatomic, copy) NSString *strVoiceTime;
 
-@property (nonatomic, assign) MessageType type;
+@property (nonatomic, assign) UUMessageType type;
 @property (nonatomic, assign) MessageFrom from;
 @property (nonatomic, assign) MessageSubType subType;
 

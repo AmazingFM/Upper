@@ -134,6 +134,8 @@
 		3A08464F1D619D6800170C64 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A08464E1D619D6800170C64 /* libsqlite3.0.tbd */; };
 		3A0B60EF1DF5B92E009FCC10 /* YMNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0B60EE1DF5B92E009FCC10 /* YMNetwork.m */; };
 		3A0B60F51DF7A700009FCC10 /* YMNetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0B60F41DF7A700009FCC10 /* YMNetManager.m */; };
+		3A26C5551E52973700339B38 /* ConversationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A26C5541E52973700339B38 /* ConversationCell.m */; };
+		3A26C55B1E52CC0200339B38 /* UIAlertView+NSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A26C55A1E52CC0200339B38 /* UIAlertView+NSObject.m */; };
 		3A2939901D2F798B005CB3F3 /* UPCommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A29398F1D2F798B005CB3F3 /* UPCommentController.m */; };
 		3A2939931D2F80F6005CB3F3 /* UPTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2939921D2F80F6005CB3F3 /* UPTextView.m */; };
 		3A33A3021E44147300144D66 /* UPRulesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A33A3011E44147300144D66 /* UPRulesController.m */; };
@@ -246,7 +248,6 @@
 		85B344F11E51FCD3002E69A9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B344EA1E51FCD3002E69A9 /* TTTAttributedLabel.m */; };
 		EC3C18011CECB16D00223D6B /* UPGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B21CECB16D00223D6B /* UPGlobals.m */; };
 		EC3C18021CECB16D00223D6B /* UPTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B41CECB16D00223D6B /* UPTheme.m */; };
-		EC3C18031CECB16D00223D6B /* XWBaseMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B61CECB16D00223D6B /* XWBaseMethod.m */; };
 		EC3C18041CECB16D00223D6B /* XWCommonHttpTool.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B81CECB16D00223D6B /* XWCommonHttpTool.m */; };
 		EC3C18051CECB16D00223D6B /* XWDataCacheTool.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16BA1CECB16D00223D6B /* XWDataCacheTool.m */; };
 		EC3C18061CECB16D00223D6B /* XWHttpTool.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16BC1CECB16D00223D6B /* XWHttpTool.m */; };
@@ -572,6 +573,10 @@
 		3A0B60EE1DF5B92E009FCC10 /* YMNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMNetwork.m; sourceTree = "<group>"; };
 		3A0B60F31DF7A700009FCC10 /* YMNetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMNetManager.h; sourceTree = "<group>"; };
 		3A0B60F41DF7A700009FCC10 /* YMNetManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMNetManager.m; sourceTree = "<group>"; };
+		3A26C5531E52973700339B38 /* ConversationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationCell.h; sourceTree = "<group>"; };
+		3A26C5541E52973700339B38 /* ConversationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationCell.m; sourceTree = "<group>"; };
+		3A26C5591E52CC0200339B38 /* UIAlertView+NSObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+NSObject.h"; sourceTree = "<group>"; };
+		3A26C55A1E52CC0200339B38 /* UIAlertView+NSObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+NSObject.m"; sourceTree = "<group>"; };
 		3A29398E1D2F798B005CB3F3 /* UPCommentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCommentController.h; sourceTree = "<group>"; };
 		3A29398F1D2F798B005CB3F3 /* UPCommentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPCommentController.m; sourceTree = "<group>"; };
 		3A2939911D2F80F6005CB3F3 /* UPTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPTextView.h; sourceTree = "<group>"; };
@@ -714,8 +719,6 @@
 		EC3C16B21CECB16D00223D6B /* UPGlobals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPGlobals.m; sourceTree = "<group>"; };
 		EC3C16B31CECB16D00223D6B /* UPTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPTheme.h; sourceTree = "<group>"; };
 		EC3C16B41CECB16D00223D6B /* UPTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPTheme.m; sourceTree = "<group>"; };
-		EC3C16B51CECB16D00223D6B /* XWBaseMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWBaseMethod.h; sourceTree = "<group>"; };
-		EC3C16B61CECB16D00223D6B /* XWBaseMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWBaseMethod.m; sourceTree = "<group>"; };
 		EC3C16B71CECB16D00223D6B /* XWCommonHttpTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWCommonHttpTool.h; sourceTree = "<group>"; };
 		EC3C16B81CECB16D00223D6B /* XWCommonHttpTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XWCommonHttpTool.m; sourceTree = "<group>"; };
 		EC3C16B91CECB16D00223D6B /* XWDataCacheTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XWDataCacheTool.h; sourceTree = "<group>"; };
@@ -1486,6 +1489,8 @@
 				3A837D2D1DD884D100A9A0BB /* OperationBar.m */,
 				3A837D2E1DD884D100A9A0BB /* PlaceholderTextView.h */,
 				3A837D2F1DD884D100A9A0BB /* PlaceholderTextView.m */,
+				3A26C5531E52973700339B38 /* ConversationCell.h */,
+				3A26C5541E52973700339B38 /* ConversationCell.m */,
 			);
 			path = chat;
 			sourceTree = "<group>";
@@ -1558,8 +1563,6 @@
 				EC3C16BA1CECB16D00223D6B /* XWDataCacheTool.m */,
 				EC3C16B31CECB16D00223D6B /* UPTheme.h */,
 				EC3C16B41CECB16D00223D6B /* UPTheme.m */,
-				EC3C16B51CECB16D00223D6B /* XWBaseMethod.h */,
-				EC3C16B61CECB16D00223D6B /* XWBaseMethod.m */,
 				EC3C16B71CECB16D00223D6B /* XWCommonHttpTool.h */,
 				EC3C16B81CECB16D00223D6B /* XWCommonHttpTool.m */,
 				EC3C16B91CECB16D00223D6B /* XWDataCacheTool.h */,
@@ -1720,6 +1723,8 @@
 				EC3C17081CECB16D00223D6B /* UIImage+CH.m */,
 				EC3C17091CECB16D00223D6B /* UIView+MJ.h */,
 				EC3C170A1CECB16D00223D6B /* UIView+MJ.m */,
+				3A26C5591E52CC0200339B38 /* UIAlertView+NSObject.h */,
+				3A26C55A1E52CC0200339B38 /* UIAlertView+NSObject.m */,
 			);
 			path = Gategoary;
 			sourceTree = "<group>";
@@ -2013,6 +2018,7 @@
 				EC3C18291CECB16D00223D6B /* UIImage+CH.m in Sources */,
 				2CC6453A1D04108400A07408 /* MessageCenterController.m in Sources */,
 				2CDAD6351D0EEC4000C260F4 /* AFURLSessionManager.m in Sources */,
+				3A26C5551E52973700339B38 /* ConversationCell.m in Sources */,
 				EC3C182A1CECB16D00223D6B /* UIView+MJ.m in Sources */,
 				EC3C18111CECB16D00223D6B /* QRCodeController.m in Sources */,
 				2CDAD6711D0EEC4000C260F4 /* SDWebImageDecoder.m in Sources */,
@@ -2035,7 +2041,6 @@
 				2CDAD6761D0EEC4000C260F4 /* UIButton+WebCache.m in Sources */,
 				EC3C18191CECB16D00223D6B /* UpperController.m in Sources */,
 				2CDAD65C1D0EEC4000C260F4 /* UIView+MJExtension.m in Sources */,
-				EC3C18031CECB16D00223D6B /* XWBaseMethod.m in Sources */,
 				2CDAD6561D0EEC4000C260F4 /* MJRefreshNormalHeader.m in Sources */,
 				EC3C18151CECB16D00223D6B /* UPGuideViewController.m in Sources */,
 				2CDAD6571D0EEC4000C260F4 /* MJRefreshStateHeader.m in Sources */,
@@ -2201,6 +2206,7 @@
 				3A04D6911E51A5ED004396D2 /* MessageListController.m in Sources */,
 				2CDAD63F1D0EEC4000C260F4 /* MBProgressHUD+MJ.m in Sources */,
 				3A837D1C1DD8123700A9A0BB /* UPMessageCell.m in Sources */,
+				3A26C55B1E52CC0200339B38 /* UIAlertView+NSObject.m in Sources */,
 				2CDAD65A1D0EEC4000C260F4 /* UIScrollView+MJExtension.m in Sources */,
 				EC3C18231CECB16D00223D6B /* UPExpertItem.m in Sources */,
 				3AAF86391D6C193700248A45 /* YMImageLoadView.m in Sources */,

@@ -17,7 +17,6 @@
 #import "UIImageView+WebCache.h"
 #import "UIImage+CH.h"
 #import "UIView+MJ.h"
-#import "XWBaseMethod.h"
 #import "NSDate+CH.h"
 #import "Reachability.h"
 #import "ASProgressPopUpView.h"

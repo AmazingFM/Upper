@@ -30,11 +30,7 @@
 }
 
 - (void)start2weimaRequest
-{
-    if ([XWBaseMethod connectionInternet]==NO) {
-        [XWBaseMethod showErrorWithStr:@"网络断开了" toView:self.view];
-    }
-    
+{    
     NSDictionary *headParam = [UPDataManager shared].getHeadParams;
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
     

@@ -220,7 +220,7 @@
     }];
 }
 
-- (UUMessage *)msgInGroup:(NSString *)fromID andType:(MessageType)msgType
+- (UUMessage *)msgInGroup:(NSString *)fromID andType:(UUMessageType)msgType
 {
     UUMessage *message = nil;
     
@@ -291,7 +291,7 @@
 /**
  *根据参数获取指定位置的记录
  */
-- (NSMutableArray *)getMessages:(NSRange)range withUserId:(NSString *)userId andType:(MessageType)msgType
+- (NSMutableArray *)getMessages:(NSRange)range withUserId:(NSString *)userId andType:(UUMessageType)msgType
 {
     [messageDb open];
     

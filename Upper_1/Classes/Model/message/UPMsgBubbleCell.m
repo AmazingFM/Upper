@@ -104,7 +104,7 @@
 - (void)setContent:(NSString *)content andPortrait:(NSURL *)portraitURL
 {
     _messageView.text = content;
-    [_portrait sd_setImageWithURL:portraitURL placeholderImage:[UIImage imageNamed:@"head"]];
+//    [_portrait sd_setImageWithURL:portraitURL placeholderImage:[UIImage imageNamed:@"head"]];
     CGFloat bubbleWidth = [_messageView sizeThatFits:CGSizeMake(self.contentView.frame.size.width-104-25, MAXFLOAT)].width;
     
     _bubbleWidthConstraint.constant = bubbleWidth + 25;

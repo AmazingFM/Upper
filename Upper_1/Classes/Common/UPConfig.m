@@ -153,6 +153,10 @@
 
 - (ActivityType *)getActivityTypeByID:(NSString *)ID
 {
+    if (ID==nil) {
+        return nil;
+    }
+    
     for (ActivityType *actType in self.activityTypeArr) {
         if ([actType.ID isEqualToString:ID]) {
             return actType;

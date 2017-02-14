@@ -7,146 +7,23 @@
 //
 
 #import "MessageCenterController.h"
+#import "MessageListController.h"
 #import "MessageManager.h"
 #import "UPDataManager.h"
 #import "UPTimerManager.h"
-#import "UPTools.h"
+#import "PrivateMessage.h"
 #import "Info.h"
 #import "UUMessage.h"
 #import "UPTheme.h"
-#import "UPMessageCell.h"
+#import "ConversationCell.h"
 
 #import "BubbleChatViewController.h"
-#import "PrivateMessage.h"
 
 @implementation UserChatItem
 @end
 
-@interface ConversationCell()
-@property (nonatomic, retain) UIImageView *userIconView;
-@property (nonatomic, retain) UILabel *name, *msg, *time;
-
-@end
-
-@implementation ConversationCell
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        if (!_userIconView) {
-            _userIconView = [[UIImageView alloc] initWithFrame:CGRectMake(LeftRightPadding, ([ConversationCell cellHeight]-48)/2, 48, 48)];
-            _userIconView.layer.masksToBounds = YES;
-            _userIconView.layer.cornerRadius = 48/2;
-            self.layer.borderWidth = 0.5;
-            self.layer.borderColor = [UPTools colorWithHex:0xdddddd].CGColor;
-            [self.contentView addSubview:_userIconView];
-        }
-        if (!_name) {
-            _name = [[UILabel alloc] initWithFrame:CGRectMake(75, 8, 150, 25)];
-            _name.font = [UIFont systemFontOfSize:17];
-            _name.textColor = [UPTools colorWithHex:0x222222];
-            _name.backgroundColor = [UIColor clearColor];
-            [self.contentView addSubview:_name];
-        }
-        if (!_time) {
-            _time = [[UILabel alloc] initWithFrame:CGRectMake(ScreenWidth-100-LeftRightPadding, 8, 100, 25)];
-            _time.font = [UIFont systemFontOfSize:12];
-            _time.textAlignment = NSTextAlignmentRight;
-            _time.textColor = [UPTools colorWithHex:0x999999];
-            _time.backgroundColor = [UIColor clearColor];
-            [self.contentView addSubview:_time];
-        }
-        if (!_msg) {
-            _msg = [[UILabel alloc] initWithFrame:CGRectMake(75, 30, ScreenWidth-75-30-LeftRightPadding, 25)];
-            _msg.font = [UIFont systemFontOfSize:15];
-            _msg.backgroundColor = [UIColor clearColor];
-            _msg.textColor = [UPTools colorWithHex:0x999999];
-            [self.contentView addSubview:_msg];
-        }
-    }
-    return self;
-}
-
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    if (!_curPriMsg) {
-        return;
-    }
-    [_userIconView setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"head"]];
-    
-    _name.text = _curPriMsg.nickName;
-    _time.text = _curPriMsg.addTime;
-    _msg.text = _curPriMsg.msgContent;
-}
-
-+ (CGFloat)cellHeight
-{
-    return 61;
-}
-
-@end
-
-@implementation ToMessageCell
-
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        self.textLabel.font = kUPThemeTitleFont;
-        self.textLabel.textColor = [UPTools colorWithHex:0x222222];
-    }
-    return self;
-}
-
-- (void)setType:(ToMessageType)type
-{
-    _type = type;
-    NSString *imageName, *titleStr;
-    switch (type) {
-        case ToMessageTypeInvitation:
-            imageName = @"messageInvite";
-            titleStr = @"活动邀请";
-            break;
-        case ToMessageTypeSystemNotification:
-            imageName = @"messageSystem";
-            titleStr = @"系统通知";
-            break;
-        default:
-            break;
-    }
-    self.imageView.image = [UIImage imageNamed:imageName];
-    self.textLabel.text = titleStr;
-}
-
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    self.imageView.frame = CGRectMake(LeftRightPadding, ([ToMessageCell cellHeight]-48)/2, 48, 48);
-    self.textLabel.frame = CGRectMake(75, ([ToMessageCell cellHeight]-30)/2, ScreenWidth-120, 30);
-    NSString *badgeTip = @"";
-    if (_unreadCount && _unreadCount.integerValue > 0) {
-        if (_unreadCount.integerValue > 99) {
-            badgeTip = @"99+";
-        }else{
-            badgeTip = _unreadCount.stringValue;
-        }
-        self.accessoryType = UITableViewCellAccessoryNone;
-    }else{
-        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }
-    [self.contentView addBadgeTip:badgeTip withCenterPosition:CGPointMake(ScreenWidth-25, [ToMessageCell cellHeight]/2)];
-}
-
-+ (CGFloat)cellHeight
-{
-    return 61.0;
-}
-
-@end
-
-#define kCellIdentifier_Conversation    @"conversationCellId"
-#define kCellIdentifier_ToMessage       @"TopMessageCellId"
+#define kCellIdentifier_Conversation    @"kConversationCellId"
+#define kCellIdentifier_ToMessage       @"kTopMessageCellId"
 
 @interface MessageCenterController () <UITableViewDelegate, UITableViewDataSource>
 {
@@ -186,7 +63,6 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self clearMessage];
 }
 
 - (void)loadMessage
@@ -194,11 +70,6 @@
     NSRange range = NSMakeRange(0, 100);
     NSMutableArray *groupMsgList = [[MessageManager shared] getMessageGroup:range];
     [self fillMessage:groupMsgList];
-}
-
-- (void)clearMessage
-{
-    
 }
 
 - (void)updateMsg:(NSNotification *)notification
@@ -282,7 +153,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row<2) {
-        //
+        MessageListController *msgListController = [[MessageListController alloc] init];
+        msgListController.messageType = indexPath.row;
+        [self.navigationController pushViewController:msgListController animated:YES];
     } else {
         PrivateMessage *msg = [priMsgList objectAtIndex:indexPath.row-2];
         BubbleChatViewController *chatController = [[BubbleChatViewController alloc] initWithUserID:msg.fromId andUserName:msg.nickName];

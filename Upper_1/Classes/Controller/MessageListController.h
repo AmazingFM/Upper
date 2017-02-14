@@ -7,7 +7,9 @@
 //
 
 #import "UPBaseViewController.h"
+#import "PrivateMessage.h"
 
 @interface MessageListController : UPBaseViewController
+@property (nonatomic, assign) MessageType messageType;
 
 @end
