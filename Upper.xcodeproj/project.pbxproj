@@ -246,6 +246,10 @@
 		85B344EF1E51FCD3002E69A9 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 85B344E61E51FCD3002E69A9 /* LICENSE */; };
 		85B344F01E51FCD3002E69A9 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 85B344E71E51FCD3002E69A9 /* README.md */; };
 		85B344F11E51FCD3002E69A9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B344EA1E51FCD3002E69A9 /* TTTAttributedLabel.m */; };
+		85B344F81E534023002E69A9 /* UIImageView+Upper.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B344F71E534023002E69A9 /* UIImageView+Upper.m */; };
+		85B344FB1E5344DF002E69A9 /* UPWebImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B344FA1E5344DF002E69A9 /* UPWebImageManager.m */; };
+		85B344FE1E53466E002E69A9 /* UPWebImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B344FD1E53466E002E69A9 /* UPWebImageDownloader.m */; };
+		85B345021E534BB7002E69A9 /* UPWebImageDownloaderOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B345011E534BB7002E69A9 /* UPWebImageDownloaderOperation.m */; };
 		EC3C18011CECB16D00223D6B /* UPGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B21CECB16D00223D6B /* UPGlobals.m */; };
 		EC3C18021CECB16D00223D6B /* UPTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B41CECB16D00223D6B /* UPTheme.m */; };
 		EC3C18041CECB16D00223D6B /* XWCommonHttpTool.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C16B81CECB16D00223D6B /* XWCommonHttpTool.m */; };
@@ -714,6 +718,15 @@
 		85B344E71E51FCD3002E69A9 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		85B344E91E51FCD3002E69A9 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
 		85B344EA1E51FCD3002E69A9 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
+		85B344F61E534023002E69A9 /* UIImageView+Upper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+Upper.h"; sourceTree = "<group>"; };
+		85B344F71E534023002E69A9 /* UIImageView+Upper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+Upper.m"; sourceTree = "<group>"; };
+		85B344F91E5344DF002E69A9 /* UPWebImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPWebImageManager.h; sourceTree = "<group>"; };
+		85B344FA1E5344DF002E69A9 /* UPWebImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPWebImageManager.m; sourceTree = "<group>"; };
+		85B344FC1E53466E002E69A9 /* UPWebImageDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPWebImageDownloader.h; sourceTree = "<group>"; };
+		85B344FD1E53466E002E69A9 /* UPWebImageDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPWebImageDownloader.m; sourceTree = "<group>"; };
+		85B344FF1E5349A4002E69A9 /* UPWebImageOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPWebImageOperation.h; sourceTree = "<group>"; };
+		85B345001E534BB7002E69A9 /* UPWebImageDownloaderOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPWebImageDownloaderOperation.h; sourceTree = "<group>"; };
+		85B345011E534BB7002E69A9 /* UPWebImageDownloaderOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPWebImageDownloaderOperation.m; sourceTree = "<group>"; };
 		EC3C16AF1CECB16D00223D6B /* Info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Info.h; sourceTree = "<group>"; };
 		EC3C16B11CECB16D00223D6B /* UPGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPGlobals.h; sourceTree = "<group>"; };
 		EC3C16B21CECB16D00223D6B /* UPGlobals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPGlobals.m; sourceTree = "<group>"; };
@@ -1535,6 +1548,22 @@
 			path = TTTAttributedLabel;
 			sourceTree = "<group>";
 		};
+		85B344F51E53400F002E69A9 /* UPImage */ = {
+			isa = PBXGroup;
+			children = (
+				85B344F61E534023002E69A9 /* UIImageView+Upper.h */,
+				85B344F71E534023002E69A9 /* UIImageView+Upper.m */,
+				85B344F91E5344DF002E69A9 /* UPWebImageManager.h */,
+				85B344FA1E5344DF002E69A9 /* UPWebImageManager.m */,
+				85B344FC1E53466E002E69A9 /* UPWebImageDownloader.h */,
+				85B344FD1E53466E002E69A9 /* UPWebImageDownloader.m */,
+				85B344FF1E5349A4002E69A9 /* UPWebImageOperation.h */,
+				85B345001E534BB7002E69A9 /* UPWebImageDownloaderOperation.h */,
+				85B345011E534BB7002E69A9 /* UPWebImageDownloaderOperation.m */,
+			);
+			path = UPImage;
+			sourceTree = "<group>";
+		};
 		EC3C16AD1CECB16D00223D6B /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -1551,6 +1580,7 @@
 		EC3C16AE1CECB16D00223D6B /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				85B344F51E53400F002E69A9 /* UPImage */,
 				2C9F755C1D5B855C006FEDF9 /* DrawSomething.h */,
 				2C9F755D1D5B855C006FEDF9 /* DrawSomething.m */,
 				2C97939F1CEFF8550043EA50 /* UPTimerManager.h */,
@@ -2043,6 +2073,7 @@
 				2CDAD65C1D0EEC4000C260F4 /* UIView+MJExtension.m in Sources */,
 				2CDAD6561D0EEC4000C260F4 /* MJRefreshNormalHeader.m in Sources */,
 				EC3C18151CECB16D00223D6B /* UPGuideViewController.m in Sources */,
+				85B344F81E534023002E69A9 /* UIImageView+Upper.m in Sources */,
 				2CDAD6571D0EEC4000C260F4 /* MJRefreshStateHeader.m in Sources */,
 				2CDAD67A1D0EEC4000C260F4 /* UIImageView+HighlightedWebCache.m in Sources */,
 				3A0B60F51DF7A700009FCC10 /* YMNetManager.m in Sources */,
@@ -2152,6 +2183,8 @@
 				2CDAD4FF1D0ED8A900C260F4 /* UUMessage.m in Sources */,
 				2CDAD6431D0EEC4000C260F4 /* MJFoundation.m in Sources */,
 				2CDAD62D1D0EEC4000C260F4 /* AFHTTPRequestOperation.m in Sources */,
+				85B345021E534BB7002E69A9 /* UPWebImageDownloaderOperation.m in Sources */,
+				85B344FB1E5344DF002E69A9 /* UPWebImageManager.m in Sources */,
 				3ACF2AF51D6AEDD30083E04E /* RecommendController.m in Sources */,
 				2CDAD6781D0EEC4000C260F4 /* UIImage+MultiFormat.m in Sources */,
 				2CDAD67C1D0EEC4000C260F4 /* UIView+WebCacheOperation.m in Sources */,
@@ -2200,6 +2233,7 @@
 				2CDAD6721D0EEC4000C260F4 /* SDWebImageDownloader.m in Sources */,
 				2CDAD6371D0EEC4000C260F4 /* ASProgressPopUpView.m in Sources */,
 				2CDAD6331D0EEC4000C260F4 /* AFURLRequestSerialization.m in Sources */,
+				85B344FE1E53466E002E69A9 /* UPWebImageDownloader.m in Sources */,
 				EC3C18041CECB16D00223D6B /* XWCommonHttpTool.m in Sources */,
 				EC3C181E1CECB16D00223D6B /* CityButton.m in Sources */,
 				2CC645371D04105200A07408 /* UPBaseViewController.m in Sources */,
