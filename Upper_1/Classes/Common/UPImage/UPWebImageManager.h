@@ -24,5 +24,5 @@
 @interface UPWebImageManager : NSObject
 
 @property (nonatomic, weak) id <UPWebImageManagerDelegate> delegate;
-@property (nonatomic, retain, readonly) 
+//@property (nonatomic, retain, readonly) 
 @end

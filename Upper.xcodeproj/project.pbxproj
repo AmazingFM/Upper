@@ -140,6 +140,7 @@
 		3A2939931D2F80F6005CB3F3 /* UPTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2939921D2F80F6005CB3F3 /* UPTextView.m */; };
 		3A33A3021E44147300144D66 /* UPRulesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A33A3011E44147300144D66 /* UPRulesController.m */; };
 		3A33A3051E44168100144D66 /* UPPresentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A33A3041E44168100144D66 /* UPPresentViewController.m */; };
+		3A44AE4A1E547C3600BBD049 /* UIView+UPCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A44AE491E547C3600BBD049 /* UIView+UPCacheOperation.m */; };
 		3A44D7E01E4D82B1004ADA08 /* UPConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A44D7DF1E4D82B1004ADA08 /* UPConfig.m */; };
 		3A44D7E21E4D8C7B004ADA08 /* ActivityType.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A44D7E11E4D8C7B004ADA08 /* ActivityType.plist */; };
 		3A44D7E41E4D9320004ADA08 /* ActivityStatus.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A44D7E31E4D9320004ADA08 /* ActivityStatus.plist */; };
@@ -589,6 +590,8 @@
 		3A33A3011E44147300144D66 /* UPRulesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPRulesController.m; sourceTree = "<group>"; };
 		3A33A3031E44168100144D66 /* UPPresentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPPresentViewController.h; sourceTree = "<group>"; };
 		3A33A3041E44168100144D66 /* UPPresentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPPresentViewController.m; sourceTree = "<group>"; };
+		3A44AE481E547C3600BBD049 /* UIView+UPCacheOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+UPCacheOperation.h"; sourceTree = "<group>"; };
+		3A44AE491E547C3600BBD049 /* UIView+UPCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+UPCacheOperation.m"; sourceTree = "<group>"; };
 		3A44D7DE1E4D82B1004ADA08 /* UPConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPConfig.h; sourceTree = "<group>"; };
 		3A44D7DF1E4D82B1004ADA08 /* UPConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPConfig.m; sourceTree = "<group>"; };
 		3A44D7E11E4D8C7B004ADA08 /* ActivityType.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ActivityType.plist; sourceTree = "<group>"; };
@@ -1560,6 +1563,8 @@
 				85B344FF1E5349A4002E69A9 /* UPWebImageOperation.h */,
 				85B345001E534BB7002E69A9 /* UPWebImageDownloaderOperation.h */,
 				85B345011E534BB7002E69A9 /* UPWebImageDownloaderOperation.m */,
+				3A44AE481E547C3600BBD049 /* UIView+UPCacheOperation.h */,
+				3A44AE491E547C3600BBD049 /* UIView+UPCacheOperation.m */,
 			);
 			path = UPImage;
 			sourceTree = "<group>";
@@ -2178,6 +2183,7 @@
 				EC3C189E1CECB2B300223D6B /* RootViewController.m in Sources */,
 				2CDAD66B1D0EEC4000C260F4 /* SDRefreshView.m in Sources */,
 				2CDAD6C01D0EF42000C260F4 /* AFNetworkActivityIndicatorManager.m in Sources */,
+				3A44AE4A1E547C3600BBD049 /* UIView+UPCacheOperation.m in Sources */,
 				EC3C18861CECB16D00223D6B /* CityCell.m in Sources */,
 				EC3C188C1CECB16D00223D6B /* UpActView.m in Sources */,
 				2CDAD4FF1D0ED8A900C260F4 /* UUMessage.m in Sources */,
