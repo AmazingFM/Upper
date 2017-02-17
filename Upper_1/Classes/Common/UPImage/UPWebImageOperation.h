@@ -10,6 +10,6 @@
 
 @protocol UPWebImageOperation <NSObject>
 
-- (void)cancle;
+- (void)cancel;
 
 @end

@@ -7,6 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "UPWebImageOperation.h"
+#import "UPWebImageDownloader.h"
+
+typedef void (^UPWebImageCompletionBlock)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSString *usrID);
+typedef void (^UPWebImageCompletionWithFinishedBlock)(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSString *usrID);
 
 @class UPWebImageManager;
 
@@ -24,5 +29,11 @@
 @interface UPWebImageManager : NSObject
 
 @property (nonatomic, weak) id <UPWebImageManagerDelegate> delegate;
-//@property (nonatomic, retain, readonly) 
+
++(id)sharedManager;
+
+- (id<UPWebImageOperation>)downloadImageWithUserID:(NSString *)userId progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(UPWebImageCompletionWithFinishedBlock)completedBlock;
+
+- (void)cancelAll;
+- (BOOL)isRunning;
 @end

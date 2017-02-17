@@ -95,7 +95,7 @@ extern NSString *const SDWebImageDownloadFinishNotification;
     }
 }
 
-- (void)cancle
+- (void)cancel
 {
     @synchronized (self) {
         if (self.thread) {
@@ -145,7 +145,7 @@ extern NSString *const SDWebImageDownloadFinishNotification;
     self.completedBlock = nil;
     self.progressBlock = nil;
     self.connection = nil;
-    self.imageData = nil;
+    self.userData = nil;
     self.thread = nil;
 }
 

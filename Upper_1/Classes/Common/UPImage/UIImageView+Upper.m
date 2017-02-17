@@ -9,6 +9,8 @@
 #import "UIImageView+Upper.h"
 #import <objc/runtime.h>
 #import "UIView+WebCacheOperation.h"
+#import "UPWebImageOperation.h"
+#import "UPWebImageManager.h"
 
 static char imageURLKey;
 static char TAG_ACTIVITY_INDICATOR;
@@ -22,7 +24,7 @@ static char TAG_ACTIVITY_SHOW;
     [self setImageWithUserId:userId placeholderImage:nil];
 }
 
-- (void)setImageWithUserId:(NSString *)userId placeholderImage:(UIImage *)placeholder
+- (void)setImageWithUserId:(NSString *)userId placeholderImage:(UIImage *)placeholder completed:(UPWebImageCompletionBlock)completedBlock
 {
     [self up_cancelCurrentImageLoad];
     objc_setAssociatedObject(self, &imageURLKey, userId, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -35,7 +37,14 @@ static char TAG_ACTIVITY_SHOW;
     if (userId) {
         __weak __typeof(self)wself = self;
         
+//        id<UPWebImageOperation> operation = [UPWebImageManager.shared]
+        
     }
+}
+                                                                                                 
+- (void)setImageWithUserId:(NSString *)userId placeholderImage:(UIImage *)placeholder
+{
+    [self setImageWithUserId:userId placeholderImage:placeholder completed:nil];
 }
 
 - (void)up_cancelCurrentImageLoad

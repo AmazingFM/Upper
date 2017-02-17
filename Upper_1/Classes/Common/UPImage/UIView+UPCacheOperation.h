@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "UPWebImageManager.h"
+
 @interface UIView (UPCacheOperation)
 
 - (void)up_setImageLoadOperation:(id)operation forKey:(NSString *)key;

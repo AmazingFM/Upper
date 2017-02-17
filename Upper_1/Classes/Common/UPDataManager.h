@@ -27,7 +27,6 @@
 
 + (instancetype)shared;
 - (NSDictionary *)getHeadParams;
-- (void)initWithCityItems:(NSArray *)cityArr;
 - (void)writeToDefaults:(UserData *)userData;
 - (void)readFromDefaults;
 - (void)cleanUserDafult;
