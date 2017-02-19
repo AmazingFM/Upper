@@ -189,6 +189,18 @@ NSString *kKeyChainUUIDAccessGroup = @"com.upper";
     return json;
 }
 
++ (id)JSONFromData:(NSData *)jsonData
+{
+    NSError *error;
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:&error];
+    
+    if (error) {
+        NSLog(@"Error occured when init object with json data, error: %@", error.localizedDescription);
+        return nil;
+    }
+    return dict;
+}
+
 +(NSString*)documentFilePathWithName:(NSString*)fileName{
     NSArray *paths         = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentPath =[paths objectAtIndex:0];

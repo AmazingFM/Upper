@@ -91,7 +91,7 @@ static int kMsgCount = 0;
     
     self.navigationItem.rightBarButtonItems = [self rightNavButtonItems];
     
-    firstLoad = YES;
+//    firstLoad = YES;
     lastPage = NO;
     
     
@@ -104,7 +104,7 @@ static int kMsgCount = 0;
     [self.view addSubview:self.mainTable];
     
     _data1 = [NSMutableArray new];
-    NSDictionary *nolimitOne = @{@"title":@"不限", @"data":@[@"全部"]};
+    NSDictionary *nolimitOne = @{@"title":@"不限", @"data":@[@"本地",@"全部"]};
     [_data1 addObject:nolimitOne];
     for (ProvinceInfo *provinceInfo in [UPConfig sharedInstance].cityContainer.provinceInfoArr) {
         NSMutableArray *cityNames = [NSMutableArray new];
@@ -192,7 +192,11 @@ static int kMsgCount = 0;
     if (![UPDataManager shared].isLogin) {
         
     } else {
-        firstLoad = YES;
+//        firstLoad = YES;
+//        if (_currentData1Index==0) {
+//            _currentData1RightIndex=0;
+//        }
+        
         [_mainTable.header beginRefreshing];
     }
 }
@@ -278,7 +282,7 @@ static int kMsgCount = 0;
 
     //复合条件查询
     if (_currentData1Index==0){
-        if (firstLoad) {
+        if (firstLoad || _currentData1RightIndex==0) {
             [params setObject:[UPDataManager shared].userInfo.province_code forKey:@"province_code"];
         } else {
             [params setObject:@"" forKey:@"province_code"];
@@ -621,7 +625,7 @@ static int kMsgCount = 0;
             return;
         } else {
             _currentData1RightIndex = indexPath.row;
-            firstLoad = NO;
+//            firstLoad = NO;
         }
     } else if(indexPath.column == 1){
         if(indexPath.leftOrRight==0){

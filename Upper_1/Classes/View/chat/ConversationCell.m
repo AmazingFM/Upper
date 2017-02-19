@@ -12,6 +12,8 @@
 #import "UPTools.h"
 #import "UPTheme.h"
 
+#import "UIImageView+Upper.h"
+
 @interface ConversationCell()
 @property (nonatomic, retain) UIImageView *userIconView;
 @property (nonatomic, retain) UILabel *name, *msg, *time;
@@ -132,7 +134,8 @@
         default:
             break;
     }
-    self.imageView.image = [UIImage imageNamed:imageName];
+//    self.imageView.image = [UIImage imageNamed:imageName];
+    [self.imageView setImageWithUserId:@"3" placeholderImage:[UIImage imageNamed:imageName]];
     self.textLabel.text = titleStr;
 }
 

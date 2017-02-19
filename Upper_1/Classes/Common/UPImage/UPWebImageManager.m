@@ -108,7 +108,6 @@
     @synchronized (self.runningOperations) {
         [self.runningOperations addObject:operation];
     }
-    NSString *key = userId;
     
     operation.cacheOperation = [self.imageCache queryDiskCacheForKey:userId done:^(UIImage *image, SDImageCacheType cacheType) {
         if (operation.isCancelled) {
@@ -118,10 +117,55 @@
             return;
         }
         
-        id<UPWebImageOperation> subOperation = [self.imageDownloader downloadImageWithUserId:userId progress:progressBlock completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
-            <#code#>
+        id<UPWebImageOperation> subOperation = [self.imageDownloader downloadImageWithUserId:userId progress:progressBlock completed:^(UIImage *downloadedImage, NSData *data, NSError *error, BOOL finished) {
+            if (weakOperation.isCancelled) {
+                //
+            } else if (error) {
+                dispatch_main_sync_safe(^{
+                    if (!weakOperation.isCancelled) {
+                        completedBlock(nil, error, SDImageCacheTypeNone, finished, userId);
+                    }
+                });
+            } else {
+                dispatch_main_sync_safe(^{
+                    if (!weakOperation.isCancelled) {
+                        completedBlock(downloadedImage, nil, SDImageCacheTypeNone, finished, userId);
+                    }
+                });
+            }
+            
+            if (finished) {
+                @synchronized (self.runningOperations) {
+                    [self.runningOperations removeObject:operation];
+                }
+            }
         }];
+        
+        operation.cancelBlock = ^{
+            [subOperation cancel];
+            @synchronized (self.runningOperations) {
+                [self.runningOperations removeObject:weakOperation];
+            }
+        };
     }];
     return operation;
+}
+
+- (void)cancelAll
+{
+    @synchronized (self.runningOperations) {
+        NSArray *copiedOperations = [self.runningOperations copy];
+        [copiedOperations makeObjectsPerformSelector:@selector(cancel)];
+        [self.runningOperations removeObjectsInArray:copiedOperations];
+    }
+}
+
+- (BOOL)isRunning
+{
+    BOOL isRunning = NO;
+    @synchronized (self.runningOperations) {
+        isRunning = (self.runningOperations.count>0);
+    }
+    return isRunning;
 }
 @end

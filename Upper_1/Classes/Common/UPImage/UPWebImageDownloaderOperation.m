@@ -225,21 +225,28 @@ extern NSString *const SDWebImageDownloadFinishNotification;
     responseFromCached = NO;
     if (completionBlock && self.userData) {
         //处理返回数据
-        NSString *userJsonStr = [[NSString alloc] initWithData:self.userData encoding:NSUTF8StringEncoding];
-        UserData *userInfo = [[UserData alloc] initWithJsonString:userJsonStr];
-        NSString *imgData = userInfo.user_icon;
-        if (imgData) {
-            NSData *_decodedImageData = [[NSData alloc] initWithBase64EncodedString:imgData options:NSDataBase64DecodingIgnoreUnknownCharacters];
-            UIImage *image = [UIImage imageWithData:_decodedImageData];
-            
-            if (CGSizeEqualToSize(image.size, CGSizeZero)) {
-                completionBlock(nil, nil, [NSError errorWithDomain:SDWebImageErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey : @"Downloaded image has 0 pixels"}], YES);
-            }else {
-                completionBlock(image, _decodedImageData, nil, YES);
+        NSError *error;
+        NSDictionary *response = [NSJSONSerialization JSONObjectWithData:self.userData options:NSJSONReadingMutableLeaves error:&error];
+        
+        NSString *respID = response[@"resp_id"];
+        if ([respID intValue]==0) {
+            UserData *userInfo = [[UserData alloc] initWithDict:response[@"resp_data"]];
+            NSString *imgData = userInfo.user_icon;
+            if (imgData) {
+                NSData *_decodedImageData = [[NSData alloc] initWithBase64EncodedString:imgData options:NSDataBase64DecodingIgnoreUnknownCharacters];
+                UIImage *image = [UIImage imageWithData:_decodedImageData];
+                
+                if (CGSizeEqualToSize(image.size, CGSizeZero)) {
+                    completionBlock(nil, nil, [NSError errorWithDomain:SDWebImageErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey : @"Downloaded image has 0 pixels"}], YES);
+                }else {
+                    completionBlock(image, _decodedImageData, nil, YES);
+                }
             }
+        } else {
+            completionBlock(nil, nil, [NSError errorWithDomain:SDWebImageErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey : @"user data request failed"}], YES);
         }
         
-            } else {
+    } else {
         completionBlock(nil, nil, [NSError errorWithDomain:SDWebImageErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey : @"Image data is nil"}], YES);
     }
 }

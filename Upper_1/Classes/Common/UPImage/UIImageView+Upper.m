@@ -8,14 +8,11 @@
 
 #import "UIImageView+Upper.h"
 #import <objc/runtime.h>
-#import "UIView+WebCacheOperation.h"
+#import "UIView+UPCacheOperation.h"
 #import "UPWebImageOperation.h"
 #import "UPWebImageManager.h"
 
 static char imageURLKey;
-static char TAG_ACTIVITY_INDICATOR;
-static char TAG_ACTIVITY_STYLE;
-static char TAG_ACTIVITY_SHOW;
 
 @implementation UIImageView (Upper)
 
@@ -36,9 +33,30 @@ static char TAG_ACTIVITY_SHOW;
     
     if (userId) {
         __weak __typeof(self)wself = self;
-        
-//        id<UPWebImageOperation> operation = [UPWebImageManager.shared]
-        
+        id<UPWebImageOperation> operation = [[UPWebImageManager sharedManager] downloadImageWithUserID:userId progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSString *usrID){
+            if (!wself) {
+                return;
+            }
+            dispatch_main_sync_safe(^{
+                if (!wself) return;
+                if (image && completedBlock) {
+                    completedBlock(image, error, cacheType, userId);
+                    return;
+                } else if (image) {
+                    wself.image = image;
+                    [wself setNeedsLayout];
+                } else {
+                    wself.image = placeholder;
+                    [wself setNeedsLayout];
+                }
+                
+                if (completedBlock && finished) {
+                    completedBlock(image, error, cacheType, userId);
+                }
+            });
+            
+        }];
+        [self up_setImageLoadOperation:operation forKey:@"UIImageViewImageLoad"];
     }
 }
                                                                                                  
@@ -49,6 +67,6 @@ static char TAG_ACTIVITY_SHOW;
 
 - (void)up_cancelCurrentImageLoad
 {
-    [self sd_cancelImageLoadOperationWithKey:@"UIImageViewImageLoad"];
+    [self up_cancelImageLoadOperationWithKey:@"UIImageViewImageLoad"];
 }
 @end

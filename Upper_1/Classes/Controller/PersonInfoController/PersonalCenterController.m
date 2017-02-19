@@ -15,6 +15,7 @@
 #import "BubbleChatViewController.h"
 
 #import "UPDataManager.h"
+#import "YMNetwork.h"
 
 #define TopViewHeight 200
 
@@ -89,16 +90,18 @@
     NSString *user_id = [UPDataManager shared].userInfo.ID;
     NSString *query_id = self.user.ID;
     
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+//    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
+//    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    
+    NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"UserQuery"forKey:@"a"];
     
     [params setObject:user_id forKey:@"user_id"];
     [params setObject:query_id forKey:@"qry_usr_id"];
     [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json){
-        NSDictionary *dict = (NSDictionary *)json;
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             //处理
@@ -107,10 +110,13 @@
             PersonInfoController *personController = self.childViewControllers[0];
             [personController setUserData:user];
         }
-        
-    }failture:^(id error) {
-        
+    } failure:^(NSError *error) {
     }];
+    
+//    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json){
+//            }failture:^(id error) {
+//        
+//    }];
 }
 
 - (void)addHeader

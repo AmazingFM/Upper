@@ -40,11 +40,11 @@ static char loadOperationKey;
         if ([operations isKindOfClass:[NSArray class]]) {
             for (id<UPWebImageOperation> operation in operations) {
                 if (operation) {
-                    [operation cancle];
+                    [operation cancel];
                 }
             }
         } else if ([operations conformsToProtocol:@protocol(UPWebImageOperation)]) {
-            [(id<UPWebImageOperation>)operations cancle];
+            [(id<UPWebImageOperation>)operations cancel];
         }
         [operationDictionary removeObjectForKey:key];
     }

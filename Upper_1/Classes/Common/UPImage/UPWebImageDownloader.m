@@ -9,6 +9,7 @@
 #import "UPWebImageDownloader.h"
 #import "AFURLRequestSerialization.h"
 #import "UPWebImageDownloaderOperation.h"
+#import "UPDataManager.h"
 
 static NSString *const kProgressCallbackKey = @"progress";
 static NSString *const kCompletedCallbackKey = @"completed";
@@ -93,10 +94,27 @@ static NSString *const kCompletedCallbackKey = @"completed";
             timeoutInterval = 15.f;
         }
         
-        NSMutableDictionary *parameters = [NSMutableDictionary new];
+        NSString *user_id = [UPDataManager shared].userInfo.ID;
+        NSString *query_id = userId;
+        
+        NSMutableDictionary *params = [NSMutableDictionary new];
+        [params setObject:@"UserQuery"forKey:@"a"];
+        
+        [params setObject:user_id forKey:@"user_id"];
+        [params setObject:query_id forKey:@"qry_usr_id"];
+        [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
+
+        NSString *uuid = [UPConfig sharedInstance].uuid;
+        NSString *currentDate = [UPConfig sharedInstance].currentDate;
+        NSString *reqSeq = [UPConfig sharedInstance].newReqSeqStr;
+        NSString *md5Str = [UPTools md5HexDigest:[NSString stringWithFormat:@"upper%@%@%@upper", uuid, reqSeq, currentDate]];
+        
+        NSMutableDictionary *newParamsDic = [NSMutableDictionary dictionaryWithDictionary:@{@"app_id":uuid, @"req_seq":reqSeq, @"time_stamp":currentDate, @"sign":md5Str}];
+        [newParamsDic addEntriesFromDictionary:params];
+        
         
         NSError *serializationError = nil;
-        NSMutableURLRequest *request = [wself.requestSerializer requestWithMethod:@"GET" URLString:@"http://api.qidianzhan.com.cn/AppServ/index.php" parameters:parameters error:&serializationError];
+        NSMutableURLRequest *request = [wself.requestSerializer requestWithMethod:@"GET" URLString:@"http://api.qidianzhan.com.cn/AppServ/index.php" parameters:newParamsDic error:&serializationError];
         
         operation = [[wself.operationClass alloc] initWithRequest:request options:SDWebImageDownloaderLowPriority progress:^(NSInteger receivedSize, NSInteger expectedSize) {
             UPWebImageDownloader *sself = wself;

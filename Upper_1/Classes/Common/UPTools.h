@@ -33,6 +33,7 @@
 +(NSData*)dataFromGBKJSON:(NSObject*)jsonObj;
 +(NSString*)stringFromJSON:(NSObject*)jsonObj;
 +(NSObject*)JSONFromString:(NSString*)jsonStr;
++ (id)JSONFromData:(NSData *)jsonData;
 
 +(NSString*)documentFilePathWithName:(NSString*)fileName;
 +(BOOL)saveFileToDocument:(NSData*)data withName:(NSString*)fileName;

@@ -366,7 +366,7 @@
             if ([sexual intValue]==0) {
                 statusName = @"满员";
             } else {
-                statusName = @"火热募集中";
+                statusName = @"募集中";
             }
         }
         _statusLab.text = statusName;

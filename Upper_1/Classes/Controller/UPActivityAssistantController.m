@@ -30,14 +30,16 @@
     backView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:backView];
     
-    float verticalPadding = 0.f;
+    float verticalPadding = 8.f;
     float perHeight = (ScreenHeight-FirstLabelHeight-6*verticalPadding)/3;
     float offsety = 0;
     
-    NSArray *imgArr = @[@"assist1", @"assist2", @"assist3"];
+    NSArray *imgArr = @[@"jhsj", @"xqsj", @"zysj"];
     for (int i=0; i<3; i++) {
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(LeftRightPadding,offsety+verticalPadding, backView.size.width-2*LeftRightPadding,perHeight)];
         imageView.tag = 100+i;
+        imageView.layer.cornerRadius = 10;
+        imageView.layer.masksToBounds = YES;
         imageView.backgroundColor = [UIColor clearColor];
         [imageView setContentMode:UIViewContentModeScaleToFill];
         [imageView setImage:[UIImage imageNamed:imgArr[i]]];
