@@ -28,18 +28,32 @@ typedef NS_ENUM(NSInteger, MessageType){
     MessageTypeCommonMix,                       //普通文本混合（子类别,普通聊天消息）
 };
 
+typedef NS_ENUM(NSInteger, MessageSource) {
+    MessageSourceMe     = 0,    //自己发的
+    MessageSourceOther  = 1     //别人发得
+};
+
 @interface PrivateMessage : NSObject
 
-@property (nonatomic, copy) NSString *fromId;
-@property (nonatomic, copy) NSString *nickName;
-@property (nonatomic, copy) NSString *msgContent;
-@property (nonatomic, copy) NSString *addTime;
-@property (nonatomic, copy) NSString *msgStatus;
-@property (nonatomic, copy) NSString *msgType;//服务器标志
+@property (nonatomic, copy) NSString *local_id;     //本人user_id;
+@property (nonatomic, copy) NSString *local_name;   //本人nick_name;
+@property (nonatomic, copy) NSString *remote_id;    //对方user_id，配合source使用
+@property (nonatomic, copy) NSString *remote_name;  //对方nick_name
+@property (nonatomic, copy) NSString *message_desc;
+@property (nonatomic, copy) NSString *add_time;
+@property (nonatomic, copy) NSString *status;
+@property (nonatomic, copy) NSString *message_type;//服务器标志
 
-@property (nonatomic, assign) MessageType messageType;//本地标志
+@property (nonatomic) MessageSource source;//消息来源
+@property (nonatomic, assign) MessageType localMsgType;//本地区分标志
 
 @property (assign, nonatomic) PrivateMessageSendStatus sendStatus;
+
+@property (nonatomic, assign) BOOL showDateLabel;
+
+- (void)setWithDict:(NSDictionary *)dict;
+
+- (void)minuteOffSetStart:(NSString *)start end:(NSString *)end;
 
 @end
 

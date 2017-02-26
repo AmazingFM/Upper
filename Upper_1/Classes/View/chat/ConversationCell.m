@@ -67,33 +67,33 @@
     }
 //    [_userIconView sd_setImageWithURL:_curPriMsg.fromId placeholderImage:[UIImage imageNamed:@"head"]];
     
-    switch (_curPriMsg.messageType) {
+    switch (_curPriMsg.localMsgType) {
         case MessageTypeSystemGeneral:
         {
             _name.text = @"系统消息";
-            _time.text = _curPriMsg.addTime;
-            _msg.text = _curPriMsg.msgContent;
+            _time.text = _curPriMsg.add_time;
+            _msg.text = _curPriMsg.message_desc;
         }
             break;
         case MessageTypeActivityInvite:
         {
             _name.text = @"活动邀请";
-            _time.text = _curPriMsg.addTime;
+            _time.text = _curPriMsg.add_time;
             _msg.text = @"有人向你发送了活动邀请，去看看吧@";
         }
             break;
         case MessageTypeActivityChangeLauncher:
         {
             _name.text = @"组织活动";
-            _time.text = _curPriMsg.addTime;
+            _time.text = _curPriMsg.add_time;
             _msg.text = @"想组织活动吗？快去迎接挑战吧@";
         }
             break;
         default:
         {
-            _name.text = _curPriMsg.nickName;
-            _time.text = _curPriMsg.addTime;
-            _msg.text = _curPriMsg.msgContent;
+            _name.text = _curPriMsg.remote_name;
+            _time.text = _curPriMsg.add_time;
+            _msg.text = _curPriMsg.message_desc;
         }
             break;
     }
@@ -134,8 +134,8 @@
         default:
             break;
     }
-//    self.imageView.image = [UIImage imageNamed:imageName];
-    [self.imageView setImageWithUserId:@"3" placeholderImage:[UIImage imageNamed:imageName]];
+    self.imageView.image = [UIImage imageNamed:imageName];
+//    [self.imageView setImageWithUserId:@"3" placeholderImage:[UIImage imageNamed:imageName]];
     self.textLabel.text = titleStr;
 }
 

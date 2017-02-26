@@ -8,29 +8,7 @@
 
 #import "UPBaseViewController.h"
 
-@class UPBaseModel;
-@interface OtherUserData : UPBaseModel
-
-@property (nonatomic, copy) NSString *birthday;
-@property (nonatomic, copy) NSString *creator_coin;
-@property (nonatomic, copy) NSString *creator_good_rate;
-@property (nonatomic, copy) NSString *creator_group;
-@property (nonatomic, copy) NSString *creator_level;
-@property (nonatomic, copy) NSString *ID;
-@property (nonatomic, copy) NSString *industry_id;
-@property (nonatomic, copy) NSString *industry_name;
-@property (nonatomic, copy) NSString *join_coin;
-@property (nonatomic, copy) NSString *join_good_rate;
-@property (nonatomic, copy) NSString *join_group;
-@property (nonatomic, copy) NSString *join_level;
-@property (nonatomic, copy) NSString *nick_name;
-@property (nonatomic, copy) NSString *node_id;
-@property (nonatomic, copy) NSString *node_name;
-@property (nonatomic, copy) NSString *sexual;
-@property (nonatomic, copy) NSString *true_name;
-@property (nonatomic, copy) NSString *user_icon;
-@end
-
+@class OtherUserData;
 @interface PersonalCenterController : UPBaseViewController
 
 @property (nonatomic, assign) int index;

@@ -86,14 +86,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PrivateMessage *msg = [msgList objectAtIndex:indexPath.row];
-    switch (msg.messageType) {
+    switch (msg.localMsgType) {
         case MessageTypeSystemGeneral:
-            showDefaultAlert(@"系统消息", msg.msgContent);
+            showDefaultAlert(@"系统消息", msg.message_desc);
             break;
         case MessageTypeActivityInvite:
         {
             //得到活动信息
-            ActivityData *activityInfo = [self getActivityInfoFromMsg:msg.msgContent];
+            ActivityData *activityInfo = [self getActivityInfoFromMsg:msg.message_desc];
             UpActDetailController *actDetailController = [[UpActDetailController alloc] init];
             actDetailController.actData = activityInfo;
             actDetailController.sourceType = SourceTypeDaTing;
@@ -103,7 +103,7 @@
         case MessageTypeActivityChangeLauncher:
         {
             //得到活动信息
-            ActivityData *activityInfo = [self getActivityInfoFromMsg:msg.msgContent];
+            ActivityData *activityInfo = [self getActivityInfoFromMsg:msg.message_desc];
             ActivityType *actType = [[UPConfig sharedInstance] getActivityTypeByID:activityInfo.activity_class];
             
             NSString *showMsg = [NSString stringWithFormat:@"活动名称:%@\n活动类型:%@\n发起人:%@", activityInfo.activity_name, actType.name, activityInfo.nick_name];

@@ -17,7 +17,7 @@
 #import "UPTheme.h"
 #import "ConversationCell.h"
 
-#import "BubbleChatViewController.h"
+#import "UPChatViewController.h"
 
 @implementation UserChatItem
 @end
@@ -152,15 +152,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row<2) {
-        MessageListController *msgListController = [[MessageListController alloc] init];
-        msgListController.messageType = indexPath.row;
-        [self.navigationController pushViewController:msgListController animated:YES];
-    } else {
+//    if (indexPath.row<2) {
+//        MessageListController *msgListController = [[MessageListController alloc] init];
+//        msgListController.messageType = indexPath.row;
+//        [self.navigationController pushViewController:msgListController animated:YES];
+//    } else {
         PrivateMessage *msg = [priMsgList objectAtIndex:indexPath.row-2];
-        BubbleChatViewController *chatController = [[BubbleChatViewController alloc] initWithUserID:msg.fromId andUserName:msg.nickName];
+        UPChatViewController *chatController = [[UPChatViewController alloc] initWithUserID:msg.remote_id andUserName:msg.remote_name];
         [self.navigationController pushViewController:chatController animated:YES];
-    }
+//    }
 //    UserChatItem *item = usrMsgList[indexPath.row];
 //    [[MessageManager shared] updateGropuMessageStatus:item.userId];//设置状态已读
 //    BubbleChatViewController *chatController = [[BubbleChatViewController alloc] initWithUserID:item.userId andUserName:item.userName];

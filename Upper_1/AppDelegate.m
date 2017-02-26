@@ -26,10 +26,8 @@
     /************ 控件外观设置 **************/
     NSDictionary *navbarTitleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
     [[UINavigationBar appearance] setTitleTextAttributes:navbarTitleTextAttributes];
-    [[UINavigationBar appearance] setBarTintColor:[UIColor redColor]];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"back_shadow"] forBarMetrics:UIBarMetricsDefault];
-    [[UINavigationBar appearance] setTranslucent:YES];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor blackColor]];
     
     self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     

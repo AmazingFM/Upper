@@ -233,6 +233,11 @@
 		3A837D4D1DDEDC9200A9A0BB /* UPActAsistDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A837D4C1DDEDC9200A9A0BB /* UPActAsistDetailController.m */; };
 		3A90746D1DD05E59000B2050 /* UPActTypeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A90746C1DD05E59000B2050 /* UPActTypeController.m */; };
 		3A9074701DD07ECF000B2050 /* UPGoShareController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A90746F1DD07ECF000B2050 /* UPGoShareController.m */; };
+		3A91CCEA1E62FBFC00EBEF58 /* PrivateMsgCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A91CCE91E62FBFC00EBEF58 /* PrivateMsgCell.m */; };
+		3A91CCED1E62FF8000EBEF58 /* UPMessageBubbleController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A91CCEC1E62FF8000EBEF58 /* UPMessageBubbleController.m */; };
+		3A91CCF01E6310CB00EBEF58 /* UPChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A91CCEF1E6310CB00EBEF58 /* UPChatViewController.m */; };
+		3A91CCF31E6334A200EBEF58 /* toolbar-emoji2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A91CCF11E6334A200EBEF58 /* toolbar-emoji2@2x.png */; };
+		3A91CCF41E6334A200EBEF58 /* toolbar-emoji2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A91CCF21E6334A200EBEF58 /* toolbar-emoji2@3x.png */; };
 		3AAB8EA51E3875BE00025188 /* asistant@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AAB8EA41E3875BE00025188 /* asistant@2x.png */; };
 		3AAF86391D6C193700248A45 /* YMImageLoadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAF86381D6C193700248A45 /* YMImageLoadView.m */; };
 		3ACF2AF51D6AEDD30083E04E /* RecommendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACF2AF41D6AEDD30083E04E /* RecommendController.m */; };
@@ -700,6 +705,14 @@
 		3A90746C1DD05E59000B2050 /* UPActTypeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPActTypeController.m; sourceTree = "<group>"; };
 		3A90746E1DD07ECF000B2050 /* UPGoShareController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPGoShareController.h; sourceTree = "<group>"; };
 		3A90746F1DD07ECF000B2050 /* UPGoShareController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPGoShareController.m; sourceTree = "<group>"; };
+		3A91CCE81E62FBFC00EBEF58 /* PrivateMsgCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrivateMsgCell.h; sourceTree = "<group>"; };
+		3A91CCE91E62FBFC00EBEF58 /* PrivateMsgCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrivateMsgCell.m; sourceTree = "<group>"; };
+		3A91CCEB1E62FF8000EBEF58 /* UPMessageBubbleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPMessageBubbleController.h; sourceTree = "<group>"; };
+		3A91CCEC1E62FF8000EBEF58 /* UPMessageBubbleController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPMessageBubbleController.m; sourceTree = "<group>"; };
+		3A91CCEE1E6310CB00EBEF58 /* UPChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPChatViewController.h; sourceTree = "<group>"; };
+		3A91CCEF1E6310CB00EBEF58 /* UPChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPChatViewController.m; sourceTree = "<group>"; };
+		3A91CCF11E6334A200EBEF58 /* toolbar-emoji2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbar-emoji2@2x.png"; sourceTree = "<group>"; };
+		3A91CCF21E6334A200EBEF58 /* toolbar-emoji2@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbar-emoji2@3x.png"; sourceTree = "<group>"; };
 		3AAB8EA41E3875BE00025188 /* asistant@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "asistant@2x.png"; sourceTree = "<group>"; };
 		3AAF86371D6C193700248A45 /* YMImageLoadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMImageLoadView.h; sourceTree = "<group>"; };
 		3AAF86381D6C193700248A45 /* YMImageLoadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMImageLoadView.m; sourceTree = "<group>"; };
@@ -922,6 +935,8 @@
 				3A837D3A1DD8920A00A9A0BB /* UPMsgBubbleCell.m */,
 				3A6944D01E51853C00F1BEF5 /* PrivateMessage.h */,
 				3A6944D11E51853C00F1BEF5 /* PrivateMessage.m */,
+				3A91CCE81E62FBFC00EBEF58 /* PrivateMsgCell.h */,
+				3A91CCE91E62FBFC00EBEF58 /* PrivateMsgCell.m */,
 			);
 			path = message;
 			sourceTree = "<group>";
@@ -1344,6 +1359,8 @@
 		3A71CB3A1E26267700EBE0A2 /* pic */ = {
 			isa = PBXGroup;
 			children = (
+				3A91CCF11E6334A200EBEF58 /* toolbar-emoji2@2x.png */,
+				3A91CCF21E6334A200EBEF58 /* toolbar-emoji2@3x.png */,
 				8559245A1E5828D500FAAFFA /* jhsj@2x.png */,
 				8559245B1E5828D500FAAFFA /* xqsj@2x.png */,
 				8559245C1E5828D500FAAFFA /* zysj@2x.png */,
@@ -1489,6 +1506,10 @@
 				3A837D371DD88F6400A9A0BB /* MessageBubbleViewController.m */,
 				3A04D68F1E51A5ED004396D2 /* MessageListController.h */,
 				3A04D6901E51A5ED004396D2 /* MessageListController.m */,
+				3A91CCEB1E62FF8000EBEF58 /* UPMessageBubbleController.h */,
+				3A91CCEC1E62FF8000EBEF58 /* UPMessageBubbleController.m */,
+				3A91CCEE1E6310CB00EBEF58 /* UPChatViewController.h */,
+				3A91CCEF1E6310CB00EBEF58 /* UPChatViewController.m */,
 			);
 			name = chat;
 			sourceTree = "<group>";
@@ -1990,6 +2011,7 @@
 				3A71CBA81E26267700EBE0A2 /* done@2x.png in Resources */,
 				3A71CBBF1E26267700EBE0A2 /* qrcode.png in Resources */,
 				3A71CBC91E26267700EBE0A2 /* select_bg.png in Resources */,
+				3A91CCF41E6334A200EBEF58 /* toolbar-emoji2@3x.png in Resources */,
 				EC3C18891CECB16D00223D6B /* FriendCell.xib in Resources */,
 				3A71CBC01E26267700EBE0A2 /* qrcode@2x.png in Resources */,
 				3A71CBB01E26267700EBE0A2 /* guide_p3.png in Resources */,
@@ -2029,6 +2051,7 @@
 				3A71CBD11E26267700EBE0A2 /* unselect_bg.png in Resources */,
 				3A71CBA01E26267700EBE0A2 /* Chat_take_picture.png in Resources */,
 				3A71CBC41E26267700EBE0A2 /* scanline.png in Resources */,
+				3A91CCF31E6334A200EBEF58 /* toolbar-emoji2@2x.png in Resources */,
 				3A71CBC81E26267700EBE0A2 /* search_btn_line@3x.png in Resources */,
 				3A71CBC31E26267700EBE0A2 /* radio_nor.png in Resources */,
 				3A71CBCD1E26267700EBE0A2 /* suppose.png in Resources */,
@@ -2069,9 +2092,11 @@
 				2CDAD6591D0EEC4000C260F4 /* MJRefreshConst.m in Sources */,
 				EC3C187E1CECB16D00223D6B /* ButtonGroupView.m in Sources */,
 				2CDAD4FD1D0ED8A900C260F4 /* UUImageAvatarBrowser.m in Sources */,
+				3A91CCEA1E62FBFC00EBEF58 /* PrivateMsgCell.m in Sources */,
 				2CDAD6621D0EEC4000C260F4 /* SDCollectionViewCell.m in Sources */,
 				EC3C18841CECB16D00223D6B /* CustomField.m in Sources */,
 				2CDAD67B1D0EEC4000C260F4 /* UIImageView+WebCache.m in Sources */,
+				3A91CCED1E62FF8000EBEF58 /* UPMessageBubbleController.m in Sources */,
 				2CDAD6761D0EEC4000C260F4 /* UIButton+WebCache.m in Sources */,
 				EC3C18191CECB16D00223D6B /* UpperController.m in Sources */,
 				2CDAD65C1D0EEC4000C260F4 /* UIView+MJExtension.m in Sources */,
@@ -2213,6 +2238,7 @@
 				2C9793A31CEFF8550043EA50 /* UPTimerManager.m in Sources */,
 				2CDAD6411D0EEC4000C260F4 /* MBProgressHUD.m in Sources */,
 				2CDAD6601D0EEC4000C260F4 /* TADotView.m in Sources */,
+				3A91CCF01E6310CB00EBEF58 /* UPChatViewController.m in Sources */,
 				EC3C18801CECB16D00223D6B /* UPActivityCellItem.m in Sources */,
 				EC3C18161CECB16D00223D6B /* UpLoginController.m in Sources */,
 				3A05508E1DB5EB99009EA918 /* UPMyFriendsViewController.m in Sources */,

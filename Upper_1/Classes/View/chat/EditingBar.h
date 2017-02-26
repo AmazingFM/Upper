@@ -14,6 +14,7 @@
 @property (nonatomic, copy) void (^sendContent)(NSString *content);
 
 @property (nonatomic, strong) GrowingTextView *editView;
+@property (nonatomic, strong) UIButton *inputViewButton;
 
 - (instancetype)initWithModeSwitchButton:(BOOL)hasAModeSwitchButton;
 

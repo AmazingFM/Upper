@@ -22,19 +22,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if ([[UIDevice currentDevice].systemVersion floatValue]>=7) {
-        self.edgesForExtendedLayout = UIRectEdgeAll;
-        self.extendedLayoutIncludesOpaqueBars = NO;
-        self.modalPresentationCapturesStatusBarAppearance = NO;
-        self.automaticallyAdjustsScrollViewInsets=YES;
-    }else {
-        self.wantsFullScreenLayout=YES;
-    }
     
-    UIImageView *backImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_cover_gaussian"]];
-    backImg.userInteractionEnabled = NO;
-    backImg.frame = self.view.bounds;
-    [self.view addSubview:backImg];
+    self.extendedLayoutIncludesOpaqueBars = NO;
+    self.modalPresentationCapturesStatusBarAppearance = NO;
+    
+    UIView *back = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    [self.view addSubview:back];
+//    UIImageView *backImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_cover_gaussian"]];
+//    backImg.userInteractionEnabled = NO;
+//    backImg.frame = self.view.bounds;
+//    [self.view addSubview:backImg];
 }
 
 - (void)viewWillAppear:(BOOL)animated

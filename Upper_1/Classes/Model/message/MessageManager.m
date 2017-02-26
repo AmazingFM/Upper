@@ -13,6 +13,8 @@
 #import "Info.h"
 #import "UUMessage.h"
 
+#import "PrivateMessage.h"
+
 @implementation GroupMessage
 
 - (NSMutableArray *)messageList
@@ -134,90 +136,99 @@
 
 - (void)pullMessage
 {
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
-    [params setValue:@"MessageGet" forKey:@"a"];
-
-    [params setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
-
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
-        NSDictionary *dict = (NSDictionary *)json;
-        NSLog(@"MessageGet:%@", dict);
-
-        NSString *resp_id = dict[@"resp_id"];
-        if ([resp_id intValue]==0) {
-            NSDictionary *resp_data = dict[@"resp_data"];
-
-            int totalCnt =  [resp_data[@"total_count"] intValue];
-            if (totalCnt!=0) {
-                NSString *msglist = resp_data[@"message_list"];
-                if ([msglist isKindOfClass:[NSArray class]]) {
-                    NSMutableArray *msgArr = (NSMutableArray*)msglist;
-                    for (NSDictionary *dict in msgArr) {
-                        UUMessage *msg = [[UUMessage alloc] init];
-                        
-                        
-                        //99为邀请类消息， from_id为0时为系统消息
-                        NSString *fromId = dict[@"from_id"];
-                        msg.strId = fromId;
-                        
-                        if ([fromId intValue]==0) {
-                            msg.type = UPMessageTypeSys;
-                        } else {
-                            int msgType = [dict[@"message_type"] intValue];
-                            if (msgType==99) {
-                                msg.type = UPMessageTypeInvite;
-                            } else {
-                                msg.type = UPMessageTypeNormal;
-                            }
-                        }
-                        
-                        msg.from = UUMessageFromOther;
-                        
-                        //后续需要完善，每次请求都需要考虑绑定用户id
-                        NSString *to_id = [UPDataManager shared].userInfo.ID;//
-                        msg.strToId = to_id;
-                        
-                        msg.strName = dict[@"nick_name"];
-                        msg.strContent = dict[@"message_desc"];
-                        msg.strTime = dict[@"add_time"];
-                        msg.status = dict[@"status"];
-                        
-                        UUMessage *message = [self msgInGroup:msg.strId andType:msg.type];
-                        if (message) {
-                            if ([message.strTime compare:msg.strTime]==NSOrderedAscending) {
-                                message.strContent = msg.strContent;
-                                message.strTime = msg.strTime;
-                                message.status = msg.status;
-                            }
-                        } else {
-                            [self.groupMessageList addObject:msg];
-                        }
-                        
-                        [self.messageList addObject:msg];
-                    }
-                    
-                    BOOL result = [self updateMessages];
-                    if (result) {
-                        [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierMessageComing object:self.messageList];
-                        [self.messageList removeAllObjects];
-                        NSLog(@"更新成功");
-                    }
-                    
-                    result = [self updateGroupMessage];
-                    if (result) {
-                        [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierMessageGroupUpdate object:self.groupMessageList];
-                        [self.groupMessageList removeAllObjects];
-                        NSLog(@"更新成功");
-                    }
-
-                    
-                }
-            }
-        }
-    } failture:^(id error) {
-        NSLog(@"%@",error);
-    }];
+//    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
+//    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+//    [params setValue:@"MessageGet" forKey:@"a"];
+//
+//    [params setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
+//
+//    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
+//        NSDictionary *dict = (NSDictionary *)json;
+//        NSLog(@"MessageGet:%@", dict);
+//
+//        NSString *resp_id = dict[@"resp_id"];
+//        if ([resp_id intValue]==0) {
+//            NSDictionary *resp_data = dict[@"resp_data"];
+//
+//            int totalCnt =  [resp_data[@"total_count"] intValue];
+//            if (totalCnt!=0) {
+//                NSString *msglist = resp_data[@"message_list"];
+//                if ([msglist isKindOfClass:[NSArray class]]) {
+//                    NSMutableArray *msgArr = (NSMutableArray*)msglist;
+//                    for (NSDictionary *dict in msgArr) {
+//                        PrivateMessage *priMsg = [[PrivateMessage alloc] init];
+//                        priMsg.remote_id      = dict[@"from_id"];
+//                        priMsg.remote_name    = dict[@"nick_name"];
+//                        priMsg.message_desc = dict[@"message_desc"];
+//                        priMsg.add_time     = dict[@"add_time"];
+//                        priMsg.status       = dict[@"status"];
+//                        priMsg.message_type = dict[@"message_type"];
+//                        
+//                        
+//                        UUMessage *msg = [[UUMessage alloc] init];
+//                        
+//                        
+//                        //99为邀请类消息， from_id为0时为系统消息
+//                        NSString *fromId = dict[@"from_id"];
+//                        msg.strId = fromId;
+//                        
+//                        if ([fromId intValue]==0) {
+//                            msg.type = UPMessageTypeSys;
+//                        } else {
+//                            int msgType = [dict[@"message_type"] intValue];
+//                            if (msgType==99) {
+//                                msg.type = UPMessageTypeInvite;
+//                            } else {
+//                                msg.type = UPMessageTypeNormal;
+//                            }
+//                        }
+//                        
+//                        msg.from = UUMessageFromOther;
+//                        
+//                        //后续需要完善，每次请求都需要考虑绑定用户id
+//                        NSString *to_id = [UPDataManager shared].userInfo.ID;//
+//                        msg.strToId = to_id;
+//                        
+//                        msg.strName = dict[@"nick_name"];
+//                        msg.strContent = dict[@"message_desc"];
+//                        msg.strTime = dict[@"add_time"];
+//                        msg.status = dict[@"status"];
+//                        
+//                        UUMessage *message = [self msgInGroup:msg.strId andType:msg.type];
+//                        if (message) {
+//                            if ([message.strTime compare:msg.strTime]==NSOrderedAscending) {
+//                                message.strContent = msg.strContent;
+//                                message.strTime = msg.strTime;
+//                                message.status = msg.status;
+//                            }
+//                        } else {
+//                            [self.groupMessageList addObject:msg];
+//                        }
+//                        
+//                        [self.messageList addObject:msg];
+//                    }
+//                    
+//                    BOOL result = [self updateMessages];
+//                    if (result) {
+//                        [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierMessageComing object:self.messageList];
+//                        [self.messageList removeAllObjects];
+//                        NSLog(@"更新成功");
+//                    }
+//                    
+//                    result = [self updateGroupMessage];
+//                    if (result) {
+//                        [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierMessageGroupUpdate object:self.groupMessageList];
+//                        [self.groupMessageList removeAllObjects];
+//                        NSLog(@"更新成功");
+//                    }
+//
+//                    
+//                }
+//            }
+//        }
+//    } failture:^(id error) {
+//        NSLog(@"%@",error);
+//    }];
 }
 
 - (UUMessage *)msgInGroup:(NSString *)fromID andType:(UUMessageType)msgType

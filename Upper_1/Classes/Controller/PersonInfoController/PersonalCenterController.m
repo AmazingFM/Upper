@@ -14,18 +14,11 @@
 #import "Info.h"
 #import "BubbleChatViewController.h"
 
+#import "UserData.h"
 #import "UPDataManager.h"
 #import "YMNetwork.h"
 
 #define TopViewHeight 200
-
-
-@implementation OtherUserData
-
-- (NSDictionary *)attributeMapDictionary {
-    return @{ @"ID" : @"id",};
-}
-@end
 
 @interface PersonalCenterController () <UIScrollViewDelegate>
 

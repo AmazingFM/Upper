@@ -8,7 +8,7 @@
 
 #import "BottomBarViewController.h"
 #import "EditingBar.h"
-#import "OperationBar.h"
+//#import "OperationBar.h"
 #import "GrowingTextView.h"
 
 
@@ -27,11 +27,6 @@
     if (self) {
         _editingBar = [[EditingBar alloc] initWithModeSwitchButton:hasAModeSwitchButton];
         _editingBar.editView.delegate = self;
-        if (hasAModeSwitchButton) {
-            _hasAModeSwitchButton = hasAModeSwitchButton;
-            _operationBar = [OperationBar new];
-            _operationBar.hidden = YES;
-        }
     }
     
     return self;
@@ -39,16 +34,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor colorWithRed:235.0/255 green:235.0/255 blue:243.0/255 alpha:1.0];//[UIColor whiteColor];
     
     [self setup];
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 
 #pragma mark -
 
@@ -67,16 +56,13 @@
     _editingBar.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:_editingBar];
     
-    _editingBarYConstraint = [NSLayoutConstraint constraintWithItem:self.view    attribute:NSLayoutAttributeBottom   relatedBy:NSLayoutRelationEqual
-                                                             toItem:_editingBar  attribute:NSLayoutAttributeBottom   multiplier:1.0 constant:0];
+    _editingBarYConstraint = [NSLayoutConstraint constraintWithItem:self.view attribute:NSLayoutAttributeBottom   relatedBy:NSLayoutRelationEqual toItem:_editingBar attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0];
     
-    _editingBarHeightConstraint = [NSLayoutConstraint constraintWithItem:_editingBar attribute:NSLayoutAttributeHeight         relatedBy:NSLayoutRelationEqual
-                                                                  toItem:nil         attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:[self minimumInputbarHeight]];
+    _editingBarHeightConstraint = [NSLayoutConstraint constraintWithItem:_editingBar attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:[self minimumInputbarHeight]];
     
     [self.view addConstraint:_editingBarYConstraint];
     [self.view addConstraint:_editingBarHeightConstraint];
 }
-
 #pragma mark - textView的基本设置
 
 - (GrowingTextView *)textView

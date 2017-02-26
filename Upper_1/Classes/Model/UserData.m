@@ -75,3 +75,13 @@
     }
 }
 @end
+
+
+
+@implementation OtherUserData
+
+- (NSDictionary *)attributeMapDictionary {
+    return @{ @"ID" : @"id",};
+}
+@end
+
