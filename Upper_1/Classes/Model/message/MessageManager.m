@@ -12,8 +12,15 @@
 #import "XWHttpTool.h"
 #import "Info.h"
 #import "UUMessage.h"
+#import "YMNetwork.h"
 
-#import "PrivateMessage.h"
+
+#define SYSTEMTABLE @"SysTable"
+#define USRTABLE    @"UsrTable"
+
+#define SysMsgKey @"SysMsg"
+#define ActMsgKey @"ActMsg"
+#define UsrMsgKey @"UsrMsg"
 
 @implementation GroupMessage
 
@@ -62,10 +69,18 @@
     return self;
 }
 
-- (void)initEnv
+- (void)login:(NSNotification *)notice
 {
-    [self.messageList removeAllObjects];
-    [self.groupMessageList removeAllObjects];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotifierLogin object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(login:) name:kNotifierLogin object:nil];
+    
+    [UPTimerManager createTimer:@"TimeToPullMessage" notice:kNotifierMessagePull heartTime:10.0f];
+    [[UPTimerManager shared] startTimeMachine:@"TimeToPullMessage"];
+}
+
+- (void)logout:(NSNotification *)notice
+{
+    [[UPTimerManager shared] stopTimeMachine:@"TimeToPullMessage"];
 }
 
 - (void)initializeDB
@@ -82,153 +97,287 @@
     }
     
     //建表消息列表
-//    flag = [messageDb executeUpdate:@"create table if not exists messages_detail (id integer primary key autoincrement, from_id text, to_id text, nick_name text, message_desc text, message_from integer, message_type integer, add_time text, status text)"];
-//    
+    flag = [messageDb executeUpdate:@"create table if not exists SysTable (id integer primary key autoincrement, local_id text, local_name text, remote_id text, remote_name text, msg_desc integer, source integer, add_time text, msg_status text, msg_type integer, msg_key text)"];
+    
+    flag = [messageDb executeUpdate:@"create table if not exists UsrTable (id integer primary key autoincrement, local_id text, local_name text, remote_id text, remote_name text, msg_desc integer, source integer, add_time text, msg_status text, msg_type integer, msg_key text)"];
+    
 //    flag = [messageDb executeUpdate:@"create table if not exists messages_group (id integer primary key autoincrement, from_id text unique, to_id text, nick_name text, newest_message text, message_type integer, add_time text, status text)"];
     
     flag = [messageDb executeUpdate:@"create table if not exists messages_detail (id integer primary key autoincrement, from_id text, to_id text, nick_name text, message_desc text, message_from integer, message_type integer, add_time text, status text)"];
     
     flag = [messageDb executeUpdate:@"create table if not exists messages_group (id integer primary key autoincrement, from_id text unique, to_id text, nick_name text, newest_message text, message_type integer, add_time text, status text)"];
-
-    
     
     if (flag) {
         NSLog(@"建表messages成功");
     } else {
         NSLog(@"建表messages失败");
     }
-
     [messageDb close];
 }
 
-
-
-- (NSMutableArray *)messageList
+- (NSDictionary *)parseMessages:(NSArray *)msgArr
 {
-    if (_messageList==nil) {
-        _messageList = [NSMutableArray new];
-    }
-    return _messageList;
-}
-
-- (NSMutableArray *)groupMessageList
-{
-    if (_groupMessageList==nil) {
-        _groupMessageList = [NSMutableArray new];
-    }
-    return _groupMessageList;
-}
-
-- (void)login:(NSNotification *)notice
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotifierLogin object:nil];
-    [UPTimerManager createTimer:@"TimeToPullMessage" notice:kNotifierMessagePull heartTime:10.0f];
-    [[UPTimerManager shared] startTimeMachine:@"TimeToPullMessage"];
+    NSMutableArray *sysMsgList = [NSMutableArray new];
+    NSMutableArray *actMsgList = [NSMutableArray new];
+    NSMutableArray *usrMsgList = [NSMutableArray new];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(login:) name:kNotifierLogin object:nil];
+    if (msgArr.count==0) {
+        return nil;
+    }
+    
+    for (NSDictionary *dict in msgArr) {
+        PrivateMessage *priMsg  = [[PrivateMessage alloc] init];
+        priMsg.remote_id        = dict[@"from_id"];
+        priMsg.remote_name      = dict[@"nick_name"];
+        priMsg.msg_desc     = dict[@"message_desc"];
+        priMsg.add_time         = dict[@"add_time"];
+        priMsg.status           = dict[@"status"];
+        priMsg.message_type     = dict[@"message_type"];//不存数据库
+        
+        priMsg.source           = MessageSourceOther;
+        priMsg.local_id         = [UPDataManager shared].userInfo.ID;
+        priMsg.local_name       = [UPDataManager shared].userInfo.nick_name;
+        priMsg.msg_key          = @"uniquexxx";
+        
+        
+        //99为邀请类消息， from_id为0时为系统消息
+        if ([priMsg.remote_id intValue]==0) {
+            priMsg.localMsgType = MessageTypeSystemGeneral;
+        } else {
+            int msgType = [priMsg.message_type intValue];
+            if (msgType==99) {
+                priMsg.localMsgType = MessageTypeActivityInvite;
+            } else if (msgType==98) {
+                priMsg.localMsgType = MessageTypeActivityChangeLauncher;
+            } else {
+                priMsg.localMsgType = MessageTypeCommonText;
+            }
+        }
+        
+        switch (priMsg.localMsgType) {
+            case MessageTypeSystemGeneral:
+            {
+                [sysMsgList addObject:priMsg];
+            }
+                break;
+            case MessageTypeActivityInvite:
+            case MessageTypeActivityChangeLauncher:
+            {
+                [actMsgList addObject:priMsg];
+            }
+                break;
+            case MessageTypeCommonText:
+            case MessageTypeCommonImage:
+            case MessageTypeCommonMix:
+            {
+                [usrMsgList addObject:priMsg];
+            }
+                break;
+            default:
+                break;
+        }
+    }
+    
+    NSMutableDictionary *msgGroupDict = [NSMutableDictionary new];
+    [msgGroupDict setObject:sysMsgList forKey:SysMsgKey];
+    [msgGroupDict setObject:usrMsgList forKey:UsrMsgKey];
+    
+    return msgGroupDict;
 }
 
-- (void)logout:(NSNotification *)notice
+- (void)insertMsgGroupDict:(NSDictionary *)msgGroupDict
 {
-    [[UPTimerManager shared] stopTimeMachine:@"TimeToPullMessage"];
+    @synchronized (messageDb) {
+        [messageDb open];
+        
+        [messageDb beginTransaction];
+        BOOL isRollBack = NO;
+        
+        NSString *sysInsertSql = @"insert into SysTable (local_id, local_name, remote_id, remote_name, msg_desc, source, add_time, msg_status, msg_type, msg_key) values(?,?,?,?,?,?,?,?,?,?)";
+        
+        NSString *usrInsertSql = @"insert into UsrTable (local_id, local_name, remote_id, remote_name, msg_desc, source, add_time, msg_status, msg_type, msg_key) values(?,?,?,?,?,?,?,?,?,?)";
+        
+        NSArray *insertSqls = @[sysInsertSql, usrInsertSql];
+        NSArray *msgKeys = @[SysMsgKey, UsrMsgKey];
+        
+        @try {
+        for (int i=0; i<2; i++) {
+            NSString *insertSql = insertSqls[i];
+            
+            NSMutableArray *msgList = [NSMutableArray new];
+            if (i==0) {
+                [msgList addObjectsFromArray:msgGroupDict[SysMsgKey]];
+                [msgList addObjectsFromArray:msgGroupDict[ActMsgKey]];
+            } else if (i==1) {
+                [msgList addObjectsFromArray:msgGroupDict[UsrMsgKey]];
+            }
+            
+            
+            if (msgList.count>0) {
+                for (PrivateMessage *msg in msgList) {
+                    BOOL a = [messageDb executeUpdate:insertSql,
+                              msg.local_id,     msg.local_name,
+                              msg.remote_id,    msg.remote_name,
+                              msg.msg_desc, [NSNumber numberWithInt:msg.source],
+                              msg.add_time,     msg.status,
+                              [NSNumber numberWithInt:msg.localMsgType],
+                              msg.msg_key];
+                    if (!a) {
+                        NSLog(@"插入失败：%@",msgKeys[i]);
+                    }
+                }
+            }
+        }
+        }@catch (NSException *exception) {
+            isRollBack = YES;
+            [messageDb rollback];
+        } @finally {
+            if (!isRollBack) {
+                [messageDb commit];
+            }
+        }
+    }
 }
 
-
-- (void)pullMessage
+- (void)requestMessages
 {
-//    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-//    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
-//    [params setValue:@"MessageGet" forKey:@"a"];
-//
-//    [params setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
-//
-//    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
-//        NSDictionary *dict = (NSDictionary *)json;
-//        NSLog(@"MessageGet:%@", dict);
-//
-//        NSString *resp_id = dict[@"resp_id"];
-//        if ([resp_id intValue]==0) {
-//            NSDictionary *resp_data = dict[@"resp_data"];
-//
-//            int totalCnt =  [resp_data[@"total_count"] intValue];
-//            if (totalCnt!=0) {
-//                NSString *msglist = resp_data[@"message_list"];
-//                if ([msglist isKindOfClass:[NSArray class]]) {
-//                    NSMutableArray *msgArr = (NSMutableArray*)msglist;
-//                    for (NSDictionary *dict in msgArr) {
-//                        PrivateMessage *priMsg = [[PrivateMessage alloc] init];
-//                        priMsg.remote_id      = dict[@"from_id"];
-//                        priMsg.remote_name    = dict[@"nick_name"];
-//                        priMsg.message_desc = dict[@"message_desc"];
-//                        priMsg.add_time     = dict[@"add_time"];
-//                        priMsg.status       = dict[@"status"];
-//                        priMsg.message_type = dict[@"message_type"];
-//                        
-//                        
-//                        UUMessage *msg = [[UUMessage alloc] init];
-//                        
-//                        
-//                        //99为邀请类消息， from_id为0时为系统消息
-//                        NSString *fromId = dict[@"from_id"];
-//                        msg.strId = fromId;
-//                        
-//                        if ([fromId intValue]==0) {
-//                            msg.type = UPMessageTypeSys;
-//                        } else {
-//                            int msgType = [dict[@"message_type"] intValue];
-//                            if (msgType==99) {
-//                                msg.type = UPMessageTypeInvite;
-//                            } else {
-//                                msg.type = UPMessageTypeNormal;
-//                            }
-//                        }
-//                        
-//                        msg.from = UUMessageFromOther;
-//                        
-//                        //后续需要完善，每次请求都需要考虑绑定用户id
-//                        NSString *to_id = [UPDataManager shared].userInfo.ID;//
-//                        msg.strToId = to_id;
-//                        
-//                        msg.strName = dict[@"nick_name"];
-//                        msg.strContent = dict[@"message_desc"];
-//                        msg.strTime = dict[@"add_time"];
-//                        msg.status = dict[@"status"];
-//                        
-//                        UUMessage *message = [self msgInGroup:msg.strId andType:msg.type];
-//                        if (message) {
-//                            if ([message.strTime compare:msg.strTime]==NSOrderedAscending) {
-//                                message.strContent = msg.strContent;
-//                                message.strTime = msg.strTime;
-//                                message.status = msg.status;
-//                            }
-//                        } else {
-//                            [self.groupMessageList addObject:msg];
-//                        }
-//                        
-//                        [self.messageList addObject:msg];
-//                    }
-//                    
-//                    BOOL result = [self updateMessages];
-//                    if (result) {
-//                        [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierMessageComing object:self.messageList];
-//                        [self.messageList removeAllObjects];
-//                        NSLog(@"更新成功");
-//                    }
-//                    
-//                    result = [self updateGroupMessage];
-//                    if (result) {
-//                        [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierMessageGroupUpdate object:self.groupMessageList];
-//                        [self.groupMessageList removeAllObjects];
-//                        NSLog(@"更新成功");
-//                    }
-//
-//                    
-//                }
-//            }
-//        }
-//    } failture:^(id error) {
-//        NSLog(@"%@",error);
-//    }];
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    [params setValue:@"MessageGet" forKey:@"a"];
+    [params setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+        NSDictionary *dict = (NSDictionary *)responseObject;
+        NSLog(@"MessageGet:%@", dict);
+        
+        NSString *resp_id = dict[@"resp_id"];
+        if ([resp_id intValue]==0) {
+            NSDictionary *resp_data = dict[@"resp_data"];
+            
+            int totalCnt =  [resp_data[@"total_count"] intValue];
+            if (totalCnt!=0) {
+                NSString *msglist = resp_data[@"message_list"];
+                if ([msglist isKindOfClass:[NSArray class]]) {
+                    NSMutableArray *msgArr = (NSMutableArray*)msglist;
+                    
+                    NSDictionary *msgGroupDict = [self parseMessages:msgArr];
+                    
+                    if (msgGroupDict) {
+                        [self insertMsgGroupDict:msgGroupDict];
+                        //发送通知
+                        [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierMessageComing object:nil userInfo:msgGroupDict];
+                    }
+                }
+            }
+        }
+    } failure:^(NSError *error) {
+        //
+    }];
+}
+
+- (NSArray<PrivateMessage *> *)getMessagesByType:(MessageType)type
+{
+    //create table if not exists SysTable (id integer primary key autoincrement, local_id text, local_name text, remote_id text, remote_name text, msg_desc integer, source integer, add_time text, msg_status text, msg_type integer, msg_key text)
+    [messageDb open];
+
+    NSString *queryCondition = nil;
+    
+    if (type==MessageTypeSystem) {
+        queryCondition = @"msg_type=3";
+    } else if (type==MessageTypeActivity) {
+        queryCondition = @"msg_type=4 or msg_type=5";
+    }
+    
+    NSMutableArray<PrivateMessage *> *msgList = [NSMutableArray new];
+    
+    if (type==MessageTypeSystem ||
+        type==MessageTypeActivity) {
+        NSString *querySql = [NSString stringWithFormat:@"select * from SysTable where %@ order by add_time desc",queryCondition];
+        FMResultSet *s = [messageDb executeQuery:querySql];
+        while (s.next) {
+            PrivateMessage *msg = [[PrivateMessage alloc] init];
+            msg.local_id        = [s stringForColumn:@"local_id"];
+            msg.local_name      = [s stringForColumn:@"local_name"];
+            msg.remote_id       = [s stringForColumn:@"remote_id"];
+            msg.remote_name     = [s stringForColumn:@"remote_name"];
+            msg.msg_desc        = [s stringForColumn:@"msg_desc"];
+            msg.source          = [s intForColumn:@"source"];
+            msg.add_time        = [s stringForColumn:@"add_time"];
+            msg.status          = [s stringForColumn:@"msg_status"];
+            msg.localMsgType    = [s intForColumn:@"msg_type"];
+            msg.msg_key         = [s stringForColumn:@"msg_key"];
+            
+            [msgList addObject:msg];
+        }
+        [messageDb close];
+    } else if (type==MessageTypeActivity) {
+        NSString *querySql = [NSString stringWithFormat:@"select * from UsrTable where local_id in (select local_id, MAX(add_time)) from UsrTable group by local_id) order by add_time desc group by local_id"];
+        FMResultSet *s = [messageDb executeQuery:querySql];
+        while (s.next) {
+            PrivateMessage *msg = [[PrivateMessage alloc] init];
+            msg.local_id        = [s stringForColumn:@"local_id"];
+            msg.local_name      = [s stringForColumn:@"local_name"];
+            msg.remote_id       = [s stringForColumn:@"remote_id"];
+            msg.remote_name     = [s stringForColumn:@"remote_name"];
+            msg.msg_desc        = [s stringForColumn:@"msg_desc"];
+            msg.source          = [s intForColumn:@"source"];
+            msg.add_time        = [s stringForColumn:@"add_time"];
+            msg.status          = [s stringForColumn:@"msg_status"];
+            msg.localMsgType    = [s intForColumn:@"msg_type"];
+            msg.msg_key         = [s stringForColumn:@"msg_key"];
+            
+            [msgList addObject:msg];
+        }
+        [messageDb close];
+    }
+    return msgList;
+}
+
+- (NSArray<PrivateMessage *> *)getMessagesByUser:(NSString *)userId
+{
+    //create table if not exists SysTable (id integer primary key autoincrement, local_id text, local_name text, remote_id text, remote_name text, msg_desc integer, source integer, add_time text, msg_status text, msg_type integer, msg_key text)
+    [messageDb open];
+    
+    NSMutableArray<PrivateMessage *> *msgList = [NSMutableArray new];
+    
+    NSString *querySql = [NSString stringWithFormat:@"select * from UsrTable where local_id='%@' order by add_time desc", userId];
+    FMResultSet *s = [messageDb executeQuery:querySql];
+    while (s.next) {
+        PrivateMessage *msg = [[PrivateMessage alloc] init];
+        msg.local_id        = [s stringForColumn:@"local_id"];
+        msg.local_name      = [s stringForColumn:@"local_name"];
+        msg.remote_id       = [s stringForColumn:@"remote_id"];
+        msg.remote_name     = [s stringForColumn:@"remote_name"];
+        msg.msg_desc        = [s stringForColumn:@"msg_desc"];
+        msg.source          = [s intForColumn:@"source"];
+        msg.add_time        = [s stringForColumn:@"add_time"];
+        msg.status          = [s stringForColumn:@"msg_status"];
+        msg.localMsgType    = [s intForColumn:@"msg_type"];
+        msg.msg_key         = [s stringForColumn:@"msg_key"];
+        
+        [msgList addObject:msg];
+    }
+    [messageDb close];
+    
+    return msgList;
+}
+
+- (BOOL)insertOneMessage:(PrivateMessage *)msg
+{
+    [messageDb open];
+    NSString *usrInsertSql = @"insert into UsrTable (local_id, local_name, remote_id, remote_name, msg_desc, source, add_time, msg_status, msg_type, msg_key) values(?,?,?,?,?,?,?,?,?,?)";
+    
+    BOOL a = [messageDb executeUpdate:usrInsertSql,
+              msg.local_id,     msg.local_name,
+              msg.remote_id,    msg.remote_name,
+              msg.msg_desc, [NSNumber numberWithInt:msg.source],
+              msg.add_time,     msg.status,
+              [NSNumber numberWithInt:msg.localMsgType],
+              msg.msg_key];
+    if (!a) {
+        NSLog(@"发送信息插入失败");
+    }
+
+    [messageDb close];
+    return a;
 }
 
 - (UUMessage *)msgInGroup:(NSString *)fromID andType:(UUMessageType)msgType

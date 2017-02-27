@@ -61,7 +61,7 @@
     [_mainTableView registerClass:[UPMsgBubbleCell class] forCellReuseIdentifier:kMessageBubbleOthers];
     [_mainTableView registerClass:[UPMsgBubbleCell class] forCellReuseIdentifier:kMessageBubbleMe];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageGroupUpdate object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageComing object:nil];
 }
 
 - (void)updateMsg:(NSNotification *)notice

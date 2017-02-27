@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+#import "PrivateMessage.h"
+
+
 @class UUMessage;
-
-
 typedef NS_ENUM(NSUInteger, UPGroupMsgType){
     kGroupMsgSys = 0,
     kGroupMsgInv,
@@ -33,5 +34,8 @@ typedef NS_ENUM(NSUInteger, UPGroupMsgType){
 - (BOOL)updateGropuMessageStatus:(NSString *)user_id;
 - (NSMutableArray *)getMessages:(NSRange)range withUserId:(NSString *)userId;
 - (BOOL)updateOneMessage:(UUMessage *)msg;
+
+- (NSArray<PrivateMessage *> *)getMessagesByType:(MessageType)type;
+- (NSArray<PrivateMessage *> *)getMessagesByUser:(NSString *)userId;
 
 @end

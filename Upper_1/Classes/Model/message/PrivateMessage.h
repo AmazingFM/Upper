@@ -20,10 +20,10 @@ typedef NS_ENUM(NSInteger, MessageType){
     MessageTypeActivity,                        //活动消息（大类别，用于和 系统消息、普通聊天消息区分）
     MessageTypeCommon,                          //普通聊天消息（大类别）
     
-    MessageTypeSystemGeneral,                   //系统消息中一般类消息（子类别,属于系统消息）
-    MessageTypeActivityInvite,                  //活动消息中邀请类消息（子类别,属于活动消息）
+    MessageTypeSystemGeneral=3,                   //系统消息中一般类消息（子类别,属于系统消息）
+    MessageTypeActivityInvite=4,                  //活动消息中邀请类消息（子类别,属于活动消息）
     MessageTypeActivityChangeLauncher,          //活动消息中变更发起人（子类别,属于活动消息）
-    MessageTypeCommonText,                      //普通文本消息（子类别,普通聊天消息）
+    MessageTypeCommonText=6,                      //普通文本消息（子类别,普通聊天消息）
     MessageTypeCommonImage,                     //普通文本图片（子类别,普通聊天消息）
     MessageTypeCommonMix,                       //普通文本混合（子类别,普通聊天消息）
 };
@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger, MessageSource) {
 @property (nonatomic, copy) NSString *local_name;   //本人nick_name;
 @property (nonatomic, copy) NSString *remote_id;    //对方user_id，配合source使用
 @property (nonatomic, copy) NSString *remote_name;  //对方nick_name
-@property (nonatomic, copy) NSString *message_desc;
+@property (nonatomic, copy) NSString *msg_desc;
 @property (nonatomic, copy) NSString *add_time;
 @property (nonatomic, copy) NSString *status;
 @property (nonatomic, copy) NSString *message_type;//服务器标志
@@ -48,6 +48,8 @@ typedef NS_ENUM(NSInteger, MessageSource) {
 @property (nonatomic, assign) MessageType localMsgType;//本地区分标志
 
 @property (assign, nonatomic) PrivateMessageSendStatus sendStatus;
+@property (nonatomic, copy) NSString *msg_key;
+
 
 @property (nonatomic, assign) BOOL showDateLabel;
 

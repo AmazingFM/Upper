@@ -18,7 +18,7 @@
 #define kNotifierMessagePull    @"kNotifierMessagePull"   //从server 定时取消息
 #define kNotifierMessageSending @"kNotifierMessageSending"    //取到消息后，对chatcontroller内容进行更新
 #define kNotifierMessageComing @"kNotifierMessageComing"    //取到消息后，对chatcontroller内容进行更新
-#define kNotifierMessageGroupUpdate @"kNotifierMessageGroupUpdate" ////取到消息后，对messageCenter内容进行更新,显示最新消息
+
 #define kUPMessageTimeMachineName     @"messageTimer"
 
 #define kMessageRequireTimeInterval 5.0f

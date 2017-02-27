@@ -96,7 +96,7 @@
     message.local_name = [UPDataManager shared].userInfo.nick_name;
     message.remote_id = self.remote_id;
     message.remote_name = self.remote_name;
-    message.message_desc = self.editingBar.editView.text;
+    message.msg_desc = self.editingBar.editView.text;
     message.status = @"1";
     message.add_time = [UPTools dateString:[NSDate date] withFormat:@"yyyyMMddHHmmss"];
     [_msgBubbleVC addMessage:message];

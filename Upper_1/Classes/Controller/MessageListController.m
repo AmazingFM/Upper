@@ -48,7 +48,7 @@
     
     [self loadMessage];//加载初始消息
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageGroupUpdate object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageComing object:nil];
     
 }
 
@@ -88,12 +88,12 @@
     PrivateMessage *msg = [msgList objectAtIndex:indexPath.row];
     switch (msg.localMsgType) {
         case MessageTypeSystemGeneral:
-            showDefaultAlert(@"系统消息", msg.message_desc);
+            showDefaultAlert(@"系统消息", msg.msg_desc);
             break;
         case MessageTypeActivityInvite:
         {
             //得到活动信息
-            ActivityData *activityInfo = [self getActivityInfoFromMsg:msg.message_desc];
+            ActivityData *activityInfo = [self getActivityInfoFromMsg:msg.msg_desc];
             UpActDetailController *actDetailController = [[UpActDetailController alloc] init];
             actDetailController.actData = activityInfo;
             actDetailController.sourceType = SourceTypeDaTing;
@@ -103,7 +103,7 @@
         case MessageTypeActivityChangeLauncher:
         {
             //得到活动信息
-            ActivityData *activityInfo = [self getActivityInfoFromMsg:msg.message_desc];
+            ActivityData *activityInfo = [self getActivityInfoFromMsg:msg.msg_desc];
             ActivityType *actType = [[UPConfig sharedInstance] getActivityTypeByID:activityInfo.activity_class];
             
             NSString *showMsg = [NSString stringWithFormat:@"活动名称:%@\n活动类型:%@\n发起人:%@", activityInfo.activity_name, actType.name, activityInfo.nick_name];

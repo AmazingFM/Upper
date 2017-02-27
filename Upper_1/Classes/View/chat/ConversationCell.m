@@ -72,7 +72,7 @@
         {
             _name.text = @"系统消息";
             _time.text = _curPriMsg.add_time;
-            _msg.text = _curPriMsg.message_desc;
+            _msg.text = _curPriMsg.msg_desc;
         }
             break;
         case MessageTypeActivityInvite:
@@ -93,7 +93,7 @@
         {
             _name.text = _curPriMsg.remote_name;
             _time.text = _curPriMsg.add_time;
-            _msg.text = _curPriMsg.message_desc;
+            _msg.text = _curPriMsg.msg_desc;
         }
             break;
     }

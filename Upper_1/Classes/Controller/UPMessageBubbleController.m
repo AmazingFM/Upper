@@ -40,7 +40,7 @@
         _pageNo = 0;
         _msglist = [NSMutableArray new];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageGroupUpdate object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageComing object:nil];
     }
     return self;
 }
@@ -132,12 +132,12 @@
     if (message.source == MessageSourceMe) {
         cell = [_mainTableView dequeueReusableCellWithIdentifier:kMessageBubbleMe forIndexPath:indexPath];
         
-        [cell setContent:message.message_desc andPortrait:nil];
+        [cell setContent:message.msg_desc andPortrait:nil];
         cell.portrait.tag = [message.remote_id integerValue];
     } else if (message.source == MessageSourceOther) {
         cell = [_mainTableView dequeueReusableCellWithIdentifier:kMessageBubbleOthers forIndexPath:indexPath];
         
-        [cell setContent:message.message_desc andPortrait:nil];
+        [cell setContent:message.msg_desc andPortrait:nil];
         cell.portrait.tag = [message.remote_id integerValue];
     }
     [cell.portrait addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pushUserDetails:)]];
@@ -152,7 +152,7 @@
     _label.numberOfLines = 0;
     _label.lineBreakMode = NSLineBreakByWordWrapping;
     _label.font = [UIFont systemFontOfSize:15.f];
-    _label.text = message.message_desc;
+    _label.text = message.msg_desc;
     CGSize contentSize = [_label sizeThatFits:CGSizeMake(tableView.frame.size.width-85, MAXFLOAT)];
     return contentSize.height+33;
 }

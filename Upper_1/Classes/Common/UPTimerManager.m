@@ -81,10 +81,10 @@
 
 - (void)createDefaultTimeMachines
 {
-//    if (self.autoRefreshRate>0) {
-//        UPTimeMachine *timeMachine = [UPTimerManager createTimer:kUPMessageTimeMachineName notice:kNotifierMessagePull heartTime:self.autoRefreshRate];
-//        [timeMachine start];
-//    }
+    if (self.autoRefreshRate>0) {
+        UPTimeMachine *timeMachine = [UPTimerManager createTimer:kUPMessageTimeMachineName notice:kNotifierMessagePull heartTime:self.autoRefreshRate];
+        [timeMachine start];
+    }
 }
 - (void)updateTimeMachines
 {
