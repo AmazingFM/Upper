@@ -11,6 +11,10 @@
 #import "PrivateMessage.h"
 
 
+#define SysMsgKey @"SysMsg"
+#define ActMsgKey @"ActMsg"
+#define UsrMsgKey @"UsrMsg"
+
 @class UUMessage;
 typedef NS_ENUM(NSUInteger, UPGroupMsgType){
     kGroupMsgSys = 0,
@@ -37,5 +41,5 @@ typedef NS_ENUM(NSUInteger, UPGroupMsgType){
 
 - (NSArray<PrivateMessage *> *)getMessagesByType:(MessageType)type;
 - (NSArray<PrivateMessage *> *)getMessagesByUser:(NSString *)userId;
-
+- (BOOL)insertOneMessage:(PrivateMessage *)msg;
 @end

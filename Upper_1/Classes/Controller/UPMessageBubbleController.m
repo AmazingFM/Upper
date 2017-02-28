@@ -20,7 +20,7 @@
 {
     UITableView *_mainTableView;
     
-    NSMutableArray<PrivateMessage *> *_msglist;
+    NSMutableArray<PrivateMessage *> *priMsgList;
     NSString *_userID;
     NSString *_userName;
     int _pageNo;
@@ -38,7 +38,7 @@
         _userID = userID;
         _userName = userName;
         _pageNo = 0;
-        _msglist = [NSMutableArray new];
+        priMsgList = [NSMutableArray new];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageComing object:nil];
     }
@@ -48,7 +48,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-//    _msglist = [[MessageManager shared] getMessages:NSMakeRange(_pageNo, kPageNum) withUserId:_userID];
+    self.navigationItem.title = _userName;
+    
+    [self loadMessage];//加载初始消息
     
     _mainTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _mainTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -60,13 +62,40 @@
     
     [_mainTableView registerClass:[PrivateMsgCell class] forCellReuseIdentifier:kMessageBubbleOthers];
     [_mainTableView registerClass:[PrivateMsgCell class] forCellReuseIdentifier:kMessageBubbleMe];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageComing object:nil];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (_msglist.count!=0) {
+    if (priMsgList.count!=0) {
         [self scrollToBottom];
+    }
+}
+
+//初次加载
+- (void)loadMessage
+{
+    [priMsgList addObjectsFromArray:[[MessageManager shared] getMessagesByUser:_userName]];
+}
+
+- (void)updateMsg:(NSNotification *)notification
+{
+    NSDictionary *msgGroupDict = notification.userInfo;
+    NSArray<PrivateMessage *> *usrMsgList = msgGroupDict[UsrMsgKey];
+    
+    //更新用户信息
+    if (usrMsgList.count>0) {
+        @synchronized (priMsgList) {
+            [priMsgList addObjectsFromArray:usrMsgList];
+            [_mainTableView reloadData];
+        }
     }
 }
 
@@ -75,34 +104,20 @@
     _mainTableView.frame = self.view.bounds;
 }
 
-- (void)updateMsg:(NSNotification *)notice
-{
-    NSMutableArray *msglist = notice.object;
-    if (msglist.count!=0) {
-        [self addMessages:msglist];
-    }
-}
-
 - (void)addMessage:(PrivateMessage*)msg
 {
-    [_msglist insertObject:msg atIndex:0];
-//    [[MessageManager shared] updateOneMessage:msg];
-    
-    [_mainTableView reloadData];
-    [self scrollToBottom];
-}
-
-- (void)addMessages:(NSMutableArray *)msglist
-{
-    NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, msglist.count)];
-    [_msglist insertObjects:msglist atIndexes:indexSet];
-    [_mainTableView reloadData];
-    [self scrollToBottom];
+    @synchronized (priMsgList) {
+        [priMsgList addObject:msg];
+        [[MessageManager shared] insertOneMessage:msg];
+        
+        [_mainTableView reloadData];
+        [self scrollToBottom];
+    }
 }
 
 - (void)scrollToBottom
 {
-    [_mainTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_msglist.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    [_mainTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:priMsgList.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -121,12 +136,12 @@
 #pragma mark UITableViewDelegate UITableViewDatasource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _msglist.count;
+    return priMsgList.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PrivateMessage *message = _msglist[_msglist.count-1-indexPath.row];
+    PrivateMessage *message = priMsgList[priMsgList.count-1-indexPath.row];
     
     PrivateMsgCell *cell = nil;
     if (message.source == MessageSourceMe) {
@@ -146,7 +161,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PrivateMessage *message = _msglist[_msglist.count-1-indexPath.row];
+    PrivateMessage *message = priMsgList[priMsgList.count-1-indexPath.row];
     
     UILabel *_label = [UILabel new];
     _label.numberOfLines = 0;

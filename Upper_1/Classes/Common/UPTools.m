@@ -213,12 +213,12 @@ NSString *kKeyChainUUIDAccessGroup = @"com.upper";
     return [data writeToFile:realPath atomically:YES];
 }
 
-+(NSObject*)loadKey:(NSString*)key{
++(id)loadKey:(NSString*)key{
     NSUserDefaults* userDefault=[NSUserDefaults standardUserDefaults];
     return [userDefault valueForKey:key];
 }
 
-+(BOOL)saveKey:(NSString*)key value:(NSObject*)value{
++(BOOL)saveKey:(NSString*)key value:(id)value{
     NSUserDefaults* userDefault=[NSUserDefaults standardUserDefaults];
     if(userDefault){
         [userDefault setObject:value forKey:key];

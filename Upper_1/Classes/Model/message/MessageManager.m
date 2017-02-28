@@ -18,10 +18,6 @@
 #define SYSTEMTABLE @"SysTable"
 #define USRTABLE    @"UsrTable"
 
-#define SysMsgKey @"SysMsg"
-#define ActMsgKey @"ActMsg"
-#define UsrMsgKey @"UsrMsg"
-
 @implementation GroupMessage
 
 - (NSMutableArray *)messageList
@@ -46,12 +42,6 @@
 
 @implementation MessageManager
 
-+ (void)load
-{
-    //加载初始化信息，城市信息
-    [self performSelectorOnMainThread:@selector(shared) withObject:nil waitUntilDone:NO];
-}
-
 + (instancetype)shared
 {
     static MessageManager *instance = nil;
@@ -69,8 +59,7 @@
         [self initializeDB];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(login:) name:kNotifierLogin object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logout:) name:kNotifierLogout object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pullMessage) name:kNotifierMessagePull object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestMessages) name:kNotifierMessagePull object:nil];
     }
     return self;
 }
@@ -103,16 +92,10 @@
     }
     
     //建表消息列表
-    flag = [messageDb executeUpdate:@"create table if not exists SysTable (id integer primary key autoincrement, local_id char(10) not null, local_name varchar(50) not null, remote_id varchar(10) not null, remote_name varchar(50) not null, msg_desc varchar(512) not null, source integer not null, add_time char(14) not null, msg_status char(1), msg_type integer not null, msg_key varchar(256)) "];
+    flag = [messageDb executeUpdate:@"create table if not exists SysTable (local_id char(10) not null, local_name varchar(50) not null, remote_id varchar(10) not null, remote_name varchar(50) not null, msg_desc varchar(512) not null, source integer not null, add_time char(14) not null, msg_status char(1), msg_type integer not null, msg_key varchar(256)) "];
     
-    flag = [messageDb executeUpdate:@"create table if not exists UsrTable (id integer primary key autoincrement, local_id char(10) not null, local_name varchar(50) not null, remote_id varchar(10) not null, remote_name varchar(50) not null, msg_desc varchar(512) not null, source integer not null, add_time char(14) not null, msg_status char(1), msg_type integer not null, msg_key varchar(256)) "];
-    
-//    flag = [messageDb executeUpdate:@"create table if not exists messages_group (id integer primary key autoincrement, from_id text unique, to_id text, nick_name text, newest_message text, message_type integer, add_time text, status text)"];
-    
-    flag = [messageDb executeUpdate:@"create table if not exists messages_detail (id integer primary key autoincrement, from_id text, to_id text, nick_name text, message_desc text, message_from integer, message_type integer, add_time text, status text)"];
-    
-    flag = [messageDb executeUpdate:@"create table if not exists messages_group (id integer primary key autoincrement, from_id text unique, to_id text, nick_name text, newest_message text, message_type integer, add_time text, status text)"];
-    
+    flag = [messageDb executeUpdate:@"create table if not exists UsrTable (local_id char(10) not null, local_name varchar(50) not null, remote_id varchar(10) not null, remote_name varchar(50) not null, msg_desc varchar(512) not null, source integer not null, add_time char(14) not null, msg_status char(1), msg_type integer not null, msg_key varchar(256)) "];
+
     if (flag) {
         NSLog(@"建表messages成功");
     } else {
@@ -186,6 +169,7 @@
     
     NSMutableDictionary *msgGroupDict = [NSMutableDictionary new];
     [msgGroupDict setObject:sysMsgList forKey:SysMsgKey];
+    [msgGroupDict setObject:actMsgList forKey:ActMsgKey];
     [msgGroupDict setObject:usrMsgList forKey:UsrMsgKey];
     
     return msgGroupDict;
@@ -314,8 +298,11 @@
             [msgList addObject:msg];
         }
         [messageDb close];
-    } else if (type==MessageTypeActivity) {
+    } else if (type==MessageTypeCommon) {
         NSString *querySql = [NSString stringWithFormat:@"select * from UsrTable where local_id in (select local_id, MAX(add_time)) from UsrTable group by local_id) order by add_time desc group by local_id"];
+        
+        querySql = [NSString stringWithFormat:@"select * from UsrTable where local_id='%@' group by remote_id order by add_time desc", [UPDataManager shared].userInfo.ID];
+        
         FMResultSet *s = [messageDb executeQuery:querySql];
         while (s.next) {
             PrivateMessage *msg = [[PrivateMessage alloc] init];
@@ -344,7 +331,7 @@
     
     NSMutableArray<PrivateMessage *> *msgList = [NSMutableArray new];
     
-    NSString *querySql = [NSString stringWithFormat:@"select * from UsrTable where local_id='%@' order by add_time desc", userId];
+    NSString *querySql = [NSString stringWithFormat:@"select * from UsrTable where local_id='%@' group by remote_id order by add_time desc", [UPDataManager shared].userInfo.ID];
     FMResultSet *s = [messageDb executeQuery:querySql];
     while (s.next) {
         PrivateMessage *msg = [[PrivateMessage alloc] init];

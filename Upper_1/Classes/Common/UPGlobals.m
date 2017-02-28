@@ -8,6 +8,7 @@
 
 #import "UPGlobals.h"
 #import "UPDataManager.h"
+#import "MessageManager.h"
 #import <UIKit/UIKit.h>
 
 int  g_PageSize;
@@ -48,7 +49,7 @@ void initialize()
     }
     
     g_appDelegate = nil;
-    
+    [MessageManager shared];
     [UPDataManager shared].isLogin = NO;
     [[UPDataManager shared] readFromDefaults];
     [[UPDataManager shared] readSeqFromDefaults];

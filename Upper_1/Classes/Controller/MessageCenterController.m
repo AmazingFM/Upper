@@ -10,10 +10,9 @@
 #import "MessageListController.h"
 #import "MessageManager.h"
 #import "UPDataManager.h"
-#import "UPTimerManager.h"
+//#import "UPTimerManager.h"
 #import "PrivateMessage.h"
 #import "Info.h"
-#import "UUMessage.h"
 #import "UPTheme.h"
 #import "ConversationCell.h"
 
@@ -29,18 +28,42 @@
 {
     UITableView *_messageTable;
     NSMutableArray<PrivateMessage *> *priMsgList;
-    
-    NSMutableDictionary *notificationDict;
+    BOOL showBadgeSys;
+    BOOL showBadgeAct;
 }
 
 @end
 
 @implementation MessageCenterController
 
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        priMsgList = [NSMutableArray new];
+        showBadgeSys = [self loadBadgeFlag:@"SysBadgeKey"];
+        showBadgeAct = [self loadBadgeFlag:@"ActBadgeKey"];
+    }
+    return self;
+}
+
+- (BOOL)loadBadgeFlag:(NSString *)key
+{
+    return [[NSUserDefaults standardUserDefaults] boolForKey:key];
+}
+
+- (void)setBadgeFlag:(NSString *)key flag:(BOOL)flag
+{
+    [[NSUserDefaults standardUserDefaults] setBool:flag forKey:key];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"消息中心";
     self.navigationItem.rightBarButtonItem = nil;
+    
+    [self loadMessage];//加载初始消息
     
     _messageTable = ({
         UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
@@ -55,7 +78,7 @@
         tableView;
     });
     
-    [self loadMessage];//加载初始消息
+
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageComing object:nil];
 }
@@ -65,42 +88,39 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+//初次加载
 - (void)loadMessage
 {
-    NSRange range = NSMakeRange(0, 100);
-    NSMutableArray *groupMsgList = [[MessageManager shared] getMessageGroup:range];
-    [self fillMessage:groupMsgList];
+    [priMsgList addObjectsFromArray:[[MessageManager shared] getMessagesByType:MessageTypeCommon]];
 }
 
 - (void)updateMsg:(NSNotification *)notification
 {
-    //注意加锁
-    NSMutableArray *msgList = notification.object;
+    NSDictionary *msgGroupDict = notification.userInfo;
+    NSArray<PrivateMessage *> *sysMsgList = msgGroupDict[SysMsgKey];
+    NSArray<PrivateMessage *> *actMsgList = msgGroupDict[ActMsgKey];
+    NSArray<PrivateMessage *> *usrMsgList = msgGroupDict[UsrMsgKey];
     
-    [self fillMessage:msgList];
-}
-
-- (void)fillMessage:(NSMutableArray *)groupMsgList
-{
-//    @synchronized (self) {
-//        //获取第三个普通消息组
-//        GroupMessage *usrGroup = groupMsgList[2];
-//        
-//        for (UUMessage *msg in usrGroup.messageList) {
-//            UserChatItem *item = [self getItem:msg.strId];
-//            if (item==nil) {
-//                item = [[UserChatItem alloc] init];
-//                [usrMsgList insertObject:item atIndex:0];
-//            }
-//            item.userId = msg.strId;
-//            item.userName = msg.strName;
-//            item.recentMsg = msg.strContent;
-//            item.time = msg.strTime;
-//            item.status = msg.status;
-//        }
-//    }
-//
-//    [_messageTable reloadData];
+    //更新系统消息、活动消息红点
+    if (sysMsgList.count>0) {
+        if (!showBadgeSys) {
+            showBadgeSys = YES;
+        }
+    }
+    if (actMsgList.count>0) {
+        if (!showBadgeAct) {
+            showBadgeAct = YES;
+        }
+    }
+    if (showBadgeSys || showBadgeAct) {
+        [_messageTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0],[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    }
+    
+    //更新用户信息
+    if (usrMsgList.count>0) {
+        [priMsgList addObjectsFromArray:usrMsgList];
+        [_messageTable reloadData];
+    }
 }
 
 #pragma mark UITableViewDelegate, datasource
@@ -132,11 +152,15 @@
         switch (indexPath.row) {
             case 0:
                 cell.type = ToMessageTypeSystemNotification;
-                cell.unreadCount = @10;//[notificationDict objectForKey:@"system"];
+                if (showBadgeSys) {
+                    cell.unreadCount = @1;//[notificationDict objectForKey:@"system"];
+                }
                 break;
             case 1:
                 cell.type = ToMessageTypeInvitation;
-                cell.unreadCount = @9;//[notificationDict objectForKey:@"invite"];
+                if (showBadgeAct) {
+                    cell.unreadCount = @1;//[notificationDict objectForKey:@"invite"];
+                }
                 break;
             default:
                 break;
@@ -152,19 +176,20 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    if (indexPath.row<2) {
-//        MessageListController *msgListController = [[MessageListController alloc] init];
-//        msgListController.messageType = indexPath.row;
-//        [self.navigationController pushViewController:msgListController animated:YES];
-//    } else {
+    if (indexPath.row<2) {
+        MessageListController *msgListController = [[MessageListController alloc] init];
+        if (indexPath.row==0) {
+            msgListController.messageType = MessageTypeSystem;
+        } else if (indexPath.row==1) {
+            msgListController.messageType = MessageTypeActivity;
+        }
+        [self.navigationController pushViewController:msgListController animated:YES];
+        
+    } else {
         PrivateMessage *msg = [priMsgList objectAtIndex:indexPath.row-2];
         UPChatViewController *chatController = [[UPChatViewController alloc] initWithUserID:msg.remote_id andUserName:msg.remote_name];
         [self.navigationController pushViewController:chatController animated:YES];
-//    }
-//    UserChatItem *item = usrMsgList[indexPath.row];
-//    [[MessageManager shared] updateGropuMessageStatus:item.userId];//设置状态已读
-//    BubbleChatViewController *chatController = [[BubbleChatViewController alloc] initWithUserID:item.userId andUserName:item.userName];
-//    [self.navigationController pushViewController:chatController animated:YES];
+    }
 }
 
 @end

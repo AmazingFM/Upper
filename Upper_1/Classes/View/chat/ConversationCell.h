@@ -25,6 +25,7 @@ typedef NS_ENUM(NSInteger, ToMessageType)
 @interface ToMessageCell : UITableViewCell
 @property (nonatomic, assign) ToMessageType type;
 @property (nonatomic, retain) NSNumber *unreadCount;
+@property (nonatomic) BOOL showBadge;
 
 + (CGFloat)cellHeight;
 @end

@@ -38,8 +38,8 @@
 +(NSString*)documentFilePathWithName:(NSString*)fileName;
 +(BOOL)saveFileToDocument:(NSData*)data withName:(NSString*)fileName;
 
-+(NSObject*)loadKey:(NSString*)key;
-+(BOOL)saveKey:(NSString*)key value:(NSObject*)value;
++(id)loadKey:(NSString*)key;
++(BOOL)saveKey:(NSString*)key value:(id)value;
 
 +(BOOL)needUpgradeVersion:(NSString*)version newVersion:(NSString*)newVersion;
 

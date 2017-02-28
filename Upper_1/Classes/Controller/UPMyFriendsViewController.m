@@ -13,6 +13,9 @@
 #import "MJRefreshComponent.h"
 #import "UPBaseItem.h"
 
+#import "UPChatViewController.h"
+#import "PrivateMessage.h"
+
 #define kActivityPageSize 20
 #define kDescHeight 44
 
@@ -188,7 +191,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    UPFriendItem *friend = self.friendlist[indexPath.row];
+    UPChatViewController *chatController = [[UPChatViewController alloc] initWithUserID:friend.relation_id andUserName:friend.nick_name];
+    [self.navigationController pushViewController:chatController animated:YES];
 }
 
 

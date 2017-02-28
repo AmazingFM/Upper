@@ -37,7 +37,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.navigationItem.title = @"xxxxxx";
+    self.navigationItem.title = self.remote_name;
     [self setLayout];
 }
 
@@ -83,7 +83,7 @@
     
     [params1 setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
     [params1 setValue:[UPDataManager shared].userInfo.ID forKey:@"from_id"];
-    [params1 setValue:@"3" forKey:@"to_id"];//[params1 setValue:self.remote_id forKey:@"to_id"];
+    [params1 setValue:self.remote_id forKey:@"to_id"];//[params1 setValue:self.remote_id forKey:@"to_id"];
     [params1 setValue:@"0"forKey:@"message_type"];
     [params1 setValue:self.editingBar.editView.text forKey:@"message_desc"];
     [params1 setValue:@"" forKey:@"expire_time"];

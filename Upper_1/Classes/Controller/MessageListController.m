@@ -17,11 +17,20 @@
 @interface MessageListController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 {
     UITableView *_messageTable;
-    NSMutableArray<PrivateMessage *> *msgList;
+    NSMutableArray<PrivateMessage *> *priMsgList;
 }
 @end
 
 @implementation MessageListController
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        priMsgList = [NSMutableArray new];
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -32,7 +41,7 @@
         self.title = @"活动消息";
     }
     
-    msgList = [NSMutableArray new];
+    [self loadMessage];//加载初始消息
     
     _messageTable = ({
         UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
@@ -46,21 +55,37 @@
         tableView;
     });
     
-    [self loadMessage];//加载初始消息
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageComing object:nil];
-    
-}
-
-- (void)loadMessage
-{
-    NSRange range = NSMakeRange(0, 100);
-    NSMutableArray *groupMsgList = [[MessageManager shared] getMessageGroup:range];
 }
 
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+//初次加载
+- (void)loadMessage
+{
+    [priMsgList addObjectsFromArray:[[MessageManager shared] getMessagesByType:self.messageType]];
+}
+
+- (void)updateMsg:(NSNotification *)notification
+{
+    NSString *msgGroupKey = nil;
+    if (self.messageType==MessageTypeSystem) {
+        msgGroupKey = SysMsgKey;
+    } else if (self.messageType==MessageTypeActivity) {
+        msgGroupKey = ActMsgKey;
+    }
+    
+    NSDictionary *msgGroupDict = notification.userInfo;
+    NSArray<PrivateMessage *> *msgList = msgGroupDict[msgGroupKey];
+    
+    if (msgList.count>0) {
+        [priMsgList addObjectsFromArray:msgList];
+        [_messageTable reloadData];
+    }
 }
 
 #pragma mark UITableViewDelegate, datasource
@@ -72,20 +97,20 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return msgList.count;
+    return priMsgList.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ConversationCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier_Message forIndexPath:indexPath];
-    PrivateMessage *msg = [msgList objectAtIndex:indexPath.row];
+    PrivateMessage *msg = [priMsgList objectAtIndex:indexPath.row];
     cell.curPriMsg = msg;
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PrivateMessage *msg = [msgList objectAtIndex:indexPath.row];
+    PrivateMessage *msg = [priMsgList objectAtIndex:indexPath.row];
     switch (msg.localMsgType) {
         case MessageTypeSystemGeneral:
             showDefaultAlert(@"系统消息", msg.msg_desc);
