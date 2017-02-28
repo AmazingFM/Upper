@@ -46,6 +46,12 @@
 
 @implementation MessageManager
 
++ (void)load
+{
+    //加载初始化信息，城市信息
+    [self performSelectorOnMainThread:@selector(shared) withObject:nil waitUntilDone:NO];
+}
+
 + (instancetype)shared
 {
     static MessageManager *instance = nil;
@@ -97,9 +103,9 @@
     }
     
     //建表消息列表
-    flag = [messageDb executeUpdate:@"create table if not exists SysTable (id integer primary key autoincrement, local_id text, local_name text, remote_id text, remote_name text, msg_desc integer, source integer, add_time text, msg_status text, msg_type integer, msg_key text)"];
+    flag = [messageDb executeUpdate:@"create table if not exists SysTable (id integer primary key autoincrement, local_id char(10) not null, local_name varchar(50) not null, remote_id varchar(10) not null, remote_name varchar(50) not null, msg_desc varchar(512) not null, source integer not null, add_time char(14) not null, msg_status char(1), msg_type integer not null, msg_key varchar(256)) "];
     
-    flag = [messageDb executeUpdate:@"create table if not exists UsrTable (id integer primary key autoincrement, local_id text, local_name text, remote_id text, remote_name text, msg_desc integer, source integer, add_time text, msg_status text, msg_type integer, msg_key text)"];
+    flag = [messageDb executeUpdate:@"create table if not exists UsrTable (id integer primary key autoincrement, local_id char(10) not null, local_name varchar(50) not null, remote_id varchar(10) not null, remote_name varchar(50) not null, msg_desc varchar(512) not null, source integer not null, add_time char(14) not null, msg_status char(1), msg_type integer not null, msg_key varchar(256)) "];
     
 //    flag = [messageDb executeUpdate:@"create table if not exists messages_group (id integer primary key autoincrement, from_id text unique, to_id text, nick_name text, newest_message text, message_type integer, add_time text, status text)"];
     
