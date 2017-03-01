@@ -88,9 +88,16 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [_messageTable reloadData];
+}
+
 //初次加载
 - (void)loadMessage
 {
+    [priMsgList removeAllObjects];
     [priMsgList addObjectsFromArray:[[MessageManager shared] getMessagesByType:MessageTypeCommon]];
 }
 
@@ -105,21 +112,24 @@
     if (sysMsgList.count>0) {
         if (!showBadgeSys) {
             showBadgeSys = YES;
+            [self setBadgeFlag:@"SysBadgeKey" flag:showBadgeAct];
         }
     }
     if (actMsgList.count>0) {
         if (!showBadgeAct) {
             showBadgeAct = YES;
+            [self setBadgeFlag:@"ActBadgeKey" flag:showBadgeAct];
         }
     }
-    if (showBadgeSys || showBadgeAct) {
-        [_messageTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0],[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    }
-    
+
     //更新用户信息
     if (usrMsgList.count>0) {
-        [priMsgList addObjectsFromArray:usrMsgList];
+        [self loadMessage];//重新加载
         [_messageTable reloadData];
+    } else  {
+        if (showBadgeSys || showBadgeAct) {
+            [_messageTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0],[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        }
     }
 }
 
@@ -179,10 +189,17 @@
     if (indexPath.row<2) {
         MessageListController *msgListController = [[MessageListController alloc] init];
         if (indexPath.row==0) {
+            showBadgeSys = NO;
+            [self setBadgeFlag:@"SysBadgeKey" flag:showBadgeSys];
+            
             msgListController.messageType = MessageTypeSystem;
         } else if (indexPath.row==1) {
+            showBadgeAct = NO;
+            [self setBadgeFlag:@"ActBadgeKey" flag:showBadgeAct];
+            
             msgListController.messageType = MessageTypeActivity;
         }
+
         [self.navigationController pushViewController:msgListController animated:YES];
         
     } else {

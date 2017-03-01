@@ -33,7 +33,6 @@ typedef NS_ENUM(NSUInteger, UPGroupMsgType){
 + (instancetype)shared;
 //- (void)pullMessage;
 - (NSMutableArray *)getMessageGroup;
-- (void)initEnv;
 - (NSMutableArray *)getMessageGroup:(NSRange)range;
 - (BOOL)updateGropuMessageStatus:(NSString *)user_id;
 - (NSMutableArray *)getMessages:(NSRange)range withUserId:(NSString *)userId;
