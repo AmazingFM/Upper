@@ -354,7 +354,7 @@
 {
     __block NSMutableArray<PrivateMessage *> *msgList = [NSMutableArray new];
     [self.fmQueue inDatabase:^(FMDatabase *db) {
-        NSString *querySql = [NSString stringWithFormat:@"select * from UsrTable where local_id='%@' group by remote_id order by add_time desc", [UPDataManager shared].userInfo.ID];
+        NSString *querySql = [NSString stringWithFormat:@"select * from UsrTable where local_id='%@' and remote_id='%@' order by add_time desc", [UPDataManager shared].userInfo.ID, userId];
         FMResultSet *s = [db executeQuery:querySql];
         while (s.next) {
             PrivateMessage *msg = [[PrivateMessage alloc] init];

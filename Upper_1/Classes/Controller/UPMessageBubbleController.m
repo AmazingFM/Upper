@@ -45,8 +45,8 @@
     return self;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)loadView {
+    [super loadView];
     // Do any additional setup after loading the view.
     self.navigationItem.title = _userName;
     
@@ -75,14 +75,14 @@
 {
     [super viewWillAppear:animated];
     if (priMsgList.count!=0) {
-        [self scrollToBottom];
+        [self scrollToBottom:YES];
     }
 }
 
 //初次加载
 - (void)loadMessage
 {
-    [priMsgList addObjectsFromArray:[[MessageManager shared] getMessagesByUser:_userName]];
+    [priMsgList addObjectsFromArray:[[MessageManager shared] getMessagesByUser:_userID]];
 }
 
 - (void)updateMsg:(NSNotification *)notification
@@ -92,9 +92,20 @@
     
     //更新用户信息
     if (usrMsgList.count>0) {
-        @synchronized (priMsgList) {
-            [priMsgList addObjectsFromArray:usrMsgList];
-            [_mainTableView reloadData];
+        NSMutableArray<PrivateMessage *> *myMsgs = [NSMutableArray new];
+        for (PrivateMessage *msg in usrMsgList) {
+            if ([msg.remote_id isEqualToString:_userID]) {
+                [myMsgs addObject:msg];
+            }
+        }
+        
+        if (myMsgs.count>0) {
+            @synchronized (priMsgList) {
+                [priMsgList addObjectsFromArray:myMsgs];
+                [_mainTableView reloadData];
+                [self scrollToBottom:YES];
+            }
+
         }
     }
 }
@@ -111,13 +122,16 @@
         [[MessageManager shared] insertOneMessage:msg];
         
         [_mainTableView reloadData];
-        [self scrollToBottom];
+        [self scrollToBottom:YES];
     }
 }
 
-- (void)scrollToBottom
+- (void)scrollToBottom:(BOOL)animated
 {
-    [_mainTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:priMsgList.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    NSInteger rows = [_mainTableView numberOfRowsInSection:0];
+    if (rows > 0) {
+            [_mainTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:rows-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:animated];
+    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -129,7 +143,7 @@
 {
     NSString *userID = [@(recognizer.view.tag) stringValue];
     PersonalCenterController *personInfoVC = [[PersonalCenterController alloc] init];
-    personInfoVC.userID = userID;
+    personInfoVC.userID = _userID;
     [self.navigationController pushViewController:personInfoVC animated:YES];
 }
 
@@ -141,7 +155,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PrivateMessage *message = priMsgList[priMsgList.count-1-indexPath.row];
+    PrivateMessage *message = priMsgList[indexPath.row];
     
     PrivateMsgCell *cell = nil;
     if (message.source == MessageSourceMe) {
