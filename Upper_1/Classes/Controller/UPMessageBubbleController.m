@@ -49,9 +49,6 @@
     [super loadView];
     // Do any additional setup after loading the view.
     self.navigationItem.title = _userName;
-    
-    [self loadMessage];//加载初始消息
-    
     _mainTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _mainTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _mainTableView.backgroundColor = [UIColor colorWithRed:235.0/255 green:235.0/255 blue:243.0/255 alpha:1.0];
@@ -71,12 +68,25 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self loadMessage];//加载初始消息
+    [_mainTableView reloadData];
+    
     if (priMsgList.count!=0) {
         [self scrollToBottom:YES];
     }
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageComing object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 //初次加载
@@ -113,6 +123,7 @@
 - (void)viewWillLayoutSubviews{
     [super viewWillLayoutSubviews];
     _mainTableView.frame = self.view.bounds;
+    [self scrollToBottom:NO];
 }
 
 - (void)addMessage:(PrivateMessage*)msg

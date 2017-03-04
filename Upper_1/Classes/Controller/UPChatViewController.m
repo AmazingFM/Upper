@@ -65,6 +65,12 @@
                                                                       metrics:nil views:views]];
 }
 
+//- (void)viewWillLayoutSubviews
+//{
+//    [super viewWillLayoutSubviews];
+//    int a=0;
+//}
+
 - (void)sendContent
 {
     [self.editingBar.editView resignFirstResponder];

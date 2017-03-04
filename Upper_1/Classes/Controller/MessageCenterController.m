@@ -63,8 +63,6 @@
     self.title = @"消息中心";
     self.navigationItem.rightBarButtonItem = nil;
     
-    [self loadMessage];//加载初始消息
-    
     _messageTable = ({
         UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
         tableView.backgroundColor = [UIColor whiteColor];
@@ -77,10 +75,6 @@
         [self.view addSubview:tableView];
         tableView;
     });
-    
-
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageComing object:nil];
 }
 
 - (void)dealloc
@@ -91,8 +85,19 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self loadMessage];//加载初始消息
     [_messageTable reloadData];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageComing object:nil];
 }
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 
 //初次加载
 - (void)loadMessage
