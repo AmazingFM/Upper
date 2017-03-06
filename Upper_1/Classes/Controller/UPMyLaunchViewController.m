@@ -204,6 +204,8 @@
         QRCodeController *qrController = [[QRCodeController alloc] init];
         qrController.title = @"扫描";
         [self.navigationController pushViewController:qrController animated:YES];
+    } else if (type==kUPActChangeTag) {
+        UIAlertView *readyPeople = [UIAlertView alloc] initti
     }
 }
 @end

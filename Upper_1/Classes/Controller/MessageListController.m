@@ -13,11 +13,15 @@
 #import "UIAlertView+NSObject.h"
 #import "YMNetwork.h"
 #import "UpActDetailController.h"
+#import "MBProgressHUD+MJ.h"
+
 #define kCellIdentifier_Message     @"kMessageCellId"
 @interface MessageListController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 {
     UITableView *_messageTable;
     NSMutableArray<PrivateMessage *> *priMsgList;
+    
+    NSString *remoteID;
 }
 @end
 
@@ -126,6 +130,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     PrivateMessage *msg = [priMsgList objectAtIndex:indexPath.row];
+    remoteID = msg.remote_id;
+    
     switch (msg.localMsgType) {
         case MessageTypeSystemGeneral:
             showDefaultAlert(@"系统消息", msg.msg_desc);
@@ -134,10 +140,14 @@
         {
             //得到活动信息
             ActivityData *activityInfo = [self getActivityInfoFromMsg:msg.msg_desc];
-            UpActDetailController *actDetailController = [[UpActDetailController alloc] init];
-            actDetailController.actData = activityInfo;
-            actDetailController.sourceType = SourceTypeDaTing;
-            [self.navigationController pushViewController:actDetailController animated:YES];
+            ActivityType *actType = [[UPConfig sharedInstance] getActivityTypeByID:activityInfo.activity_class];
+            
+            NSString *showMsg = [NSString stringWithFormat:@"活动名称:%@\n活动类型:%@\n开始时间:%@", activityInfo.activity_name, actType.name, activityInfo.begin_time];
+            
+            UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"活动邀请" message:showMsg delegate:self cancelButtonTitle:@"忽略" otherButtonTitles:@"查看详情", nil];
+            alertview.tag = 99;
+            alertview.someObj = activityInfo;
+            [alertview show];
         }
             break;
         case MessageTypeActivityChangeLauncher:
@@ -161,12 +171,20 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    if (alertView.tag==99) {
+        if (buttonIndex==1) {//查看活动详情
+            ActivityData *activityInfo = (ActivityData *)alertView.someObj;
+            UpActDetailController *actDetailController = [[UpActDetailController alloc] init];
+            actDetailController.actData = activityInfo;
+            actDetailController.sourceType = SourceTypeDaTing;
+            [self.navigationController pushViewController:actDetailController animated:YES];
+
+        }
+    }
     if (alertView.tag==100) {
         if (buttonIndex==1) {//接受转让
             ActivityData *activityInfo = (ActivityData *)alertView.someObj;
-            if (activityInfo!=nil) {
-                [self acceptActivity:activityInfo];
-            }
+            [self acceptActivity:activityInfo];
         }
     }
 }
@@ -183,7 +201,37 @@
 
 - (void)acceptActivity:(ActivityData *)activityInfo
 {
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] init];
+    indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    [indicator startAnimating];
     
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    [params setObject:@"ActivityModify"forKey:@"a"];
+    [params setObject:remoteID forKey:@"user_id"];
+    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"new_user_id"];
+    [params setObject:activityInfo.ID forKey:@"activity_id"];
+    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
+    
+    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
+        [indicator stopAnimating];
+        
+        NSDictionary *dict = (NSDictionary *)json;
+        NSString *resp_id = dict[@"resp_id"];
+        if ([resp_id intValue]==0) {
+            NSString *resp_desc = dict[@"resp_desc"];
+            [MBProgressHUD show:resp_desc icon:nil view:nil];
+        }
+        else
+        {
+            NSString *resp_desc = dict[@"resp_desc"];
+            [MBProgressHUD show:resp_desc icon:nil view:nil];
+        }
+        
+    } failture:^(id error) {
+        [indicator stopAnimating];
+        NSLog(@"%@",error);
+        
+    }];
 }
 
 

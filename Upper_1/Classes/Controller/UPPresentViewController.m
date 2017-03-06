@@ -24,7 +24,7 @@
     _navigationBar.topItem.title = self.title;
     
     UIButton* dismissBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    [dismissBtn setTitle:@"完成" forState:UIControlStateNormal];
+    [dismissBtn setTitle:@"取消" forState:UIControlStateNormal];
     [dismissBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     dismissBtn.backgroundColor=[UIColor clearColor];
     dismissBtn.frame=CGRectMake(0,0,48,44);

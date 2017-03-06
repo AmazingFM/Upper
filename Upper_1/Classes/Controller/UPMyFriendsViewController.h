@@ -7,17 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
 #import "UPBaseViewController.h"
-#import "UPBaseModel.h"
-
-@interface UPFriendItem : UPBaseModel
-
-@property (nonatomic, copy) NSString *nick_name;
-@property (nonatomic, copy) NSString *relation_id;
-@property (nonatomic, copy) NSString *sexual;
-@property (nonatomic, copy) NSString *user_icon;
-@end
 
 @interface UPMyFriendsViewController : UPBaseViewController
 

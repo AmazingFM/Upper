@@ -436,37 +436,6 @@
     return NO;
 }
 
-
-- (BOOL)updateMessages
-{
-//    [messageDb open];
-//    
-//    [messageDb beginTransaction];
-//    BOOL isRollBack = NO;
-//    
-//    @try {
-//        for (UUMessage *msg in self.messageList)
-//        {
-//            NSString *sql = @"insert into messages_detail (from_id, to_id, nick_name, message_desc, message_from, message_type, add_time, status) values(?,?,?,?,?,?,?,?)";
-//            BOOL a = [messageDb executeUpdate:sql, msg.strId, msg.strToId, msg.strName, msg.strContent, [NSNumber numberWithInt:msg.from], [NSNumber numberWithInt:msg.type], msg.strTime, msg.status ];
-//            if (!a) {
-//                NSLog(@"插入失败");
-//            }
-//        }
-//
-//    } @catch (NSException *exception) {
-//        isRollBack = YES;
-//        [messageDb rollback];
-//    } @finally {
-//        if (!isRollBack) {
-//            [messageDb commit];
-//        }
-//    }
-//    [messageDb close];
-//    return !isRollBack;
-    return NO;
-}
-
 /**
  *根据参数获取指定位置的记录
  */

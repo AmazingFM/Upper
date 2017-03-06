@@ -15,13 +15,10 @@
 
 #import "UPChatViewController.h"
 #import "PrivateMessage.h"
+#import "UPFriendItem.h"
 
-#define kActivityPageSize 20
 #define kDescHeight 44
 
-@implementation UPFriendItem
-
-@end
 @interface UPMyFriendsViewController() <UITableViewDelegate, UITableViewDataSource>
 {
     MJRefreshComponent *myRefreshView;
@@ -50,9 +47,11 @@
     [self.view addSubview:backView];
     [self.view addSubview:self.mainTable];
     
-    UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,ScreenHeight-FirstLabelHeight-kDescHeight,ScreenWidth, kDescHeight)];
+    UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(10,ScreenHeight-FirstLabelHeight-kDescHeight,ScreenWidth-20, kDescHeight)];
     descLabel.text = @"可以在活动现场通过扫描对方用户二维码来添加";
     descLabel.font = [UIFont systemFontOfSize:15.f];
+    descLabel.adjustsFontSizeToFitWidth = YES;
+    descLabel.minimumScaleFactor = 0.6;
     descLabel.textColor = [UIColor blackColor];
     descLabel.textAlignment = NSTextAlignmentCenter;
     descLabel.backgroundColor = [UIColor clearColor];
@@ -184,8 +183,6 @@
     cell.textLabel.text = item.nick_name;
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    
-    
     return cell;
 }
 
@@ -195,8 +192,6 @@
     UPChatViewController *chatController = [[UPChatViewController alloc] initWithUserID:friend.relation_id andUserName:friend.nick_name];
     [self.navigationController pushViewController:chatController animated:YES];
 }
-
-
 
 #pragma mark - 请求活动列表
 - (void)loadData

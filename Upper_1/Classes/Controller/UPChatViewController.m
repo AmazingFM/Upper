@@ -8,7 +8,7 @@
 
 #import "UPChatViewController.h"
 #import "UPMessageBubbleController.h"
-
+#import "YMNetwork.h"
 #import "MBProgressHUD.h"
 #import "PrivateMessage.h"
 
@@ -83,16 +83,15 @@
     HUD.removeFromSuperViewOnHide = YES;
     HUD.labelText = @"私信发送中";
     
-    NSDictionary *headParam1 = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params1 = [NSMutableDictionary dictionaryWithDictionary:headParam1];
-    [params1 setValue:@"MessageSend" forKey:@"a"];
+    NSMutableArray *params = [NSMutableArray new];
+    [params setValue:@"MessageSend" forKey:@"a"];
     
-    [params1 setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
-    [params1 setValue:[UPDataManager shared].userInfo.ID forKey:@"from_id"];
-    [params1 setValue:self.remote_id forKey:@"to_id"];//[params1 setValue:self.remote_id forKey:@"to_id"];
-    [params1 setValue:@"0"forKey:@"message_type"];
-    [params1 setValue:self.editingBar.editView.text forKey:@"message_desc"];
-    [params1 setValue:@"" forKey:@"expire_time"];
+    [params setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
+    [params setValue:[UPDataManager shared].userInfo.ID forKey:@"from_id"];
+    [params setValue:self.remote_id forKey:@"to_id"];
+    [params setValue:@"0"forKey:@"message_type"];
+    [params setValue:self.editingBar.editView.text forKey:@"message_desc"];
+    [params setValue:@"" forKey:@"expire_time"];
     
     PrivateMessage *message = [[PrivateMessage alloc] init];
     
@@ -107,9 +106,9 @@
     message.add_time = [UPTools dateString:[NSDate date] withFormat:@"yyyyMMddHHmmss"];
     [_msgBubbleVC addMessage:message];
     
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params1 success:^(id json) {
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         
-        NSDictionary *dict = (NSDictionary *)json;
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSLog(@"MessageSend, %@", dict);
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
@@ -126,7 +125,7 @@
             HUD.labelText = dict[@"resp_desc"];
             [HUD hide:YES afterDelay:1];
         }
-    } failture:^(id error) {
+    } failure:^(NSError *error) {
         HUD.mode = MBProgressHUDModeCustomView;
         HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HUD-error"]];
         HUD.labelText = @"网络异常，私信发送失败";
@@ -134,5 +133,4 @@
         [HUD hide:YES afterDelay:1];
     }];
 }
-
 @end

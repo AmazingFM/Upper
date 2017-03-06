@@ -21,12 +21,15 @@
 #import "DrawSomething.h"
 #import "UPConfig.h"
 #import "NewLaunchActivityController.h"
+#import "UPInviteFriendController.h"
+
+#import "YMNetwork.h"
 
 #define LabelHeight 17
 #define AlertTagEdit    0
 #define AlertTagCancel  1
 
-@interface UpActDetailController () <UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface UpActDetailController () <UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, UPInviteFriendDelegate>
 {
     UITableView *_tableView;
     int loveCount;
@@ -82,6 +85,83 @@
     
     //:@"策划人" ,@"活动时间", @"活动地点", @"人数上限", @"活动类型", @"报名状态",
     _cellIdArr = @[@"image", @"actTitle", @"actDesc", @"cellID", @"cellID", @"cellID", @"cellID", @"cellID", @"cellID", @"submit"];
+    
+    if (self.sourceType==SourceTypeWoFaqi) {
+        UIButton *addFriendButton=[UIButton buttonWithType:UIButtonTypeCustom];
+        
+        addFriendButton.frame=CGRectMake(0, 0, 35, 35);
+        UIImage *image = [UIImage imageNamed:@"add"];
+        UIImage *stretchableButtonImage = [image resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
+        [addFriendButton setBackgroundImage:stretchableButtonImage forState:UIControlStateNormal];
+        [addFriendButton addTarget:self action:@selector(inviteBtn:) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithCustomView:addFriendButton];
+    }
+}
+
+- (void)inviteBtn:(UIButton *)sender
+{
+    
+    UPInviteFriendController *inviteFriend = [[UPInviteFriendController alloc] init];
+    inviteFriend.delegate = self;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:inviteFriend];
+    [self presentViewController:nav animated:YES completion:nil];
+}
+
+#pragma mark UPInviteFriendDelegate
+- (void)inviteFriends:(NSArray *)friendId
+{
+    [self sendInvitation:friendId];
+}
+
+- (void)sendInvitation:(NSArray *)friendIds
+{
+    UIWindow *window = [[UIApplication sharedApplication].windows lastObject];
+    MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithWindow:window];
+    HUD.detailsLabelFont = [UIFont boldSystemFontOfSize:16];
+    [window addSubview:HUD];
+    [HUD show:YES];
+    HUD.removeFromSuperViewOnHide = YES;
+    HUD.labelText = @"正在发送邀请";
+    
+    __block int count = 0;
+    
+    NSDictionary *actDataDict = @{@"activity_name":self.actData.activity_name,@"activity_class":self.actData.activity_class,@"begin_time":self.actData.begin_time,@"id":self.actData.ID};
+    
+    NSString *msgDesc = [UPTools stringFromJSON:actDataDict];
+    
+    for (NSString *to_id in friendIds) {
+        NSMutableDictionary *params = [NSMutableDictionary new];
+        [params setValue:@"MessageSend" forKey:@"a"];
+        [params setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
+        [params setValue:[UPDataManager shared].userInfo.ID forKey:@"from_id"];
+        [params setValue:to_id forKey:@"to_id"];
+        [params setValue:@"99" forKey:@"message_type"];
+        [params setValue:msgDesc forKey:@"message_desc"];
+        [params setValue:@"" forKey:@"expire_time"];
+        
+        [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+            
+            NSDictionary *dict = (NSDictionary *)responseObject;
+            NSLog(@"MessageSend, %@", dict);
+            NSString *resp_id = dict[@"resp_id"];
+            if ([resp_id intValue]==0) {
+                NSLog(@"send message successful!");
+                count++;
+            } else {
+                count++;
+            }
+        } failure:^(NSError *error) {
+            count++;
+        }];
+    }
+    
+    if (count==friendIds.count) {
+        HUD.mode = MBProgressHUDModeCustomView;
+        HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HUD-done"]];
+        HUD.labelText = @"发送邀请成功";
+        [HUD hide:YES afterDelay:0.5];
+    }
 }
 
 - (void)onButtonClick:(UIButton *)sender
