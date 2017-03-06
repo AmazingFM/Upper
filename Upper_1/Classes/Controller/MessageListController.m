@@ -82,10 +82,10 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-
 //初次加载
 - (void)loadMessage
 {
+    [priMsgList removeAllObjects];
     [priMsgList addObjectsFromArray:[[MessageManager shared] getMessagesByType:self.messageType]];
 }
 

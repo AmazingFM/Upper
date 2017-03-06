@@ -50,14 +50,6 @@
     }];;
 }
 
-
-
-
-/*
- *
- */
-
-
 +(void)getDetailWithUrl:(NSString *)str parms:(NSDictionary *)parms success:(void (^)(id))success failture:(void (^)(id))failture
 {
     

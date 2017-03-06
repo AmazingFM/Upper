@@ -148,7 +148,7 @@
 		3A44D7E81E4D96BB004ADA08 /* PlaceType.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A44D7E71E4D96BB004ADA08 /* PlaceType.plist */; };
 		3A44D7EA1E4D9C75004ADA08 /* PayType.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A44D7E91E4D9C75004ADA08 /* PayType.plist */; };
 		3A5368261D54791E00F36FBC /* YRSideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A5368251D54791E00F36FBC /* YRSideViewController.m */; };
-		3A6668871E6D060500CD7CCC /* UPInviteFriendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A6668861E6D060500CD7CCC /* UPInviteFriendController.m */; };
+		3A6668871E6D060500CD7CCC /* UPFriendListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A6668861E6D060500CD7CCC /* UPFriendListController.m */; };
 		3A66688A1E6D09DB00CD7CCC /* UPFriendItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A6668891E6D09DB00CD7CCC /* UPFriendItem.m */; };
 		3A6944CD1E51615F00F1BEF5 /* messageComment@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A6944CA1E51615F00F1BEF5 /* messageComment@2x.png */; };
 		3A6944CE1E51615F00F1BEF5 /* messageInvite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A6944CB1E51615F00F1BEF5 /* messageInvite@2x.png */; };
@@ -607,8 +607,8 @@
 		3A44D7E91E4D9C75004ADA08 /* PayType.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PayType.plist; sourceTree = "<group>"; };
 		3A5368241D54791E00F36FBC /* YRSideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YRSideViewController.h; sourceTree = "<group>"; };
 		3A5368251D54791E00F36FBC /* YRSideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YRSideViewController.m; sourceTree = "<group>"; };
-		3A6668851E6D060500CD7CCC /* UPInviteFriendController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPInviteFriendController.h; sourceTree = "<group>"; };
-		3A6668861E6D060500CD7CCC /* UPInviteFriendController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPInviteFriendController.m; sourceTree = "<group>"; };
+		3A6668851E6D060500CD7CCC /* UPFriendListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPFriendListController.h; sourceTree = "<group>"; };
+		3A6668861E6D060500CD7CCC /* UPFriendListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPFriendListController.m; sourceTree = "<group>"; };
 		3A6668881E6D09DB00CD7CCC /* UPFriendItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPFriendItem.h; sourceTree = "<group>"; };
 		3A6668891E6D09DB00CD7CCC /* UPFriendItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPFriendItem.m; sourceTree = "<group>"; };
 		3A6944CA1E51615F00F1BEF5 /* messageComment@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "messageComment@2x.png"; sourceTree = "<group>"; };
@@ -1694,8 +1694,8 @@
 				3A33A3011E44147300144D66 /* UPRulesController.m */,
 				3A33A3031E44168100144D66 /* UPPresentViewController.h */,
 				3A33A3041E44168100144D66 /* UPPresentViewController.m */,
-				3A6668851E6D060500CD7CCC /* UPInviteFriendController.h */,
-				3A6668861E6D060500CD7CCC /* UPInviteFriendController.m */,
+				3A6668851E6D060500CD7CCC /* UPFriendListController.h */,
+				3A6668861E6D060500CD7CCC /* UPFriendListController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -2099,7 +2099,7 @@
 				2CDAD6501D0EEC4000C260F4 /* MJRefreshAutoNormalFooter.m in Sources */,
 				2CDAD6321D0EEC4000C260F4 /* AFURLConnectionOperation.m in Sources */,
 				3A66688A1E6D09DB00CD7CCC /* UPFriendItem.m in Sources */,
-				3A6668871E6D060500CD7CCC /* UPInviteFriendController.m in Sources */,
+				3A6668871E6D060500CD7CCC /* UPFriendListController.m in Sources */,
 				2CC645311D0316E700A07408 /* pinyin.m in Sources */,
 				2CDAD6591D0EEC4000C260F4 /* MJRefreshConst.m in Sources */,
 				EC3C187E1CECB16D00223D6B /* ButtonGroupView.m in Sources */,

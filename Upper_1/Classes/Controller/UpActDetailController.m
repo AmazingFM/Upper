@@ -21,7 +21,7 @@
 #import "DrawSomething.h"
 #import "UPConfig.h"
 #import "NewLaunchActivityController.h"
-#import "UPInviteFriendController.h"
+#import "UPFriendListController.h"
 
 #import "YMNetwork.h"
 
@@ -29,7 +29,7 @@
 #define AlertTagEdit    0
 #define AlertTagCancel  1
 
-@interface UpActDetailController () <UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, UPInviteFriendDelegate>
+@interface UpActDetailController () <UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, UPFriendListDelegate>
 {
     UITableView *_tableView;
     int loveCount;
@@ -101,8 +101,8 @@
 
 - (void)inviteBtn:(UIButton *)sender
 {
-    
-    UPInviteFriendController *inviteFriend = [[UPInviteFriendController alloc] init];
+    UPFriendListController *inviteFriend = [[UPFriendListController alloc] init];
+    inviteFriend.type = 0; //我的好友列表
     inviteFriend.delegate = self;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:inviteFriend];
     [self presentViewController:nav animated:YES completion:nil];
@@ -111,19 +111,14 @@
 #pragma mark UPInviteFriendDelegate
 - (void)inviteFriends:(NSArray *)friendId
 {
+    if (friendId.count==0) {
+        return;
+    }
     [self sendInvitation:friendId];
 }
 
 - (void)sendInvitation:(NSArray *)friendIds
 {
-    UIWindow *window = [[UIApplication sharedApplication].windows lastObject];
-    MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithWindow:window];
-    HUD.detailsLabelFont = [UIFont boldSystemFontOfSize:16];
-    [window addSubview:HUD];
-    [HUD show:YES];
-    HUD.removeFromSuperViewOnHide = YES;
-    HUD.labelText = @"正在发送邀请";
-    
     __block int count = 0;
     
     NSDictionary *actDataDict = @{@"activity_name":self.actData.activity_name,@"activity_class":self.actData.activity_class,@"begin_time":self.actData.begin_time,@"id":self.actData.ID};
@@ -154,13 +149,6 @@
         } failure:^(NSError *error) {
             count++;
         }];
-    }
-    
-    if (count==friendIds.count) {
-        HUD.mode = MBProgressHUDModeCustomView;
-        HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HUD-done"]];
-        HUD.labelText = @"发送邀请成功";
-        [HUD hide:YES afterDelay:0.5];
     }
 }
 
@@ -215,16 +203,8 @@
             [nav.navigationBar setTranslucent:YES];
             [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
             [self presentViewController:nav animated:YES completion:nil];
-//            [self.navigationController pushViewController:commentController animated:YES];
         }
             break;
-//        case DetailBtnTypeSign:
-//        {
-//            QRCodeController *qrSignController = [[QRCodeController alloc] init];
-//            qrSignController.actId = self.actData.ID;
-//            [self.navigationController pushViewController:qrSignController animated:YES];
-//        }
-        
     }
 }
 - (void)modifyActiviy:(RequestType)type

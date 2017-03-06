@@ -12,6 +12,5 @@
 @end
 
 @interface EnrollPeopleController : UPBaseViewController
-
-@property (nonatomic, assign) NSString *activityId;
+@property (nonatomic, copy) NSString *activityId;
 @end

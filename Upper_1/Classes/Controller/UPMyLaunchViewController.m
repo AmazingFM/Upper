@@ -19,8 +19,14 @@
 #import "UPActivityCellItem.h"
 #import "UPCommentController.h"
 #import "QRCodeController.h"
+#import "EnrollPeopleController.h"
+#import "UPFriendListController.h"
+#import "YMNetwork.h"
 
-@interface UPMyLaunchViewController ()
+@interface UPMyLaunchViewController () <UPFriendListDelegate>
+{
+    ActivityData *selectedActData;
+}
 @end
 
 @implementation UPMyLaunchViewController
@@ -52,7 +58,7 @@
     NSDictionary *headParam = [UPDataManager shared].getHeadParams;
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
     [params setObject:@"ActivityList"forKey:@"a"];
-    [params setObject:[NSString stringWithFormat:@"%d", self.pageNum] forKey:@"current_page"];
+    [params setObject:[NSString stringWithFormat:@"%ld", self.pageNum] forKey:@"current_page"];
     [params setObject:[NSString stringWithFormat:@"%d", g_PageSize] forKey:@"page_size"];
     [params setObject:@"" forKey:@"activity_status"];
     [params setObject:@""forKey:@"activity_class"];
@@ -205,7 +211,50 @@
         qrController.title = @"扫描";
         [self.navigationController pushViewController:qrController animated:YES];
     } else if (type==kUPActChangeTag) {
+        //查看报名人数
+        selectedActData = cellItem.itemData;
         
+        UPFriendListController *friendlistController = [[UPFriendListController alloc]init];
+        friendlistController.type = 1; //活动参与者列表
+        friendlistController.activityId = cellItem.itemData.ID;
+        friendlistController.delegate = self;
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:friendlistController];
+        [self presentViewController:nav animated:YES completion:nil];
     }
 }
+
+#pragma mark UPInviteFriendDelegate
+- (void)changeLauncher:(NSString *)userId
+{
+    __block int count = 0;
+    
+    NSDictionary *actDataDict = @{@"activity_name":selectedActData.activity_name,@"activity_class":selectedActData.activity_class,@"begin_time":selectedActData.begin_time,@"id":selectedActData.ID};
+    
+    NSString *msgDesc = [UPTools stringFromJSON:actDataDict];
+    
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    [params setValue:@"MessageSend" forKey:@"a"];
+    [params setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
+    [params setValue:[UPDataManager shared].userInfo.ID forKey:@"from_id"];
+    [params setValue:userId forKey:@"to_id"];
+    [params setValue:@"98" forKey:@"message_type"];
+    [params setValue:msgDesc forKey:@"message_desc"];
+    [params setValue:@"" forKey:@"expire_time"];
+    
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+        
+        NSDictionary *dict = (NSDictionary *)responseObject;
+        NSLog(@"MessageSend, %@", dict);
+        NSString *resp_id = dict[@"resp_id"];
+        if ([resp_id intValue]==0) {
+            NSLog(@"send message successful!");
+            count++;
+        } else {
+            count++;
+        }
+    } failure:^(NSError *error) {
+        count++;
+    }];
+}
+
 @end
