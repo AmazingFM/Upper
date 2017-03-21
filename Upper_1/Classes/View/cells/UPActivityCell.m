@@ -1037,12 +1037,18 @@
                 size = SizeWithFont(@" 发布了 ", kUPThemeMinFont);
                 
                 offsetx += _sponserLab.width+10;
-                UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(offsetx, offsety, size.width, _sponserLab.height)];
-                lab.font = kUPThemeMinFont;
-                lab.backgroundColor = [UIColor clearColor];
-                lab.textAlignment = NSTextAlignmentLeft;
-                lab.text = @" 发布了 ";
-                lab.textColor = RGBCOLOR(204, 204, 204);
+                
+                
+                UILabel *lab = [self viewWithTag:10000];
+                if (lab==nil) {
+                    lab = [[UILabel alloc] initWithFrame:CGRectMake(offsetx, offsety, size.width, _sponserLab.height)];
+                    lab.font = kUPThemeMinFont;
+                    lab.backgroundColor = [UIColor clearColor];
+                    lab.textAlignment = NSTextAlignmentLeft;
+                    lab.text = @" 发布了 ";
+                    lab.textColor = RGBCOLOR(204, 204, 204);
+                    lab.tag = 10000;
+                }
                 
                 offsetx += lab.width;
                 

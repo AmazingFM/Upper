@@ -151,6 +151,8 @@
 }
 
 -(void)setConfigItem:(HTConfigItem *)configItem{
+    _configItem = configItem;
+    
     if(_scrollView==nil){
         _scrollView=[[UIScrollView alloc] initWithFrame:CGRectMake(0,0,ScreenWidth,kImageButtonHeight)];
         [_scrollView setShowsHorizontalScrollIndicator:NO];

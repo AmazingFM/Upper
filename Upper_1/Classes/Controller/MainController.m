@@ -9,6 +9,7 @@
 #import "MainController.h"
 #import "MessageCenterController.h"
 #import "UPActivityAssistantController.h"
+#import "UPActAsistDetailController.h"
 #import "UpActView.h"
 #import "Info.h"
 
@@ -47,7 +48,7 @@
 
 static int kMsgCount = 0;
 
-@interface MainController ()<UIGestureRecognizerDelegate,XWTopMenuDelegate, UITableViewDelegate, UITableViewDataSource, JSDropDownMenuDataSource, JSDropDownMenuDelegate>
+@interface MainController ()<UIGestureRecognizerDelegate,XWTopMenuDelegate, UITableViewDelegate, UITableViewDataSource, JSDropDownMenuDataSource, JSDropDownMenuDelegate, HTConfigCellDelegate>
 {
     NSMutableArray *_data1;
     NSMutableArray *_data2;
@@ -228,7 +229,7 @@ static int kMsgCount = 0;
 {
     if (!_mainTable) {
         CGRect bounds = CGRectMake(0, FirstLabelHeight+45, ScreenWidth, ScreenHeight-FirstLabelHeight-45);
-        _mainTable = [[UITableView alloc] initWithFrame:bounds style:UITableViewStylePlain];
+        _mainTable = [[UITableView alloc] initWithFrame:bounds style:UITableViewStyleGrouped];
         _mainTable.delegate = self;
         _mainTable.dataSource = self;
         _mainTable.backgroundColor = RGBCOLOR(245, 245, 245);
@@ -450,6 +451,11 @@ static int kMsgCount = 0;
     return 30;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return CGFLOAT_MIN;
+}
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 30)];
@@ -492,6 +498,7 @@ static int kMsgCount = 0;
     UITableViewCell *tableCell = nil;
     if (indexPath.section==0) {
         HTScrollCell *cell = [tableView dequeueReusableCellWithIdentifier:@"scrollCellId"];
+        cell.delegate = self;
         [cell setConfigItem:collectItem];
 
         tableCell = cell;
@@ -707,6 +714,40 @@ static int kMsgCount = 0;
     }
     
     [self.mainTable.header beginRefreshing];//刷新
+}
+
+#pragma mark HTConfigCellDelegate
+-(void)configItemSelected:(HTConfigItem*)item
+{
+    NSMutableArray *itemsArr = [[NSMutableArray alloc] initWithCapacity:3];
+    
+    NSDictionary *actDict = [UPTools loadBundleFile:@"introduce.json"];
+    
+    for (NSString *key in @[@"jhsj", @"xqsj", @"zysj"]) {
+        NSArray *tmpArr = actDict[key];
+        NSMutableArray *sjArr = [NSMutableArray new];
+        for (NSDictionary *dict in tmpArr) {
+            UPActHelpItem *item = [UPActHelpItem new];
+            item.name = dict[@"name"];
+            item.desc = dict[@"desc"];
+            item.place = dict[@"place"];
+            item.tips = dict[@"tips"];
+            [sjArr addObject:item];
+        }
+        [itemsArr addObject:sjArr];
+    }
+    UPActAsistDetailController *detailVC;
+    
+    HTConfigInfoItem *infoItem = (HTConfigInfoItem *)item;
+    if ([infoItem.title isEqualToString:@"聚会社交"]) {
+        detailVC= [[UPActAsistDetailController alloc] initWithType:UPActTypeJuhui andContents:itemsArr[UPActTypeJuhui]];
+    } else if ([infoItem.title isEqualToString:@"兴趣社交"]) {
+        detailVC= [[UPActAsistDetailController alloc] initWithType:UPActTypeXinqu andContents:itemsArr[UPActTypeXinqu]];
+    } else if ([infoItem.title isEqualToString:@"专业社交"]) {
+        detailVC= [[UPActAsistDetailController alloc] initWithType:UPActTypeZhuanye andContents:itemsArr[UPActTypeZhuanye]];
+    }
+    
+    [self.navigationController pushViewController:detailVC animated:YES];
 }
 
 @end
