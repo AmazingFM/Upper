@@ -12,6 +12,7 @@
 #import "UIView+MJ.h"
 #import "UIBarButtonItem+CH.h"
 
+#define kImageRatio 0.75
 
 //定义屏幕的宽-高
 #define ScreenWidth [UIScreen mainScreen].bounds.size.width

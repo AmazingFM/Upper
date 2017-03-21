@@ -39,6 +39,9 @@
 #import "UIBarButtonItem+Badge.h"
 #import "UPConfig.h"
 #import "YMNetwork.h"
+
+#import "HTScrollCell.h"
+
 #define kActivityPageSize 20
 #define kMainButtonTag 1000
 
@@ -64,6 +67,8 @@ static int kMsgCount = 0;
     BOOL firstLoad;
     
     UIBarButtonItem *messageItem;
+    
+    HTConfigCollectItem *collectItem;
 }
 
 @property (nonatomic, retain) XWTopMenu *topMenu;
@@ -80,6 +85,8 @@ static int kMsgCount = 0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self loadCollectItem];
+    
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = backItem;
     
@@ -90,8 +97,7 @@ static int kMsgCount = 0;
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
     
     self.navigationItem.rightBarButtonItems = [self rightNavButtonItems];
-    
-//    firstLoad = YES;
+
     lastPage = NO;
     
     
@@ -137,6 +143,23 @@ static int kMsgCount = 0;
     menu.dataSource = self;
     menu.delegate = self;
     [self.view addSubview:menu];
+}
+
+- (void)loadCollectItem
+{
+    NSArray *imgArr = @[@"jhsj", @"xqsj", @"zysj"];
+    NSArray *titleArr = @[@"聚会社交", @"兴趣社交", @"专业社交"];
+    
+    if (collectItem==nil) {
+        collectItem = [[HTConfigCollectItem alloc] init];
+        
+        for (int i=0; i<titleArr.count; i++) {
+            HTConfigInfoItem *infoItem = [[HTConfigInfoItem alloc] init];
+            infoItem.title = titleArr[i];
+            infoItem.localImage = imgArr[i];
+            [collectItem.subItems addObject:infoItem];
+        }
+    }
 }
 
 - (NSArray *)rightNavButtonItems
@@ -206,13 +229,14 @@ static int kMsgCount = 0;
     if (!_mainTable) {
         CGRect bounds = CGRectMake(0, FirstLabelHeight+45, ScreenWidth, ScreenHeight-FirstLabelHeight-45);
         _mainTable = [[UITableView alloc] initWithFrame:bounds style:UITableViewStylePlain];
-        _mainTable.separatorColor = [UIColor grayColor];
         _mainTable.delegate = self;
         _mainTable.dataSource = self;
-        _mainTable.backgroundColor = [UIColor whiteColor];
-        _mainTable.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        _mainTable.separatorColor = [UIColor lightGrayColor];
+        _mainTable.backgroundColor = RGBCOLOR(245, 245, 245);
+        _mainTable.separatorStyle = UITableViewCellSeparatorStyleNone;
         _mainTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+        
+        [_mainTable registerClass:[HTScrollCell class] forCellReuseIdentifier:@"scrollCellId"];
+        [_mainTable registerClass:[HTActivityCell class] forCellReuseIdentifier:@"activityCellId"];
         
         if([_mainTable respondsToSelector:@selector(setSeparatorInset:)]){
             [_mainTable setSeparatorInset:UIEdgeInsetsZero];
@@ -332,6 +356,7 @@ static int kMsgCount = 0;
     
     return params;
 }
+
 - (void)loadData:(NSDictionary *)params
 {
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id json) {
@@ -365,7 +390,7 @@ static int kMsgCount = 0;
                 {
                     UPActivityCellItem *actCellItem = [[UPActivityCellItem alloc] init];
                     actCellItem.cellWidth = ScreenWidth;
-                    actCellItem.cellHeight = 100;
+                    actCellItem.cellHeight = 30*2+60+10;
                     actCellItem.itemData = activityList[i];
                     actCellItem.style = UPItemStyleActNone;
                     [arrayM addObject:actCellItem];
@@ -415,26 +440,69 @@ static int kMsgCount = 0;
 }
 
 #pragma mark - tableView delegate
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 2;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 30;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 30)];
+    bgView.backgroundColor = [UIColor clearColor];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, ScreenWidth-10, 30)];
+    label.backgroundColor = [UIColor clearColor];
+    label.font = kUPThemeSmallFont;
+    label.textColor = [UIColor grayColor];
+    
+    if (section==0) {
+        label.text = @"热门类型";
+    } else if (section==1) {
+        label.text = @"最新活动";
+    }
+    [bgView addSubview:label];
+    return bgView;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.actArray.count;
+    if (section==0) {
+        return 1;
+    } else {
+        return self.actArray.count;
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 100;
+    if (indexPath.section==0) {
+        return kImageButtonHeight;
+    } else if (indexPath.section==1) {
+        return 30*2+60+10;
+    }
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *cellIdentifier = @"cell";
-    UPActivityCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (!cell) {
-        cell = [[UPActivityCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
+    UITableViewCell *tableCell = nil;
+    if (indexPath.section==0) {
+        HTScrollCell *cell = [tableView dequeueReusableCellWithIdentifier:@"scrollCellId"];
+        [cell setConfigItem:collectItem];
+
+        tableCell = cell;
+    } else if (indexPath.section==1) {
+        HTActivityCell *cell = [tableView dequeueReusableCellWithIdentifier:@"activityCellId"];
+        [cell setActivityItems:(self.actArray[indexPath.row])];
+        
+        tableCell = cell;
     }
     
-    [cell setActivityItems:(self.actArray[indexPath.row])];
-    return cell;
+    return tableCell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

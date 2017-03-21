@@ -132,6 +132,7 @@
 		3A05508E1DB5EB99009EA918 /* UPMyFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A05508D1DB5EB99009EA918 /* UPMyFriendsViewController.m */; };
 		3A0550921DB602EC009EA918 /* UPAddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0550911DB602EC009EA918 /* UPAddFriendViewController.m */; };
 		3A08464F1D619D6800170C64 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A08464E1D619D6800170C64 /* libsqlite3.0.tbd */; };
+		3A08A84E1E80EFF9003C55BD /* HTScrollCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A08A84D1E80EFF9003C55BD /* HTScrollCell.m */; };
 		3A0B60EF1DF5B92E009FCC10 /* YMNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0B60EE1DF5B92E009FCC10 /* YMNetwork.m */; };
 		3A0B60F51DF7A700009FCC10 /* YMNetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0B60F41DF7A700009FCC10 /* YMNetManager.m */; };
 		3A26C5551E52973700339B38 /* ConversationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A26C5541E52973700339B38 /* ConversationCell.m */; };
@@ -224,6 +225,7 @@
 		3A71CBD41E26267700EBE0A2 /* introduce.json in Resources */ = {isa = PBXBuildFile; fileRef = 3A71CB881E26267700EBE0A2 /* introduce.json */; };
 		3A71CBD51E26267700EBE0A2 /* slide_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A71CB8A1E26267700EBE0A2 /* slide_bg.png */; };
 		3A7694DF1E26731F002715B4 /* UPMainMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A7694DE1E26731F002715B4 /* UPMainMenuController.m */; };
+		3A7B2CBD1E8117B4004F7F83 /* YMLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A7B2CBC1E8117B4004F7F83 /* YMLabel.m */; };
 		3A837D1C1DD8123700A9A0BB /* UPMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A837D1B1DD8123700A9A0BB /* UPMessageCell.m */; };
 		3A837D211DD883B500A9A0BB /* BottomBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A837D201DD883B500A9A0BB /* BottomBarViewController.m */; };
 		3A837D301DD884D100A9A0BB /* EditingBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A837D251DD884D100A9A0BB /* EditingBar.m */; };
@@ -580,6 +582,8 @@
 		3A0550901DB602EC009EA918 /* UPAddFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPAddFriendViewController.h; sourceTree = "<group>"; };
 		3A0550911DB602EC009EA918 /* UPAddFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPAddFriendViewController.m; sourceTree = "<group>"; };
 		3A08464E1D619D6800170C64 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		3A08A84C1E80EFF9003C55BD /* HTScrollCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTScrollCell.h; sourceTree = "<group>"; };
+		3A08A84D1E80EFF9003C55BD /* HTScrollCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTScrollCell.m; sourceTree = "<group>"; };
 		3A0B60ED1DF5B92E009FCC10 /* YMNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMNetwork.h; sourceTree = "<group>"; };
 		3A0B60EE1DF5B92E009FCC10 /* YMNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMNetwork.m; sourceTree = "<group>"; };
 		3A0B60F31DF7A700009FCC10 /* YMNetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMNetManager.h; sourceTree = "<group>"; };
@@ -689,6 +693,8 @@
 		3A71CB8A1E26267700EBE0A2 /* slide_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slide_bg.png; sourceTree = "<group>"; };
 		3A7694DD1E26731F002715B4 /* UPMainMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPMainMenuController.h; sourceTree = "<group>"; };
 		3A7694DE1E26731F002715B4 /* UPMainMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPMainMenuController.m; sourceTree = "<group>"; };
+		3A7B2CBB1E8117B4004F7F83 /* YMLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMLabel.h; sourceTree = "<group>"; };
+		3A7B2CBC1E8117B4004F7F83 /* YMLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMLabel.m; sourceTree = "<group>"; };
 		3A837D1A1DD8123700A9A0BB /* UPMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPMessageCell.h; sourceTree = "<group>"; };
 		3A837D1B1DD8123700A9A0BB /* UPMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPMessageCell.m; sourceTree = "<group>"; };
 		3A837D1F1DD883B500A9A0BB /* BottomBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BottomBarViewController.h; sourceTree = "<group>"; };
@@ -1341,6 +1347,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		3A08A84B1E80ED4C003C55BD /* home */ = {
+			isa = PBXGroup;
+			children = (
+				3A08A84C1E80EFF9003C55BD /* HTScrollCell.h */,
+				3A08A84D1E80EFF9003C55BD /* HTScrollCell.m */,
+			);
+			path = home;
+			sourceTree = "<group>";
+		};
 		3A0B60EC1DF5B8DC009FCC10 /* net */ = {
 			isa = PBXGroup;
 			children = (
@@ -1797,6 +1812,9 @@
 		EC3C17CB1CECB16D00223D6B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				3A7B2CBB1E8117B4004F7F83 /* YMLabel.h */,
+				3A7B2CBC1E8117B4004F7F83 /* YMLabel.m */,
+				3A08A84B1E80ED4C003C55BD /* home */,
 				3A837D231DD884D100A9A0BB /* chat */,
 				3AAF86371D6C193700248A45 /* YMImageLoadView.h */,
 				3AAF86381D6C193700248A45 /* YMImageLoadView.m */,
@@ -2095,6 +2113,7 @@
 				2CDAD5021D0ED8A900C260F4 /* UUMessageFrame.m in Sources */,
 				2CDAD64C1D0EEC4000C260F4 /* MJRefreshComponent.m in Sources */,
 				3A837D3B1DD8920A00A9A0BB /* UPMsgBubbleCell.m in Sources */,
+				3A7B2CBD1E8117B4004F7F83 /* YMLabel.m in Sources */,
 				EC3C189D1CECB2B300223D6B /* AppDelegate.m in Sources */,
 				2CDAD6501D0EEC4000C260F4 /* MJRefreshAutoNormalFooter.m in Sources */,
 				2CDAD6321D0EEC4000C260F4 /* AFURLConnectionOperation.m in Sources */,
@@ -2168,6 +2187,7 @@
 				EC3C18821CECB16D00223D6B /* UPCells.m in Sources */,
 				850D79211E51FA670082D944 /* NSString+Common.m in Sources */,
 				EC3C18071CECB16D00223D6B /* XWNetworkLabel.m in Sources */,
+				3A08A84E1E80EFF9003C55BD /* HTScrollCell.m in Sources */,
 				EC3C187F1CECB16D00223D6B /* UPActivityCell.m in Sources */,
 				EC3C188F1CECB16D00223D6B /* YMImageButton.m in Sources */,
 				3AFCCDBD1D5C09BC0003F6F3 /* NewLaunchActivityController.m in Sources */,

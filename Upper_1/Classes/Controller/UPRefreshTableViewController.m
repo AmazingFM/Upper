@@ -33,7 +33,7 @@
     _tipsLabel.textColor = [UIColor blackColor];
     _tipsLabel.text = @"没有活动";
     _tipsLabel.hidden = YES;
-    [self.view addSubview:_tipsLabel];
+//    [self.view addSubview:_tipsLabel];
     
     _mainTable = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     _mainTable.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -58,7 +58,7 @@
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    _mainTable.frame = self.view.bounds;
+    _mainTable.frame = CGRectMake(0, 0, ScreenWidth, self.view.bounds.size.height);
     _tipsLabel.center = _mainTable.center;
 }
 
@@ -92,15 +92,15 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 100;
+    return 30*2+60+10;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *cellIdentifier = @"cell";
-    UPActivityCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    HTActivityCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
-        cell = [[UPActivityCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
+        cell = [[HTActivityCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
         cell.delegate = self;
     }
     else {

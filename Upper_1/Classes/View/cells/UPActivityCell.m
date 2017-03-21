@@ -14,6 +14,7 @@
 #import "UPTheme.h"
 #import "MBProgressHUD+MJ.h"
 #import "UPConfig.h"
+#import "YMLabel.h"
 
 @interface UPTimeLocationView()
 {
@@ -708,3 +709,619 @@
 }
 
 @end
+
+@interface HTActivityCell() <UIGestureRecognizerDelegate, UIAlertViewDelegate>
+{
+    UIView *backView;
+    UIImageView *_img;
+    UILabel *_titleLab;
+    UILabel *_freeTips;
+    UILabel *_typeLab;
+    
+    UILabel *_statusLab;
+    UILabel *_sponserLab;
+    
+    YMLabel *_actDesc;
+    UILabel *_timeLabel;
+    UILabel *_location;
+    UILabel *_payLab;
+    
+    UIView *_btnContainerView;
+    
+    UIButton *_reviewActBtn;
+    UIButton *_cancelActBtn;
+    UIButton *_changeActBtn;
+    UIButton *_commentActBtn;
+    UIButton *_quitActBtn;
+    UIButton *_signActBtn;
+    UIButton *_joinActBtn;
+}
+
+@end
+
+@implementation HTActivityCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self  = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        self.backgroundColor = [UIColor clearColor];
+        self.contentView.backgroundColor = [UIColor clearColor];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        backView = [[UIView alloc] initWithFrame:CGRectZero];
+        backView.backgroundColor = [UIColor whiteColor];
+//        backView.layer.cornerRadius = 5.f;
+//        backView.layer.masksToBounds = YES;
+        [self addSubview:backView];
+        
+        _titleLab = [[UILabel alloc] initWithFrame:CGRectZero];
+        _titleLab.font = kUPThemeSmallFont;
+        _titleLab.backgroundColor = [UIColor clearColor];
+        _titleLab.textAlignment = NSTextAlignmentLeft;
+        _titleLab.adjustsFontSizeToFitWidth = YES;
+        
+        _freeTips = [[UILabel alloc] initWithFrame:CGRectZero];
+        _freeTips.font = kUPThemeTitleFont;
+        _freeTips.backgroundColor = [UIColor clearColor];
+        _freeTips.textAlignment = NSTextAlignmentRight;
+        
+        _img = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _img.layer.cornerRadius = 3.f;
+        _img.layer.masksToBounds = YES;
+
+        
+        _actDesc = [[YMLabel alloc] initWithFrame:CGRectZero];
+        _actDesc.font = kUPThemeMinFont;
+        _actDesc.numberOfLines = 2;
+        _actDesc.lineBreakMode = NSLineBreakByWordWrapping;
+        _actDesc.textAlignment = NSTextAlignmentLeft;
+        [_actDesc setVerticalAlignment:VerticalAlignmentTop];
+        _actDesc.backgroundColor = [UIColor clearColor];
+        _actDesc.layer.cornerRadius = 2.0f;
+        _actDesc.adjustsFontSizeToFitWidth = YES;
+        _actDesc.layer.masksToBounds = YES;
+        _actDesc.textColor = RGBCOLOR(115, 115, 115);
+        
+        _timeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _timeLabel.font = kUPThemeMinFont;
+        _timeLabel.backgroundColor = [UIColor clearColor];
+        _timeLabel.textAlignment = NSTextAlignmentLeft;
+        _timeLabel.layer.cornerRadius = 2.0f;
+        _timeLabel.adjustsFontSizeToFitWidth = YES;
+        _timeLabel.layer.masksToBounds = YES;
+        _timeLabel.textColor = RGBCOLOR(204, 204, 204);
+        
+        
+        _location = [[UILabel alloc] initWithFrame:CGRectZero];
+        _location.font = kUPThemeMinFont;
+        _location.backgroundColor = [UIColor clearColor];
+        _location.textAlignment = NSTextAlignmentLeft;
+        _location.layer.cornerRadius = 2.0f;
+        _location.adjustsFontSizeToFitWidth = YES;
+        _location.layer.masksToBounds = YES;
+        _location.textColor = RGBCOLOR(204, 204, 204);
+        
+        _statusLab = [[UILabel alloc] initWithFrame:CGRectZero];
+        _statusLab.font = kUPThemeMinFont;
+        _statusLab.textAlignment = NSTextAlignmentCenter;
+        _statusLab.textColor = [UIColor redColor];
+        _statusLab.layer.cornerRadius = 2.0f;
+        _statusLab.layer.masksToBounds = YES;
+        
+        _typeLab = [[UILabel alloc] initWithFrame:CGRectZero];
+        _typeLab.font = kUPThemeMinFont;
+        _typeLab.backgroundColor = [UIColor clearColor];
+        _typeLab.textAlignment = NSTextAlignmentLeft;
+        _typeLab.layer.cornerRadius = 2.0f;
+        _typeLab.adjustsFontSizeToFitWidth = YES;
+        _typeLab.layer.masksToBounds = YES;
+        
+        _payLab = [[UILabel alloc] initWithFrame:CGRectZero];
+        _payLab.font = kUPThemeMinFont;
+        _payLab.backgroundColor = [UIColor clearColor];
+        _payLab.textAlignment = NSTextAlignmentCenter;
+        _payLab.layer.cornerRadius = 2.0f;
+        _payLab.layer.masksToBounds = YES;
+        _payLab.adjustsFontSizeToFitWidth = YES;
+        
+        _sponserLab = [[UILabel alloc] initWithFrame:CGRectZero];
+        _sponserLab.font = kUPThemeSmallFont;
+        _sponserLab.textAlignment = NSTextAlignmentLeft;
+        _sponserLab.layer.cornerRadius = 2.0f;
+        _sponserLab.layer.masksToBounds = YES;
+        _sponserLab.adjustsFontSizeToFitWidth = YES;
+        _sponserLab.textColor = RGBCOLOR(204, 204, 204);
+        
+        _btnContainerView = [[UIView alloc] initWithFrame:CGRectZero];
+        _btnContainerView.backgroundColor = [UIColor clearColor];
+        
+        _reviewActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_reviewActBtn setTitle:@"回顾" forState:UIControlStateNormal];
+        _reviewActBtn.tag = kUPActReviewTag;
+        [_reviewActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        _reviewActBtn.titleLabel.font = kUPThemeMinFont;
+        _reviewActBtn.layer.cornerRadius = 2.0f;
+        _reviewActBtn.layer.masksToBounds = YES;
+        _reviewActBtn.layer.borderWidth = 1.f;
+        [_reviewActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        _cancelActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_cancelActBtn setTitle:@"取消" forState:UIControlStateNormal];
+        _cancelActBtn.tag = kUPActCancelTag;
+        [_cancelActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        _cancelActBtn.titleLabel.font = kUPThemeMinFont;
+        _cancelActBtn.layer.cornerRadius = 2.0f;
+        _cancelActBtn.layer.masksToBounds = YES;
+        _cancelActBtn.layer.borderWidth = 1.f;
+        [_cancelActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        _changeActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_changeActBtn setTitle:@"更改" forState:UIControlStateNormal];
+        _changeActBtn.tag = kUPActChangeTag;
+        [_changeActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        _changeActBtn.titleLabel.font = kUPThemeMinFont;
+        _changeActBtn.layer.cornerRadius = 2.0f;
+        _changeActBtn.layer.masksToBounds = YES;
+        _changeActBtn.layer.borderWidth = 1.f;
+        [_changeActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        _commentActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_commentActBtn setTitle:@"评论" forState:UIControlStateNormal];
+        _commentActBtn.tag = kUPActCommentTag;
+        [_commentActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        _commentActBtn.titleLabel.font = kUPThemeMinFont;
+        _commentActBtn.layer.cornerRadius = 2.0f;
+        _commentActBtn.layer.masksToBounds = YES;
+        _commentActBtn.layer.borderWidth = 1.f;
+        [_commentActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        _quitActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_quitActBtn setTitle:@"退出" forState:UIControlStateNormal];
+        _quitActBtn.tag = kUPActQuitTag;
+        [_quitActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        _quitActBtn.titleLabel.font = kUPThemeMinFont;
+        _quitActBtn.layer.cornerRadius = 2.0f;
+        _quitActBtn.layer.masksToBounds = YES;
+        _quitActBtn.layer.borderWidth = 1.f;
+        [_quitActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        _signActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_signActBtn setTitle:@"签到" forState:UIControlStateNormal];
+        _signActBtn.tag = kUPActSignTag;
+        [_signActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        _signActBtn.titleLabel.font = kUPThemeMinFont;
+        _signActBtn.layer.cornerRadius = 2.0f;
+        _signActBtn.layer.masksToBounds = YES;
+        _signActBtn.layer.borderWidth = 1.f;
+        [_signActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        _joinActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_joinActBtn setTitle:@"报名" forState:UIControlStateNormal];
+        _joinActBtn.tag = kUPActJoinTag;
+        [_joinActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        _joinActBtn.titleLabel.font = kUPThemeMinFont;
+        _joinActBtn.layer.cornerRadius = 2.0f;
+        _joinActBtn.layer.masksToBounds = YES;
+        _joinActBtn.layer.borderWidth = 1.f;
+        [_joinActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [_btnContainerView addSubview:_reviewActBtn];
+        [_btnContainerView addSubview:_cancelActBtn];
+        [_btnContainerView addSubview:_changeActBtn];
+        [_btnContainerView addSubview:_commentActBtn];
+        [_btnContainerView addSubview:_quitActBtn];
+        [_btnContainerView addSubview:_signActBtn];
+        [_btnContainerView addSubview:_joinActBtn];
+        
+        [backView addSubview:_img];
+        [backView addSubview:_titleLab];
+        [backView addSubview:_freeTips];
+        [backView addSubview:_typeLab];
+        [backView addSubview:_payLab];
+        [backView addSubview:_statusLab];
+        [backView addSubview:_btnContainerView];
+        [backView addSubview:_actDesc];
+        [backView addSubview:_timeLabel];
+        [backView addSubview:_location];
+        [backView addSubview:_sponserLab];
+    }
+    return self;
+}
+
+- (void)setActivityItems:(UPBaseCellItem *)item
+{
+    _actCellItem = (UPActivityCellItem*)item;
+    ActivityData *itemData = _actCellItem.itemData;
+    
+    
+    backView.frame = CGRectMake(10, 0, _actCellItem.cellWidth-20, _actCellItem.cellHeight-10);
+    
+    CGFloat width = backView.frame.size.width;
+    
+    CGFloat offsetx=5;
+    CGFloat offsety=0;
+    
+    _titleLab.frame = CGRectMake(offsetx,offsety,width-offsetx-80,30);
+    _titleLab.text = itemData.activity_name;
+    
+    CGSize size;
+    /**
+     二、活动状态时序
+     活动背景：1日创建，10日报名截止，12日开始
+     总人数限制：5-10人，女性限制: >=2人
+     
+     0-募集期：活动募集中 (1-10日)：总人数<5人 或 女性参与者<2人
+     1-募集期：募集成功 （1-10日）总人数5-9人 且  女性参与者>=2人
+     2-募集期：男性满员 （1-10日）女性参与者<2人 且 男性8人报名
+     3-募集期：活动满员 （1-10日） 总人数10人
+     4-募集结束：募集成功  11日 总人数5-10人 且  女性参与者>=2人
+     5-募集结束：募集失败  11日 总人数<5人 或 女性参与者<2人
+     6-活动进行中： 12日
+     7-活动待回顾： 13日
+     8-活动已回顾： 13日以后，发起人回顾
+     9-活动取消：1-10日期间，发起人主动取消
+     **/
+    
+    NSString *actStatusID = itemData.activity_status;
+    ActivityStatus *actStatus = [[UPConfig sharedInstance] getActivityStatusByID:actStatusID];
+    
+    if (actStatus) {
+        NSString *statusName = actStatus.name;
+        if ([statusName isEqualToString:@"none"]) {
+            NSString *sexual = [UPDataManager shared].userInfo.sexual;
+            if ([sexual intValue]==0) {
+                statusName = @"满员";
+            } else {
+                statusName = @"募集中";
+            }
+        }
+        _statusLab.text = statusName;
+        size = SizeWithFont(statusName, kUPThemeMinFont);
+        _statusLab.frame = CGRectMake(width-80, 0, 80, 30);
+    }
+
+    offsety+=_titleLab.height;
+    _img.frame = CGRectMake(offsetx, offsety, 60*4/3, 60);
+    _img.contentMode = UIViewContentModeScaleAspectFill;
+    _img.clipsToBounds = YES;
+    [_img sd_setImageWithURL:[NSURL URLWithString:itemData.activity_image] placeholderImage:[UIImage imageNamed:@"me"]];
+
+    offsetx += _img.width+5;
+    _actDesc.frame = CGRectMake(offsetx, offsety, width-offsetx, 40);
+    _actDesc.text = itemData.activity_desc;
+    
+    offsety += _actDesc.height;
+    
+    CGFloat tmpWidth = (width-offsetx)/3;
+    _location.frame = CGRectMake(offsetx, offsety, tmpWidth-5, 60-_actDesc.height);
+    _location.text = itemData.city;
+    
+    offsetx += tmpWidth;
+    _timeLabel.frame = CGRectMake(offsetx, offsety, tmpWidth-5, 60-_actDesc.height);
+    NSString *begin_time = [UPTools dateStringTransform:itemData.begin_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy.MM.dd"];
+    _timeLabel.text = begin_time;
+    
+    offsetx += tmpWidth;
+    NSString *payTypeID = itemData.is_prepaid;
+    BaseType *baseType = [[UPConfig sharedInstance] getPayTypeByID:payTypeID];
+    
+    NSString *payName = baseType.name;
+    if (payName.length!=0) {
+        _payLab.text = payName;
+        _payLab.frame = CGRectMake(offsetx, offsety, tmpWidth, 60-_actDesc.height);
+    } else {
+        _payLab.frame = CGRectZero;
+    }
+    
+    offsetx = 5;
+    offsety += 20;
+    
+    if (_actCellItem.type==SourceTypeDaTing) {
+        NSString *sponser = itemData.nick_name;
+        if (sponser.length!=0) {
+            _sponserLab.text = sponser;
+            size = SizeWithFont(sponser, kUPThemeMinFont);
+            
+            if (size.width>100) {
+                size.width = 100;
+            }
+            _sponserLab.frame = CGRectMake(offsetx, offsety, size.width, 30);
+            
+            NSString *actTypeID = itemData.activity_class;
+            ActivityType *activityType = [[UPConfig sharedInstance] getActivityTypeByID:actTypeID];
+            
+            NSString *actTypeTitle = activityType.name;
+            
+            if (actTypeTitle.length!=0) {
+                size = SizeWithFont(@" 发布了 ", kUPThemeMinFont);
+                
+                offsetx += _sponserLab.width+10;
+                UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(offsetx, offsety, size.width, _sponserLab.height)];
+                lab.font = kUPThemeMinFont;
+                lab.backgroundColor = [UIColor clearColor];
+                lab.textAlignment = NSTextAlignmentLeft;
+                lab.text = @" 发布了 ";
+                lab.textColor = RGBCOLOR(204, 204, 204);
+                
+                offsetx += lab.width;
+                
+                _typeLab.text = actTypeTitle;
+                _typeLab.frame = CGRectMake(offsetx, offsety, width-offsetx, _sponserLab.height);
+                [backView addSubview:lab];
+
+            } else {
+                _typeLab.frame = CGRectZero;
+            }
+
+        } else {
+            _sponserLab.frame = CGRectZero;
+        }
+    } else {
+        if (actStatus) {
+            _btnContainerView.size = CGSizeMake(width-2*offsetx, 30);
+            _btnContainerView.backgroundColor = [UIColor clearColor];
+            _btnContainerView.hidden =NO;
+            
+            CGFloat perHeight = 30;
+            
+            CGSize size = SizeWithFont(@"回顾", kUPThemeMinFont);
+            size.width += 10;
+            
+            if (_actCellItem.type==SourceTypeWoFaqi) {
+                switch ([actStatusID intValue]) {
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                        _changeActBtn.frame =   CGRectMake(0,0,size.width,perHeight);
+                        _cancelActBtn.frame =   CGRectMake(10+size.width,0,size.width,perHeight);
+                        _reviewActBtn.frame =   CGRectZero;
+                        _commentActBtn.frame =  CGRectZero;
+                        _quitActBtn.frame =     CGRectZero;
+                        _signActBtn.frame =     CGRectZero;
+                        _joinActBtn.frame =     CGRectZero;
+                        break;
+                    case 6:
+                        _signActBtn.frame =     CGRectMake(0,0,size.width,perHeight);
+                        _reviewActBtn.frame =   CGRectZero;
+                        _changeActBtn.frame =   CGRectZero;
+                        _cancelActBtn.frame =   CGRectZero;
+                        _commentActBtn.frame =  CGRectZero;
+                        _quitActBtn.frame =     CGRectZero;
+                        _joinActBtn.frame =     CGRectZero;
+                        break;
+                    case 7:
+                        _reviewActBtn.frame =   CGRectMake(0,0,size.width,perHeight);
+                        _changeActBtn.frame =   CGRectZero;
+                        _cancelActBtn.frame =   CGRectZero;
+                        _commentActBtn.frame =  CGRectZero;
+                        _quitActBtn.frame =     CGRectZero;
+                        _signActBtn.frame =     CGRectZero;
+                        _joinActBtn.frame =     CGRectZero;
+                        break;
+                    case 5:
+                    case 8:
+                    case 9:
+                        _reviewActBtn.frame =   CGRectZero;
+                        _changeActBtn.frame =   CGRectZero;
+                        _cancelActBtn.frame =   CGRectZero;
+                        _commentActBtn.frame =  CGRectZero;
+                        _quitActBtn.frame =     CGRectZero;
+                        _signActBtn.frame =     CGRectZero;
+                        _joinActBtn.frame =     CGRectZero;
+                        break;
+                }
+            } else if(_actCellItem.type==SourceTypeWoCanyu) {
+                int anticipateStatus = [itemData.activity_class intValue];
+                /**
+                 ● 参与者状态
+                 0：报名
+                 1：签到
+                 2：主动退出
+                 4：因接受发起人转让而被动退出
+                 5：已评价
+                 ● 操作
+                 活动状态		参与状态		操作
+                 0-3			-1,2,4		报名 （满员是否可报，前台动态控制，后台有校验）
+                 0-3			0			退出
+                 4			0			退出
+                 5						无操作
+                 6			0			我要签到->弹个人中心二维码
+                 7-9			0,1			评价
+                 其它						无操作             */
+                
+                switch ([actStatusID intValue]) {
+                        
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                        _reviewActBtn.frame =   CGRectZero;
+                        _changeActBtn.frame =   CGRectZero;
+                        _cancelActBtn.frame =   CGRectZero;
+                        _commentActBtn.frame =  CGRectZero;
+                        _quitActBtn.frame =     CGRectZero;
+                        _signActBtn.frame =     CGRectZero;
+                        _joinActBtn.frame =     CGRectZero;
+                        break;
+                    case 4:
+                        _reviewActBtn.frame =   CGRectZero;
+                        _changeActBtn.frame =   CGRectZero;
+                        _cancelActBtn.frame =   CGRectZero;
+                        _commentActBtn.frame =  CGRectZero;
+                        _quitActBtn.frame =     CGRectZero;
+                        _signActBtn.frame =     CGRectZero;
+                        _joinActBtn.frame =     CGRectZero;
+                        
+                        break;
+                    case 5:
+                        _reviewActBtn.frame =   CGRectZero;
+                        _changeActBtn.frame =   CGRectZero;
+                        _cancelActBtn.frame =   CGRectZero;
+                        _commentActBtn.frame =  CGRectZero;
+                        _quitActBtn.frame =     CGRectZero;
+                        _signActBtn.frame =     CGRectZero;
+                        _joinActBtn.frame =     CGRectZero;
+                        
+                        break;
+                    case 6:
+                        _reviewActBtn.frame =   CGRectZero;
+                        _changeActBtn.frame =   CGRectZero;
+                        _cancelActBtn.frame =   CGRectZero;
+                        _commentActBtn.frame =  CGRectZero;
+                        _quitActBtn.frame =     CGRectZero;
+                        _signActBtn.frame =     CGRectZero;
+                        _joinActBtn.frame =     CGRectZero;
+                        
+                        break;
+                    case 7:
+                    case 8:
+                    case 9:
+                        _reviewActBtn.frame =   CGRectZero;
+                        _changeActBtn.frame =   CGRectZero;
+                        _cancelActBtn.frame =   CGRectZero;
+                        _commentActBtn.frame =  CGRectZero;
+                        _quitActBtn.frame =     CGRectZero;
+                        _signActBtn.frame =     CGRectZero;
+                        _joinActBtn.frame =     CGRectZero;
+                        break;
+                }
+                
+            } else if(_actCellItem.type==SourceTypeTaCanyu ||
+                      _actCellItem.type==SourceTypeTaFaqi) {
+                _btnContainerView.hidden =YES;
+            } else {
+                _btnContainerView.hidden =YES;
+                _reviewActBtn.frame = CGRectZero;
+                _cancelActBtn.frame = CGRectZero;
+                _changeActBtn.frame = CGRectZero;
+                _commentActBtn.frame = CGRectZero;
+                _quitActBtn.frame = CGRectZero;
+            }
+        }
+    }
+}
+
+- (void)onClick:(UIButton *)sender
+{
+    if (sender.tag==kUPActQuitTag||
+        sender.tag==kUPActCancelTag) {
+        NSString *cancleRules = @"取消规则：\n\
+        1、募集中的活动，随时可取消，一年内满十次，封停账号一个月（不可发起 可参与）\n\
+        2、募集成功的活动，如果发起者不能参加，建议先尝试寻找接替的发起人，将活动发起者身份转交给新的发起人。无法找到接替者也可以取消，一年满3次，封停账号半年。\n\
+        3、可以点击“更改发起人”按钮，向目前报名人员发送站内信，发送接受链接。可以在发送之前通过站内短信和参与人员沟通接收意向。\n";
+        
+        NSString *quitRules = @"退出规则：\n\
+        1、	募集中的活动，参与者随时可退出，一年内满十次，封停账号一个月（不可发起 不可参与）\n\
+        2、	成功的活动，参与者随时可退出，一年满三次，封停账号3个月。\n";
+        
+        NSString *msg = sender.tag==kUPActCancelTag?cancleRules:quitRules;
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alertView.tag = sender.tag;
+        [alertView show];
+        
+    } else if (sender.tag==kUPActReviewTag  ||
+               sender.tag==kUPActCommentTag ||
+               sender.tag==kUPActChangeTag  ||
+               sender.tag==kUPActSignTag)
+    {
+        if ([self.delegate respondsToSelector:@selector(onButtonSelected:withType:)]) {
+            [self.delegate onButtonSelected:_actCellItem withType:sender.tag];
+        }
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex==1) {
+        if (alertView.tag==kUPActCancelTag) {
+            [self cancelActivity];
+        }
+        
+        if (alertView.tag==kUPActQuitTag) {
+            [self quitActivity];
+        }
+    }
+}
+- (void)quitActivity
+{
+    [MBProgressHUD showMessage:@"正在提交请求，请稍后...." toView:g_mainWindow];
+    
+    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    [params setObject:@"ActivityJoinModify"forKey:@"a"];
+    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
+    [params setObject:_actCellItem.itemData.ID forKey:@"activity_id"];
+    [params setObject:@"2" forKey:@"user_status"];
+    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
+    
+    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
+        [MBProgressHUD hideHUDForView:g_mainWindow];
+        
+        NSDictionary *dict = (NSDictionary *)json;
+        NSString *resp_id = dict[@"resp_id"];
+        if ([resp_id intValue]==0) {
+            NSString *resp_desc = dict[@"resp_desc"];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"🙏🏻，恭喜您" message:resp_desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierActQuitRefresh object:nil];
+        }
+        else
+        {
+            NSString *resp_desc = dict[@"resp_desc"];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"💔，很遗憾" message:resp_desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
+            
+        }
+        
+    } failture:^(id error) {
+        [MBProgressHUD hideHUDForView:g_mainWindow];
+        NSLog(@"%@",error);
+        
+    }];
+}
+
+- (void)cancelActivity
+{
+    [MBProgressHUD showMessage:@"正在提交请求，请稍后...." toView:g_mainWindow];
+    
+    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    [params setObject:@"ActivityModify"forKey:@"a"];
+    
+    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
+    [params setObject:_actCellItem.itemData.ID forKey:@"activity_id"];
+    [params setObject:@"9" forKey:@"user_status"];
+    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
+    
+    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
+        [MBProgressHUD hideHUDForView:g_mainWindow];
+        
+        NSDictionary *dict = (NSDictionary *)json;
+        NSString *resp_id = dict[@"resp_id"];
+        if ([resp_id intValue]==0) {
+            NSString *resp_desc = dict[@"resp_desc"];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"🙏🏻，恭喜您" message:resp_desc delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierActCancelRefresh object:nil];
+        }
+        else
+        {
+            NSString *resp_desc = dict[@"resp_desc"];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"💔，很遗憾" message:resp_desc delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
+            
+        }
+        
+    } failture:^(id error) {
+        [MBProgressHUD hideHUDForView:g_mainWindow];
+        NSLog(@"%@",error);
+        
+    }];
+}
+
+@end
+
