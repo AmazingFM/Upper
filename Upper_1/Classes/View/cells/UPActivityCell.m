@@ -751,15 +751,13 @@
         
         backView = [[UIView alloc] initWithFrame:CGRectZero];
         backView.backgroundColor = [UIColor whiteColor];
-//        backView.layer.cornerRadius = 5.f;
-//        backView.layer.masksToBounds = YES;
         [self addSubview:backView];
         
         _titleLab = [[UILabel alloc] initWithFrame:CGRectZero];
         _titleLab.font = kUPThemeSmallFont;
         _titleLab.backgroundColor = [UIColor clearColor];
         _titleLab.textAlignment = NSTextAlignmentLeft;
-        _titleLab.adjustsFontSizeToFitWidth = YES;
+        _titleLab.textColor = [UPTools colorWithHex:0x333333];
         
         _freeTips = [[UILabel alloc] initWithFrame:CGRectZero];
         _freeTips.font = kUPThemeTitleFont;
@@ -781,7 +779,7 @@
         _actDesc.layer.cornerRadius = 2.0f;
         _actDesc.adjustsFontSizeToFitWidth = YES;
         _actDesc.layer.masksToBounds = YES;
-        _actDesc.textColor = RGBCOLOR(115, 115, 115);
+        _actDesc.textColor = [UPTools colorWithHex:0x666666];
         
         _timeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _timeLabel.font = kUPThemeMinFont;
@@ -790,7 +788,7 @@
         _timeLabel.layer.cornerRadius = 2.0f;
         _timeLabel.adjustsFontSizeToFitWidth = YES;
         _timeLabel.layer.masksToBounds = YES;
-        _timeLabel.textColor = RGBCOLOR(204, 204, 204);
+        _timeLabel.textColor = [UPTools colorWithHex:0xaaaaaa];
         
         
         _location = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -800,12 +798,12 @@
         _location.layer.cornerRadius = 2.0f;
         _location.adjustsFontSizeToFitWidth = YES;
         _location.layer.masksToBounds = YES;
-        _location.textColor = RGBCOLOR(204, 204, 204);
+        _location.textColor = [UPTools colorWithHex:0xaaaaaa];
         
         _statusLab = [[UILabel alloc] initWithFrame:CGRectZero];
         _statusLab.font = kUPThemeMinFont;
         _statusLab.textAlignment = NSTextAlignmentCenter;
-        _statusLab.textColor = [UIColor redColor];
+        _statusLab.textColor = [UPTools colorWithHex:0xff5454];
         _statusLab.layer.cornerRadius = 2.0f;
         _statusLab.layer.masksToBounds = YES;
         
@@ -823,7 +821,7 @@
         _payLab.textAlignment = NSTextAlignmentCenter;
         _payLab.layer.cornerRadius = 2.0f;
         _payLab.layer.masksToBounds = YES;
-        _payLab.adjustsFontSizeToFitWidth = YES;
+        _payLab.textColor = [UPTools colorWithHex:0x666666];
         
         _sponserLab = [[UILabel alloc] initWithFrame:CGRectZero];
         _sponserLab.font = kUPThemeSmallFont;
