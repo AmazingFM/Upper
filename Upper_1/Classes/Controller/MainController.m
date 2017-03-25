@@ -700,7 +700,6 @@ static int kMsgCount = 0;
             return;
         } else {
             _currentData1RightIndex = indexPath.row;
-//            firstLoad = NO;
         }
     } else if(indexPath.column == 1){
         if(indexPath.leftOrRight==0){
@@ -719,34 +718,39 @@ static int kMsgCount = 0;
 #pragma mark HTConfigCellDelegate
 -(void)configItemSelected:(HTConfigItem*)item
 {
-    NSMutableArray *itemsArr = [[NSMutableArray alloc] initWithCapacity:3];
-    
-    NSDictionary *actDict = [UPTools loadBundleFile:@"introduce.json"];
-    
-    for (NSString *key in @[@"jhsj", @"xqsj", @"zysj"]) {
-        NSArray *tmpArr = actDict[key];
-        NSMutableArray *sjArr = [NSMutableArray new];
-        for (NSDictionary *dict in tmpArr) {
-            UPActHelpItem *item = [UPActHelpItem new];
-            item.name = dict[@"name"];
-            item.desc = dict[@"desc"];
-            item.place = dict[@"place"];
-            item.tips = dict[@"tips"];
-            [sjArr addObject:item];
-        }
-        [itemsArr addObject:sjArr];
-    }
+//    NSMutableArray *itemsArr = [[NSMutableArray alloc] initWithCapacity:3];
+//    
+//    NSDictionary *actDict = [UPTools loadBundleFile:@"introduce.json"];
+//    
+//    for (NSString *key in @[@"jhsj", @"xqsj", @"zysj"]) {
+//        NSArray *tmpArr = actDict[key];
+//        NSMutableArray *infoItemArr = [NSMutableArray new];
+//        for (NSDictionary *dict in tmpArr) {
+//            UPInfoCellItem *item = [UPInfoCellItem new];
+//            item.title = dict[@"name"];
+//            item.detail = dict[@"desc"];
+//            
+//            NSString *place = [NSString stringWithFormat:@"推荐场所：%@", dict[@"place"]];
+//            NSString *tips = [NSString stringWithFormat:@"小贴士：%@",dict[@"tips"]];
+//            item.tips = [NSString stringWithFormat:@"%@\n%@", tips, place];
+//            
+//            [infoItemArr addObject:item];
+//        }
+//        [itemsArr addObject:infoItemArr];
+//    }
     UPActAsistDetailController *detailVC;
     
     HTConfigInfoItem *infoItem = (HTConfigInfoItem *)item;
-    if ([infoItem.title isEqualToString:@"聚会社交"]) {
-        detailVC= [[UPActAsistDetailController alloc] initWithType:UPActTypeJuhui andContents:itemsArr[UPActTypeJuhui]];
-    } else if ([infoItem.title isEqualToString:@"兴趣社交"]) {
-        detailVC= [[UPActAsistDetailController alloc] initWithType:UPActTypeXinqu andContents:itemsArr[UPActTypeXinqu]];
-    } else if ([infoItem.title isEqualToString:@"专业社交"]) {
-        detailVC= [[UPActAsistDetailController alloc] initWithType:UPActTypeZhuanye andContents:itemsArr[UPActTypeZhuanye]];
-    }
     
+    UPActType type;
+    if ([infoItem.title isEqualToString:@"聚会社交"]) {
+        type = UPActTypeJuhui;
+    } else if ([infoItem.title isEqualToString:@"兴趣社交"]) {
+        type = UPActTypeXinqu;
+    } else if ([infoItem.title isEqualToString:@"专业社交"]) {
+        type = UPActTypeZhuanye;
+    }
+    detailVC= [[UPActAsistDetailController alloc] initWithType:type];
     [self.navigationController pushViewController:detailVC animated:YES];
 }
 

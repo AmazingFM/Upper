@@ -7,6 +7,7 @@
 //
 
 #import "UPBaseViewController.h"
+#import "UPCells.h"
 
 typedef NS_ENUM(NSInteger, UPActType)
 {
@@ -15,27 +16,28 @@ typedef NS_ENUM(NSInteger, UPActType)
     UPActTypeZhuanye
 };
 
-@interface UPActHelpItem : NSObject
-
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *desc;
-@property (nonatomic, copy) NSString *place;
-@property (nonatomic, copy) NSString *tips;
-
-- (CGFloat)size;
-
-@end
-
-@interface UPActHelpCell : UITableViewCell
-
-- (void)setItem:(UPActHelpItem *)item;
-@end
+//@interface UPActHelpItem : NSObject
+//
+//@property (nonatomic, copy) NSString *name;
+//@property (nonatomic, copy) NSString *desc;
+//@property (nonatomic, copy) NSString *place;
+//@property (nonatomic, copy) NSString *tips;
+//
+//- (CGFloat)size;
+//
+//@end
+//
+//@interface UPActHelpCell : UITableViewCell
+//
+//- (void)setItem:(UPActHelpItem *)item;
+//@end
 
 @interface UPActAsistDetailController : UPBaseViewController
 
+@property (nonatomic) UPActType type;
 @property (nonatomic, retain) UITableView *mainTable;
-@property (nonatomic, retain) NSMutableArray<UPActHelpItem *> *itemArray;
+@property (nonatomic, retain) NSMutableArray<UPInfoCellItem *> *itemArray;
 
-- (instancetype)initWithType:(UPActType)type andContents:(NSMutableArray *)contents;
+- (instancetype)initWithType:(UPActType)type;
 
 @end

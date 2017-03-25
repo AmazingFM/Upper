@@ -109,5 +109,19 @@
 }
 @end
 
+@interface UPInfoCell : UPBaseCell
+{
+    UIView *line;
+    UILabel *titleLabel;
+    
+    UIView *hLine;
+    UILabel *detailLabel;
+    
+    UIView *tipsBackView;
+    UILabel *tipsLabel;
+}
+
+@end
+
 @interface UPCells : NSObject
 @end

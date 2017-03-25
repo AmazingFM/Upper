@@ -144,7 +144,7 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        [cell.imageView setImage:[UPTools imageWithColor:[UIColor redColor] size:CGSizeMake(5, 20)]];
+        [cell.imageView setImage:[UPTools imageWithColor:RGBCOLOR(200, 0, 0) size:CGSizeMake(3, 15)]];
     }
     cell.textLabel.textColor = [UIColor whiteColor];
     cell.textLabel.text = menuTitles[indexPath.row];

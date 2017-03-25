@@ -217,6 +217,9 @@
 }
 @end
 
+@implementation UPInfoCellItem
+@end
+
 @implementation UPCellItems
 
 @end

@@ -751,8 +751,7 @@
         
         backView = [[UIView alloc] initWithFrame:CGRectZero];
         backView.backgroundColor = [UIColor whiteColor];
-//        backView.layer.cornerRadius = 5.f;
-//        backView.layer.masksToBounds = YES;
+
         [self addSubview:backView];
         
         _titleLab = [[UILabel alloc] initWithFrame:CGRectZero];

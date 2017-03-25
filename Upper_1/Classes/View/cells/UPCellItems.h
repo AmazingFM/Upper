@@ -121,6 +121,12 @@ typedef enum{
 @property (nonatomic, copy) NSString *date;
 @end
 
+@interface UPInfoCellItem : UPBaseCellItem
+@property (nonatomic, retain) NSString *title;
+@property (nonatomic, retain) NSString *detail;
+@property (nonatomic, retain) NSString *tips;
+@end
+
 @interface UPCellItems : NSObject
 
 @end

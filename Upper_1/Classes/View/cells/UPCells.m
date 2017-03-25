@@ -11,6 +11,7 @@
 #import "UPGlobals.h"
 #import "UPTextView.h"
 #import "DrawSomething.h"
+#import "UPTools.h"
 
 @implementation UPBaseCell
 
@@ -893,6 +894,94 @@
     }
     
     return YES;
+}
+
+@end
+
+@implementation UPInfoCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        self.backgroundColor = [UIColor whiteColor];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        line = [[UIView alloc] initWithFrame:CGRectZero];
+        line.backgroundColor = RGBCOLOR(200, 0, 0);
+        
+        titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        titleLabel.font = kUPThemeSmallFont;
+        titleLabel.backgroundColor = [UIColor clearColor];
+        titleLabel.textAlignment = NSTextAlignmentLeft;
+        titleLabel.textColor = RGBCOLOR(0, 0, 0);
+        
+        hLine = [[UIView alloc] initWithFrame:CGRectZero];
+        hLine.backgroundColor = RGBCOLOR(240, 240, 240);
+
+        detailLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        detailLabel.font = [UIFont systemFontOfSize:13];
+        detailLabel.backgroundColor = [UIColor clearColor];
+        detailLabel.textAlignment = NSTextAlignmentLeft;
+        detailLabel.numberOfLines = 0;
+        detailLabel.textColor = RGBCOLOR(110, 110, 110);
+        
+        tipsBackView = [[UIView alloc] initWithFrame:CGRectZero];
+        tipsBackView.backgroundColor = RGBCOLOR(240, 240, 240);
+        
+        tipsLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        tipsLabel.font = kUPThemeMinFont;
+        tipsLabel.backgroundColor = [UIColor clearColor];
+        tipsLabel.textAlignment = NSTextAlignmentLeft;
+        tipsLabel.numberOfLines = 0;
+        tipsLabel.textColor = RGBCOLOR(160, 160, 160);
+        
+        [self addSubview:line];
+        [self addSubview:titleLabel];
+        [self addSubview:hLine];
+        [self addSubview:detailLabel];
+        [self addSubview:tipsBackView];
+        [tipsBackView addSubview:tipsLabel];
+    }
+    return self;
+}
+
+- (void)setItem:(UPBaseCellItem *)item
+{
+    [super setItem:item];
+    
+    UPInfoCellItem *cellItem = (UPInfoCellItem *)item;
+    
+    CGFloat hMargin = 10;
+    CGFloat vMargin = 5;
+    
+    CGFloat offsetx = hMargin;
+    CGFloat offsety = 0;
+    
+    CGSize size = SizeWithFont(@"标题", kUPThemeSmallFont);
+    size.height-=2;
+    line.frame = CGRectMake(offsetx, (30-size.height)/2, 1, size.height);
+    
+    titleLabel.frame = CGRectMake(offsetx+8, offsety, cellItem.cellWidth-30, 30);
+    titleLabel.text = cellItem.title;
+    
+    hLine.frame = CGRectMake(0, 29, cellItem.cellWidth, 1);
+    
+    offsety +=30;
+    
+    size = [UPTools sizeOfString:cellItem.detail withWidth:cellItem.cellWidth-2*hMargin font:[UIFont systemFontOfSize:13]];
+    detailLabel.frame = CGRectMake(hMargin, offsety+vMargin, cellItem.cellWidth-2*hMargin, size.height);
+    detailLabel.text = cellItem.detail;
+    
+    if (cellItem.tips) {
+        offsety += size.height+vMargin;
+        
+        size = [UPTools sizeOfString:cellItem.tips withWidth:cellItem.cellWidth-2*hMargin-2*5 font:kUPThemeMinFont];
+        tipsLabel.frame = CGRectMake(5, vMargin, cellItem.cellWidth-2*hMargin-2*5 , size.height);
+        tipsLabel.text = cellItem.tips;
+        
+        tipsBackView.frame = CGRectMake(hMargin, offsety+vMargin, cellItem.cellWidth-2*hMargin, size.height+2*vMargin);
+    }
 }
 
 @end

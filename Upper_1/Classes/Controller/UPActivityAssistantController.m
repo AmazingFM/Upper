@@ -15,7 +15,7 @@
 {
     NSArray *assistBtnArr;
     
-    NSMutableArray *itemsArr;
+//    NSMutableArray *itemsArr;
 }
 
 @end
@@ -55,23 +55,23 @@
         offsety += 2*verticalPadding+perHeight;
     }
     
-    itemsArr = [[NSMutableArray alloc] initWithCapacity:3];
-    
-    NSDictionary *actDict = [UPTools loadBundleFile:@"introduce.json"];
-    
-    for (NSString *key in @[@"jhsj", @"xqsj", @"zysj"]) {
-        NSArray *tmpArr = actDict[key];
-        NSMutableArray *sjArr = [NSMutableArray new];
-        for (NSDictionary *dict in tmpArr) {
-            UPActHelpItem *item = [UPActHelpItem new];
-            item.name = dict[@"name"];
-            item.desc = dict[@"desc"];
-            item.place = dict[@"place"];
-            item.tips = dict[@"tips"];
-            [sjArr addObject:item];
-        }
-        [itemsArr addObject:sjArr];
-    }
+//    itemsArr = [[NSMutableArray alloc] initWithCapacity:3];
+//    
+//    NSDictionary *actDict = [UPTools loadBundleFile:@"introduce.json"];
+//    
+//    for (NSString *key in @[@"jhsj", @"xqsj", @"zysj"]) {
+//        NSArray *tmpArr = actDict[key];
+//        NSMutableArray *sjArr = [NSMutableArray new];
+//        for (NSDictionary *dict in tmpArr) {
+//            UPActHelpItem *item = [UPActHelpItem new];
+//            item.name = dict[@"name"];
+//            item.desc = dict[@"desc"];
+//            item.place = dict[@"place"];
+//            item.tips = dict[@"tips"];
+//            [sjArr addObject:item];
+//        }
+//        [itemsArr addObject:sjArr];
+//    }
 }
 
 - (void)tap:(UITapGestureRecognizer *)gesture
@@ -79,7 +79,7 @@
     UIImageView *imageView = (UIImageView *)gesture.view;
     if ([gesture.view isKindOfClass:[UIImageView class]]) {
         int index = (int)imageView.tag-100;
-        UPActAsistDetailController *detailVC = [[UPActAsistDetailController alloc] initWithType:index andContents:itemsArr[index]];
+        UPActAsistDetailController *detailVC = [[UPActAsistDetailController alloc] initWithType:index];
         [self.navigationController pushViewController:detailVC animated:YES];
     }
 }
