@@ -232,7 +232,7 @@ static int kMsgCount = 0;
         _mainTable = [[UITableView alloc] initWithFrame:bounds style:UITableViewStyleGrouped];
         _mainTable.delegate = self;
         _mainTable.dataSource = self;
-        _mainTable.backgroundColor = RGBCOLOR(245, 245, 245);
+        _mainTable.backgroundColor = [UPTools colorWithHex:0xf3f3f3];
         _mainTable.separatorStyle = UITableViewCellSeparatorStyleNone;
         _mainTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
         

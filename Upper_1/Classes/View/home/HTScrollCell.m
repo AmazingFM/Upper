@@ -7,7 +7,7 @@
 //
 
 #import "HTScrollCell.h"
-
+#import "UPTools.h"
 #import "UPTheme.h"
 
 #import "UIImageView+AFNetworking.h"
@@ -101,7 +101,7 @@
 -(void)setTitleFrame:(CGRect)titleFrame imgFrame:(CGRect)imgFrame{
     _imageView.frame=imgFrame;
     _titleLabel.frame=titleFrame;
-    _titleLabel.textColor=RGBCOLOR(0x66, 0x66, 0x66);
+    _titleLabel.textColor= [UPTools colorWithHex:0x666666];
 }
 @end
 
