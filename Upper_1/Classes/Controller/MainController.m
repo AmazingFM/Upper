@@ -216,11 +216,6 @@ static int kMsgCount = 0;
     if (![UPDataManager shared].isLogin) {
         
     } else {
-//        firstLoad = YES;
-//        if (_currentData1Index==0) {
-//            _currentData1RightIndex=0;
-//        }
-        
         [_mainTable.header beginRefreshing];
     }
 }
@@ -304,7 +299,6 @@ static int kMsgCount = 0;
     [params setObject:@""forKey:@"creator_id"];
     [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
-
     //复合条件查询
     if (_currentData1Index==0){
         if (firstLoad || _currentData1RightIndex==0) {
@@ -488,7 +482,8 @@ static int kMsgCount = 0;
     if (indexPath.section==0) {
         return kImageButtonHeight;
     } else if (indexPath.section==1) {
-        return 30*2+60+10;
+        UPActivityCellItem *item = self.actArray[indexPath.row];
+        return item.cellHeight;
     }
     return 0;
 }

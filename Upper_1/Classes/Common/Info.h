@@ -53,7 +53,7 @@
 #define kUPActCommentTag    103
 #define kUPActQuitTag       104
 #define kUPActSignTag       105
-#define kUPActJoinTag       106
+#define kUPActEditTag       106
 
 //顶部菜单高度
 #define selectMenuH 30

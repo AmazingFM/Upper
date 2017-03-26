@@ -39,8 +39,8 @@
     _mainTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     _mainTable.delegate = self;
     _mainTable.dataSource = self;
-    _mainTable.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    _mainTable.backgroundColor = [UIColor whiteColor];
+    _mainTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _mainTable.backgroundColor = [UPTools colorWithHex:0xf3f3f3];
     _mainTable.header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
     _mainTable.footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
     
@@ -92,7 +92,8 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 30*2+60+10;
+    UPActivityCellItem *item = self.itemArray[indexPath.row];
+    return item.cellHeight;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

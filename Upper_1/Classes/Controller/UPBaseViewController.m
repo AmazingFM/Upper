@@ -29,16 +29,11 @@
     UIView *back = [[UIView alloc] initWithFrame:CGRectZero];
     
     [self.view addSubview:back];
-//    UIImageView *backImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_cover_gaussian"]];
-//    backImg.userInteractionEnabled = NO;
-//    backImg.frame = self.view.bounds;
-//    [self.view addSubview:backImg];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];

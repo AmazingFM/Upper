@@ -15,6 +15,7 @@
 #import "MBProgressHUD+MJ.h"
 #import "UPConfig.h"
 #import "YMLabel.h"
+#import "YMNetwork.h"
 
 @interface UPTimeLocationView()
 {
@@ -112,9 +113,8 @@
     UIButton *_commentActBtn;
     UIButton *_quitActBtn;
     UIButton *_signActBtn;
-    UIButton *_joinActBtn;
+    UIButton *_editActBtn;
     
-//    UPTimeLocationView *_timeLocationV;
     UILabel *_timeLabel;
 }
 
@@ -180,7 +180,6 @@
         
         _sponserLab = [[UILabel alloc] initWithFrame:CGRectZero];
         _sponserLab.font = kUPThemeSmallFont;
-//        _sponserLab.backgroundColor = [UPTools colorWithHex:0x79CDCD];
         _sponserLab.textAlignment = NSTextAlignmentCenter;
         _sponserLab.layer.cornerRadius = 2.0f;
         _sponserLab.layer.masksToBounds = YES;
@@ -210,7 +209,7 @@
         [_cancelActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         _changeActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_changeActBtn setTitle:@"更改" forState:UIControlStateNormal];
+        [_changeActBtn setTitle:@"更改发起人" forState:UIControlStateNormal];
         _changeActBtn.tag = kUPActChangeTag;
         [_changeActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         _changeActBtn.titleLabel.font = kUPThemeMinFont;
@@ -249,15 +248,15 @@
         _signActBtn.layer.borderWidth = 1.f;
         [_signActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
 
-        _joinActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_joinActBtn setTitle:@"报名" forState:UIControlStateNormal];
-        _joinActBtn.tag = kUPActJoinTag;
-        [_joinActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        _joinActBtn.titleLabel.font = kUPThemeMinFont;
-        _joinActBtn.layer.cornerRadius = 2.0f;
-        _joinActBtn.layer.masksToBounds = YES;
-        _joinActBtn.layer.borderWidth = 1.f;
-        [_joinActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+        _editActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_editActBtn setTitle:@"编辑" forState:UIControlStateNormal];
+        _editActBtn.tag = kUPActEditTag;
+        [_editActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        _editActBtn.titleLabel.font = kUPThemeMinFont;
+        _editActBtn.layer.cornerRadius = 2.0f;
+        _editActBtn.layer.masksToBounds = YES;
+        _editActBtn.layer.borderWidth = 1.f;
+        [_editActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
 
         [_btnContainerView addSubview:_reviewActBtn];
         [_btnContainerView addSubview:_cancelActBtn];
@@ -265,9 +264,7 @@
         [_btnContainerView addSubview:_commentActBtn];
         [_btnContainerView addSubview:_quitActBtn];
         [_btnContainerView addSubview:_signActBtn];
-        [_btnContainerView addSubview:_joinActBtn];
-        
-//        _timeLocationV = [[UPTimeLocationView alloc] initWithFrame:CGRectZero];
+        [_btnContainerView addSubview:_editActBtn];
 
         [backView addSubview:_img];
         [backView addSubview:_titleLab];
@@ -451,7 +448,7 @@
                     _commentActBtn.frame =  CGRectZero;
                     _quitActBtn.frame =     CGRectZero;
                     _signActBtn.frame =     CGRectZero;
-                    _joinActBtn.frame =     CGRectZero;
+                    _editActBtn.frame =     CGRectZero;
                     break;
                 case 6:
                     _signActBtn.frame =     CGRectMake(0,0,size.width,perHeight);
@@ -460,7 +457,7 @@
                     _cancelActBtn.frame =   CGRectZero;
                     _commentActBtn.frame =  CGRectZero;
                     _quitActBtn.frame =     CGRectZero;
-                    _joinActBtn.frame =     CGRectZero;
+                    _editActBtn.frame =     CGRectZero;
                     break;
                 case 7:
                     _reviewActBtn.frame =   CGRectMake(0,0,size.width,perHeight);
@@ -469,7 +466,7 @@
                     _commentActBtn.frame =  CGRectZero;
                     _quitActBtn.frame =     CGRectZero;
                     _signActBtn.frame =     CGRectZero;
-                    _joinActBtn.frame =     CGRectZero;
+                    _editActBtn.frame =     CGRectZero;
                     break;
                 case 5:
                 case 8:
@@ -480,7 +477,7 @@
                     _commentActBtn.frame =  CGRectZero;
                     _quitActBtn.frame =     CGRectZero;
                     _signActBtn.frame =     CGRectZero;
-                    _joinActBtn.frame =     CGRectZero;
+                    _editActBtn.frame =     CGRectZero;
                     break;
             }
         } else if(_actCellItem.type==SourceTypeWoCanyu) {
@@ -514,7 +511,7 @@
                     _commentActBtn.frame =  CGRectZero;
                     _quitActBtn.frame =     CGRectZero;
                     _signActBtn.frame =     CGRectZero;
-                    _joinActBtn.frame =     CGRectZero;
+                    _editActBtn.frame =     CGRectZero;
                     break;
                 case 4:
                     _reviewActBtn.frame =   CGRectZero;
@@ -523,8 +520,7 @@
                     _commentActBtn.frame =  CGRectZero;
                     _quitActBtn.frame =     CGRectZero;
                     _signActBtn.frame =     CGRectZero;
-                    _joinActBtn.frame =     CGRectZero;
-
+                    _editActBtn.frame =     CGRectZero;
                     break;
                 case 5:
                     _reviewActBtn.frame =   CGRectZero;
@@ -533,8 +529,7 @@
                     _commentActBtn.frame =  CGRectZero;
                     _quitActBtn.frame =     CGRectZero;
                     _signActBtn.frame =     CGRectZero;
-                    _joinActBtn.frame =     CGRectZero;
-
+                    _editActBtn.frame =     CGRectZero;
                     break;
                 case 6:
                     _reviewActBtn.frame =   CGRectZero;
@@ -543,8 +538,7 @@
                     _commentActBtn.frame =  CGRectZero;
                     _quitActBtn.frame =     CGRectZero;
                     _signActBtn.frame =     CGRectZero;
-                    _joinActBtn.frame =     CGRectZero;
-
+                    _editActBtn.frame =     CGRectZero;
                     break;
                 case 7:
                 case 8:
@@ -555,7 +549,7 @@
                     _commentActBtn.frame =  CGRectZero;
                     _quitActBtn.frame =     CGRectZero;
                     _signActBtn.frame =     CGRectZero;
-                    _joinActBtn.frame =     CGRectZero;
+                    _editActBtn.frame =     CGRectZero;
                     break;
             }
 
@@ -572,21 +566,6 @@
         }
         offsety += perHeight;
     }
-    
-//    offsetx = height*4/3+kUPThemeBorder;
-//    NSString *time = [UPTools dateStringTransform:itemData.begin_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy.MM.dd"];
-//    NSString *location = itemData.activity_place;
-//    NSString *mergeStr = [NSString stringWithFormat:@"%@AAA%@", time, location];
-//    
-//    size = SizeWithFont(mergeStr, kUPThemeSmallFont);
-//    
-//    if (size.width>(width-height*4/3-2*kUPThemeBorder)) {
-//        size.width = width-height*4/3-2*kUPThemeBorder;
-//    }
-    
-//    _timeLocationV.size = CGSizeMake(size.width, size.height+4);
-//    _timeLocationV.center = CGPointMake(offsetx+size.width/2, offsety+perHeight/2);
-//    [_timeLocationV setTime:time andLocation:location];
 }
 
 - (void)onClick:(UIButton *)sender
@@ -717,15 +696,18 @@
     UILabel *_titleLab;
     UILabel *_freeTips;
     UILabel *_typeLab;
-    
     UILabel *_statusLab;
-    UILabel *_sponserLab;
+    
     
     YMLabel *_actDesc;
-    UILabel *_timeLabel;
-    UILabel *_location;
-    UILabel *_payLab;
+    UIButton *_timeBtn;
+    UIButton *_locationBtn;
     
+    UIButton *_payBtn;
+    
+    UIImageView *_userImgView;
+    UILabel *_sponserLab;
+
     UIView *_btnContainerView;
     
     UIButton *_reviewActBtn;
@@ -734,7 +716,7 @@
     UIButton *_commentActBtn;
     UIButton *_quitActBtn;
     UIButton *_signActBtn;
-    UIButton *_joinActBtn;
+    UIButton *_editActBtn;
 }
 
 @end
@@ -750,6 +732,9 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
         backView = [[UIView alloc] initWithFrame:CGRectZero];
+        backView.layer.cornerRadius = 5.f;
+        backView.layer.masksToBounds = YES;
+
         backView.backgroundColor = [UIColor whiteColor];
         [self addSubview:backView];
         
@@ -776,30 +761,23 @@
         _actDesc.textAlignment = NSTextAlignmentLeft;
         [_actDesc setVerticalAlignment:VerticalAlignmentTop];
         _actDesc.backgroundColor = [UIColor clearColor];
-        _actDesc.layer.cornerRadius = 2.0f;
-        _actDesc.adjustsFontSizeToFitWidth = YES;
-        _actDesc.layer.masksToBounds = YES;
         _actDesc.textColor = [UPTools colorWithHex:0x666666];
         
-        _timeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        _timeLabel.font = kUPThemeMinFont;
-        _timeLabel.backgroundColor = [UIColor clearColor];
-        _timeLabel.textAlignment = NSTextAlignmentLeft;
-        _timeLabel.layer.cornerRadius = 2.0f;
-        _timeLabel.adjustsFontSizeToFitWidth = YES;
-        _timeLabel.layer.masksToBounds = YES;
-        _timeLabel.textColor = [UPTools colorWithHex:0xaaaaaa];
+        _timeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _timeBtn.titleLabel.font = kUPThemeMiniFont;
+        _timeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        _timeBtn.backgroundColor = [UIColor clearColor];
+        [_timeBtn setTitleColor:[UPTools colorWithHex:0xaaaaaa] forState:UIControlStateNormal];
+        [_timeBtn setImage:[UIImage imageNamed:@"icon-time"] forState:UIControlStateNormal];
         
-        
-        _location = [[UILabel alloc] initWithFrame:CGRectZero];
-        _location.font = kUPThemeMinFont;
-        _location.backgroundColor = [UIColor clearColor];
-        _location.textAlignment = NSTextAlignmentLeft;
-        _location.layer.cornerRadius = 2.0f;
-        _location.adjustsFontSizeToFitWidth = YES;
-        _location.layer.masksToBounds = YES;
-        _location.textColor = [UPTools colorWithHex:0xaaaaaa];
-        
+        _locationBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _locationBtn.titleLabel.font = kUPThemeMiniFont;
+        _locationBtn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        _locationBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        _locationBtn.backgroundColor = [UIColor clearColor];
+        [_locationBtn setTitleColor:[UPTools colorWithHex:0xaaaaaa] forState:UIControlStateNormal];
+        [_locationBtn setImage:[UIImage imageNamed:@"icon-address"] forState:UIControlStateNormal];
+
         _statusLab = [[UILabel alloc] initWithFrame:CGRectZero];
         _statusLab.font = kUPThemeMinFont;
         _statusLab.textAlignment = NSTextAlignmentCenter;
@@ -815,21 +793,25 @@
         _typeLab.adjustsFontSizeToFitWidth = YES;
         _typeLab.layer.masksToBounds = YES;
         
-        _payLab = [[UILabel alloc] initWithFrame:CGRectZero];
-        _payLab.font = kUPThemeMinFont;
-        _payLab.backgroundColor = [UIColor clearColor];
-        _payLab.textAlignment = NSTextAlignmentCenter;
-        _payLab.layer.cornerRadius = 2.0f;
-        _payLab.layer.masksToBounds = YES;
-        _payLab.textColor = [UPTools colorWithHex:0x666666];
+        _payBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _payBtn.titleLabel.font = kUPThemeMiniFont;
+        _payBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        _payBtn.backgroundColor = [UIColor clearColor];
+        [_payBtn setTitleColor:[UPTools colorWithHex:0x666666] forState:UIControlStateNormal];
+        [_payBtn setImage:[UIImage imageNamed:@"icon-money"] forState:UIControlStateNormal];
+        
+        _userImgView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _userImgView.backgroundColor = [UIColor clearColor];
+        _userImgView.contentMode = UIViewContentModeScaleToFill;
         
         _sponserLab = [[UILabel alloc] initWithFrame:CGRectZero];
-        _sponserLab.font = kUPThemeSmallFont;
+        _sponserLab.font = kUPThemeMinFont;
         _sponserLab.textAlignment = NSTextAlignmentLeft;
         _sponserLab.layer.cornerRadius = 2.0f;
         _sponserLab.layer.masksToBounds = YES;
         _sponserLab.adjustsFontSizeToFitWidth = YES;
         _sponserLab.textColor = RGBCOLOR(204, 204, 204);
+        _sponserLab.backgroundColor = [UIColor clearColor];
         
         _btnContainerView = [[UIView alloc] initWithFrame:CGRectZero];
         _btnContainerView.backgroundColor = [UIColor clearColor];
@@ -838,7 +820,7 @@
         [_reviewActBtn setTitle:@"回顾" forState:UIControlStateNormal];
         _reviewActBtn.tag = kUPActReviewTag;
         [_reviewActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        _reviewActBtn.titleLabel.font = kUPThemeMinFont;
+        _reviewActBtn.titleLabel.font = kUPThemeMiniFont;
         _reviewActBtn.layer.cornerRadius = 2.0f;
         _reviewActBtn.layer.masksToBounds = YES;
         _reviewActBtn.layer.borderWidth = 1.f;
@@ -848,27 +830,27 @@
         [_cancelActBtn setTitle:@"取消" forState:UIControlStateNormal];
         _cancelActBtn.tag = kUPActCancelTag;
         [_cancelActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        _cancelActBtn.titleLabel.font = kUPThemeMinFont;
+        _cancelActBtn.titleLabel.font = kUPThemeMiniFont;
         _cancelActBtn.layer.cornerRadius = 2.0f;
         _cancelActBtn.layer.masksToBounds = YES;
         _cancelActBtn.layer.borderWidth = 1.f;
         [_cancelActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         _changeActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_changeActBtn setTitle:@"更改" forState:UIControlStateNormal];
+        [_changeActBtn setTitle:@"更改发起人" forState:UIControlStateNormal];
         _changeActBtn.tag = kUPActChangeTag;
         [_changeActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        _changeActBtn.titleLabel.font = kUPThemeMinFont;
+        _changeActBtn.titleLabel.font = kUPThemeMiniFont;
         _changeActBtn.layer.cornerRadius = 2.0f;
         _changeActBtn.layer.masksToBounds = YES;
         _changeActBtn.layer.borderWidth = 1.f;
         [_changeActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         _commentActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_commentActBtn setTitle:@"评论" forState:UIControlStateNormal];
+        [_commentActBtn setTitle:@"评价" forState:UIControlStateNormal];
         _commentActBtn.tag = kUPActCommentTag;
         [_commentActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        _commentActBtn.titleLabel.font = kUPThemeMinFont;
+        _commentActBtn.titleLabel.font = kUPThemeMiniFont;
         _commentActBtn.layer.cornerRadius = 2.0f;
         _commentActBtn.layer.masksToBounds = YES;
         _commentActBtn.layer.borderWidth = 1.f;
@@ -878,7 +860,7 @@
         [_quitActBtn setTitle:@"退出" forState:UIControlStateNormal];
         _quitActBtn.tag = kUPActQuitTag;
         [_quitActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        _quitActBtn.titleLabel.font = kUPThemeMinFont;
+        _quitActBtn.titleLabel.font = kUPThemeMiniFont;
         _quitActBtn.layer.cornerRadius = 2.0f;
         _quitActBtn.layer.masksToBounds = YES;
         _quitActBtn.layer.borderWidth = 1.f;
@@ -888,21 +870,21 @@
         [_signActBtn setTitle:@"签到" forState:UIControlStateNormal];
         _signActBtn.tag = kUPActSignTag;
         [_signActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        _signActBtn.titleLabel.font = kUPThemeMinFont;
+        _signActBtn.titleLabel.font = kUPThemeMiniFont;
         _signActBtn.layer.cornerRadius = 2.0f;
         _signActBtn.layer.masksToBounds = YES;
         _signActBtn.layer.borderWidth = 1.f;
         [_signActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
-        _joinActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_joinActBtn setTitle:@"报名" forState:UIControlStateNormal];
-        _joinActBtn.tag = kUPActJoinTag;
-        [_joinActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        _joinActBtn.titleLabel.font = kUPThemeMinFont;
-        _joinActBtn.layer.cornerRadius = 2.0f;
-        _joinActBtn.layer.masksToBounds = YES;
-        _joinActBtn.layer.borderWidth = 1.f;
-        [_joinActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+        _editActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_editActBtn setTitle:@"编辑" forState:UIControlStateNormal];
+        _editActBtn.tag = kUPActEditTag;
+        [_editActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        _editActBtn.titleLabel.font = kUPThemeMiniFont;
+        _editActBtn.layer.cornerRadius = 2.0f;
+        _editActBtn.layer.masksToBounds = YES;
+        _editActBtn.layer.borderWidth = 1.f;
+        [_editActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         [_btnContainerView addSubview:_reviewActBtn];
         [_btnContainerView addSubview:_cancelActBtn];
@@ -910,18 +892,19 @@
         [_btnContainerView addSubview:_commentActBtn];
         [_btnContainerView addSubview:_quitActBtn];
         [_btnContainerView addSubview:_signActBtn];
-        [_btnContainerView addSubview:_joinActBtn];
+        [_btnContainerView addSubview:_editActBtn];
         
         [backView addSubview:_img];
         [backView addSubview:_titleLab];
         [backView addSubview:_freeTips];
         [backView addSubview:_typeLab];
-        [backView addSubview:_payLab];
+        [backView addSubview:_payBtn];
         [backView addSubview:_statusLab];
         [backView addSubview:_btnContainerView];
         [backView addSubview:_actDesc];
-        [backView addSubview:_timeLabel];
-        [backView addSubview:_location];
+        [backView addSubview:_timeBtn];
+        [backView addSubview:_locationBtn];
+        [backView addSubview:_userImgView];
         [backView addSubview:_sponserLab];
     }
     return self;
@@ -992,24 +975,24 @@
     offsety += _actDesc.height;
     
     CGFloat tmpWidth = (width-offsetx)/3;
-    _location.frame = CGRectMake(offsetx, offsety, tmpWidth-5, 60-_actDesc.height);
-    _location.text = itemData.city;
+    _locationBtn.frame = CGRectMake(offsetx, offsety, tmpWidth-10, 60-_actDesc.height);
+    [_locationBtn setTitle:itemData.city forState:UIControlStateNormal];
     
-    offsetx += tmpWidth;
-    _timeLabel.frame = CGRectMake(offsetx, offsety, tmpWidth-5, 60-_actDesc.height);
-    NSString *begin_time = [UPTools dateStringTransform:itemData.begin_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy.MM.dd"];
-    _timeLabel.text = begin_time;
+    offsetx += tmpWidth-8;
+    _timeBtn.frame = CGRectMake(offsetx, offsety, tmpWidth, 60-_actDesc.height);
+    NSString *start_time = [UPTools dateStringTransform:itemData.start_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy.MM.dd"];
+    [_timeBtn setTitle:start_time forState:UIControlStateNormal];
     
-    offsetx += tmpWidth;
+    offsetx += tmpWidth+2;
     NSString *payTypeID = itemData.is_prepaid;
     BaseType *baseType = [[UPConfig sharedInstance] getPayTypeByID:payTypeID];
     
     NSString *payName = baseType.name;
     if (payName.length!=0) {
-        _payLab.text = payName;
-        _payLab.frame = CGRectMake(offsetx, offsety, tmpWidth, 60-_actDesc.height);
+        [_payBtn setTitle:payName forState:UIControlStateNormal];
+        _payBtn.frame = CGRectMake(offsetx, offsety, width-offsetx, 60-_actDesc.height);
     } else {
-        _payLab.frame = CGRectZero;
+        _payBtn.frame = CGRectZero;
     }
     
     offsetx = 5;
@@ -1021,9 +1004,15 @@
             _sponserLab.text = sponser;
             size = SizeWithFont(sponser, kUPThemeMinFont);
             
+            
+            CGFloat imgWidth = size.height+4;
+            _userImgView.frame = CGRectMake(offsetx, offsety+(30-imgWidth)/2, imgWidth, imgWidth);
+            [_userImgView sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"activity_user_icon"]];
+            
             if (size.width>100) {
                 size.width = 100;
             }
+            offsetx += imgWidth+5;
             _sponserLab.frame = CGRectMake(offsetx, offsety, size.width, 30);
             
             NSString *actTypeID = itemData.activity_class;
@@ -1034,7 +1023,7 @@
             if (actTypeTitle.length!=0) {
                 size = SizeWithFont(@" 发布了 ", kUPThemeMinFont);
                 
-                offsetx += _sponserLab.width+10;
+                offsetx += _sponserLab.width;
                 
                 
                 UILabel *lab = [self viewWithTag:10000];
@@ -1063,18 +1052,24 @@
         }
     } else {
         if (actStatus) {
-            _btnContainerView.size = CGSizeMake(width-2*offsetx, 30);
-            _btnContainerView.backgroundColor = [UIColor clearColor];
-            _btnContainerView.hidden =NO;
+            _btnContainerView.frame = CGRectMake(offsetx, offsety, width-2*offsetx, 30);
             
             CGFloat perHeight = 30;
             
             CGSize size = SizeWithFont(@"回顾", kUPThemeMinFont);
-            size.width += 10;
+            size.width = 60;
             
             if (_actCellItem.type==SourceTypeWoFaqi) {
                 switch ([actStatusID intValue]) {
                     case 0:
+                        _changeActBtn.frame =   CGRectMake(0,5,size.width,perHeight-10);
+                        _cancelActBtn.frame =   CGRectMake(10+size.width,5,size.width,perHeight-10);
+                        _editActBtn.frame =     CGRectMake(2*(10+size.width),5,size.width,perHeight-10);;
+                        _reviewActBtn.frame =   CGRectZero;
+                        _commentActBtn.frame =  CGRectZero;
+                        _quitActBtn.frame =     CGRectZero;
+                        _signActBtn.frame =     CGRectZero;
+                        break;
                     case 1:
                     case 2:
                     case 3:
@@ -1085,7 +1080,7 @@
                         _commentActBtn.frame =  CGRectZero;
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
-                        _joinActBtn.frame =     CGRectZero;
+                        _editActBtn.frame =     CGRectZero;
                         break;
                     case 6:
                         _signActBtn.frame =     CGRectMake(0,0,size.width,perHeight);
@@ -1094,7 +1089,7 @@
                         _cancelActBtn.frame =   CGRectZero;
                         _commentActBtn.frame =  CGRectZero;
                         _quitActBtn.frame =     CGRectZero;
-                        _joinActBtn.frame =     CGRectZero;
+                        _editActBtn.frame =     CGRectZero;
                         break;
                     case 7:
                         _reviewActBtn.frame =   CGRectMake(0,0,size.width,perHeight);
@@ -1103,7 +1098,7 @@
                         _commentActBtn.frame =  CGRectZero;
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
-                        _joinActBtn.frame =     CGRectZero;
+                        _editActBtn.frame =     CGRectZero;
                         break;
                     case 5:
                     case 8:
@@ -1114,7 +1109,7 @@
                         _commentActBtn.frame =  CGRectZero;
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
-                        _joinActBtn.frame =     CGRectZero;
+                        _editActBtn.frame =     CGRectZero;
                         break;
                 }
             } else if(_actCellItem.type==SourceTypeWoCanyu) {
@@ -1148,7 +1143,7 @@
                         _commentActBtn.frame =  CGRectZero;
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
-                        _joinActBtn.frame =     CGRectZero;
+                        _editActBtn.frame =     CGRectZero;
                         break;
                     case 4:
                         _reviewActBtn.frame =   CGRectZero;
@@ -1157,8 +1152,7 @@
                         _commentActBtn.frame =  CGRectZero;
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
-                        _joinActBtn.frame =     CGRectZero;
-                        
+                        _editActBtn.frame =     CGRectZero;
                         break;
                     case 5:
                         _reviewActBtn.frame =   CGRectZero;
@@ -1167,8 +1161,7 @@
                         _commentActBtn.frame =  CGRectZero;
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
-                        _joinActBtn.frame =     CGRectZero;
-                        
+                        _editActBtn.frame =     CGRectZero;
                         break;
                     case 6:
                         _reviewActBtn.frame =   CGRectZero;
@@ -1177,8 +1170,7 @@
                         _commentActBtn.frame =  CGRectZero;
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
-                        _joinActBtn.frame =     CGRectZero;
-                        
+                        _editActBtn.frame =     CGRectZero;
                         break;
                     case 7:
                     case 8:
@@ -1189,7 +1181,7 @@
                         _commentActBtn.frame =  CGRectZero;
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
-                        _joinActBtn.frame =     CGRectZero;
+                        _editActBtn.frame =     CGRectZero;
                         break;
                 }
                 
@@ -1229,7 +1221,8 @@
     } else if (sender.tag==kUPActReviewTag  ||
                sender.tag==kUPActCommentTag ||
                sender.tag==kUPActChangeTag  ||
-               sender.tag==kUPActSignTag)
+               sender.tag==kUPActSignTag    ||
+               sender.tag==kUPActEditTag)
     {
         if ([self.delegate respondsToSelector:@selector(onButtonSelected:withType:)]) {
             [self.delegate onButtonSelected:_actCellItem withType:sender.tag];
@@ -1290,17 +1283,14 @@
 - (void)cancelActivity
 {
     [MBProgressHUD showMessage:@"正在提交请求，请稍后...." toView:g_mainWindow];
-    
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"ActivityModify"forKey:@"a"];
-    
     [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
     [params setObject:_actCellItem.itemData.ID forKey:@"activity_id"];
-    [params setObject:@"9" forKey:@"user_status"];
+    [params setObject:@"9" forKey:@"activity_status"];
     [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id json) {
         [MBProgressHUD hideHUDForView:g_mainWindow];
         
         NSDictionary *dict = (NSDictionary *)json;
@@ -1320,7 +1310,7 @@
             
         }
         
-    } failture:^(id error) {
+    } failure:^(id error) {
         [MBProgressHUD hideHUDForView:g_mainWindow];
         NSLog(@"%@",error);
         

@@ -21,6 +21,7 @@
 #import "QRCodeController.h"
 #import "EnrollPeopleController.h"
 #import "UPFriendListController.h"
+#import "NewLaunchActivityController.h"
 #import "YMNetwork.h"
 
 @interface UPMyLaunchViewController () <UPFriendListDelegate>
@@ -187,25 +188,6 @@
         [nav.navigationBar setTranslucent:YES];
         [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
         [self presentViewController:nav animated:YES completion:nil];
-    } else if (type==kUPActCommentTag) {
-        //发布评论
-        UPCommentController *commentController = [[UPCommentController alloc]init];
-        commentController.actID = cellItem.itemData.ID;
-        commentController.title=@"我要评论";
-        commentController.type = 1;
-        
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:commentController];
-        [nav.navigationBar setTintColor:[UIColor whiteColor]];
-        [nav.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-        [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"back_shadow"] forBarMetrics:UIBarMetricsDefault];
-        nav.navigationBar.shadowImage=[[UIImage alloc]init];  //隐藏掉导航栏底部的那条线
-        //2.设置导航栏barButton上面文字的颜色
-        UIBarButtonItem *item=[UIBarButtonItem appearance];
-        [item setTintColor:[UIColor whiteColor]];
-        [item setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]} forState:UIControlStateNormal];
-        [nav.navigationBar setTranslucent:YES];
-        [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-        [self presentViewController:nav animated:YES completion:nil];
     } else if (type==kUPActSignTag) {
         QRCodeController *qrController = [[QRCodeController alloc] init];
         qrController.title = @"扫描";
@@ -220,6 +202,10 @@
         friendlistController.delegate = self;
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:friendlistController];
         [self presentViewController:nav animated:YES completion:nil];
+    } else if (type==kUPActEditTag) {
+        NewLaunchActivityController *launchVC = [[NewLaunchActivityController alloc] init];
+        launchVC.actData = cellItem.itemData;
+        [self.navigationController pushViewController:launchVC animated:YES];
     }
 }
 
@@ -242,7 +228,6 @@
     [params setValue:@"" forKey:@"expire_time"];
     
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
-        
         NSDictionary *dict = (NSDictionary *)responseObject;
         NSLog(@"MessageSend, %@", dict);
         NSString *resp_id = dict[@"resp_id"];

@@ -75,8 +75,7 @@
 #define RGBACOLOR(r,g,b,a) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]
 
 //主色调
-//#define kUPThemeMainColor           RGBCOLOR(0,109,255) //RGBCOLOR(58,156,253)
-#define kUPThemeMainColor           RGBCOLOR(0,0x6d,0xff) //RGBCOLOR(58,156,253)
+#define kUPThemeMainColor           RGBCOLOR(140,25,25)
 #define kUPThemeBackgroundColor     RGBCOLOR(237,237,237) //RGBCOLOR(255,255,255)
 #define kUPThemeHighligUPColor      RGBCOLOR(250,150,40)
 #define kUPThemeUnhighligUPColor    [UIColor lightGrayColor]
@@ -105,6 +104,7 @@
 #define kUPThemeNormalFont     [UIFont systemFontOfSize:16]
 #define kUPThemeSmallFont     [UIFont systemFontOfSize:14]
 #define kUPThemeMinFont       [UIFont systemFontOfSize:12]
+#define kUPThemeMiniFont       [UIFont systemFontOfSize:10]
 
 #define kUPThemeTitleFont     [UIFont systemFontOfSize:17]
 #define kUPThemeInfoTimeFont  [UIFont systemFontOfSize:15]

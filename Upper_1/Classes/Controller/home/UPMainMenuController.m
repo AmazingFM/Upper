@@ -40,7 +40,6 @@
     
     UpperController *upperVC = [[UpperController alloc] init];
     MainController *hallVC = [[MainController alloc] init];
-//    UpExpertController *expertVC = [[UpExpertController alloc] init];
     NewLaunchActivityController *launchVC = [[NewLaunchActivityController alloc] init];
     UPMyFriendsViewController *friendVC = [[UPMyFriendsViewController alloc] init];
     UpMyActivityViewController *myActVC = [[UpMyActivityViewController alloc] init];
@@ -48,7 +47,6 @@
     
     UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:upperVC];
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:hallVC];
-//    UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:expertVC];
     UINavigationController *nav4 = [[UINavigationController alloc] initWithRootViewController:launchVC];
     UINavigationController *nav5 = [[UINavigationController alloc] initWithRootViewController:friendVC];
     UINavigationController *nav6 = [[UINavigationController alloc] initWithRootViewController:myActVC];
