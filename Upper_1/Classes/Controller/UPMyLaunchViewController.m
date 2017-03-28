@@ -204,6 +204,7 @@
         [self presentViewController:nav animated:YES completion:nil];
     } else if (type==kUPActEditTag) {
         NewLaunchActivityController *launchVC = [[NewLaunchActivityController alloc] init];
+        launchVC.type = ActOperTypeEdit;
         launchVC.actData = cellItem.itemData;
         [self.navigationController pushViewController:launchVC animated:YES];
     }

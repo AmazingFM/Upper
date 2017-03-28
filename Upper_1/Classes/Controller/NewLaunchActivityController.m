@@ -44,7 +44,7 @@ static CGFloat const FixRatio = 4/3.0;
     [super viewDidLoad];
     self.navigationItem.title = @"选择城市";
     
-    UIBarButtonItem *rightBtn = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStyleBordered target:self action:@selector(backView)];
+    UIBarButtonItem *rightBtn = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(backView)];
     self.navigationItem.rightBarButtonItem = rightBtn;
     self.automaticallyAdjustsScrollViewInsets = YES;
     
@@ -151,12 +151,12 @@ static CGFloat const FixRatio = 4/3.0;
     BaseType *_clothType;
     BaseType *_payType;
     
-    NSString *_actTypeID;
-    
+    ActivityType *_actType;
     NSString *_lowLimit;
     NSString *_highLimit;
     NSString *_femaleLowLimit;
     NSString *_activityFee;
+    
     
     NSData *_imgData;
     
@@ -181,17 +181,45 @@ static CGFloat const FixRatio = 4/3.0;
     [super viewDidLoad];
     self.navigationItem.title = @"发起活动";
     
-    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:nil target:self action:@selector(leftClick)];
-
-    _actTypeID = @"";
+    if (self.type==ActOperTypeLaunch) {
+        self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:nil target:self action:@selector(leftClick)];
+    }
     
-    _lowLimit = @"0";
-    _highLimit = @"0";
-    _activityFee = @"0";
-    _femaleLowLimit = @"0";
-    _selectedCity = nil;
-    _clothType = nil;
-    _payType = nil;
+    if (self.type==ActOperTypeEdit) {
+        [self getImageDataFromURL:self.actData.activity_image];
+        
+        _actType = [[UPConfig sharedInstance] getActivityTypeByID:self.actData.activity_class];
+        
+        _lowLimit = @"0";
+        _highLimit = self.actData.limit_count;
+        
+        _activityFee = self.actData.activity_fee;
+        _femaleLowLimit = @"0";
+        
+        _selectedCity = [[CityInfo alloc] initWithDict:@{@"province_code"   :self.actData.province_code,
+                                                         @"city_code"       :self.actData.city_code,
+                                                         @"town_code"       :@"",
+                                                         @"province"        :self.actData.province,
+                                                         @"city"            :self.actData.city,
+                                                         @"town"            :@""}];
+        
+        _clothType = [[UPConfig sharedInstance] getClothTypeByID:self.actData.clothes_need];
+        _payType = [[UPConfig sharedInstance] getPayTypeByID:self.actData.is_prepaid];
+    } else {
+        self.actData = nil;
+        
+        _actType = nil;
+        
+        _lowLimit = @"0";
+        _highLimit = @"0";
+        _activityFee = @"0";
+        _femaleLowLimit = @"0";
+        _selectedCity = nil;
+        _clothType = nil;
+        _payType = nil;
+    }
+    
+    
     
     [self setNewData];
     
@@ -222,6 +250,37 @@ static CGFloat const FixRatio = 4/3.0;
     [self loadNotificationCell];
 }
 
+-(void)getImageDataFromURL:(NSString *)imageUrl
+{
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURL *url = [NSURL URLWithString:imageUrl];
+    
+    NSURLSessionTask *task = [session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        [self reloadImageData:data];
+        
+        
+    }];
+    
+    [task resume];
+}
+
+- (void)reloadImageData:(NSData *)imageData
+{
+    _imgData = imageData;
+    
+    for (UPBaseCellItem *item in self.itemList) {
+        if ([item.key isEqualToString:@"imageUpload"]) {
+            UPButtonCellItem *imageItem = (UPButtonCellItem *)item;
+            imageItem.btnImage = [UIImage imageWithData:_imgData];
+            break;
+        }
+    }
+    
+    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+
+
 - (void)setNewData
 {
     [self.itemList removeAllObjects];
@@ -230,35 +289,46 @@ static CGFloat const FixRatio = 4/3.0;
     
     UPButtonCellItem *item0 = [[UPButtonCellItem alloc] init];
     item0.btnStyle = UPBtnStyleImage;
-    item0.btnImage = [UIImage imageNamed:@"camera"];
+    item0.btnImage = (_imgData==nil)?[UIImage imageNamed:@"camera"]:[UIImage imageWithData:_imgData];
     item0.btnTitle = @"单击上传活动图片";
     item0.tintColor = [UIColor redColor];
     item0.key = @"imageUpload";
     
     UPFieldCellItem *item1 = [[UPFieldCellItem alloc] init];
     item1.title = @"活动主题";
+    item1.fieldText = self.actData.activity_name;
     item1.placeholder = @"添加活动主题";
     item1.key = @"activity_name";
     
     UPTextCellItem *item2 = [[UPTextCellItem alloc] init];
     item2.placeholder = @"添加活动介绍";
     item2.actionLen = 200;
+    item2.fieldText = self.actData.activity_desc;
     item2.key = @"activity_desc";
     
     //begin_time 为报名开始时间，即当前时间
+    NSString *time = nil;
+    if (self.actData!=nil) {
+        time = self.actData.end_time;
+    }
+
     UPDateCellItem *item3 = [[UPDateCellItem alloc] init];
     item3.title = @"报名截止时间";
-    item3.date = @"选择日期";
+    item3.date = (self.actData==nil)?@"选择日期":[UPTools dateTransform:time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy-MM-dd"];
     item3.key = @"end_time";
     
     UPDateCellItem *item4 = [[UPDateCellItem alloc] init];
     item4.title = @"活动开始时间";
-    item4.date = @"选择日期";
+    
+    if (self.actData!=nil) {
+        time = self.actData.start_time;
+    }
+    item4.date = time==nil?@"选择日期":[UPTools dateTransform:time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy-MM-dd"];
     item4.key = @"start_time";
     
     UPDetailCellItem *item5 = [[UPDetailCellItem alloc] init];
     item5.title = @"活动类型";
-    item5.detail = @"选择类型";
+    item5.detail = (_actType==nil)?@"选择类型":_actType.name;
     item5.key = @"activity_class";
     
     UPTitleCellItem *item15 = [[UPTitleCellItem alloc] init];
@@ -266,17 +336,19 @@ static CGFloat const FixRatio = 4/3.0;
     
     UPDetailCellItem *item6 = [[UPDetailCellItem alloc] init];
     item6.title = @"活动地点区域";
-    item6.detail = @"选择城市";
+    item6.detail = (_selectedCity==nil?@"选择城市":_selectedCity.city);
     item6.key = @"activity_area";
     
     UPFieldCellItem *item7 = [[UPFieldCellItem alloc] init];
     item7.title = @"活动地址";
     item7.placeholder = @"请输入活动地址";
+    item7.fieldText = self.actData.activity_place_code;
     item7.key = @"activity_place_code";
     
     UPFieldCellItem *item8 = [[UPFieldCellItem alloc] init];
     item8.title = @"活动场所";
     item8.placeholder = @"请输入活动场所";
+    item8.fieldText =  self.actData.activity_place;
     item8.more = YES;
     item8.detail = @"";
     item8.detailColor = [UIColor redColor];
@@ -295,6 +367,7 @@ static CGFloat const FixRatio = 4/3.0;
         [clothNames addObject:obj.name];
     }];
     item10.comboxItems = clothNames;
+    item10.selectedIndex = _clothType!=nil?([_clothType.ID intValue]-1):0;
     item10.style = UPItemStyleIndex;
     item10.key = @"clothes_need";
     UPComboxCellItem *item11 = [[UPComboxCellItem alloc] init];  //使用 是否预付的 字段传参
@@ -305,6 +378,7 @@ static CGFloat const FixRatio = 4/3.0;
         [payNames addObject:obj.name];
     }];
     item11.comboxItems = payNames;
+    item11.selectedIndex = _payType!=nil?([_payType.ID intValue]-1):0;
     item11.style = UPItemStyleIndex;
     item11.key = @"is_prepaid";
     
@@ -325,7 +399,7 @@ static CGFloat const FixRatio = 4/3.0;
     
     UPSwitchCellItem *item12 = [[UPSwitchCellItem alloc] init];
     item12.title=@"仅限本行业";
-    item12.isOn = YES;
+    item12.isOn = [self.actData.industry_id intValue]==-1?NO:YES;
     item12.isLock = YES;
     item12.key = @"industry_id";
     
@@ -497,6 +571,7 @@ static CGFloat const FixRatio = 4/3.0;
         lowField.borderStyle = UITextBorderStyleLine;
         [lowField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
         lowField.delegate = self;
+        lowField.text = _activityFee;
         
         UILabel *renLabel = [[UILabel alloc] initWithFrame:CGRectMake(detailWidth-perWidth,(detailHeight-perHeight)/2, perWidth, perHeight)];
         renLabel.text = @"元";
@@ -536,6 +611,7 @@ static CGFloat const FixRatio = 4/3.0;
             lowField.borderStyle = UITextBorderStyleLine;
             [lowField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
             lowField.delegate = self;
+            lowField.text = _femaleLowLimit;
             
             UILabel *renLabel = [[UILabel alloc] initWithFrame:CGRectMake(detailWidth-perWidth,(detailHeight-perHeight)/2, perWidth, perHeight)];
             renLabel.text = @"人";
@@ -568,6 +644,7 @@ static CGFloat const FixRatio = 4/3.0;
         lowField.borderStyle = UITextBorderStyleLine;
         [lowField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
         lowField.delegate = self;
+        lowField.text = _lowLimit;
     
         UITextField *highField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-3*perWidth-kUPThemeBorder, (detailHeight-perHeight)/2, 2*perWidth, perHeight)];
         highField.tag = kFieldTagForPepleHighLimit;
@@ -575,6 +652,7 @@ static CGFloat const FixRatio = 4/3.0;
         highField.keyboardType = UIKeyboardTypeNumberPad;
         [highField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
         highField.delegate = self;
+        highField.text = _highLimit;
         
         UILabel *zhiLabel = [[UILabel alloc] initWithFrame:CGRectMake(detailWidth-4*perWidth-2*kUPThemeBorder,(detailHeight-perHeight)/2, perWidth, perHeight)];
         zhiLabel.text = @"至";
@@ -758,7 +836,7 @@ static CGFloat const FixRatio = 4/3.0;
         if (_payType==nil) {
             msg = @"请选择付款方式";
         }
-        if (_actTypeID.length==0) {
+        if (_actType==nil) {
             msg = @"请选择活动类型";
         }
 
@@ -770,7 +848,7 @@ static CGFloat const FixRatio = 4/3.0;
 
         [params setObject:_clothType.ID forKey:@"clothes_need"];
         [params setObject:_payType.ID forKey:@"is_prepaid"];
-        [params setObject:_actTypeID forKey:@"activity_class"];
+        [params setObject:_actType.ID forKey:@"activity_class"];
         
         [params setObject:_selectedCity.province_code forKey:@"province_code"];
         [params setObject:_selectedCity.city_code forKey:@"city_code"];
@@ -805,6 +883,7 @@ static CGFloat const FixRatio = 4/3.0;
                 NSDictionary *respDict = (NSDictionary *)jsonObj;
                 NSString *resp_id = respDict[@"resp_id"];
                 if ([resp_id intValue]==0) {
+                    self.actData = nil;
                     [self setNewData];
                     [_tableView reloadData];
                 }
@@ -996,7 +1075,7 @@ static CGFloat const FixRatio = 4/3.0;
     }
     [_tableView reloadRowsAtIndexPaths:@[femaleItem.indexPath] withRowAnimation:UITableViewRowAnimationNone];
 
-    _actTypeID = actType.ID;
+    _actType = actType;
 }
 
 - (void)resignKeyboard

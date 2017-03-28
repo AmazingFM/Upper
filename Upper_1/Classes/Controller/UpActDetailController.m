@@ -25,6 +25,144 @@
 
 #import "YMNetwork.h"
 
+@implementation UPDetailImageCellItem
+@end
+
+@implementation UPDetailTitleInfoCellItem
+@end
+
+@implementation UPDetailPeopleInfoCellItem
+@end
+
+@implementation UPDetailExtraInfoCellItem
+@end
+
+@implementation UPDetailButtonCellItem
+@end
+
+
+//------cell
+@interface UPDetailImageCell()
+{
+    UIView *userBackView;
+}
+
+@end
+@implementation UPDetailImageCell
+//@property (nonatomic, retain) UIImageView *activityImage;
+//@property (nonatomic, retain) UIImageView *userIconImage;
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        self.activityImage = [[UIImageView alloc] initWithFrame:CGRectZero];
+        self.activityImage.contentMode = UIViewContentModeScaleAspectFit;
+        self.activityImage.backgroundColor = [UIColor clearColor];
+        self.activityImage.layer.cornerRadius = 5.f;
+        self.activityImage.layer.masksToBounds = YES;
+        
+        userBackView = [[UIView alloc] initWithFrame:CGRectZero];
+        userBackView.backgroundColor = [UIColor whiteColor];
+        
+        self.userIconImage = [[UIImageView alloc] initWithFrame:CGRectZero];
+        self.userIconImage.contentMode = UIViewContentModeScaleAspectFit;
+        self.userIconImage.backgroundColor = [UIColor clearColor];
+        
+        self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.userNameLabel.font = kUPThemeMiniFont;
+        self.userNameLabel.textColor = [UIColor blackColor];
+        self.userNameLabel.textAlignment = NSTextAlignmentLeft;
+
+        [self addSubview:self.activityImage];
+        [self addSubview:userBackView];
+        [userBackView addSubview:self.userIconImage];
+        [userBackView addSubview:self.userNameLabel];
+    }
+    return self;
+}
+
+- (void)setItem:(UPBaseCellItem *)item
+{
+    [super setItem:item];
+    UPDetailImageCellItem *cellItem = (UPDetailImageCellItem *)item;
+    
+    CGFloat offsetx = 5;
+    CGFloat offsety = 5;
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:cellItem.imageUrl] placeholderImage:[UIImage imageNamed:cellItem.imageDefault]];
+    self.imageView.frame = CGRectMake(offsetx, offsety, cellItem.cellWidth, cellItem.cellHeight-2*5);
+    
+    float width =(ScreenWidth==320?100:125);
+    userBackView.frame = CGRectMake(cellItem.cellWidth-15, cellItem.cellHeight-30, width, 30);
+    
+    [self.userIconImage sd_setImageWithURL:[NSURL URLWithString:cellItem.userIconUrl] placeholderImage:[UIImage imageNamed:cellItem.userIconDefault]];
+    self.userIconImage.frame = CGRectMake(5, 2, 26, 26);
+    self.userNameLabel.frame = CGRectMake(10+26, 0, width-(36), 30);
+    self.userNameLabel.text = cellItem.userName;
+}
+@end
+
+
+@implementation UPDetailTitleInfoCell
+//@property (nonatomic, retain) UILabel *titleLabel;
+//@property (nonatomic, retain) UILabel *cityNameLabel;
+//@property (nonatomic, retain) UILabel *startTimeLabel;
+//@property (nonatomic, retain) UILabel *endTimeLabel;
+//@property (nonatomic, retain) UILabel *payTypeNameLabel;
+//@property (nonatomic, retain) UILabel *payFeeLabel;
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        
+    }
+    return self;
+}
+
+@end
+
+@implementation UPDetailPeopleInfoCell
+//@property (nonatomic, retain) UIButton *infoButton;
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        
+    }
+    return self;
+}
+
+@end
+
+@implementation UPDetailExtraInfoCell
+//@property (nonatomic, retain) UILabel *placeLabel;
+//@property (nonatomic, retain) UILabel *shopNameLabel;
+//@property (nonatomic, retain) UILabel *activityTypeNameLabel;
+//@property (nonatomic, retain) UILabel *clothTypeNameLabel;
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        
+    }
+    return self;
+}
+
+@end
+
+@implementation UPDetailButtonCell
+//@property (nonatomic, retain) UIButton *button;
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        
+    }
+    return self;
+}
+
+@end
+
+
 #define LabelHeight 17
 #define AlertTagEdit    0
 #define AlertTagCancel  1

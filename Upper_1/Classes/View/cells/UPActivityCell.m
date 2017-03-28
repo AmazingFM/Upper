@@ -980,7 +980,7 @@
     
     offsetx += tmpWidth-8;
     _timeBtn.frame = CGRectMake(offsetx, offsety, tmpWidth, 60-_actDesc.height);
-    NSString *start_time = [UPTools dateStringTransform:itemData.start_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy.MM.dd"];
+    NSString *start_time = [UPTools dateStringTransform:itemData.begin_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy.MM.dd"];
     [_timeBtn setTitle:start_time forState:UIControlStateNormal];
     
     offsetx += tmpWidth+2;
@@ -988,6 +988,10 @@
     BaseType *baseType = [[UPConfig sharedInstance] getPayTypeByID:payTypeID];
     
     NSString *payName = baseType.name;
+    if ([payTypeID intValue]==0) {
+        payName = itemData.activity_fee;
+    }
+    
     if (payName.length!=0) {
         [_payBtn setTitle:payName forState:UIControlStateNormal];
         _payBtn.frame = CGRectMake(offsetx, offsety, width-offsetx, 60-_actDesc.height);
@@ -1134,6 +1138,7 @@
                 switch ([actStatusID intValue]) {
                         
                     case 0:
+                        
                     case 1:
                     case 2:
                     case 3:

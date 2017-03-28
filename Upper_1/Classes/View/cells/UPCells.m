@@ -873,6 +873,7 @@
     
     self.textV.frame = CGRectMake(kUPCellHBorder, kUPCellVBorder, cellItem.cellWidth-2*kUPCellHBorder, cellItem.cellHeight-2*kUPCellVBorder);
     self.textV.placeholder = cellItem.placeholder;
+//    self.textV.text = cellItem.fieldText;
 }
 
 #pragma mark UITextViewDelegate

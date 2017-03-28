@@ -8,7 +8,8 @@
 
 #import "UPBaseViewController.h"
 #import "ActivityData.h"
-#import "UPCellItems.h"
+#import "UPCells.h"
+#import "UIImageView+WebCache.h"
 
 typedef NS_ENUM(NSInteger, DetailBtnType) {
 //    DetailBtnTypeLove,
@@ -35,6 +36,73 @@ typedef NS_ENUM(NSInteger, SourceType) {
     SourceTypeTaFaqi,
     SourceTypeTaCanyu
 };
+
+@interface UPDetailImageCellItem : UPBaseCellItem
+@property (nonatomic, retain) NSString *imageUrl;
+@property (nonatomic, retain) NSString *imageDefault;
+@property (nonatomic, retain) NSString *userIconUrl;
+@property (nonatomic, retain) NSString *userIconDefault;
+@property (nonatomic, retain) NSString *userName;
+@end
+
+@interface UPDetailTitleInfoCellItem : UPBaseCellItem
+@property (nonatomic, retain) NSString *title;
+@property (nonatomic, retain) NSString *cityName;
+@property (nonatomic, retain) NSString *startTime;
+@property (nonatomic, retain) NSString *endTime;
+@property (nonatomic, retain) NSString *payTypeName;
+@property (nonatomic, retain) NSString *payFee;
+@end
+
+@interface UPDetailPeopleInfoCellItem : UPBaseCellItem
+@property (nonatomic, retain) NSString *currentNum;
+@property (nonatomic, retain) NSString *totalNum;
+@property (nonatomic, retain) NSMutableArray *userIconUrlList;
+@end
+
+@interface UPDetailExtraInfoCellItem : UPBaseCellItem
+@property (nonatomic, retain) NSString *place;
+@property (nonatomic, retain) NSString *shopName;
+@property (nonatomic, retain) NSString *activityTypeName;
+@property (nonatomic, retain) NSString *clothTypeName;
+@end
+
+@interface UPDetailButtonCellItem : UPBaseCellItem
+@property (nonatomic, retain) NSString *title;
+@end
+
+//------cell
+@interface UPDetailImageCell : UPBaseCell
+@property (nonatomic, retain) UIImageView *activityImage;
+@property (nonatomic, retain) UIImageView *userIconImage;
+@property (nonatomic, retain) UILabel *userNameLabel;
+@end
+
+
+@interface UPDetailTitleInfoCell : UPBaseCell
+@property (nonatomic, retain) UILabel *titleLabel;
+@property (nonatomic, retain) UILabel *cityNameLabel;
+@property (nonatomic, retain) UILabel *startTimeLabel;
+@property (nonatomic, retain) UILabel *endTimeLabel;
+@property (nonatomic, retain) UILabel *payTypeNameLabel;
+@property (nonatomic, retain) UILabel *payFeeLabel;
+@end
+
+@interface UPDetailPeopleInfoCell : UPBaseCell
+@property (nonatomic, retain) UIButton *infoButton;
+@end
+
+@interface UPDetailExtraInfoCell : UPBaseCell
+@property (nonatomic, retain) UILabel *placeLabel;
+@property (nonatomic, retain) UILabel *shopNameLabel;
+@property (nonatomic, retain) UILabel *activityTypeNameLabel;
+@property (nonatomic, retain) UILabel *clothTypeNameLabel;
+@end
+
+@interface UPDetailButtonCell : UPBaseCell
+@property (nonatomic, retain) UIButton *button;
+@end
+
 
 @interface UpActDetailController : UPBaseViewController
 

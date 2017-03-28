@@ -8,6 +8,11 @@
 
 #import "UPBaseViewController.h"
 
+typedef NS_ENUM(NSInteger, ActOperType) {
+    ActOperTypeLaunch,
+    ActOperTypeEdit
+};
+
 @class CityInfo;
 @class ActivityData;
 @protocol CitySelectDelegate <NSObject>
@@ -20,5 +25,7 @@
 @end
 
 @interface NewLaunchActivityController : UPBaseViewController <CitySelectDelegate>
+
+@property (nonatomic) ActOperType type;
 @property (nonatomic, retain) ActivityData *actData;
 @end

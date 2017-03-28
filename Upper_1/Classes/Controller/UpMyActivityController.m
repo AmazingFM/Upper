@@ -54,7 +54,7 @@
     
     NSArray *segmentedData = [[NSArray alloc]initWithObjects:@"我发起的",@"我参与的", nil];
     UISegmentedControl *segmentedControl = [[UISegmentedControl alloc]initWithItems:segmentedData];
-    segmentedControl.frame = CGRectMake(0, 0, 25, 25);
+    segmentedControl.frame = CGRectMake(0, 0, 30, 30);
     segmentedControl.layer.cornerRadius = 5.f;
     segmentedControl.layer.masksToBounds = YES;
     /*
