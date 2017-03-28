@@ -109,6 +109,7 @@ typedef NS_ENUM(NSInteger, SourceType) {
 @interface UpActDetailController : UPBaseViewController
 
 @property (nonatomic, retain) ActivityData *actData;
+@property (nonatomic, retain) ActivityData *detailActData;
 @property (nonatomic) UPItemStyle style;
 @property (nonatomic) SourceType sourceType;
 @end

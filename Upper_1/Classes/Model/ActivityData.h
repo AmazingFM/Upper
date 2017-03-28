@@ -47,10 +47,12 @@
 @property (nonatomic, copy) NSString *activity_place;
 @property (nonatomic, copy) NSString *activity_place_code;
 @property (nonatomic, copy) NSString *activity_status;
+
 @property (nonatomic, copy) NSString *start_time;
 @property (nonatomic, copy) NSString *create_time;
 @property (nonatomic, copy) NSString *begin_time;
 @property (nonatomic, copy) NSString *end_time;
+
 @property (nonatomic, copy) NSString *city;
 @property (nonatomic, copy) NSString *city_code;
 @property (nonatomic, copy) NSString *clothes_need;
@@ -64,4 +66,12 @@
 @property (nonatomic, copy) NSString *town;
 @property (nonatomic, copy) NSString *town_code;
 @property (nonatomic, copy) NSString *nick_name;
+
+//详细信息
+@property (nonatomic, copy) NSString *activity_type;
+@property (nonatomic, copy) NSString *fmale_low;
+@property (nonatomic, copy) NSString *fmale_part_count;
+@property (nonatomic, copy) NSString *join_status;
+@property (nonatomic, copy) NSString *limit_low;
+@property (nonatomic, copy) NSString *user_id;
 @end
