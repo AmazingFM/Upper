@@ -44,6 +44,7 @@
 //------cell
 @interface UPDetailImageCell()
 {
+    UIView *backView;
     UIView *userBackView;
 }
 
@@ -55,6 +56,9 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        backView = [[UIView alloc] initWithFrame:CGRectZero];
+        backView.backgroundColor = [UIColor whiteColor];
+        
         self.activityImage = [[UIImageView alloc] initWithFrame:CGRectZero];
         self.activityImage.contentMode = UIViewContentModeScaleAspectFit;
         self.activityImage.backgroundColor = [UIColor clearColor];
@@ -73,8 +77,9 @@
         self.userNameLabel.textColor = [UIColor blackColor];
         self.userNameLabel.textAlignment = NSTextAlignmentLeft;
 
-        [self addSubview:self.activityImage];
-        [self addSubview:userBackView];
+        [self addSubview: backView];
+        [backView addSubview:self.activityImage];
+        [backView addSubview:userBackView];
         [userBackView addSubview:self.userIconImage];
         [userBackView addSubview:self.userNameLabel];
     }
@@ -86,53 +91,225 @@
     [super setItem:item];
     UPDetailImageCellItem *cellItem = (UPDetailImageCellItem *)item;
     
-    CGFloat offsetx = 5;
-    CGFloat offsety = 5;
+    CGFloat offsetx = 10;
+    CGFloat offsety = 10;
+    
+    backView.frame = CGRectMake(offsetx, offsety, cellItem.cellWidth-2*offsetx, cellItem.cellHeight);
+    CGFloat backWidth = backView.width;
+    CGFloat backHeight = backView.height;
+    
     [self.imageView sd_setImageWithURL:[NSURL URLWithString:cellItem.imageUrl] placeholderImage:[UIImage imageNamed:cellItem.imageDefault]];
-    self.imageView.frame = CGRectMake(offsetx, offsety, cellItem.cellWidth, cellItem.cellHeight-2*5);
+    self.imageView.frame = CGRectMake(0, 0, backWidth, backHeight-15);
     
     float width =(ScreenWidth==320?100:125);
-    userBackView.frame = CGRectMake(cellItem.cellWidth-15, cellItem.cellHeight-30, width, 30);
+    userBackView.frame = CGRectMake(backWidth-20-width, backHeight-30, width, 30);
     
     [self.userIconImage sd_setImageWithURL:[NSURL URLWithString:cellItem.userIconUrl] placeholderImage:[UIImage imageNamed:cellItem.userIconDefault]];
     self.userIconImage.frame = CGRectMake(5, 2, 26, 26);
+    self.userIconImage.layer.cornerRadius = 13;
+    self.userIconImage.layer.masksToBounds = YES;
+    
     self.userNameLabel.frame = CGRectMake(10+26, 0, width-(36), 30);
     self.userNameLabel.text = cellItem.userName;
+    
+    //(ScreenWidth-2*10)*3/4+10+15
 }
 @end
 
-
+@interface UPDetailTitleInfoCell()
+{
+    UIView *backView;
+    UIView *infoBackView;
+}
+@end
 @implementation UPDetailTitleInfoCell
-//@property (nonatomic, retain) UILabel *titleLabel;
-//@property (nonatomic, retain) UILabel *cityNameLabel;
-//@property (nonatomic, retain) UILabel *startTimeLabel;
-//@property (nonatomic, retain) UILabel *endTimeLabel;
-//@property (nonatomic, retain) UILabel *payTypeNameLabel;
-//@property (nonatomic, retain) UILabel *payFeeLabel;
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        backView = [[UIView alloc] initWithFrame:CGRectZero];
+        backView.backgroundColor = [UIColor whiteColor];
         
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.titleLabel.font = kUPThemeSmallFont;
+        self.titleLabel.backgroundColor = [UIColor clearColor];
+        self.titleLabel.textAlignment = NSTextAlignmentLeft;
+        self.titleLabel.textColor = RGBCOLOR(0, 0, 0);
+        
+        infoBackView = [[UIView alloc] initWithFrame:CGRectZero];
+        infoBackView.backgroundColor = RGBCOLOR(240, 240, 240);
+        
+        self.cityNameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.cityNameLabel.font = kUPThemeSmallFont;
+        self.cityNameLabel.backgroundColor = [UIColor clearColor];
+        self.cityNameLabel.textAlignment = NSTextAlignmentLeft;
+        self.cityNameLabel.textColor = RGBCOLOR(160, 160, 160);
+        self.cityNameLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        
+        self.startTimeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.startTimeLabel.font = kUPThemeSmallFont;
+        self.startTimeLabel.backgroundColor = [UIColor clearColor];
+        self.startTimeLabel.textAlignment = NSTextAlignmentLeft;
+        self.startTimeLabel.textColor = RGBCOLOR(160, 160, 160);
+        
+        self.endTimeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.endTimeLabel.font = kUPThemeSmallFont;
+        self.endTimeLabel.backgroundColor = [UIColor clearColor];
+        self.endTimeLabel.textAlignment = NSTextAlignmentLeft;
+        self.endTimeLabel.textColor = RGBCOLOR(160, 160, 160);
+        
+        self.payTypeNameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.payTypeNameLabel.font = kUPThemeSmallFont;
+        self.payTypeNameLabel.backgroundColor = [UIColor clearColor];
+        self.payTypeNameLabel.textAlignment = NSTextAlignmentLeft;
+        self.payTypeNameLabel.textColor = RGBCOLOR(160, 160, 160);
+        
+        self.payFeeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.payFeeLabel.font = kUPThemeSmallFont;
+        self.payFeeLabel.backgroundColor = [UIColor clearColor];
+        self.payFeeLabel.textAlignment = NSTextAlignmentLeft;
+        self.payFeeLabel.textColor = RGBCOLOR(160, 160, 160);
+        
+        [self addSubview:backView];
+        [backView addSubview:self.titleLabel];
+        [backView addSubview:infoBackView];
+        [infoBackView addSubview:self.cityNameLabel];
+        [infoBackView addSubview:self.startTimeLabel];
+        [infoBackView addSubview:self.endTimeLabel];
+        [infoBackView addSubview:self.payTypeNameLabel];
+        [infoBackView addSubview:self.payFeeLabel];
     }
     return self;
 }
 
+- (void)setItem:(UPBaseCellItem *)item
+{
+    [super setItem:item];
+    UPDetailTitleInfoCellItem *cellItem = (UPDetailTitleInfoCellItem*)item;
+    
+    CGFloat offsetx = 10;
+    CGFloat offsety = 5;
+    
+    backView.frame = CGRectMake(offsetx, 0, cellItem.cellWidth-2*offsetx, cellItem.cellHeight);
+    CGFloat backWidth = backView.width;
+
+    self.titleLabel.frame = CGRectMake(offsetx, offsety, backWidth-offsetx, 30);
+    self.titleLabel.text = cellItem.title;
+    
+    offsety+=30;
+    CGSize size = SizeWithFont(@"活动时间", kUPThemeMiniFont);
+    CGFloat backViewWidth = backWidth-2*offsetx;
+    CGFloat backViewHeight = 5*4+size.height*3;
+    infoBackView.frame = CGRectMake(offsetx, offsety, backViewWidth, backViewHeight);
+    
+    offsety=5;
+    self.cityNameLabel.frame = CGRectMake(offsetx, offsety, backViewWidth/3, size.height);
+    self.cityNameLabel.text = cellItem.cityName;
+    
+    offsetx += self.cityNameLabel.width;
+    self.startTimeLabel.frame = CGRectMake(offsetx+5, offsety, backViewWidth-offsetx, size.height);
+    self.startTimeLabel.text = cellItem.startTime;
+
+    offsetx = 10;
+    offsety+=5+self.cityNameLabel.height;
+    self.endTimeLabel.frame = CGRectMake(offsetx, offsety, backViewWidth-offsetx, size.height);
+    self.endTimeLabel.text = [NSString stringWithFormat:@"报名截止:%@", cellItem.endTime];
+    
+    offsety+=5+self.endTimeLabel.height;
+    self.payTypeNameLabel.frame = CGRectMake(offsetx, offsety, backViewWidth/2, size.height);
+    self.payTypeNameLabel.text = [NSString stringWithFormat:@"付费方式:%@", cellItem.payTypeName];
+    
+    if (cellItem.payFee.length>0) {
+        offsetx +=backViewWidth/2+5;
+        self.payFeeLabel.frame = CGRectMake(offsetx, offsety, backViewWidth-offsetx, size.height);
+        self.payFeeLabel.text = [NSString stringWithFormat:@"预估费用:%@/人", cellItem.payFee];
+
+    }
+    
+    //5+30+5*4+size.height*3+5
+}
 @end
 
+#define kUPDetailPeopleInfoCellTag 100
+@interface UPDetailPeopleInfoCell()
+{
+    UIView *backView;
+}
+
+@end
 @implementation UPDetailPeopleInfoCell
 //@property (nonatomic, retain) UIButton *infoButton;
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        backView = [[UIView alloc] initWithFrame:CGRectZero];
+        backView.backgroundColor = [UIColor whiteColor];
         
+        self.infoButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.infoButton.titleLabel.font = kUPThemeMiniFont;
+        self.infoButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        self.infoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        self.infoButton.backgroundColor = [UIColor clearColor];
+        [self.infoButton setTitleColor:[UPTools colorWithHex:0xaaaaaa] forState:UIControlStateNormal];
+        [self.infoButton setImage:[UIImage imageNamed:@"icon-address"] forState:UIControlStateNormal];
+        
+        [self addSubview:backView];
+        [backView addSubview:self.infoButton];
     }
     return self;
 }
 
+- (void)setItem:(UPBaseCellItem *)item
+{
+    [super setItem:item];
+    UPDetailPeopleInfoCellItem *cellItem = (UPDetailPeopleInfoCellItem *)item;
+    
+    
+    CGFloat offsetx = 10;
+    CGFloat offsety = 5;
+    
+    backView.frame = CGRectMake(offsetx, 0, cellItem.cellWidth-2*offsetx, cellItem.cellHeight);
+    CGFloat backWidth = backView.width;
+    CGFloat backHeight = 20;
+    if (cellItem.userIconUrlList.count>0){
+        backHeight += 30;
+    }
+
+    
+    self.infoButton.frame = CGRectMake(offsetx, offsety, backWidth-2*offsetx, 20);
+    NSString *btnStr = [NSString stringWithFormat:@"%@/%@", cellItem.currentNum, cellItem.totalNum];
+    [self.infoButton setTitle:btnStr forState:UIControlStateNormal];
+    
+    offsety = 30;
+    
+    if (cellItem.userIconUrlList.count>0) {
+        
+        for (int i=0; i<cellItem.userIconUrlList.count; i++) {
+            UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(offsetx, 2, 26, 26)];
+            icon.backgroundColor = [UIColor grayColor];
+            icon.layer.cornerRadius = 13;
+            icon.layer.masksToBounds = YES;
+            icon.tag = i+kUPDetailPeopleInfoCellTag;
+            [icon sd_setImageWithURL:nil placeholderImage:nil];
+            [backView addSubview:icon];
+            
+            offsetx += 35;
+        }
+    }
+    
+    //30+30+5
+}
+
 @end
 
+@interface UPDetailExtraInfoCell()
+{
+    UIView *backView;
+    UIView *infoBackView;
+}
+
+@end
 @implementation UPDetailExtraInfoCell
 //@property (nonatomic, retain) UILabel *placeLabel;
 //@property (nonatomic, retain) UILabel *shopNameLabel;
@@ -142,9 +319,99 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        backView = [[UIView alloc] initWithFrame:CGRectZero];
+        backView.backgroundColor = [UIColor whiteColor];
         
+        self.descLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.descLabel.font = kUPThemeSmallFont;
+        self.descLabel.backgroundColor = [UIColor clearColor];
+        self.descLabel.textAlignment = NSTextAlignmentLeft;
+        self.descLabel.numberOfLines = 0;
+        self.descLabel.textColor = RGBCOLOR(0, 0, 0);
+        
+        infoBackView = [[UIView alloc] initWithFrame:CGRectZero];
+        infoBackView.backgroundColor = RGBCOLOR(240, 240, 240);
+        
+        self.placeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.placeLabel.font = kUPThemeSmallFont;
+        self.placeLabel.backgroundColor = [UIColor clearColor];
+        self.placeLabel.textAlignment = NSTextAlignmentLeft;
+        self.placeLabel.textColor = RGBCOLOR(160, 160, 160);
+        self.placeLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        
+        self.shopNameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.shopNameLabel.font = kUPThemeSmallFont;
+        self.shopNameLabel.backgroundColor = [UIColor clearColor];
+        self.shopNameLabel.textAlignment = NSTextAlignmentLeft;
+        self.shopNameLabel.textColor = RGBCOLOR(160, 160, 160);
+        
+        self.activityTypeNameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.activityTypeNameLabel.font = kUPThemeSmallFont;
+        self.activityTypeNameLabel.backgroundColor = [UIColor clearColor];
+        self.activityTypeNameLabel.textAlignment = NSTextAlignmentLeft;
+        self.activityTypeNameLabel.textColor = RGBCOLOR(160, 160, 160);
+        
+        self.clothTypeNameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.clothTypeNameLabel.font = kUPThemeSmallFont;
+        self.clothTypeNameLabel.backgroundColor = [UIColor clearColor];
+        self.clothTypeNameLabel.textAlignment = NSTextAlignmentLeft;
+        self.clothTypeNameLabel.textColor = RGBCOLOR(160, 160, 160);
+        
+        [self addSubview:backView];
+        [backView addSubview:self.descLabel];
+        [backView addSubview:infoBackView];
+        [infoBackView addSubview:self.placeLabel];
+        [infoBackView addSubview:self.shopNameLabel];
+        [infoBackView addSubview:self.activityTypeNameLabel];
+        [infoBackView addSubview:self.clothTypeNameLabel];
     }
     return self;
+}
+
+- (void)setItem:(UPBaseCellItem *)item
+{
+    [super setItem:item];
+    UPDetailExtraInfoCellItem *cellItem = (UPDetailExtraInfoCellItem *)item;
+    
+    CGFloat offsetx = 10;
+    CGFloat offsety = 5;
+    
+    backView.frame = CGRectMake(offsetx, 0, cellItem.cellWidth-2*offsetx, cellItem.cellHeight);
+    CGFloat backWidth = backView.width;
+
+    CGSize size;
+    if (cellItem.desc.length==0) {
+        cellItem.desc = @"该活动没有描述";
+    }
+    size = SizeWithFont(cellItem.desc, kUPThemeSmallFont);
+    
+    self.descLabel.frame = CGRectMake(offsetx, offsety, backWidth-2*offsetx, size.height);
+    self.descLabel.text = cellItem.desc;
+    
+    offsety+=self.descLabel.height;
+    size = SizeWithFont(@"商户名称", kUPThemeMiniFont);
+    CGFloat backViewWidth = backWidth-2*offsetx;
+    CGFloat backViewHeight = 5*4+size.height*3;
+    infoBackView.frame = CGRectMake(offsetx, offsety, backViewWidth, backViewHeight);
+    
+    offsety=5;
+    self.placeLabel.frame = CGRectMake(offsetx, offsety, backViewWidth-2*offsetx, size.height);
+    self.placeLabel.text = [NSString stringWithFormat:@"地址:%@", cellItem.place];
+    
+    offsety+=5+self.placeLabel.height;
+    self.shopNameLabel.frame = CGRectMake(offsetx, offsety, backViewWidth-2*offsetx, size.height);
+    self.shopNameLabel.text = [NSString stringWithFormat:@"商户名称:%@", cellItem.shopName];
+    
+    offsety+=5+self.shopNameLabel.height;
+    self.activityTypeNameLabel.frame = CGRectMake(offsetx, offsety, backViewWidth/2, size.height);
+    self.activityTypeNameLabel.text = [NSString stringWithFormat:@"类型:%@", cellItem.activityTypeName];
+    
+    
+    offsetx +=backViewWidth/2+5;
+        self.clothTypeNameLabel.frame = CGRectMake(offsetx, offsety, backViewWidth-offsetx, size.height);
+        self.clothTypeNameLabel.text = [NSString stringWithFormat:@"着装风格:%@", cellItem.clothTypeName];
+
+    ////5+(desc.height)+5*4+size.height*3+5
 }
 
 @end
@@ -155,9 +422,22 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        
+        self.button = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.button.titleLabel.font = kUPThemeSmallFont;
+        self.button.backgroundColor = kUPThemeMainColor;
+        [self.button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
     return self;
+}
+
+- (void)setItem:(UPBaseCellItem *)item
+{
+    [super setItem:item];
+    UPDetailButtonCellItem *cellItem = (UPDetailButtonCellItem *)item;
+    
+    CGFloat offsetx = 10;
+    self.button.frame = CGRectMake(offsetx, 0, cellItem.cellWidth-2*offsetx, cellItem.cellHeight);
+    [self.button setTitle:cellItem.title forState:UIControlStateNormal];
 }
 
 @end
@@ -170,25 +450,27 @@
 @interface UpActDetailController () <UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, UPFriendListDelegate>
 {
     UITableView *_tableView;
-    int loveCount;
     
-    UIView *_actContentV;
-    UILabel *_titleLabel;
-    UILabel *_contentLabel;
-    
-    UIView *_bottomView;
-    UIButton *_loveB;
-    UIButton *_bubbleB;
-    
-    UIButton *_joinB;
-    UIButton *_quitB;
-    
-    NSArray<UIButton *> *btnArr;
-    
-    NSArray *_cellIdArr;
+    NSMutableArray *_itemList;
+//    int loveCount;
+//    
+//    UIView *_actContentV;
+//    UILabel *_titleLabel;
+//    UILabel *_contentLabel;
+//    
+//    UIView *_bottomView;
+//    UIButton *_loveB;
+//    UIButton *_bubbleB;
+//    
+//    UIButton *_joinB;
+//    UIButton *_quitB;
+//    
+//    NSArray<UIButton *> *btnArr;
+//    
+//    NSArray *_cellIdArr;
 }
 
-@property (nonatomic, retain) UIScrollView *activitiesScro;
+//@property (nonatomic, retain) UIScrollView *activitiesScro;
 
 - (void)leftClick;
 
@@ -199,42 +481,64 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    loveCount = 3;
+    _itemList = [NSMutableArray new];
     
     self.title = @"活动详情";
 
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,FirstLabelHeight,ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.showsVerticalScrollIndicator = NO;
     _tableView.showsHorizontalScrollIndicator = NO;
     _tableView.tableFooterView = [[UIView alloc] init];
     
-    if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-        [_tableView setSeparatorInset:UIEdgeInsetsMake(0,0,0,0)];
-    }
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >=80000
-    if ([_tableView respondsToSelector:@selector(setLayoutMargins:)]) {
-        [_tableView setLayoutMargins:UIEdgeInsetsMake(0, 0, 0, 0)];
-    }
-#endif
+
     [self.view addSubview:_tableView];
     
-    //:@"策划人" ,@"活动时间", @"活动地点", @"人数上限", @"活动类型", @"报名状态",
-    _cellIdArr = @[@"image", @"actTitle", @"actDesc", @"cellID", @"cellID", @"cellID", @"cellID", @"cellID", @"cellID", @"submit"];
+    [self getActivityDetailInfo:self.actData.ID];
     
-    if (self.sourceType==SourceTypeWoFaqi) {
-        UIButton *addFriendButton=[UIButton buttonWithType:UIButtonTypeCustom];
+//    if (self.sourceType==SourceTypeWoFaqi) {
+//        UIButton *addFriendButton=[UIButton buttonWithType:UIButtonTypeCustom];
+//        
+//        addFriendButton.frame=CGRectMake(0, 0, 35, 35);
+//        UIImage *image = [UIImage imageNamed:@"add"];
+//        UIImage *stretchableButtonImage = [image resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
+//        [addFriendButton setBackgroundImage:stretchableButtonImage forState:UIControlStateNormal];
+//        [addFriendButton addTarget:self action:@selector(inviteBtn:) forControlEvents:UIControlEventTouchUpInside];
+//        
+//        self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithCustomView:addFriendButton];
+//    }
+}
+
+- (void)getActivityDetailInfo:(NSString *)activityId
+{
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    [params setObject:@"ActivityInfo"forKey:@"a"];
+    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
+    [params setObject:activityId forKey:@"activity_id"];
+    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
+    
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id json) {
         
-        addFriendButton.frame=CGRectMake(0, 0, 35, 35);
-        UIImage *image = [UIImage imageNamed:@"add"];
-        UIImage *stretchableButtonImage = [image resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
-        [addFriendButton setBackgroundImage:stretchableButtonImage forState:UIControlStateNormal];
-        [addFriendButton addTarget:self action:@selector(inviteBtn:) forControlEvents:UIControlEventTouchUpInside];
+        NSDictionary *dict = (NSDictionary *)json;
+        NSString *resp_id = dict[@"resp_id"];
+        if ([resp_id intValue]==0) {
+            NSString *resp_desc = dict[@"resp_desc"];
+
+        }
+        else
+        {
+            NSString *resp_desc = dict[@"resp_desc"];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"💔，很遗憾" message:resp_desc delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
+            
+        }
         
-        self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithCustomView:addFriendButton];
-    }
+    } failure:^(id error) {
+        NSLog(@"%@",error);
+        
+    }];
 }
 
 - (void)inviteBtn:(UIButton *)sender

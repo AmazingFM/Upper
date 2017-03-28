@@ -454,7 +454,6 @@ static CGFloat const FixRatio = 4/3.0;
 
 - (void)tap:(UITapGestureRecognizer *)gestureReco
 {
-//    [self resignFirstResponder];
     [self.view endEditing:YES];
 }
 

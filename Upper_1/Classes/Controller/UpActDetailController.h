@@ -61,6 +61,7 @@ typedef NS_ENUM(NSInteger, SourceType) {
 @end
 
 @interface UPDetailExtraInfoCellItem : UPBaseCellItem
+@property (nonatomic, retain) NSString *desc;
 @property (nonatomic, retain) NSString *place;
 @property (nonatomic, retain) NSString *shopName;
 @property (nonatomic, retain) NSString *activityTypeName;
@@ -93,6 +94,7 @@ typedef NS_ENUM(NSInteger, SourceType) {
 @end
 
 @interface UPDetailExtraInfoCell : UPBaseCell
+@property (nonatomic, retain) UILabel *descLabel;
 @property (nonatomic, retain) UILabel *placeLabel;
 @property (nonatomic, retain) UILabel *shopNameLabel;
 @property (nonatomic, retain) UILabel *activityTypeNameLabel;
