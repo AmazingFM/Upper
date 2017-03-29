@@ -61,7 +61,7 @@
         backView.backgroundColor = [UIColor whiteColor];
         
         self.activityImage = [[UIImageView alloc] initWithFrame:CGRectZero];
-        self.activityImage.contentMode = UIViewContentModeScaleAspectFit;
+        self.activityImage.contentMode = UIViewContentModeScaleToFill;
         self.activityImage.backgroundColor = [UIColor clearColor];
         self.activityImage.layer.cornerRadius = 5.f;
         self.activityImage.layer.masksToBounds = YES;
@@ -70,6 +70,8 @@
         userBackView.backgroundColor = [UIColor whiteColor];
         userBackView.layer.borderColor = [UIColor blackColor].CGColor;
         userBackView.layer.borderWidth = 0.6;
+        userBackView.layer.cornerRadius = 5.f;
+        
         
         self.userIconImage = [[UIImageView alloc] initWithFrame:CGRectZero];
         self.userIconImage.contentMode = UIViewContentModeScaleAspectFit;
@@ -102,10 +104,10 @@
     CGFloat backHeight = backView.height;
     
     [self.activityImage sd_setImageWithURL:[NSURL URLWithString:cellItem.imageUrl] placeholderImage:[UIImage imageNamed:cellItem.imageDefault]];
-    self.activityImage.frame = CGRectMake(0, 0, backWidth, backHeight-15);
+    self.activityImage.frame = CGRectMake(0, 0, backWidth, backHeight-5);
     
     float width =(ScreenWidth==320?100:125);
-    userBackView.frame = CGRectMake(backWidth-20-width, self.activityImage.height-15, width, 30);
+    userBackView.frame = CGRectMake(backWidth-20-width, self.activityImage.height-25, width, 30);
     
     [self.userIconImage sd_setImageWithURL:[NSURL URLWithString:cellItem.userIconUrl] placeholderImage:[UIImage imageNamed:cellItem.userIconDefault]];
     self.userIconImage.frame = CGRectMake(5, 2, 26, 26);
@@ -115,7 +117,7 @@
     self.userNameLabel.frame = CGRectMake(10+26, 0, width-(36), 30);
     self.userNameLabel.text = cellItem.userName;
     
-    //(ScreenWidth-2*10)*3/4+10+15
+    //(ScreenWidth-2*10)*3/4+10+5
 }
 @end
 
@@ -394,7 +396,7 @@
     self.descLabel.frame = CGRectMake(offsetx, offsety, backWidth-2*offsetx, size.height);
     self.descLabel.text = cellItem.desc;
     
-    offsety+=self.descLabel.height;
+    offsety+=self.descLabel.height+5;
     size = SizeWithFont(@"商户名称", kUPThemeMinFont);
     CGFloat backViewWidth = backWidth-2*offsetx;
     CGFloat backViewHeight = 5*4+size.height*3;
@@ -417,7 +419,7 @@
         self.clothTypeNameLabel.frame = CGRectMake(offsetx, offsety, backViewWidth-offsetx, size.height);
         self.clothTypeNameLabel.text = [NSString stringWithFormat:@"着装风格:%@", cellItem.clothTypeName];
 
-    ////5+(desc.height)+5*4+size.height*3+5
+    ////5+(desc.height)+5+5*4+size.height*3+5
 }
 
 @end
@@ -456,7 +458,7 @@
 @interface UpActDetailController () <UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, UPFriendListDelegate>
 {
     UITableView *_tableView;
-    
+    UIButton *_submitBtn;
     NSMutableArray *_itemList;
 //    int loveCount;
 //    
@@ -491,7 +493,7 @@
     
     self.title = @"活动详情";
 
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,FirstLabelHeight,ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,FirstLabelHeight,ScreenWidth, ScreenHeight-FirstLabelHeight-44) style:UITableViewStylePlain];
     _tableView.backgroundColor = RGBCOLOR(240, 240, 240);
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
@@ -501,6 +503,14 @@
     _tableView.tableFooterView = [[UIView alloc] init];
     
     [self.view addSubview:_tableView];
+    
+    _submitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _submitBtn.frame = CGRectMake(0, ScreenHeight-44, ScreenWidth, 44);
+    _submitBtn.backgroundColor = kUPThemeMainColor;
+    [_submitBtn setTitle:@"我要报名" forState:UIControlStateNormal];
+    _submitBtn.titleLabel.font = kUPThemeSmallFont;
+    [_submitBtn addTarget:self action:@selector(joinActivity) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_submitBtn];
     
     [self getActivityDetailInfo:self.actData.ID];
     
@@ -528,14 +538,14 @@
         imageItem.userName = self.detailActData.nick_name;
         imageItem.cellWidth = ScreenWidth;
         
-        imageItem.cellHeight = (int)((ScreenWidth-2*10)*3/4+10+15)+1;
+        imageItem.cellHeight = (int)((ScreenWidth-2*10)*3/4+10+5)+1;
 
         
         UPDetailTitleInfoCellItem *infoItem = [[UPDetailTitleInfoCellItem alloc] init];
         infoItem.title = self.detailActData.activity_name;
         infoItem.cityName = self.detailActData.city;
-        infoItem.startTime = self.detailActData.start_time;
-        infoItem.endTime = self.detailActData.end_time;
+        infoItem.startTime = [UPTools dateTransform:self.detailActData.start_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy.MM.dd"];
+        infoItem.endTime = [UPTools dateTransform:self.detailActData.end_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy.MM.dd"];
         infoItem.payTypeName = [[UPConfig sharedInstance] getPayTypeByID:self.detailActData.is_prepaid].name;
         infoItem.payFee = self.detailActData.activity_fee;
         infoItem.cellWidth = ScreenWidth;
@@ -552,7 +562,8 @@
         UPDetailExtraInfoCellItem *extraItem = [[UPDetailExtraInfoCellItem alloc] init];
         extraItem.desc = self.detailActData.activity_desc;
         extraItem.place = self.detailActData.activity_place;
-        extraItem.shopName = [[UPConfig sharedInstance] getPlaceTypeByID:self.detailActData.activity_place_code].name;
+//        int actId = [self.detailActData.activity_place_code intValue]+1;
+        extraItem.shopName = self.detailActData.activity_place;//[[UPConfig sharedInstance] getPlaceTypeByID:[@(actId) stringValue]].name;
         extraItem.activityTypeName = [[UPConfig sharedInstance] getActivityTypeByID:self.detailActData.activity_class].name;
         extraItem.clothTypeName = [[UPConfig sharedInstance] getClothTypeByID:self.detailActData.clothes_need].name;
         extraItem.cellWidth = ScreenWidth;
@@ -564,7 +575,7 @@
         float height = size.height;
 
         size = SizeWithFont(@"商户名称", kUPThemeMinFont);
-        extraItem.cellHeight = (int)(5+height+5*4+size.height*3+5)+1;
+        extraItem.cellHeight = (int)(5+height+5+5*4+size.height*3+5)+1;
         
         [_itemList addObject:imageItem];
         [_itemList addObject:infoItem];
@@ -572,6 +583,9 @@
         [_itemList addObject:extraItem];
         
         [_tableView reloadData];
+        
+        NSString *btnTitle = [NSString stringWithFormat:@"活动还差%d人，我要参加", [self.detailActData.limit_count intValue]-[self.detailActData.part_count intValue]];
+        [_submitBtn setTitle:btnTitle forState:UIControlStateNormal];
     }
 }
 

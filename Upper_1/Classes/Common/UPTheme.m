@@ -38,7 +38,7 @@ UIButton* createSubmitButton(CGFloat fontSize)
 
 - (UIColor *)colorForTitle
 {
-    return [UIColor blackColor];
+    return [UIColor greenColor];
 }
 
 - (UIFont *)fontForCommon

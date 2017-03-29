@@ -44,22 +44,30 @@
 
 @implementation UPTitleCell
 
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _titleLabel.textAlignment = NSTextAlignmentLeft;
+        _titleLabel.font = kUPThemeMinFont;
+        _titleLabel.backgroundColor = [UIColor clearColor];
+        [self addSubview:_titleLabel];
+    }
+    return self;
+}
+
 - (void)setItem:(UPBaseCellItem *)item
 {
     [super setItem:item];
     if ([item isKindOfClass:[UPTitleCellItem class]]) {
         UPTitleCellItem *cellItem = (UPTitleCellItem *)item;
-        self.textLabel.text = cellItem.title;
-        if (cellItem.iconName&&cellItem.iconName.length>0) {
-            self.imageView.image = [UIImage imageNamed:cellItem.iconName];
-        }
+        _titleLabel.text = cellItem.title;
+        CGSize size = SizeWithFont(cellItem.title, kUPThemeMinFont);
+        _titleLabel.frame = CGRectMake(10, 0, size.width, cellItem.cellHeight);
+        _titleLabel.textColor = [UIColor colorWithWhite:0.667 alpha:0.7];
     }
     self.backgroundColor = [UIColor clearColor];
-}
-
-- (void)updateTheme
-{
-    _titleLabel.textColor = [UPTheme shared].colorForTitle;
 }
 
 @end
@@ -70,7 +78,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        
+        self.detailTextLabel.font = kUPThemeMinFont;
     }
     return self;
 }
@@ -156,7 +164,7 @@
     if(self){
         _comboBtn=[UIButton buttonWithType:UIButtonTypeCustom];
         [_comboBtn setTitleColor:RGBCOLOR(80,120,200) forState:UIControlStateNormal];
-        [_comboBtn setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
+        _comboBtn.titleLabel.font = kUPThemeMinFont;
         _comboBtn.contentHorizontalAlignment=UIControlContentHorizontalAlignmentLeft;
         _comboBtn.titleLabel.lineBreakMode=NSLineBreakByTruncatingTail;
         [_comboBtn addTarget:self action:@selector(showComboxList:) forControlEvents:UIControlEventTouchUpInside];
@@ -430,10 +438,13 @@
     self=[super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if(self){
         _button=[UIButton buttonWithType:UIButtonTypeCustom];
-        _button.layer.cornerRadius=kUPThemeCornerRadius;
-        _button.titleLabel.font = kUPThemeNormalFont;
         [_button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        
+        _imgView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _imgView.contentMode = UIViewContentModeScaleToFill;
+        
         [self addSubview:_button];
+        [self addSubview:_imgView];
     }
     return self;
 }
@@ -449,13 +460,15 @@
     if([item isKindOfClass:[UPButtonCellItem class]]){
         UPButtonCellItem* btnItem=(UPButtonCellItem*)item;
         if (btnItem.btnStyle==UPBtnStyleImage) {
-            [_button setBackgroundImage:btnItem.btnImage forState:UIControlStateNormal];
+            _imgView.frame = CGRectMake(0,0,item.cellWidth/5,item.cellWidth/5);
+            _imgView.center = CGPointMake(item.cellWidth/2, item.cellHeight/2);
+            _imgView.image = btnItem.btnImage;
+        } else {
+            [_button setTitle:btnItem.btnTitle forState:UIControlStateNormal];
         }
-        [_button setTitle:btnItem.btnTitle forState:UIControlStateNormal];
-        [_button setTitle:btnItem.btnTitle forState:UIControlStateHighlighted];
         _button.backgroundColor=btnItem.tintColor;
     }
-    _button.frame=CGRectMake(kUPCellHBorder,kUPCellVBorder,item.cellWidth-2*kUPCellHBorder,item.cellHeight-2*kUPCellVBorder);
+    _button.frame=CGRectMake(0,0,item.cellWidth,item.cellHeight);
     if(item.cellHeight==0){
         _button.hidden=YES;
     }else {
@@ -483,7 +496,7 @@
     if(self){
         _dateBtn=[UIButton buttonWithType:UIButtonTypeCustom];
         [_dateBtn setTitleColor:kUPThemeMainColor forState:UIControlStateNormal];
-        [_dateBtn setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
+        _dateBtn.titleLabel.font = kUPThemeMinFont;
         _dateBtn.contentHorizontalAlignment=UIControlContentHorizontalAlignmentLeft;
         [_dateBtn addTarget:self action:@selector(showDatePanel:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_dateBtn];
@@ -496,7 +509,6 @@
     if([item isKindOfClass:[UPDateCellItem class]]){
         UPDateCellItem* dateItem=(UPDateCellItem*)item;
         [_dateBtn setTitle:dateItem.date forState:UIControlStateNormal];
-        [_dateBtn setTitle:dateItem.date forState:UIControlStateHighlighted];
     }
     CGRect defaultFrame=UPCellRightWithWidth(item.cellWidth);
     _dateBtn.frame=defaultFrame;
@@ -707,6 +719,118 @@
 
 @end
 
+@interface UPOnlyFieldCell() <UITextFieldDelegate>
+
+@end
+
+@implementation UPOnlyFieldCell
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        if (g_nOSVersion>=7) {
+            _textField = [[UITextField alloc] initWithFrame:CGRectZero];
+        }
+        [_textField setKeyboardType:UIKeyboardTypeDefault];
+        _textField.textAlignment = NSTextAlignmentLeft;
+        _textField.font= kUPThemeSmallFont;
+        _textField.returnKeyType=UIReturnKeyDone;
+        [_textField setAutocorrectionType:UITextAutocorrectionTypeNo];
+        [_textField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+        
+        _textField.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
+        [_textField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
+        [_textField addTarget:self action:@selector(textFieldDone:) forControlEvents:UIControlEventEditingDidEndOnExit];
+        _textField.delegate=self;
+        [self addSubview:_textField];
+    }
+    return self;
+}
+
+-(void)setItem:(UPBaseCellItem *)item{
+    [super setItem:item];
+    UPOnlyFieldCellItem* fieldItem=(UPOnlyFieldCellItem*)item;
+    _textField.placeholder=fieldItem.placeholder;
+    if(![_textField.text isEqualToString:fieldItem.fieldText]||fieldItem.fieldText.length==0){
+        _textField.text=fieldItem.fieldText;
+    }
+    _textField.returnKeyType=UIReturnKeyDone;
+    
+    _textField.frame = CGRectMake(10, 0, fieldItem.cellWidth-20, fieldItem.cellHeight);
+
+    if(item.cellHeight==0){
+        _textField.hidden=YES;
+    }else {
+        _textField.hidden=NO;
+    }
+}
+
+//字符控制
+#pragma mark -
+#pragma mark UITextFieldDelegate
+
+-(void)textFieldDone:(UITextField*)textField{
+    [textField resignFirstResponder];
+}
+
+-(void)textFieldChanged:(UITextField*)textField
+{
+    UPFieldCellItem* fieldItem=(UPFieldCellItem*)self.item;
+    fieldItem.fieldText=textField.text;
+    if(self.delegate&&[self.delegate respondsToSelector:@selector(viewValueChanged:withIndexPath:)]){
+        [self.delegate viewValueChanged:_textField.text withIndexPath:fieldItem.indexPath];
+    }
+}
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)textEntered
+{
+//    unichar c = [textEntered characterAtIndex:[textEntered length]-1];
+//    if(c==0||c=='\n'){
+//        return YES;
+//    }
+//    UPFieldCellItem* fieldItem=(UPFieldCellItem*)self.item;
+//    int actionLen=fieldItem.actionLen;
+//    if(actionLen>0){
+//        if([textField.text length]+[textEntered length]>actionLen){
+//            return NO;
+//        }
+//    }
+//    
+//    if(fieldItem.fieldType!=UPFieldTypeUnlimited){
+//        NSCharacterSet *cs  = nil;
+//        BOOL isMatch=NO;
+//        if(fieldItem.fieldType==UPFieldTypeAmount){
+//            isMatch=YES;
+//            cs=[[NSCharacterSet characterSetWithCharactersInString:@"0123456789."] invertedSet];
+//        }else if(fieldItem.fieldType==UPFieldTypeNumber){
+//            cs=[[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet];
+//        }else if(fieldItem.fieldType==UPFieldTypeCharater){
+//            cs=[[NSCharacterSet characterSetWithCharactersInString:@"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"] invertedSet];
+//        }
+//        NSString *filtered = [[textEntered componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+//        BOOL basicTest = [textEntered isEqualToString:filtered];
+//        //数字校验
+//        
+//        if(isMatch){
+//            NSString *temp;
+//            //        NSString *regex=@"^\\d*(\\d+)?$";
+//            NSString *regex=@"^\\d*(\\d+\\.\\d*)?$";
+//            temp = [textField.text stringByReplacingCharactersInRange:range withString:textEntered];
+//            NSPredicate *filter=[NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
+//            isMatch=[filter evaluateWithObject:temp];
+//            //数字校验
+//            return (basicTest && isMatch);
+//        }else {
+//            return basicTest;
+//        }
+//    }
+//    
+    return YES;
+    
+}
+
+@end
+
 @interface UPFieldCell() <UITextFieldDelegate>
 
 @end
@@ -722,7 +846,7 @@
         }
         [_textField setKeyboardType:UIKeyboardTypeDefault];
         _textField.textAlignment = NSTextAlignmentLeft;
-        _textField.font= kUPThemeNormalFont;
+        _textField.font= kUPThemeMinFont;
         _textField.returnKeyType=UIReturnKeyDone;
         [_textField setAutocorrectionType:UITextAutocorrectionTypeNo];
         [_textField setAutocapitalizationType:UITextAutocapitalizationTypeNone];
@@ -756,7 +880,7 @@
     _textField.secureTextEntry=fieldItem.secureTextEntry;
     
     if (fieldItem.detail!=nil && fieldItem.detail.length>0) {
-        CGSize size = SizeWithFont(fieldItem.detail, kUPThemeNormalFont);
+        CGSize size = SizeWithFont(fieldItem.detail, kUPThemeMinFont);
         CGRect frame = UPCellRightWithWidth(item.cellWidth);
         frame.size.width = frame.size.width-size.width-kUPCellHBorder*2;
         _textField.frame = frame;
@@ -853,11 +977,9 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.textV = [[UPTextView alloc] initWithFrame:CGRectZero];
-        self.textV.font = kUPThemeNormalFont;
+        self.textV.font = kUPThemeMinFont;
         self.textV.returnKeyType=UIReturnKeyDone;
         self.textV.delegate = self;
-        self.textV.layer.borderColor = [UIColor grayColor].CGColor;
-        self.textV.layer.borderWidth = 1.0f;
         [self.textV setAutocorrectionType:UITextAutocorrectionTypeNo];
         [self.textV setAutocapitalizationType:UITextAutocapitalizationTypeNone];
 
@@ -871,7 +993,7 @@
     [super setItem:item];
     UPTextCellItem *cellItem = (UPTextCellItem*)item;
     
-    self.textV.frame = CGRectMake(kUPCellHBorder, kUPCellVBorder, cellItem.cellWidth-2*kUPCellHBorder, cellItem.cellHeight-2*kUPCellVBorder);
+    self.textV.frame = CGRectMake(5, kUPCellVBorder, cellItem.cellWidth-10, cellItem.cellHeight-2*kUPCellVBorder);
     self.textV.placeholder = cellItem.placeholder;
     self.textV.text = cellItem.fieldText;
 }

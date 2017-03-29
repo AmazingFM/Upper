@@ -232,11 +232,11 @@ static CGFloat const FixRatio = 4/3.0;
     _tableView.delegate = self;
     _tableView.dataSource = self;
     if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-        _tableView.separatorInset = UIEdgeInsetsZero;
+        _tableView.separatorInset = UIEdgeInsetsMake(0,10,0,0);
     }
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
     if ([_tableView respondsToSelector:@selector(setLayoutMargins:)]) {
-        _tableView.layoutMargins = UIEdgeInsetsMake(0,0,0,0);
+        _tableView.layoutMargins = UIEdgeInsetsMake(0,10,0,0);
     }
 #endif
     _tableView.tableFooterView = [[UIView alloc] init];
@@ -289,19 +289,17 @@ static CGFloat const FixRatio = 4/3.0;
     
     UPButtonCellItem *item0 = [[UPButtonCellItem alloc] init];
     item0.btnStyle = UPBtnStyleImage;
-    item0.btnImage = (_imgData==nil)?[UIImage imageNamed:@"camera"]:[UIImage imageWithData:_imgData];
-    item0.btnTitle = @"单击上传活动图片";
-    item0.tintColor = [UIColor redColor];
+    item0.btnImage = (_imgData==nil)?[UIImage imageNamed:@"icon-camera"]:[UIImage imageWithData:_imgData];
+    item0.tintColor = RGBCOLOR(231, 231, 231);
     item0.key = @"imageUpload";
     
-    UPFieldCellItem *item1 = [[UPFieldCellItem alloc] init];
-    item1.title = @"活动主题";
+    UPOnlyFieldCellItem *item1 = [[UPOnlyFieldCellItem alloc] init];
     item1.fieldText = self.actData.activity_name;
-    item1.placeholder = @"添加活动主题";
+    item1.placeholder = @"活动主题";
     item1.key = @"activity_name";
     
     UPTextCellItem *item2 = [[UPTextCellItem alloc] init];
-    item2.placeholder = @"添加活动介绍";
+    item2.placeholder = @"活动介绍";
     item2.actionLen = 200;
     item2.fieldText = self.actData.activity_desc;
     item2.key = @"activity_desc";
@@ -328,20 +326,20 @@ static CGFloat const FixRatio = 4/3.0;
     
     UPDetailCellItem *item5 = [[UPDetailCellItem alloc] init];
     item5.title = @"活动类型";
-    item5.detail = (_actType==nil)?@"选择类型":_actType.name;
+    item5.detail = (_actType==nil)?@"":_actType.name;//(_actType==nil)?@"选择类型":_actType.name;
     item5.key = @"activity_class";
     
     UPTitleCellItem *item15 = [[UPTitleCellItem alloc] init];
     item15.key = @"fmale_low";
     
     UPDetailCellItem *item6 = [[UPDetailCellItem alloc] init];
-    item6.title = @"活动地点区域";
-    item6.detail = (_selectedCity==nil?@"选择城市":_selectedCity.city);
+    item6.title = @"活动区域";
+    item6.detail = (_selectedCity==nil?@"城市":_selectedCity.city);
     item6.key = @"activity_area";
     
     UPFieldCellItem *item7 = [[UPFieldCellItem alloc] init];
     item7.title = @"活动地址";
-    item7.placeholder = @"请输入活动地址";
+    item7.placeholder = @"请输入详细地址";
     item7.fieldText = self.actData.activity_place_code;
     item7.key = @"activity_place_code";
     
@@ -370,6 +368,7 @@ static CGFloat const FixRatio = 4/3.0;
     item10.selectedIndex = _clothType!=nil?([_clothType.ID intValue]-1):0;
     item10.style = UPItemStyleIndex;
     item10.key = @"clothes_need";
+    
     UPComboxCellItem *item11 = [[UPComboxCellItem alloc] init];  //使用 是否预付的 字段传参
     item11.title = @"付费方式";
     item11.style = UPItemStyleIndex;
@@ -395,7 +394,7 @@ static CGFloat const FixRatio = 4/3.0;
     
     UPTitleCellItem *item16 = [[UPTitleCellItem alloc] init];
     item16.key = @"activity_fee";
-
+    item16.title = @"预估人均费用";
     
     UPSwitchCellItem *item12 = [[UPSwitchCellItem alloc] init];
     item12.title=@"仅限本行业";
@@ -412,7 +411,7 @@ static CGFloat const FixRatio = 4/3.0;
     UPButtonCellItem *item13 = [[UPButtonCellItem alloc] init];
     item13.btnTitle = submitTitle;
     item13.btnStyle = UPBtnStyleSubmit;
-    item13.tintColor = [UIColor redColor];
+    item13.tintColor = kUPThemeMainColor;
     item13.key = @"submit";
     
     self.itemList = [NSMutableArray new];
@@ -520,6 +519,10 @@ static CGFloat const FixRatio = 4/3.0;
     cellItem.indexPath = indexPath;
     
     UPBaseCell *itemCell = [self cellWithItem:cellItem];
+//    
+//    if (indexPath.row==0) {
+//        itemCell.separatorInset = UIEdgeInsetsMake(0, ScreenWidth, 0, 0);
+//    }
     
     itemCell.delegate=self;
     
@@ -540,11 +543,12 @@ static CGFloat const FixRatio = 4/3.0;
         
     }else if ([cellItem.key isEqualToString:@"activity_fee"]) {
         CGFloat cellWidth = cellItem.cellWidth;
-        if (malePay) {
-            itemCell.textLabel.text = @"预估人均费用(按男女比例调整)";
-        } else {
-            itemCell.textLabel.text = @"预估人均费用";
-        }
+//        if (malePay) {
+//            itemCell.textLabel.text = @"预估人均费用(按男女比例调整)";
+//            itemCell.
+//        } else {
+//            itemCell.textLabel.text = @"预估人均费用";
+//        }
         
         UIView *detailView = itemCell.accessoryView;
         if (detailView==nil) {
@@ -671,6 +675,20 @@ static CGFloat const FixRatio = 4/3.0;
     return itemCell;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row==0) {
+        if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+            cell.layoutMargins=UIEdgeInsetsMake(0, ScreenWidth, 0, 0);
+            cell.separatorInset=UIEdgeInsetsMake(0, ScreenWidth, 0, 0);
+        }
+        
+        if([cell respondsToSelector:@selector(setPreservesSuperviewLayoutMargins:)]){
+            [cell setPreservesSuperviewLayoutMargins:NO];
+        }
+    }
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UPBaseCell *cell = [tableView cellForRowAtIndexPath:indexPath];
@@ -765,6 +783,19 @@ static CGFloat const FixRatio = 4/3.0;
     UPBaseCellItem *cellItem = self.itemList[indexPath.row];
     UPComboxCellItem *comboxItem = (UPComboxCellItem*)cellItem;
     [comboxItem setSelectedIndex:selectedIndex];
+
+    if (indexPath.row==12) {
+        UPTitleCellItem *cellItem = self.itemList[13];//费用
+        if (selectedIndex==2) {//绅士买单
+            malePay = YES;
+            cellItem.title = @"预估人均费用(按男女比例调整)";
+        } else {
+            malePay = NO;
+            cellItem.title = @"预估人均费用";
+        }
+        
+        [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:13 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
