@@ -262,4 +262,8 @@
     [_mainTableView reloadData];
 }
 
+- (void)resetSubView
+{
+    companyName.text = @"";
+}
 @end

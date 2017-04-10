@@ -445,6 +445,10 @@
     return YES;
 }
 
+- (void)resignKeyboard
+{
+    [self.view endEditing:YES];
+}
 
 - (void)comboxSelected:(int)selectedIndex withIndexPath:(NSIndexPath *)indexPath
 {

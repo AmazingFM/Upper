@@ -186,6 +186,8 @@ static CGFloat const FixRatio = 4/3.0;
     }
     
     if (self.type==ActOperTypeEdit) {
+        
+        
         [self getImageDataFromURL:self.actData.activity_image];
         
         _actType = [[UPConfig sharedInstance] getActivityTypeByID:self.actData.activity_class];
@@ -822,7 +824,10 @@ static CGFloat const FixRatio = 4/3.0;
         NSString *msg = nil;
         if (_selectedCity==nil) {
             msg = @"请选择城市";
-        } else if (_highLimit==nil || _highLimit.length==0) {
+        } else if (_lowLimit==nil || _lowLimit.length==0 || [_lowLimit intValue]<2) {
+            if ([_lowLimit intValue]<2) {
+                msg = @"活动至少需要2人（包括本人）";
+            }
             msg = @"请输入人数上限";
         } else if (_highLimit==nil || _highLimit.length==0) {
             msg = @"请输入人数下限";
@@ -872,7 +877,7 @@ static CGFloat const FixRatio = 4/3.0;
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         [manager POST:kUPFilePostURL parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             if (_imgData!=nil) {
-                 [formData appendPartWithFileData:_imgData name:@"file" fileName:@"act" mimeType:@"image/jpeg"];
+                 [formData appendPartWithFileData:_imgData name:@"file" fileName:@"activity.jpg" mimeType:@"image/jpeg"];
             }
         } success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSString *resp = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
@@ -886,9 +891,10 @@ static CGFloat const FixRatio = 4/3.0;
                     self.actData = nil;
                     [self setNewData];
                     [_tableView reloadData];
+                    showConfirmTagAlert(@"提示", @"活动发起成功，如需修改变更或取消，请点击活动规则查看相关规则和操作方式。", self, 1000);
+                } else {
+                    showDefaultAlert(@"提示", respDict[@"resp_desc"]);
                 }
-                
-                showConfirmTagAlert(@"提示", @"活动发起成功，如需修改变更或取消，请点击活动规则查看相关规则和操作方式。", self, 1000);
             }
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"Error: %@", error);
@@ -1011,12 +1017,12 @@ static CGFloat const FixRatio = 4/3.0;
         UIImage *cutImage = [UPTools cutImage:image withSize:CGSizeMake(kWidth, kWidth/FixRatio)];
         
         //压缩图片到一定大小size
-        float scale = 0.8f;
+        float scale = 0.9f;
         NSData *data = UIImageJPEGRepresentation(cutImage, scale);
-        while ([data base64EncodedDataWithOptions:0].length>20*1024 && scale>0) {
+        while (data.length>20*1024) {
+            scale *= 0.9;
             cutImage = [UPTools image:cutImage scaledToSize:CGSizeMake(cutImage.size.width*scale, cutImage.size.height*scale)];
             data = UIImageJPEGRepresentation(cutImage, scale);
-            scale-=0.1;
         }
         
         _imgData = [[NSData alloc] initWithData:data];

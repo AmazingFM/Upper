@@ -203,6 +203,7 @@ typedef enum register_enum
                 break;
             case 1:
                 _industryId = self.registerV2.industryId;
+                [self.registerV3 resetSubView];
                 break;
             case 2:
                 _companyId = self.registerV3.companyId;

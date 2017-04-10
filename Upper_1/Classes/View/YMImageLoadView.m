@@ -14,7 +14,7 @@
 #define kMaxColumn 3 // 每行显示数量
 #define deleImageWH 22 // 删除按钮的宽高
 #define kAdeleImage @"close.png" // 删除按钮图片
-#define kAddImage @"me" // 添加按钮图片
+#define kAddImage @"icon-addpic" // 添加按钮图片
 
 #define HorizontalPadding 10
 #define ImageLoadTag 1000

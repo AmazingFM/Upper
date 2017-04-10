@@ -780,7 +780,7 @@
 
         _statusLab = [[UILabel alloc] initWithFrame:CGRectZero];
         _statusLab.font = kUPThemeMinFont;
-        _statusLab.textAlignment = NSTextAlignmentCenter;
+        _statusLab.textAlignment = NSTextAlignmentRight;
         _statusLab.textColor = [UPTools colorWithHex:0xff5454];
         _statusLab.layer.cornerRadius = 2.0f;
         _statusLab.layer.masksToBounds = YES;
@@ -946,21 +946,106 @@
     
     NSString *actStatusID = itemData.activity_status;
     ActivityStatus *actStatus = [[UPConfig sharedInstance] getActivityStatusByID:actStatusID];
+    _statusLab.frame = CGRectMake(width-80, 0, 70, 30);
+    NSString *statusName = @"";
+    int actStatusValue = [actStatusID intValue];
     
-    if (actStatus) {
-        NSString *statusName = actStatus.name;
-        if ([statusName isEqualToString:@"none"]) {
-            NSString *sexual = [UPDataManager shared].userInfo.sexual;
-            if ([sexual intValue]==0) {
-                statusName = @"满员";
-            } else {
+    switch (actStatusValue) {
+        case 0:
+        {
+            statusName = @"募集中";
+        }
+            break;
+        case 1:
+        {
+            if (_actCellItem.type==SourceTypeDaTing){
                 statusName = @"募集中";
+            } else if (_actCellItem.type==SourceTypeWoFaqi){
+                statusName = @"募集成功";
+            } else if (_actCellItem.type==SourceTypeWoCanyu){
+                statusName = @"募集成功";
             }
         }
-        _statusLab.text = statusName;
-        size = SizeWithFont(statusName, kUPThemeMinFont);
-        _statusLab.frame = CGRectMake(width-80, 0, 80, 30);
+            break;
+        case 2:
+            if (_actCellItem.type==SourceTypeDaTing){
+                NSString *sexual = [UPDataManager shared].userInfo.sexual;
+                if ([sexual intValue]==0) {
+                    statusName = @"满员";
+                } else {
+                    statusName = @"募集中";
+                }
+            } else if (_actCellItem.type==SourceTypeWoFaqi){
+                statusName = @"男性满员";
+            } else if (_actCellItem.type==SourceTypeWoCanyu){
+                statusName = @"募集中";
+            }
+
+            break;
+        case 3:
+            if (_actCellItem.type==SourceTypeDaTing){
+                statusName = @"满员";
+            } else if (_actCellItem.type==SourceTypeWoFaqi){
+                statusName = @"满员";
+            } else if (_actCellItem.type==SourceTypeWoCanyu){
+                statusName = @"募集成功";
+            }
+
+            break;
+        case 4:
+            if (_actCellItem.type==SourceTypeDaTing){
+                statusName = @"募集截止";
+            } else if (_actCellItem.type==SourceTypeWoFaqi){
+                statusName = @"募集成功";
+            } else if (_actCellItem.type==SourceTypeWoCanyu){
+                statusName = @"募集成功";
+            }
+            break;
+        case 5:
+            if (_actCellItem.type==SourceTypeDaTing){
+                statusName = @"募集截止";
+            } else if (_actCellItem.type==SourceTypeWoFaqi){
+                statusName = @"募集失败";
+            } else if (_actCellItem.type==SourceTypeWoCanyu){
+                statusName = @"募集失败";
+            }
+            break;
+        case 6:
+            statusName = @"进行中";
+            break;
+        case 7:
+            if (_actCellItem.type==SourceTypeDaTing){
+                statusName = @"圆满结束";
+            } else if (_actCellItem.type==SourceTypeWoFaqi){
+                statusName = @"待回顾";
+            } else if (_actCellItem.type==SourceTypeWoCanyu){
+                statusName = @"圆满结束";
+            }
+            break;
+        case 8:
+            if (_actCellItem.type==SourceTypeDaTing){
+                statusName = @"圆满结束";
+            } else if (_actCellItem.type==SourceTypeWoFaqi){
+                statusName = @"已回顾";
+            } else if (_actCellItem.type==SourceTypeWoCanyu){
+                statusName = @"圆满结束";
+            }
+            break;
+        case 9:
+            if (_actCellItem.type==SourceTypeDaTing){
+                statusName = @"圆满结束";
+            } else if (_actCellItem.type==SourceTypeWoFaqi){
+                statusName = @"待回顾";
+            } else if (_actCellItem.type==SourceTypeWoCanyu){
+                statusName = @"圆满结束";
+            }
+            break;
+        default:
+            statusName = @"未知";
+            break;
     }
+    _statusLab.text = statusName;
+    size = SizeWithFont(statusName, kUPThemeMinFont);
 
     offsety+=_titleLab.height;
     _img.frame = CGRectMake(offsetx, offsety, 60*4/3, 60);
@@ -969,7 +1054,7 @@
     [_img sd_setImageWithURL:[NSURL URLWithString:itemData.activity_image] placeholderImage:[UIImage imageNamed:@"me"]];
 
     offsetx += _img.width+5;
-    _actDesc.frame = CGRectMake(offsetx, offsety, width-offsetx, 40);
+    _actDesc.frame = CGRectMake(offsetx, offsety, width-offsetx-10, 40);
     _actDesc.text = itemData.activity_desc;
     
     offsety += _actDesc.height;
@@ -980,7 +1065,7 @@
     
     offsetx += tmpWidth-8;
     _timeBtn.frame = CGRectMake(offsetx, offsety, tmpWidth, 60-_actDesc.height);
-    NSString *start_time = [UPTools dateStringTransform:itemData.begin_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy.MM.dd"];
+    NSString *start_time = [UPTools dateStringTransform:itemData.start_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy.MM.dd"];
     [_timeBtn setTitle:start_time forState:UIControlStateNormal];
     
     offsetx += tmpWidth+2;
