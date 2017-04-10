@@ -49,7 +49,6 @@
 @end
 
 @interface UPDetailCell : UPTitleCell{
-    //UILabel *_valueLabel;
 }
 @end
 
@@ -59,6 +58,12 @@
 @interface UPComboxCell :UPTitleCell
 {
     UIButton* _comboBtn;
+}
+@end
+
+@interface UPOnlyFieldCell : UPBaseCell
+{
+    UITextField *_textField;
 }
 @end
 
@@ -83,6 +88,7 @@
 @interface UPButtonCell :UPBaseCell
 {
     UIButton *_button;
+    UIImageView *_imgView;
 }
 @end
 

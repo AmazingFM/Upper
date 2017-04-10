@@ -89,6 +89,11 @@ typedef enum{
 @property(nonatomic)UPFieldType fieldType;
 @end
 
+@interface UPOnlyFieldCellItem : UPBaseCellItem
+@property(nonatomic,copy) NSString* fieldText;
+@property(nonatomic, copy) NSString *placeholder;
+@end
+
 @interface UPTextCellItem : UPTitleCellItem
 @property(nonatomic,copy) NSString* fieldText;
 @property(nonatomic, copy) NSString *placeholder;

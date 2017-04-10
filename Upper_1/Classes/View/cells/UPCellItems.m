@@ -124,6 +124,21 @@
 }
 @end
 
+@implementation UPOnlyFieldCellItem
+
+- (void)fillWithValue:(NSString *)value
+{
+    self.fieldText = value;
+}
+
+- (id)value
+{
+    return self.fieldText;
+}
+
+
+@end
+
 @implementation UPTextCellItem
 - (id)init
 {

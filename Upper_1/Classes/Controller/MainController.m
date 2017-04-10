@@ -371,7 +371,6 @@ static int kMsgCount = 0;
                 lastPage = YES;
             }
             
-            
             NSArray *activityList;
             if (pageItem.total_num>0 && pageItem.page_size>0) {
                 activityList  = [ActivityData objectArrayWithJsonArray: resp_data[@"activity_list"]];
