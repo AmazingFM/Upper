@@ -803,6 +803,7 @@
         _userImgView = [[UIImageView alloc] initWithFrame:CGRectZero];
         _userImgView.backgroundColor = [UIColor clearColor];
         _userImgView.contentMode = UIViewContentModeScaleToFill;
+        _userImgView.layer.masksToBounds = YES;
         
         _sponserLab = [[UILabel alloc] initWithFrame:CGRectZero];
         _sponserLab.font = kUPThemeMinFont;
@@ -818,72 +819,79 @@
         
         _reviewActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_reviewActBtn setTitle:@"回顾" forState:UIControlStateNormal];
+        [_reviewActBtn setImage:[UIImage imageNamed:@"icon-review"] forState:UIControlStateNormal];
         _reviewActBtn.tag = kUPActReviewTag;
-        [_reviewActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [_reviewActBtn setTitleColor:[UPTools colorWithHex:0x333333] forState:UIControlStateNormal];
         _reviewActBtn.titleLabel.font = kUPThemeMiniFont;
-        _reviewActBtn.layer.cornerRadius = 2.0f;
-        _reviewActBtn.layer.masksToBounds = YES;
-        _reviewActBtn.layer.borderWidth = 1.f;
+//        _reviewActBtn.layer.cornerRadius = 2.0f;
+//        _reviewActBtn.layer.masksToBounds = YES;
+//        _reviewActBtn.layer.borderWidth = 0.4f;
         [_reviewActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         _cancelActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_cancelActBtn setTitle:@"取消" forState:UIControlStateNormal];
+        [_cancelActBtn setImage:[UIImage imageNamed:@"icon-quit"] forState:UIControlStateNormal];
         _cancelActBtn.tag = kUPActCancelTag;
-        [_cancelActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [_cancelActBtn setTitleColor:[UPTools colorWithHex:0x333333] forState:UIControlStateNormal];
         _cancelActBtn.titleLabel.font = kUPThemeMiniFont;
-        _cancelActBtn.layer.cornerRadius = 2.0f;
-        _cancelActBtn.layer.masksToBounds = YES;
-        _cancelActBtn.layer.borderWidth = 1.f;
+//        _cancelActBtn.layer.cornerRadius = 2.0f;
+//        _cancelActBtn.layer.masksToBounds = YES;
+//        _cancelActBtn.layer.borderWidth = 0.4f;
         [_cancelActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         _changeActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_changeActBtn setTitle:@"更改发起人" forState:UIControlStateNormal];
+        [_changeActBtn setImage:[UIImage imageNamed:@"icon-changeLauncher"] forState:UIControlStateNormal];
         _changeActBtn.tag = kUPActChangeTag;
-        [_changeActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [_changeActBtn setTitleColor:[UPTools colorWithHex:0x333333] forState:UIControlStateNormal];
         _changeActBtn.titleLabel.font = kUPThemeMiniFont;
-        _changeActBtn.layer.cornerRadius = 2.0f;
-        _changeActBtn.layer.masksToBounds = YES;
-        _changeActBtn.layer.borderWidth = 1.f;
+//        _changeActBtn.layer.cornerRadius = 2.0f;
+//        _changeActBtn.layer.masksToBounds = YES;
+//        _changeActBtn.layer.borderWidth = 0.4f;
         [_changeActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         _commentActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_commentActBtn setTitle:@"评价" forState:UIControlStateNormal];
+        [_commentActBtn setImage:[UIImage imageNamed:@"icon-comment"] forState:UIControlStateNormal];
         _commentActBtn.tag = kUPActCommentTag;
-        [_commentActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [_commentActBtn setTitleColor:[UPTools colorWithHex:0x333333] forState:UIControlStateNormal];
         _commentActBtn.titleLabel.font = kUPThemeMiniFont;
-        _commentActBtn.layer.cornerRadius = 2.0f;
-        _commentActBtn.layer.masksToBounds = YES;
-        _commentActBtn.layer.borderWidth = 1.f;
+//        _commentActBtn.layer.cornerRadius = 2.0f;
+//        _commentActBtn.layer.masksToBounds = YES;
+//        _commentActBtn.layer.borderWidth = 0.4f;
         [_commentActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         _quitActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_quitActBtn setTitle:@"退出" forState:UIControlStateNormal];
+        [_quitActBtn setImage:[UIImage imageNamed:@"icon-quit"] forState:UIControlStateNormal];
         _quitActBtn.tag = kUPActQuitTag;
-        [_quitActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [_quitActBtn setTitleColor:[UPTools colorWithHex:0x333333] forState:UIControlStateNormal];
         _quitActBtn.titleLabel.font = kUPThemeMiniFont;
-        _quitActBtn.layer.cornerRadius = 2.0f;
-        _quitActBtn.layer.masksToBounds = YES;
-        _quitActBtn.layer.borderWidth = 1.f;
+//        _quitActBtn.layer.cornerRadius = 2.0f;
+//        _quitActBtn.layer.masksToBounds = YES;
+//        _quitActBtn.layer.borderWidth = 0.4f;
         [_quitActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         _signActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_signActBtn setTitle:@"签到" forState:UIControlStateNormal];
+        [_signActBtn setImage:[UIImage imageNamed:@"icon-sign"] forState:UIControlStateNormal];
         _signActBtn.tag = kUPActSignTag;
-        [_signActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [_signActBtn setTitleColor:[UPTools colorWithHex:0x333333] forState:UIControlStateNormal];
         _signActBtn.titleLabel.font = kUPThemeMiniFont;
-        _signActBtn.layer.cornerRadius = 2.0f;
-        _signActBtn.layer.masksToBounds = YES;
-        _signActBtn.layer.borderWidth = 1.f;
+//        _signActBtn.layer.cornerRadius = 2.0f;
+//        _signActBtn.layer.masksToBounds = YES;
+//        _signActBtn.layer.borderWidth = 0.4f;
         [_signActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         _editActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_editActBtn setTitle:@"编辑" forState:UIControlStateNormal];
+        [_editActBtn setImage:[UIImage imageNamed:@"icon-edit"] forState:UIControlStateNormal];
         _editActBtn.tag = kUPActEditTag;
-        [_editActBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [_editActBtn setTitleColor:[UPTools colorWithHex:0x333333] forState:UIControlStateNormal];
         _editActBtn.titleLabel.font = kUPThemeMiniFont;
-        _editActBtn.layer.cornerRadius = 2.0f;
-        _editActBtn.layer.masksToBounds = YES;
-        _editActBtn.layer.borderWidth = 1.f;
+//        _editActBtn.layer.cornerRadius = 2.0f;
+//        _editActBtn.layer.masksToBounds = YES;
+//        _editActBtn.layer.borderWidth = 0.4f;
         [_editActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         [_btnContainerView addSubview:_reviewActBtn];
@@ -1092,11 +1100,10 @@
         if (sponser.length!=0) {
             _sponserLab.text = sponser;
             size = SizeWithFont(sponser, kUPThemeMinFont);
-            
-            
             CGFloat imgWidth = size.height+4;
             _userImgView.frame = CGRectMake(offsetx, offsety+(30-imgWidth)/2, imgWidth, imgWidth);
-            [_userImgView sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"activity_user_icon"]];
+            _userImgView.layer.cornerRadius = imgWidth/2;
+            [_userImgView sd_setImageWithURL:[NSURL URLWithString:itemData.user_icon] placeholderImage:[UIImage imageNamed:@"activity_user_icon"]];
             
             if (size.width>100) {
                 size.width = 100;
@@ -1144,16 +1151,15 @@
             _btnContainerView.frame = CGRectMake(offsetx, offsety, width-2*offsetx, 30);
             
             CGFloat perHeight = 30;
-            
-            CGSize size = SizeWithFont(@"回顾", kUPThemeMinFont);
-            size.width = 60;
+            float btnWidth = 60.f;
+            float btnPadding = 10.f;
             
             if (_actCellItem.type==SourceTypeWoFaqi) {
                 switch ([actStatusID intValue]) {
                     case 0:
-                        _changeActBtn.frame =   CGRectMake(0,5,size.width,perHeight-10);
-                        _cancelActBtn.frame =   CGRectMake(10+size.width,5,size.width,perHeight-10);
-                        _editActBtn.frame =     CGRectMake(2*(10+size.width),5,size.width,perHeight-10);;
+                        _changeActBtn.frame =   CGRectMake(width-btnWidth*2-2*btnPadding-80,5,80,perHeight-10);
+                        _cancelActBtn.frame =   CGRectMake(width-btnWidth*2-btnPadding,5,btnWidth,perHeight-10);
+                        _editActBtn.frame =     CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
                         _reviewActBtn.frame =   CGRectZero;
                         _commentActBtn.frame =  CGRectZero;
                         _quitActBtn.frame =     CGRectZero;
@@ -1163,8 +1169,8 @@
                     case 2:
                     case 3:
                     case 4:
-                        _changeActBtn.frame =   CGRectMake(0,0,size.width,perHeight);
-                        _cancelActBtn.frame =   CGRectMake(10+size.width,0,size.width,perHeight);
+                        _changeActBtn.frame =   CGRectMake(width-btnWidth-btnPadding-80,5,80,perHeight-10);
+                        _cancelActBtn.frame =   CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
                         _reviewActBtn.frame =   CGRectZero;
                         _commentActBtn.frame =  CGRectZero;
                         _quitActBtn.frame =     CGRectZero;
@@ -1172,7 +1178,7 @@
                         _editActBtn.frame =     CGRectZero;
                         break;
                     case 6:
-                        _signActBtn.frame =     CGRectMake(0,0,size.width,perHeight);
+                        _signActBtn.frame =     CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
                         _reviewActBtn.frame =   CGRectZero;
                         _changeActBtn.frame =   CGRectZero;
                         _cancelActBtn.frame =   CGRectZero;
@@ -1181,7 +1187,7 @@
                         _editActBtn.frame =     CGRectZero;
                         break;
                     case 7:
-                        _reviewActBtn.frame =   CGRectMake(0,0,size.width,perHeight);
+                        _reviewActBtn.frame =   CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
                         _changeActBtn.frame =   CGRectZero;
                         _cancelActBtn.frame =   CGRectZero;
                         _commentActBtn.frame =  CGRectZero;
@@ -1202,7 +1208,6 @@
                         break;
                 }
             } else if(_actCellItem.type==SourceTypeWoCanyu) {
-                int anticipateStatus = [itemData.activity_class intValue];
                 /**
                  ● 参与者状态
                  0：报名
@@ -1221,26 +1226,16 @@
                  其它						无操作             */
                 
                 switch ([actStatusID intValue]) {
-                        
                     case 0:
-                        
                     case 1:
                     case 2:
                     case 3:
-                        _reviewActBtn.frame =   CGRectZero;
-                        _changeActBtn.frame =   CGRectZero;
-                        _cancelActBtn.frame =   CGRectZero;
-                        _commentActBtn.frame =  CGRectZero;
-                        _quitActBtn.frame =     CGRectZero;
-                        _signActBtn.frame =     CGRectZero;
-                        _editActBtn.frame =     CGRectZero;
-                        break;
                     case 4:
+                        _quitActBtn.frame =   CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
                         _reviewActBtn.frame =   CGRectZero;
                         _changeActBtn.frame =   CGRectZero;
                         _cancelActBtn.frame =   CGRectZero;
                         _commentActBtn.frame =  CGRectZero;
-                        _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
                         _editActBtn.frame =     CGRectZero;
                         break;
@@ -1265,10 +1260,10 @@
                     case 7:
                     case 8:
                     case 9:
+                         _commentActBtn.frame =   CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
                         _reviewActBtn.frame =   CGRectZero;
                         _changeActBtn.frame =   CGRectZero;
                         _cancelActBtn.frame =   CGRectZero;
-                        _commentActBtn.frame =  CGRectZero;
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
                         _editActBtn.frame =     CGRectZero;

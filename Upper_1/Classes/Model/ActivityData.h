@@ -9,32 +9,32 @@
 #import "UPBaseModel.h"
 
 /**
- {
- "activity_class" = 104;
- "activity_desc" = "xidan reading activity";
- "activity_fee" = "0.00";
- "activity_image" = "";
- "activity_name" = "xi dan";
- "activity_place" = xidan;
- "activity_place_code" = "-1";
- "activity_status" = 0;
- "begin_time" = 20170109215604;
- city = "\U5317\U4eac\U5e02";
- "city_code" = 000;
+ 
+ "activity_class" = 102;
+ "activity_desc" = 11111111111111111112222222;
+ "activity_fee" = "200.00";
+ "activity_image" = "http://oss-cn-hangzhou.aliyuncs.com/upper/201703312036561452.ct?OSSAccessKeyId=FRmTx08qMq4jEks4&Expires=1494117416&Signature=r7c7JrF%2FrFRmZRgtJGo%2F2SUee6E%3D";
+ "activity_name" = 123123;
+ "activity_place" = 123123123;
+ "activity_place_code" = 123123123;
+ "activity_status" = 9;
+ "begin_time" = 20170331204613;
+ city = "\U4e0a\U6d77\U5e02";
+ "city_code" = 071;
  "clothes_need" = 1;
- "create_time" = 20170109215605;
- "end_time" = 20170119235959;
- id = 5;
+ "create_time" = 20170331203656;
+ "end_time" = 20170501235959;
+ id = 34;
  "industry_id" = "-1";
- "is_prepaid" = 2;
+ "is_prepaid" = 1;
  "limit_count" = 10;
- "nick_name" = "\U7528\U62371480388475";
+ "nick_name" = "\U7528\U62371480925466";
  "part_count" = 0;
- province = "\U5317\U4eac\U5e02";
- "province_code" = 11;
- "start_time" = 20170127235959;
+ province = "\U4e0a\U6d77\U5e02";
+ "province_code" = 31;
+ "start_time" = 20170502000000;
  "town_code" = "";
-
+ "user_icon" = "http://oss-cn-hangzhou.aliyuncs.com/upper/tx29.png";
  */
 
 
@@ -66,6 +66,7 @@
 @property (nonatomic, copy) NSString *town;
 @property (nonatomic, copy) NSString *town_code;
 @property (nonatomic, copy) NSString *nick_name;
+@property (nonatomic, copy) NSString *user_icon;
 
 //详细信息
 @property (nonatomic, copy) NSString *activity_type;
