@@ -259,8 +259,6 @@ static CGFloat const FixRatio = 4/3.0;
     
     NSURLSessionTask *task = [session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         [self reloadImageData:data];
-        
-        
     }];
     
     [task resume];
@@ -274,6 +272,7 @@ static CGFloat const FixRatio = 4/3.0;
         if ([item.key isEqualToString:@"imageUpload"]) {
             UPButtonCellItem *imageItem = (UPButtonCellItem *)item;
             imageItem.btnImage = [UIImage imageWithData:_imgData];
+            imageItem.defaultImage = NO;
             break;
         }
     }
@@ -291,7 +290,14 @@ static CGFloat const FixRatio = 4/3.0;
     
     UPButtonCellItem *item0 = [[UPButtonCellItem alloc] init];
     item0.btnStyle = UPBtnStyleImage;
-    item0.btnImage = (_imgData==nil)?[UIImage imageNamed:@"icon-camera"]:[UIImage imageWithData:_imgData];
+    if (_imgData==nil) {
+        item0.defaultImage = YES;
+        item0.btnImage = [UIImage imageNamed:@"icon-camera"];
+    } else {
+        item0.defaultImage = NO;
+        item0.btnImage = [UIImage imageWithData:_imgData];
+    }
+    
     item0.tintColor = RGBCOLOR(231, 231, 231);
     item0.key = @"imageUpload";
     
@@ -1062,6 +1068,7 @@ static CGFloat const FixRatio = 4/3.0;
                 
         UPButtonCellItem *btnItem = self.itemList[0];
         btnItem.btnImage = image;
+        btnItem.defaultImage = NO;
         [_tableView reloadRowsAtIndexPaths:@[btnItem.indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
 }

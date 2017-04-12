@@ -16,4 +16,12 @@
              };
 }
 
+- (NSMutableArray *)join_list
+{
+    if (_join_list==nil) {
+        _join_list = [NSMutableArray new];
+    }
+    return _join_list;
+}
+
 @end

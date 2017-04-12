@@ -75,4 +75,6 @@
 @property (nonatomic, copy) NSString *join_status;
 @property (nonatomic, copy) NSString *limit_low;
 @property (nonatomic, copy) NSString *user_id;
+
+@property (nonatomic, copy) NSMutableArray *join_list;
 @end

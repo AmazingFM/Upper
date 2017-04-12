@@ -460,9 +460,14 @@
     if([item isKindOfClass:[UPButtonCellItem class]]){
         UPButtonCellItem* btnItem=(UPButtonCellItem*)item;
         if (btnItem.btnStyle==UPBtnStyleImage) {
-            _imgView.frame = CGRectMake(0,0,item.cellWidth/5,item.cellWidth/5);
-            _imgView.center = CGPointMake(item.cellWidth/2, item.cellHeight/2);
-            _imgView.image = btnItem.btnImage;
+            if (btnItem.defaultImage) {
+                _imgView.frame = CGRectMake(0,0,item.cellWidth/5,item.cellWidth/5);
+                _imgView.center = CGPointMake(item.cellWidth/2, item.cellHeight/2);
+                _imgView.image = btnItem.btnImage;
+            } else {
+                _imgView.frame = CGRectMake(0,0,item.cellWidth,item.cellHeight);
+                _imgView.image = btnItem.btnImage;
+            }
         } else {
             [_button setTitle:btnItem.btnTitle forState:UIControlStateNormal];
         }

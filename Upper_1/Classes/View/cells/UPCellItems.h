@@ -118,6 +118,7 @@ typedef enum{
 @interface UPButtonCellItem : UPBaseCellItem
 @property (nonatomic, copy) NSString *btnTitle;
 @property (nonatomic, copy) UIImage *btnImage;
+@property (nonatomic) BOOL defaultImage;
 @property (nonatomic, retain) UIColor *tintColor;
 @property (nonatomic) UPBtnStyle btnStyle;
 @end

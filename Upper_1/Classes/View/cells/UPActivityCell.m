@@ -823,9 +823,6 @@
         _reviewActBtn.tag = kUPActReviewTag;
         [_reviewActBtn setTitleColor:[UPTools colorWithHex:0x333333] forState:UIControlStateNormal];
         _reviewActBtn.titleLabel.font = kUPThemeMiniFont;
-//        _reviewActBtn.layer.cornerRadius = 2.0f;
-//        _reviewActBtn.layer.masksToBounds = YES;
-//        _reviewActBtn.layer.borderWidth = 0.4f;
         [_reviewActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         _cancelActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -834,9 +831,6 @@
         _cancelActBtn.tag = kUPActCancelTag;
         [_cancelActBtn setTitleColor:[UPTools colorWithHex:0x333333] forState:UIControlStateNormal];
         _cancelActBtn.titleLabel.font = kUPThemeMiniFont;
-//        _cancelActBtn.layer.cornerRadius = 2.0f;
-//        _cancelActBtn.layer.masksToBounds = YES;
-//        _cancelActBtn.layer.borderWidth = 0.4f;
         [_cancelActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         _changeActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -845,9 +839,6 @@
         _changeActBtn.tag = kUPActChangeTag;
         [_changeActBtn setTitleColor:[UPTools colorWithHex:0x333333] forState:UIControlStateNormal];
         _changeActBtn.titleLabel.font = kUPThemeMiniFont;
-//        _changeActBtn.layer.cornerRadius = 2.0f;
-//        _changeActBtn.layer.masksToBounds = YES;
-//        _changeActBtn.layer.borderWidth = 0.4f;
         [_changeActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         _commentActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -856,9 +847,6 @@
         _commentActBtn.tag = kUPActCommentTag;
         [_commentActBtn setTitleColor:[UPTools colorWithHex:0x333333] forState:UIControlStateNormal];
         _commentActBtn.titleLabel.font = kUPThemeMiniFont;
-//        _commentActBtn.layer.cornerRadius = 2.0f;
-//        _commentActBtn.layer.masksToBounds = YES;
-//        _commentActBtn.layer.borderWidth = 0.4f;
         [_commentActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         _quitActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -867,9 +855,6 @@
         _quitActBtn.tag = kUPActQuitTag;
         [_quitActBtn setTitleColor:[UPTools colorWithHex:0x333333] forState:UIControlStateNormal];
         _quitActBtn.titleLabel.font = kUPThemeMiniFont;
-//        _quitActBtn.layer.cornerRadius = 2.0f;
-//        _quitActBtn.layer.masksToBounds = YES;
-//        _quitActBtn.layer.borderWidth = 0.4f;
         [_quitActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         _signActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -878,9 +863,6 @@
         _signActBtn.tag = kUPActSignTag;
         [_signActBtn setTitleColor:[UPTools colorWithHex:0x333333] forState:UIControlStateNormal];
         _signActBtn.titleLabel.font = kUPThemeMiniFont;
-//        _signActBtn.layer.cornerRadius = 2.0f;
-//        _signActBtn.layer.masksToBounds = YES;
-//        _signActBtn.layer.borderWidth = 0.4f;
         [_signActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         _editActBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -889,9 +871,6 @@
         _editActBtn.tag = kUPActEditTag;
         [_editActBtn setTitleColor:[UPTools colorWithHex:0x333333] forState:UIControlStateNormal];
         _editActBtn.titleLabel.font = kUPThemeMiniFont;
-//        _editActBtn.layer.cornerRadius = 2.0f;
-//        _editActBtn.layer.masksToBounds = YES;
-//        _editActBtn.layer.borderWidth = 0.4f;
         [_editActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
         
         [_btnContainerView addSubview:_reviewActBtn];
@@ -1062,7 +1041,7 @@
     [_img sd_setImageWithURL:[NSURL URLWithString:itemData.activity_image] placeholderImage:[UIImage imageNamed:@"me"]];
 
     offsetx += _img.width+5;
-    _actDesc.frame = CGRectMake(offsetx, offsety, width-offsetx-10, 40);
+    _actDesc.frame = CGRectMake(offsetx, offsety, width-offsetx-5, 40);
     _actDesc.text = itemData.activity_desc;
     
     offsety += _actDesc.height;
@@ -1121,10 +1100,9 @@
                 
                 offsetx += _sponserLab.width;
                 
-                
                 UILabel *lab = [self viewWithTag:10000];
                 if (lab==nil) {
-                    lab = [[UILabel alloc] initWithFrame:CGRectMake(offsetx, offsety, size.width, _sponserLab.height)];
+                    lab = [[UILabel alloc] initWithFrame:CGRectZero];
                     lab.font = kUPThemeMinFont;
                     lab.backgroundColor = [UIColor clearColor];
                     lab.textAlignment = NSTextAlignmentLeft;
@@ -1132,6 +1110,7 @@
                     lab.textColor = RGBCOLOR(204, 204, 204);
                     lab.tag = 10000;
                 }
+                lab.frame = CGRectMake(offsetx, offsety, size.width, _sponserLab.height);
                 
                 offsetx += lab.width;
                 

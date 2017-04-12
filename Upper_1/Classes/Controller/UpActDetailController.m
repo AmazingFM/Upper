@@ -32,6 +32,13 @@
 @end
 
 @implementation UPDetailPeopleInfoCellItem
+-(NSMutableArray *)userIconUrlList
+{
+    if (_userIconUrlList==nil) {
+        _userIconUrlList = [[NSMutableArray alloc] init];
+    }
+    return _userIconUrlList;
+}
 @end
 
 @implementation UPDetailExtraInfoCellItem
@@ -49,6 +56,7 @@
 }
 
 @end
+
 @implementation UPDetailImageCell
 //@property (nonatomic, retain) UIImageView *activityImage;
 //@property (nonatomic, retain) UIImageView *userIconImage;
@@ -274,38 +282,32 @@
     
     
     CGFloat offsetx = 10;
-    CGFloat offsety = 5;
+    CGFloat offsety = 0;
     
     backView.frame = CGRectMake(offsetx, 0, cellItem.cellWidth-2*offsetx, cellItem.cellHeight);
     CGFloat backWidth = backView.width;
-    CGFloat backHeight = 20;
-    if (cellItem.userIconUrlList.count>0){
-        backHeight += 30;
-    }
-
     
-    self.infoButton.frame = CGRectMake(offsetx, offsety, backWidth-2*offsetx, 20);
+    self.infoButton.frame = CGRectMake(offsetx, offsety, backWidth-2*offsetx, 15);
     NSString *btnStr = [NSString stringWithFormat:@"%@/%@", cellItem.currentNum, cellItem.totalNum];
     [self.infoButton setTitle:btnStr forState:UIControlStateNormal];
     
-    offsety = 30;
+    offsety = 15;
     
     if (cellItem.userIconUrlList.count>0) {
-        
         for (int i=0; i<cellItem.userIconUrlList.count; i++) {
-            UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(offsetx, 2, 26, 26)];
+            NSDictionary *userDict = cellItem.userIconUrlList[i];
+            UIImageView *icon = [[UIImageView alloc] initWithFrame:CGRectMake(offsetx, offsety+2, 26, 26)];
             icon.backgroundColor = [UIColor grayColor];
             icon.layer.cornerRadius = 13;
             icon.layer.masksToBounds = YES;
             icon.tag = i+kUPDetailPeopleInfoCellTag;
-            [icon sd_setImageWithURL:nil placeholderImage:nil];
+            [icon sd_setImageWithURL:userDict[@"user_icon"] placeholderImage:nil];
             [backView addSubview:icon];
             
-            offsetx += 35;
+            offsetx += 30;
         }
     }
-    
-    //30+30+5
+    //15+30
 }
 
 @end
@@ -318,10 +320,6 @@
 
 @end
 @implementation UPDetailExtraInfoCell
-//@property (nonatomic, retain) UILabel *placeLabel;
-//@property (nonatomic, retain) UILabel *shopNameLabel;
-//@property (nonatomic, retain) UILabel *activityTypeNameLabel;
-//@property (nonatomic, retain) UILabel *clothTypeNameLabel;
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -425,7 +423,6 @@
 @end
 
 @implementation UPDetailButtonCell
-//@property (nonatomic, retain) UIButton *button;
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -533,7 +530,7 @@
         UPDetailImageCellItem *imageItem = [[UPDetailImageCellItem alloc] init];
         imageItem.imageUrl = self.detailActData.activity_image;
         imageItem.imageDefault = @"";
-        imageItem.userIconUrl = self.detailActData.user_id;
+        imageItem.userIconUrl = self.detailActData.user_icon;
         imageItem.userIconDefault = @"activity_user_icon";
         imageItem.userName = self.detailActData.nick_name;
         imageItem.cellWidth = ScreenWidth;
@@ -555,14 +552,17 @@
         UPDetailPeopleInfoCellItem *peopleItem = [[UPDetailPeopleInfoCellItem alloc] init];
         peopleItem.currentNum = self.detailActData.part_count;
         peopleItem.totalNum = self.detailActData.limit_count;
-        peopleItem.userIconUrlList = nil;
         peopleItem.cellWidth = ScreenWidth;
-        peopleItem.cellHeight = 35;
+        peopleItem.cellHeight = 15;
+        if (self.detailActData.join_list.count>0) {
+            [peopleItem.userIconUrlList removeAllObjects];
+            [peopleItem.userIconUrlList addObjectsFromArray:self.detailActData.join_list];
+            peopleItem.cellHeight+=30;
+        }
         
         UPDetailExtraInfoCellItem *extraItem = [[UPDetailExtraInfoCellItem alloc] init];
         extraItem.desc = self.detailActData.activity_desc;
         extraItem.place = self.detailActData.activity_place;
-//        int actId = [self.detailActData.activity_place_code intValue]+1;
         extraItem.shopName = self.detailActData.activity_place;//[[UPConfig sharedInstance] getPlaceTypeByID:[@(actId) stringValue]].name;
         extraItem.activityTypeName = [[UPConfig sharedInstance] getActivityTypeByID:self.detailActData.activity_class].name;
         extraItem.clothTypeName = [[UPConfig sharedInstance] getClothTypeByID:self.detailActData.clothes_need].name;
@@ -577,10 +577,15 @@
         size = SizeWithFont(@"商户名称", kUPThemeMinFont);
         extraItem.cellHeight = (int)(5+height+5+5*4+size.height*3+5)+1;
         
+        UPBaseCellItem *extraBtnItem = [[UPBaseCellItem alloc] init];
+        extraBtnItem.cellHeight = 40;
+        
+        [_itemList removeAllObjects];
         [_itemList addObject:imageItem];
         [_itemList addObject:infoItem];
         [_itemList addObject:peopleItem];
         [_itemList addObject:extraItem];
+        [_itemList addObject:extraBtnItem];
         
         [_tableView reloadData];
         
@@ -602,7 +607,20 @@
         NSDictionary *dict = (NSDictionary *)json;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
-            self.detailActData = [[ActivityData alloc] initWithDict:dict[@"resp_data"]];
+            NSDictionary *respData = dict[@"resp_data"];
+            self.detailActData = [[ActivityData alloc] initWithDict:respData];
+            
+            [self.detailActData.join_list removeAllObjects];
+            
+            NSDictionary *meDict = @{@"user_id":self.detailActData.user_id, @"nick_name":self.detailActData.nick_name, @"user_icon":self.detailActData.user_icon};
+            [self.detailActData.join_list addObject:meDict];
+            
+            if (respData[@"join_list"]!=nil) {
+                NSArray *join_list = respData[@"join_list"];
+                if (join_list.count>0) {
+                    [self.detailActData.join_list addObjectsFromArray:join_list];
+                }
+            }
             [self reloadItems];
         }
         else
@@ -610,7 +628,6 @@
             NSString *resp_desc = dict[@"resp_desc"];
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"💔，很遗憾" message:resp_desc delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
             [alert show];
-            
         }
         
     } failure:^(id error) {
@@ -925,145 +942,33 @@
     
     [cell setItem:cellItem];
     
-//    NSString *cellId = _cellIdArr[indexPath.row];
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-//    if (cell==nil) {
-//        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
-//        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//        if ([cellId isEqualToString:@"image"]) {
-//            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(kUPCellHorizontalPadding, kUPCellVerticalPadding, ScreenWidth-2*kUPCellHorizontalPadding, (ScreenWidth-kUPCellHorizontalPadding*2)*3/4-2*kUPCellVerticalPadding)];
-//            imgView.tag = 1001;
-//            [cell addSubview:imgView];
-//            
-//            NSString *time = [UPTools dateStringTransform:_actData.start_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy.MM.dd"];
-//            NSString *location = _actData.activity_place;
-//            NSString *mergeStr = [NSString stringWithFormat:@"%@AAA%@", time, location];
-//            
-//            CGSize size = SizeWithFont(mergeStr, kUPThemeSmallFont);
-//            
-//            UPTimeLocationView *_timeLocationV = [[UPTimeLocationView alloc] initWithFrame:CGRectMake(0, imgView.size.height-size.height, size.width, size.height)];
-//            [_timeLocationV setTime:time andLocation:location];
-//            [imgView addSubview:_timeLocationV];
-//
-//        } else if ([cellId isEqualToString:@"actTitle"]) {
-//            UILabel *titleLabel  = [[UILabel alloc] initWithFrame:CGRectMake(kUPCellHorizontalPadding, 0, ScreenWidth-2*kUPCellHorizontalPadding, kUPCellDefaultHeight)];
-//            titleLabel.tag = 2001;
-//            titleLabel.backgroundColor = [UIColor clearColor];
-//            titleLabel.font = kUPThemeNormalFont;
-//            titleLabel.textColor = [UIColor blackColor];
-//            [cell addSubview:titleLabel];
-//        } else if ([cellId isEqualToString:@"actDesc"]) {
-//            UILabel *descLabel  = [[UILabel alloc] initWithFrame:CGRectZero];
-//            descLabel.tag = 3001;
-//            descLabel.numberOfLines = 0;
-//            descLabel.backgroundColor = [UIColor clearColor];
-//            descLabel.font = kUPThemeSmallFont;
-//            descLabel.textColor = [UIColor blackColor];
-//            [cell addSubview:descLabel];
-//        } else if ([cellId isEqualToString:@"cellID"]) {
-//            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//            [cell.imageView setImage:[UPTools imageWithColor:[UIColor redColor] size:CGSizeMake(5, 20)]];
-//            
-//        } else if ([cellId isEqualToString:@"submit"]) {
-//            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(kUPCellHorizontalPadding, kUPCellVerticalPadding, ScreenWidth-2*kUPCellHorizontalPadding, kUPCellDefaultHeight-2*kUPCellVerticalPadding)];
-//            btn.backgroundColor=[UIColor redColor];
-//            [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//            btn.titleLabel.font = kUPThemeNormalFont;
-//            btn.tag = DetailBtnTypeSubmit;
-//            [btn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-//            [cell addSubview:btn];
-//        }
-//    }
-//    
-//    if ([cellId isEqualToString:@"image"]) {
-//        UIImageView *imgV = [cell viewWithTag:1001];
-//        [imgV sd_setImageWithURL:[NSURL URLWithString:_actData.activity_image] placeholderImage:[UIImage imageNamed:@"me"]];
-//    } else if ([cellId isEqualToString:@"actTitle"]) {
-//        UILabel *titleLabel = [cell viewWithTag:2001];
-//        titleLabel.text = _actData.activity_name;
-//    } else if ([cellId isEqualToString:@"actDesc"]) {
-//        UILabel *descLabel = [cell viewWithTag:3001];
-//        
-//        NSString *actDesc = _actData.activity_desc;
-//        CGSize size = SizeWithFont(actDesc, kUPThemeSmallFont);
-//        
-//        float height =size.height+2*kUPCellVerticalPadding;
-//        descLabel.frame = CGRectMake(kUPCellHorizontalPadding, kUPCellVerticalPadding, ScreenWidth-2*kUPCellHorizontalPadding, height);
-//        descLabel.text = actDesc;
-//        
-//    } else if ([cellId isEqualToString:@"cellID"]) {
-//        cell.textLabel.textColor = [UIColor blackColor];
-//        cell.textLabel.font = kUPThemeNormalFont;
-//        cell.backgroundColor = [UIColor clearColor];
-//        cell.accessoryView = nil;
-//
-//        if (indexPath.row==3) {
-//            cell.textLabel.text = @"策划人";
-//            cell.detailTextLabel.text = _actData.nick_name;
-//        } else if (indexPath.row==4) {
-//            cell.textLabel.text = @"活动时间";
-//            
-//            NSString *dateString = [UPTools dateStringTransform:_actData.start_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy-MM-dd"];
-//            cell.detailTextLabel.text = dateString;
-//            
-//        } else if (indexPath.row==5) {
-//            cell.textLabel.text = @"活动地点";
-//            cell.detailTextLabel.text = _actData.activity_place;
-//        } else if (indexPath.row==6) {
-//            cell.textLabel.text = @"人数上限";
-//            cell.detailTextLabel.text = _actData.limit_count;
-//            
-//            CGSize size = SizeWithFont(@"查看已报名用户", kUPThemeSmallFont);
-//            
-//            UIButton *searchBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, size.width+40, 30)];
-//            [searchBtn setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
-//            [searchBtn.imageView setContentMode:UIViewContentModeScaleAspectFit];
-//            [searchBtn setTitle:@"查看已报名用户" forState:UIControlStateNormal];
-//            [searchBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-//            searchBtn.titleLabel.font = kUPThemeSmallFont;
-//            searchBtn.backgroundColor = [UIColor clearColor];
-//            searchBtn.titleEdgeInsets=UIEdgeInsetsMake(0, 4, 0, 0);
-//            searchBtn.contentEdgeInsets=UIEdgeInsetsMake(0, 8, 0, 0);
-//            searchBtn.tag = DetailBtnTypeEnroll;
-//            [searchBtn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-//            cell.accessoryView = searchBtn;
-//        } else if (indexPath.row==7) {
-//            cell.textLabel.text = @"活动类型";
-//            
-//            NSString *actTypeID = _actData.activity_class;
-//            ActivityType *activityType = [[UPConfig sharedInstance] getActivityTypeByID:actTypeID];
-//            
-//            if (activityType) {
-//                cell.detailTextLabel.text = activityType.name;
-//            }
-//            
-//        }else if (indexPath.row==8) {
-//            cell.textLabel.text = @"报名状态";
-//            
-//            NSString *actStatusID = _actData.activity_status;
-//            ActivityStatus *activityStatus = [[UPConfig sharedInstance] getActivityStatusByID:actStatusID];
-//            
-//            NSString *statusName = activityStatus.name;
-//            if ([statusName isEqualToString:@"none"]) {
-//                NSString *sexual = [UPDataManager shared].userInfo.sexual;
-//                if ([sexual intValue]==0) {
-//                    statusName = @"满员";
-//                } else {
-//                    statusName = @"火热募集中";
-//                }
-//            }
-//            cell.detailTextLabel.text = statusName;
-//        }
-//    } else if ([cellId isEqualToString:@"submit"]) {
-//        UIButton *submit = [cell viewWithTag:(DetailBtnTypeSubmit)];
-//        
-//        if (self.sourceType==SourceTypeWoCanyu) {
-//            [submit setTitle:@"退出活动" forState:UIControlStateNormal];
-//        } else if (self.sourceType==SourceTypeWoFaqi|| self.sourceType==SourceTypeDaTing){
-//            [submit setTitle:@"参加活动" forState:UIControlStateNormal];
-//        }
-//    }
+    if (indexPath.row==4) {
+        cell.backgroundColor = [UIColor clearColor];
+        UIView *backView = [cell viewWithTag:100];
+        if (backView==nil) {
+            backView = [[UIView alloc] initWithFrame:CGRectMake(10, 0, ScreenWidth-20, cellItem.cellHeight)];
+            backView.tag=100;
+            backView.backgroundColor = [UIColor whiteColor];
+            
+            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth-20, 0.6)];
+            line.backgroundColor = [UIColor grayColor];
+            [backView addSubview:line];
 
+            UIButton *reportBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            reportBtn.frame = CGRectMake(ScreenWidth-20-60, 8, 50, cellItem.cellHeight-16);
+            [reportBtn setTitle:@"举报" forState:UIControlStateNormal];
+            [reportBtn setTitleColor:RGBCOLOR(160, 160, 160) forState:UIControlStateNormal];
+            reportBtn.titleLabel.font = kUPThemeMinFont;
+            reportBtn.backgroundColor = [UIColor clearColor];
+            reportBtn.layer.cornerRadius = 2.f;
+            reportBtn.layer.borderColor = [UIColor grayColor].CGColor;
+            reportBtn.layer.borderWidth = 1.f;
+            reportBtn.layer.masksToBounds = YES;
+            [backView addSubview:reportBtn];
+            
+            [cell addSubview:backView];
+        }
+    }
     return cell;
 }
 
