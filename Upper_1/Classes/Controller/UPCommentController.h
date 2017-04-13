@@ -12,6 +12,10 @@ typedef NS_ENUM(NSInteger, UPCommentType) {
     UPCommentTypeReview,
     UPCommentTypeComment
 };
+
+@interface UITable : <#superclass#>
+
+@end
 @interface UPCommentController : UPBaseViewController
 
 @property (nonatomic, copy) NSString *actID;

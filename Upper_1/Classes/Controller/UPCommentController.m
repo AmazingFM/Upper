@@ -20,6 +20,7 @@
 #define kUPReviewCommentPostURL @"http://api.qidianzhan.com.cn/AppServ/index.php?a=ActivityModify"
 
 
+
 @interface UPCommentController () <UIGestureRecognizerDelegate,UITextViewDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
     UIScrollView *scrollView;
@@ -185,7 +186,11 @@ static const int textViewContentHeight = 150;
 //        [params setObject:@"ActivityModify"forKey:@"a"];
         [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
         [params setObject:self.actID  forKey:@"activity_id"];
-        [params setObject:@"4" forKey:@"activity_status"];
+        [params setObject:@"8" forKey:@"activity_status"];
+        
+        for(UserData *joiner in self.userArr) {
+            [self.likes addObject:joiner.ID];
+        }
         NSString *likeStr = [self.likes componentsJoinedByString:@","]?:@"";
         NSString *dislikeStr = [self.disLikes componentsJoinedByString:@","]?:@"";
         NSString *commentStr = [UPTools encodeToPercentEscapeString:commentTextView.text];
@@ -214,7 +219,7 @@ static const int textViewContentHeight = 150;
                 }
                 UIImage *cutImage = [UPTools cutImage:image withSize:CGSizeMake(kWidth, kWidth/FixRatio)];
                 
-                [formData appendPartWithFileData:[UPTools compressImage:cutImage] name:[NSString stringWithFormat:@"image_%d",i] fileName:[NSString stringWithFormat:@"review_%d.jpg",i] mimeType:@"image/jpeg"];
+                [formData appendPartWithFileData:[UPTools compressImage:cutImage] name:[NSString stringWithFormat:@"image_%d",i+1] fileName:[NSString stringWithFormat:@"review_%d.jpg",i+1] mimeType:@"image/jpeg"];
             }
         } success:^(AFHTTPRequestOperation *operation, id responseObject) {
             [MBProgressHUD hideHUDForView:self.view];

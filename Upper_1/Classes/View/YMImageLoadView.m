@@ -248,9 +248,6 @@
         UIImagePickerController *picker = [[UIImagePickerController alloc]init];
         picker.delegate = self;
         //设置拍照后的图片可被编辑
-        picker.showsCameraControls = YES;
-        picker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
-        picker.mediaTypes = @[(NSString *)kUTTypeImage];
         picker.allowsEditing = YES;
         picker.sourceType = sourceType;
         [self.window.rootViewController presentViewController:picker animated:YES completion:nil];
@@ -258,6 +255,7 @@
     {
         NSLog(@"模拟器无法打开照相机");
     }
+
 }
 //打开本地相册
 - (void)localPhoto
