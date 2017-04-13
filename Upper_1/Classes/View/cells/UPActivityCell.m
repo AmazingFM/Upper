@@ -1278,15 +1278,22 @@
         2、	成功的活动，参与者随时可退出，一年满三次，封停账号3个月。\n";
         
         NSString *msg = sender.tag==kUPActCancelTag?cancleRules:quitRules;
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-        alertView.tag = sender.tag;
-        [alertView show];
+        if (sender.tag==kUPActCancelTag) {
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"返回" otherButtonTitles:@"确认取消", nil];
+            alertView.tag = sender.tag;
+            [alertView show];
+        } else {
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:msg delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
+            alertView.tag = sender.tag;
+            [alertView show];
+        }
         
     } else if (sender.tag==kUPActReviewTag  ||
                sender.tag==kUPActCommentTag ||
                sender.tag==kUPActChangeTag  ||
                sender.tag==kUPActSignTag    ||
-               sender.tag==kUPActEditTag)
+               sender.tag==kUPActEditTag) 
+        
     {
         if ([self.delegate respondsToSelector:@selector(onButtonSelected:withType:)]) {
             [self.delegate onButtonSelected:_actCellItem withType:sender.tag];

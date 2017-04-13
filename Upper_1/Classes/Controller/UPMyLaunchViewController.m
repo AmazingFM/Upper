@@ -174,20 +174,26 @@
         UPCommentController *commentController = [[UPCommentController alloc]init];
         commentController.actID = cellItem.itemData.ID;
         commentController.title=@"我要回顾";
-        commentController.type = 0;
+        commentController.type = UPCommentTypeReview;
         
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:commentController];
-        [nav.navigationBar setTintColor:[UIColor whiteColor]];
-        [nav.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-        [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"back_shadow"] forBarMetrics:UIBarMetricsDefault];
-        nav.navigationBar.shadowImage=[[UIImage alloc]init];  //隐藏掉导航栏底部的那条线
+//        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:commentController];
+//        [nav.navigationBar setTintColor:[UIColor whiteColor]];
+//        [nav.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+//        [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"back_shadow"] forBarMetrics:UIBarMetricsDefault];
+//        nav.navigationBar.shadowImage=[[UIImage alloc]init];  //隐藏掉导航栏底部的那条线
         //2.设置导航栏barButton上面文字的颜色
         UIBarButtonItem *item=[UIBarButtonItem appearance];
         [item setTintColor:[UIColor whiteColor]];
         [item setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]} forState:UIControlStateNormal];
-        [nav.navigationBar setTranslucent:YES];
-        [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-        [self presentViewController:nav animated:YES completion:nil];
+//        [nav.navigationBar setTranslucent:YES];
+//        [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+//        [self presentViewController:nav animated:YES completion:nil];
+        
+        CATransition* transition = [CATransition animation];
+        transition.type = kCATransitionPush;            //改变视图控制器出现的方式
+        transition.subtype = kCATransitionFromBottom;     //出现的位置
+        [self.navigationController.view.layer addAnimation:transition forKey:kCATransition];
+        [self.navigationController pushViewController:commentController animated:NO];
     } else if (type==kUPActSignTag) {
         QRCodeController *qrController = [[QRCodeController alloc] init];
         qrController.title = @"扫描";

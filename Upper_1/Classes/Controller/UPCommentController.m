@@ -15,6 +15,7 @@
 #import "UPTheme.h"
 #import "YMImageLoadView.h"
 #import "AFHTTPRequestOperationManager.h"
+#import "YMNetwork.h"
 
 #define kUPReviewCommentPostURL @"http://api.qidianzhan.com.cn/AppServ/index.php?a=ActivityModify"
 
@@ -32,7 +33,7 @@
     
     NSString *commentLevel;
     
-    BOOL hasRequestPeople;
+//    BOOL hasRequestPeople;
     
     UITableView *tableView;
 }
@@ -45,19 +46,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    UIImageView *backImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_cover_gaussian"]];
-    backImg.userInteractionEnabled = NO;
-    backImg.frame = self.view.bounds;
-    [self.view addSubview:backImg];
+    self.view.backgroundColor = [UPTools colorWithHex:0xf3f3f3];
     
     [self doInit];
     
-    
-    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight+20, ScreenWidth, ScreenHeight-FirstLabelHeight)];
+    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight)];
     scrollView.scrollEnabled = YES;
     scrollView.bounces = YES;
-    scrollView.backgroundColor = [UIColor clearColor];
+    scrollView.backgroundColor = [UPTools colorWithHex:0xf3f3f3];
     [self.view addSubview:scrollView];
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
@@ -111,7 +107,6 @@
 
 - (void)doInit {
     commentLevel = @"0";
-    hasRequestPeople = NO;
     
     pickerController = [UIImagePickerController new];
     pickerController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
@@ -134,18 +129,19 @@ static const int textViewContentHeight = 150;
     [contentView addSubview:commentTextView];
     [scrollView addSubview:contentView];
     
-    if (self.type==0) {
+    if (self.type==UPCommentTypeReview) {
         likeOrDislike = [[UIButton alloc] initWithFrame:CGRectMake(LeftRightPadding, textViewContentHeight+5, ScreenWidth-2*LeftRightPadding, 40)];
         [likeOrDislike setTitle:@"踩或赞活动参与人" forState:UIControlStateNormal];
-        likeOrDislike.backgroundColor = [UIColor whiteColor];
+        likeOrDislike.backgroundColor = [UIColor clearColor];
         likeOrDislike.titleLabel.font = kUPThemeNormalFont;
         [likeOrDislike setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         likeOrDislike.layer.cornerRadius = 5.0f;
         [likeOrDislike addTarget:self action:@selector(showAnticipates:) forControlEvents:UIControlEventTouchUpInside];
         
-         _imageLoadView = [[YMImageLoadView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(likeOrDislike.frame)+10, ScreenWidth-2*LeftRightPadding, 300) withMaxCount:5];
+         _imageLoadView = [[YMImageLoadView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(likeOrDislike.frame)+10, ScreenWidth-2*LeftRightPadding, 300) withMaxCount:3];
         [scrollView addSubview:likeOrDislike];
-    } else if (self.type==1) {
+        [scrollView addSubview:_imageLoadView];
+    } else if (self.type==UPCommentTypeReview) {
         radioBackView = [[UIView alloc] initWithFrame:CGRectMake(LeftRightPadding, textViewContentHeight+5, ScreenWidth-2*LeftRightPadding, 40)];
         radioBackView.backgroundColor = [UIColor clearColor];
         CGFloat viewWidth = ScreenWidth-2*LeftRightPadding;
@@ -200,7 +196,6 @@ static const int textViewContentHeight = 150;
         
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         //申明请求的数据是json类型
-        //manager.requestSerializer.HTTPMethodsEncodingParametersInURI = [NSSet setWithArray:@[@"POST", @"GET", @"HEAD"]];
         manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
         
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
@@ -219,9 +214,10 @@ static const int textViewContentHeight = 150;
                 }
                 UIImage *cutImage = [UPTools cutImage:image withSize:CGSizeMake(kWidth, kWidth/FixRatio)];
                 
-                [formData appendPartWithFileData:[UPTools compressImage:cutImage] name:[NSString stringWithFormat:@"image_%d",i] fileName:@"pic" mimeType:@"image/jpeg"];
+                [formData appendPartWithFileData:[UPTools compressImage:cutImage] name:[NSString stringWithFormat:@"image_%d",i] fileName:[NSString stringWithFormat:@"review_%d.jpg",i] mimeType:@"image/jpeg"];
             }
         } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [MBProgressHUD hideHUDForView:self.view];
             NSString *resp = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
             NSLog(@"Success:%@,", resp);
             
@@ -235,43 +231,14 @@ static const int textViewContentHeight = 150;
                 [alert show];
             }
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"Error: %@", error);
-            [self.navigationController popViewControllerAnimated:YES];
+            [MBProgressHUD hideHUDForView:self.view];
         }];
-
-//        [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [MBProgressHUD hideHUDForView:self.view];
-//            });
-//            
-//            
-//            NSDictionary *dict = (NSDictionary *)json;
-//            NSString *resp_id = dict[@"resp_id"];
-//            if ([resp_id intValue]==0) {
-//                NSString *resp_desc = dict[@"resp_desc"];
-//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"🙏🏻，恭喜您" message:resp_desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-//                [alert show];
-//            }
-//            else
-//            {
-//                NSString *resp_desc = dict[@"resp_desc"];
-//                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"💔，很遗憾" message:resp_desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-//                [alert show];
-//            }
-//            
-//        } failture:^(id error) {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [MBProgressHUD hideHUDForView:self.view];
-//            });
-//            NSLog(@"%@",[error localizedDescription]);
-//            
-//        }];
 
     } else if (self.type==1) {
         
         [MBProgressHUD showMessage:@"正在提交评论...." toView:self.view];
-        NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+        
+        NSMutableDictionary *params = [NSMutableDictionary new];
         [params setObject:@"ActivityJoinModify"forKey:@"a"];
         [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
         [params setObject:self.actID forKey:@"activity_id"];
@@ -281,11 +248,8 @@ static const int textViewContentHeight = 150;
         [params setObject:commentLevel forKey:@"evaluate_level_1"];
         [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
         
-        [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [MBProgressHUD hideHUDForView:self.view];
-            });
-            
+        [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id json) {
+            [MBProgressHUD hideHUDForView:self.view];
             
             NSDictionary *dict = (NSDictionary *)json;
             NSString *resp_id = dict[@"resp_id"];
@@ -301,7 +265,7 @@ static const int textViewContentHeight = 150;
                 [alert show];
             }
             
-        } failture:^(id error) {
+        } failure:^(NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [MBProgressHUD hideHUDForView:self.view];
             });
@@ -338,15 +302,12 @@ static const int textViewContentHeight = 150;
 
 - (void)showAnticipates:(UIButton *) sender
 {
-    if (hasRequestPeople) {
-        
-    } else {
-        [self requestPeopleEnrolled];
-    }
+    
+    [self requestPeopleEnrolled];
 }
 
 - (void)dismiss {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)requestPeopleEnrolled
@@ -371,20 +332,19 @@ static const int textViewContentHeight = 150;
             NSDictionary *resp_data = dict[@"resp_data"];
             int totalCount = [resp_data[@"total_count"] intValue];
             if (totalCount>0) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSString *userList = resp_data[@"user_list"];
-                    if ([userList isKindOfClass:[NSArray class]]) {
-                        for (NSDictionary *userDict in (NSArray *)userList) {
-                            UserData *user = [[UserData alloc] init];
-                            user.ID = userDict[@"user_id"];
-                            user.nick_name = userDict[@"nick_name"];
-                            user.sexual = userDict[@"sexual"];
-                            user.user_icon = userDict[@"user_icon"];
-                            
-                            [self.userArr addObject:user];
-                        }
+                NSString *userList = resp_data[@"user_list"];
+                if ([userList isKindOfClass:[NSArray class]]) {
+                    for (NSDictionary *userDict in (NSArray *)userList) {
+                        UserData *user = [[UserData alloc] init];
+                        user.ID = userDict[@"user_id"];
+                        user.nick_name = userDict[@"nick_name"];
+                        user.sexual = userDict[@"sexual"];
+                        user.user_icon = userDict[@"user_icon"];
+                        
+                        [self.userArr addObject:user];
                     }
-                });
+                }
+                
             } else{
                 //目前黑没有参与者
                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"该活动目前无人参加！" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];

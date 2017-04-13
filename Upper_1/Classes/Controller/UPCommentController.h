@@ -8,8 +8,12 @@
 
 #import "UPBaseViewController.h"
 
+typedef NS_ENUM(NSInteger, UPCommentType) {
+    UPCommentTypeReview,
+    UPCommentTypeComment
+};
 @interface UPCommentController : UPBaseViewController
 
 @property (nonatomic, copy) NSString *actID;
-@property (nonatomic) int type; //0-我要回顾， 1-我要评论
+@property (nonatomic) UPCommentType type; //0-我要回顾， 1-我要评论
 @end

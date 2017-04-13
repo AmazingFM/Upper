@@ -262,6 +262,7 @@
 
 - (void)requestMessages
 {
+    return;
     NSMutableDictionary *params = [NSMutableDictionary new];
     [params setValue:@"MessageGet" forKey:@"a"];
     [params setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
