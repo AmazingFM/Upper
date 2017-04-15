@@ -145,7 +145,8 @@ static NSMutableDictionary *rb_observers=nil;
     }
 
     [_button setTitle:self.text forState:UIControlStateNormal];
-    [_button setTitle:self.text forState:UIControlStateSelected];
+    [_button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    _button.titleLabel.font = [UIFont systemFontOfSize:14];
 
     //自定义button的点击事件handleButtonTap
 	[_button addTarget:self action:@selector(handleButtonTap:) forControlEvents:UIControlEventTouchUpInside];

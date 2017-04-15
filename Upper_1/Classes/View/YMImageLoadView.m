@@ -101,6 +101,8 @@
         addImage = imageNameOrImage;
     }
     UIButton *addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    addBtn.layer.borderColor = RGBCOLOR(220, 220, 220).CGColor;
+    addBtn.layer.borderWidth = 0.2;
     [addBtn setImage:addImage forState:UIControlStateNormal];
     [addBtn addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
     addBtn.tag = self.subviews.count;

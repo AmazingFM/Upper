@@ -1296,7 +1296,7 @@
         
     {
         if ([self.delegate respondsToSelector:@selector(onButtonSelected:withType:)]) {
-            [self.delegate onButtonSelected:_actCellItem withType:sender.tag];
+            [self.delegate onButtonSelected:_actCellItem withType:(int)sender.tag];
         }
     }
 }
