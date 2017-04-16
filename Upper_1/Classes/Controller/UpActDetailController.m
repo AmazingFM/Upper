@@ -511,17 +511,17 @@
     
     [self getActivityDetailInfo:self.actData.ID];
     
-//    if (self.sourceType==SourceTypeWoFaqi) {
-//        UIButton *addFriendButton=[UIButton buttonWithType:UIButtonTypeCustom];
-//        
-//        addFriendButton.frame=CGRectMake(0, 0, 35, 35);
-//        UIImage *image = [UIImage imageNamed:@"add"];
-//        UIImage *stretchableButtonImage = [image resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
-//        [addFriendButton setBackgroundImage:stretchableButtonImage forState:UIControlStateNormal];
-//        [addFriendButton addTarget:self action:@selector(inviteBtn:) forControlEvents:UIControlEventTouchUpInside];
-//        
-//        self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithCustomView:addFriendButton];
-//    }
+    if (self.sourceType==SourceTypeWoFaqi) {
+        UIButton *addFriendButton=[UIButton buttonWithType:UIButtonTypeCustom];
+        
+        addFriendButton.frame=CGRectMake(0, 0, 35, 35);
+        UIImage *image = [UIImage imageNamed:@"add"];
+        UIImage *stretchableButtonImage = [image resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
+        [addFriendButton setBackgroundImage:stretchableButtonImage forState:UIControlStateNormal];
+        [addFriendButton addTarget:self action:@selector(inviteBtn:) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithCustomView:addFriendButton];
+    }
 }
 
 - (void)reloadItems
@@ -966,7 +966,32 @@
             reportBtn.layer.masksToBounds = YES;
             [backView addSubview:reportBtn];
             
+            UIButton *inviteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            inviteBtn.frame = CGRectMake(ScreenWidth-20-120, 8, 50, cellItem.cellHeight-16);
+            [inviteBtn setTitle:@"邀请" forState:UIControlStateNormal];
+            [inviteBtn setTitleColor:RGBCOLOR(160, 160, 160) forState:UIControlStateNormal];
+            inviteBtn.titleLabel.font = kUPThemeMinFont;
+            inviteBtn.backgroundColor = [UIColor clearColor];
+            inviteBtn.layer.cornerRadius = 2.f;
+            inviteBtn.layer.borderColor = [UIColor grayColor].CGColor;
+            inviteBtn.layer.borderWidth = 1.f;
+            inviteBtn.layer.masksToBounds = YES;
+            [inviteBtn addTarget:self action:@selector(inviteBtn:) forControlEvents:UIControlEventTouchUpInside];
+            [backView addSubview:inviteBtn];
+            
+            UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            shareBtn.frame = CGRectMake(ScreenWidth-20-180, 8, 50, cellItem.cellHeight-16);
+            [shareBtn setTitle:@"分享" forState:UIControlStateNormal];
+            [shareBtn setTitleColor:RGBCOLOR(160, 160, 160) forState:UIControlStateNormal];
+            shareBtn.titleLabel.font = kUPThemeMinFont;
+            shareBtn.backgroundColor = [UIColor clearColor];
+            shareBtn.layer.cornerRadius = 2.f;
+            shareBtn.layer.borderColor = [UIColor grayColor].CGColor;
+            shareBtn.layer.borderWidth = 1.f;
+            shareBtn.layer.masksToBounds = YES;
+            [backView addSubview:shareBtn];
             [cell addSubview:backView];
+
         }
     }
     return cell;
