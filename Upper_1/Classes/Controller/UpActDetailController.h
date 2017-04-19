@@ -72,6 +72,11 @@ typedef NS_ENUM(NSInteger, SourceType) {
 @property (nonatomic, retain) NSString *title;
 @end
 
+@interface UPDetailReviewInfoItem :UPBaseCellItem
+@property (nonatomic, retain) NSString *reviewText;
+@property (nonatomic, retain) NSMutableArray *reviewImages;
+@end
+
 //------cell
 @interface UPDetailImageCell : UPBaseCell
 @property (nonatomic, retain) UIImageView *activityImage;
@@ -105,6 +110,10 @@ typedef NS_ENUM(NSInteger, SourceType) {
 @property (nonatomic, retain) UIButton *button;
 @end
 
+@interface UPDetailReviewInfoCell : UPBaseCell
+@property (nonatomic, retain) UILabel *reviewLabel;
+@property (nonatomic, retain) NSMutableArray *reviewImages;
+@end
 
 @interface UpActDetailController : UPBaseViewController
 

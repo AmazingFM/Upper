@@ -47,7 +47,15 @@
 @implementation UPDetailButtonCellItem
 @end
 
-
+@implementation UPDetailReviewInfoItem
+- (NSMutableArray *)reviewImages
+{
+    if (_reviewImages==nil) {
+        _reviewImages = [NSMutableArray new];
+    }
+    return _reviewImages;
+}
+@end
 //------cell
 @interface UPDetailImageCell()
 {
@@ -447,6 +455,65 @@
 
 @end
 
+@interface UPDetailReviewInfoCell()
+{
+    UIView *lineView;
+    UILabel *titleLabel;
+}
+
+@end
+
+@implementation UPDetailReviewInfoCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        lineView = [[UIView alloc] initWithFrame:CGRectZero];
+        
+        titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        titleLabel.font = kUPThemeSmallFont;
+        titleLabel.backgroundColor = [UIColor clearColor];
+        titleLabel.textAlignment = NSTextAlignmentCenter;
+        titleLabel.textColor = RGBCOLOR(160, 160, 160);
+        
+        self.reviewLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        self.reviewLabel.font = kUPThemeSmallFont;
+        self.reviewLabel.backgroundColor = [UIColor clearColor];
+        self.reviewLabel.textAlignment = NSTextAlignmentLeft;
+        self.reviewLabel.textColor = RGBCOLOR(160, 160, 160);
+        
+        [self addSubview:lineView];
+        [self addSubview:titleLabel];
+        [self addSubview:self.reviewLabel];
+    }
+    
+    return self;
+}
+
+
+- (void)setItem:(UPBaseCellItem *)item
+{
+    [super setItem: item];
+    UPDetailReviewInfoItem *reviewInfoItem = (UPDetailReviewInfoItem *)item;
+    
+    float offsetx = 10;
+    float offsety = 0;
+
+    lineView.frame = CGRectMake(offsetx, 15, reviewInfoItem.cellWidth, 0.6);
+    
+    float imageWidth = 75;
+    if (reviewInfoItem.reviewImages.count>0) {
+        
+    } else {
+    }
+    if (reviewInfoItem.reviewText.length!=0) {
+        CGSize size = SizeWithFont(reviewInfoItem.reviewText, kUPThemeSmallFont);
+        self.reviewLabel.frame = CGRectMake(10, , <#CGFloat width#>, <#CGFloat height#>)
+    }
+}
+@end
+
 
 #define LabelHeight 17
 #define AlertTagEdit    0
@@ -528,21 +595,22 @@
 {
     if (self.detailActData) {
         UPDetailImageCellItem *imageItem = [[UPDetailImageCellItem alloc] init];
+        imageItem.key = @"ActivityImage";
         imageItem.imageUrl = self.detailActData.activity_image;
         imageItem.imageDefault = @"";
         imageItem.userIconUrl = self.detailActData.user_icon;
         imageItem.userIconDefault = @"activity_user_icon";
         imageItem.userName = self.detailActData.nick_name;
         imageItem.cellWidth = ScreenWidth;
-        
         imageItem.cellHeight = (int)((ScreenWidth-2*10)*3/4+10+5)+1;
 
         
         UPDetailTitleInfoCellItem *infoItem = [[UPDetailTitleInfoCellItem alloc] init];
+        infoItem.key = @"ActivityInfo";
         infoItem.title = self.detailActData.activity_name;
         infoItem.cityName = self.detailActData.city;
-        infoItem.startTime = [UPTools dateTransform:self.detailActData.start_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy.MM.dd"];
-        infoItem.endTime = [UPTools dateTransform:self.detailActData.end_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy.MM.dd"];
+        infoItem.startTime = [UPTools dateTransform:self.detailActData.start_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy年MM月dd日"];
+        infoItem.endTime = [UPTools dateTransform:self.detailActData.end_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy年MM月dd日"];
         infoItem.payTypeName = [[UPConfig sharedInstance] getPayTypeByID:self.detailActData.is_prepaid].name;
         infoItem.payFee = self.detailActData.activity_fee;
         infoItem.cellWidth = ScreenWidth;
@@ -550,6 +618,7 @@
         infoItem.cellHeight = (int)(5+30+5*4+size.height*3+5)+1;
         
         UPDetailPeopleInfoCellItem *peopleItem = [[UPDetailPeopleInfoCellItem alloc] init];
+        peopleItem.key = @"ActivityPeople";
         peopleItem.currentNum = self.detailActData.part_count;
         peopleItem.totalNum = self.detailActData.limit_count;
         peopleItem.cellWidth = ScreenWidth;
@@ -561,6 +630,7 @@
         }
         
         UPDetailExtraInfoCellItem *extraItem = [[UPDetailExtraInfoCellItem alloc] init];
+        extraItem.key = @"extraInfo";
         extraItem.desc = self.detailActData.activity_desc;
         extraItem.place = self.detailActData.activity_place;
         extraItem.shopName = self.detailActData.activity_place;//[[UPConfig sharedInstance] getPlaceTypeByID:[@(actId) stringValue]].name;
@@ -579,6 +649,7 @@
         
         UPBaseCellItem *extraBtnItem = [[UPBaseCellItem alloc] init];
         extraBtnItem.cellHeight = 40;
+        extraBtnItem.key = @"extraButton";
         
         [_itemList removeAllObjects];
         [_itemList addObject:imageItem];
@@ -942,7 +1013,7 @@
     
     [cell setItem:cellItem];
     
-    if (indexPath.row==4) {
+    if ([cellItem.key isEqualToString:@"extraButton"]) {
         cell.backgroundColor = [UIColor clearColor];
         UIView *backView = [cell viewWithTag:100];
         if (backView==nil) {
