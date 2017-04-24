@@ -18,6 +18,12 @@
 
 
 @interface UpMyActivityViewController () <UIScrollViewDelegate>
+{
+    UISegmentedControl *segmentedControl;
+    
+    UPMyLaunchViewController *myLaunch;
+    UPMyAnticipateViewController *myAnticipate;
+}
 
 @property (nonatomic) int selectedIndex;
 - (void)leftClick;
@@ -33,13 +39,14 @@
 
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
     
-    UPMyLaunchViewController *myLaunch = [[UPMyLaunchViewController alloc] init];
+    myLaunch = [[UPMyLaunchViewController alloc] init];
     myLaunch.view.frame = CGRectMake(0,FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight);
     [self addChildViewController:myLaunch];
     
-    UPMyAnticipateViewController *myAnticipate = [[UPMyAnticipateViewController alloc] init];
+    myAnticipate = [[UPMyAnticipateViewController alloc] init];
     myAnticipate.view.frame = CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight);
     [self addChildViewController:myAnticipate];
+
 
     [self.view addSubview:self.childViewControllers[_selectedIndex].view];
 }
@@ -49,11 +56,16 @@
     [g_sideController showLeftViewController:YES];
 }
 
+- (void)switchToMyLaunch
+{
+    segmentedControl.selectedSegmentIndex = 0;
+    [self segmentAction:segmentedControl];
+}
+
 - (void)initSegmentedControl
 {
-    
     NSArray *segmentedData = [[NSArray alloc]initWithObjects:@"我发起的",@"我参与的", nil];
-    UISegmentedControl *segmentedControl = [[UISegmentedControl alloc]initWithItems:segmentedData];
+    segmentedControl = [[UISegmentedControl alloc]initWithItems:segmentedData];
     segmentedControl.frame = CGRectMake(0, 0, 30, 30);
     segmentedControl.layer.cornerRadius = 4.f;
     segmentedControl.layer.masksToBounds = YES;
@@ -85,6 +97,15 @@
         [self transitionFromViewController:self.childViewControllers[_selectedIndex] toViewController:self.childViewControllers[sender.selectedSegmentIndex] duration:0.3 options:UIViewAnimationOptionAutoreverse animations:nil completion:^(BOOL finished) {
             _selectedIndex = (int)sender.selectedSegmentIndex;
         }];
+    }
+}
+
+- (void)refresh
+{
+    if (_selectedIndex==0) {
+        [myLaunch refresh];
+    } else {
+        [myAnticipate refresh];
     }
 }
 

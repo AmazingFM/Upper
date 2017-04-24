@@ -28,6 +28,7 @@
     [[UINavigationBar appearance] setTitleTextAttributes:navbarTitleTextAttributes];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance] setBarTintColor:[UIColor blackColor]];
+//    [self test];
     
     self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
@@ -76,6 +77,10 @@
     g_sideController = mainController;
     self.window.rootViewController=mainController;
     [self.window makeKeyAndVisible];
+}
+
+- (void)test {
+    [UPTools stringFromQuotString:@""];
 }
 
 @end

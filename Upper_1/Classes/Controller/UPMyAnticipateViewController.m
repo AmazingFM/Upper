@@ -126,6 +126,8 @@
                     [self.mainTable.footer noticeNoMoreData];
                 }
             }
+            
+            self.hasLoad = YES;
         }
         else
         {
@@ -155,12 +157,13 @@
 
 -(void)onButtonSelected:(UPActivityCellItem *)cellItem withType:(int)type
 {
-    if (type==kUPActCommentTag) {
+    if (type==kUPActCommentTag ||type==kUPActComplainTag) {
+        
         //发布评论
         UPCommentController *commentController = [[UPCommentController alloc]init];
         commentController.actID = cellItem.itemData.ID;
-        commentController.title=@"我要评论";
-        commentController.type = UPCommentTypeComment;
+        commentController.title = type==kUPActCommentTag?@"我要评论":@"我要投诉";
+        commentController.type = type==kUPActCommentTag?UPCommentTypeComment:UPCommentTypeComplain;
         
 //        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:commentController];
 //        [nav.navigationBar setTintColor:[UIColor whiteColor]];

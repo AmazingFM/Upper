@@ -575,14 +575,16 @@ static CGFloat const FixRatio = 4/3.0;
         CGFloat perWidth = sizeOneChar.width;
         CGFloat perHeight = sizeOneChar.height+4;
         
-        UITextField *lowField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-3*perWidth-kUPThemeBorder, (detailHeight-perHeight)/2, 2*perWidth, perHeight)];
+        UITextField *lowField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-100-perWidth-kUPThemeBorder, (detailHeight-perHeight)/2, 100, perHeight)];
         lowField.tag = kFieldTagForPrepay;
         lowField.text = @"0";
-        lowField.keyboardType = UIKeyboardTypeNumberPad;
-        lowField.borderStyle = UITextBorderStyleLine;
+        lowField.keyboardType = UIKeyboardTypeDecimalPad;
+        lowField.returnKeyType = UIReturnKeyDone;
+        lowField.borderStyle = UITextBorderStyleRoundedRect;
         [lowField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
         lowField.delegate = self;
         lowField.text = _activityFee;
+        lowField.layer.borderColor = [UPTools colorWithHex:0x666666].CGColor;
         
         UILabel *renLabel = [[UILabel alloc] initWithFrame:CGRectMake(detailWidth-perWidth,(detailHeight-perHeight)/2, perWidth, perHeight)];
         renLabel.text = @"元";
@@ -618,11 +620,13 @@ static CGFloat const FixRatio = 4/3.0;
             
             UITextField *lowField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-3*perWidth-kUPThemeBorder, (detailHeight-perHeight)/2, 2*perWidth, perHeight)];
             lowField.tag = kFieldTagForFemaleLowLimit;
-            lowField.keyboardType = UIKeyboardTypeNumberPad;
-            lowField.borderStyle = UITextBorderStyleLine;
+            lowField.keyboardType = UIKeyboardTypeDefault;
+            lowField.returnKeyType = UIReturnKeyDone;
+            lowField.borderStyle = UITextBorderStyleRoundedRect;
             [lowField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
             lowField.delegate = self;
             lowField.text = _femaleLowLimit;
+            lowField.layer.borderColor = [UPTools colorWithHex:0x666666].CGColor;
             
             UILabel *renLabel = [[UILabel alloc] initWithFrame:CGRectMake(detailWidth-perWidth,(detailHeight-perHeight)/2, perWidth, perHeight)];
             renLabel.text = @"人";
@@ -651,19 +655,23 @@ static CGFloat const FixRatio = 4/3.0;
         CGFloat perHeight = sizeOneChar.height+4;
         UITextField *lowField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-6*perWidth-3*kUPThemeBorder, (detailHeight-perHeight)/2, 2*perWidth, perHeight)];
         lowField.tag = kFieldTagForPepleLowLimit;
-        lowField.keyboardType = UIKeyboardTypeNumberPad;
-        lowField.borderStyle = UITextBorderStyleLine;
+        lowField.keyboardType = UIKeyboardTypeDefault;
+        lowField.returnKeyType = UIReturnKeyDone;
+        lowField.borderStyle = UITextBorderStyleRoundedRect;
         [lowField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
         lowField.delegate = self;
         lowField.text = _lowLimit;
+        lowField.layer.borderColor = [UPTools colorWithHex:0x666666].CGColor;
     
         UITextField *highField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-3*perWidth-kUPThemeBorder, (detailHeight-perHeight)/2, 2*perWidth, perHeight)];
         highField.tag = kFieldTagForPepleHighLimit;
-        highField.borderStyle = UITextBorderStyleLine;
-        highField.keyboardType = UIKeyboardTypeNumberPad;
+        highField.keyboardType = UIKeyboardTypeDefault;
+        highField.returnKeyType = UIReturnKeyDone;
+        highField.borderStyle = UITextBorderStyleRoundedRect;
         [highField addTarget:self action:@selector(textFieldChanged:) forControlEvents:UIControlEventEditingChanged];
         highField.delegate = self;
         highField.text = _highLimit;
+        highField.layer.borderColor = [UPTools colorWithHex:0x666666].CGColor;
         
         UILabel *zhiLabel = [[UILabel alloc] initWithFrame:CGRectMake(detailWidth-4*perWidth-2*kUPThemeBorder,(detailHeight-perHeight)/2, perWidth, perHeight)];
         zhiLabel.text = @"至";
@@ -734,6 +742,10 @@ static CGFloat const FixRatio = 4/3.0;
 }
 
 #pragma mark UITextFieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self resignKeyboard];
+    return YES;
+}
 -(void)textFieldChanged:(UITextField*)textField
 {
     if (textField.tag==kFieldTagForPepleLowLimit) {
@@ -756,6 +768,17 @@ static CGFloat const FixRatio = 4/3.0;
     
     if (textField.tag==1001 || textField.tag==1002 || textField.tag==1003) {
         int actionLen = 2;
+        if (textField.text.length+textEntered.length>actionLen) {
+            return NO;
+        }
+        
+        NSCharacterSet *cs = nil;
+        cs = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet];
+        NSString *filtered = [[textEntered componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+        BOOL basicTest = [textEntered isEqualToString:filtered];
+        return basicTest;
+    } else if (textField.tag == kFieldTagForPrepay) {
+        int actionLen = 4;
         if (textField.text.length+textEntered.length>actionLen) {
             return NO;
         }
@@ -817,7 +840,7 @@ static CGFloat const FixRatio = 4/3.0;
 
 - (void)jumpToMyAct
 {
-    [g_homeMenu switchController:4];//4跳转到我的活动
+    [g_homeMenu switchController:4];//4跳转到我发起的活动
 }
 
 - (void)buttonClicked:(UIButton *)btn withIndexPath:(NSIndexPath *)indexPath
@@ -1129,6 +1152,11 @@ static CGFloat const FixRatio = 4/3.0;
 -(void)leftClick
 {
     [g_sideController showLeftViewController:YES];
+}
+
+- (void)willShowSlideView
+{
+    [self resignKeyboard];
 }
 
 @end

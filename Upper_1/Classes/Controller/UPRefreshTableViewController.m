@@ -9,9 +9,6 @@
 #import "UPRefreshTableViewController.h"
 
 @interface UPRefreshTableViewController () <UITableViewDelegate, UITableViewDataSource>
-{
-    BOOL isLoaded;
-}
 @end
 
 @implementation UPRefreshTableViewController
@@ -24,7 +21,7 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     self.lastPage = NO;
-    isLoaded = NO;
+    self.hasLoad = NO;
     
     _tipsLabel  = [[UILabel alloc] initWithFrame:CGRectZero];
     _tipsLabel.size = CGSizeMake(100, 44);
@@ -50,7 +47,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (!isLoaded) {
+    if (!self.hasLoad) {
         [self refresh];
     }
 }

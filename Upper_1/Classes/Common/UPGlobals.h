@@ -34,7 +34,6 @@ extern UIWindow *g_mainWindow;
 extern AppDelegate *g_appDelegate;
 
 @class MainController;
-extern MainController *g_mainMenu;
 extern YRSideViewController* g_sideController;
 
 @class UPMainMenuController;

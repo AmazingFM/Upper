@@ -69,6 +69,12 @@
     [g_sideController showLeftViewController:YES];
 }
 
+- (void)showLeftViewController:(BOOL)animated
+{
+    [super showLeftViewController:animated];
+    [g_homeMenu enterSlideView];
+}
+
 
 - (BOOL)prefersStatusBarHidden
 

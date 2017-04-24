@@ -65,7 +65,7 @@ static int kMsgCount = 0;
     int pageNum;
     BOOL lastPage;
     
-    BOOL firstLoad;
+    BOOL hasLoad;
     
     UIBarButtonItem *messageItem;
     
@@ -85,6 +85,7 @@ static int kMsgCount = 0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    hasLoad = NO;
     
     [self loadCollectItem];
     
@@ -216,8 +217,19 @@ static int kMsgCount = 0;
     if (![UPDataManager shared].isLogin) {
         
     } else {
-        [_mainTable.header beginRefreshing];
+        if (!hasLoad) {
+            [_mainTable.header beginRefreshing];
+        }
     }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+}
+
+- (void)refresh {
+    [_mainTable.header beginRefreshing];
 }
 
 - (UITableView *)mainTable
@@ -301,7 +313,7 @@ static int kMsgCount = 0;
     
     //复合条件查询
     if (_currentData1Index==0){
-        if (firstLoad || _currentData1RightIndex==0) {
+        if (_currentData1RightIndex==0) {
             [params setObject:[UPDataManager shared].userInfo.province_code forKey:@"province_code"];
         } else {
             [params setObject:@"" forKey:@"province_code"];
@@ -407,6 +419,8 @@ static int kMsgCount = 0;
                     [_mainTable.footer noticeNoMoreData];
                 }
             }
+            
+            hasLoad = YES;
         }
         else
         {

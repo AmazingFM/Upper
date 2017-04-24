@@ -26,7 +26,6 @@ UIWindow *g_mainWindow;
 NSString *g_uuid;
 
 AppDelegate *g_appDelegate;
-MainController *g_mainMenu;
 UPMainMenuController *g_homeMenu;
 
 YRSideViewController* g_sideController;

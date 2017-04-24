@@ -9,8 +9,9 @@
 #import "UPBaseViewController.h"
 
 typedef NS_ENUM(NSInteger, UPCommentType) {
-    UPCommentTypeReview,
-    UPCommentTypeComment
+    UPCommentTypeReview,    //回顾
+    UPCommentTypeComment,   //评论
+    UPCommentTypeComplain   //投诉
 };
 
 @interface CommentUserItem : NSObject

@@ -10,4 +10,5 @@
 
 @interface UPMainMenuController : UIViewController
 - (void)switchController:(NSInteger)index;
+- (void)enterSlideView;
 @end

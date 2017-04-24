@@ -165,6 +165,13 @@ NSString *kKeyChainUUIDAccessGroup = @"com.upper";
     return [newStr dataUsingEncoding:enc];;
 }
 
++ (NSString *)stringFromQuotString:(NSString *)quotString
+{
+    NSString *testStr = @"{&quot;activity_class&quot; : &quot;307&quot;,&quot;id&quot; : &quot;20&quot;,&quot;nick_name&quot; : &quot;用户1487400161&quot;,&quot;activity_name&quot; : &quot;吃饭吃饭吃饭吃饭&quot;,&quot;start_time&quot; : &quot;20171120000000&quot;}";
+    NSString *newStr = [testStr stringByReplacingOccurrencesOfString:@"&quot;" withString:@"\""];
+    return newStr;
+}
+
 +(NSString*)stringFromJSON:(NSObject*)jsonObj{
     //    [JSON JSONString]
     NSData* data=[UPTools dataFromJSON:jsonObj];

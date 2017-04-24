@@ -17,6 +17,10 @@
 #import "UpExpertController.h"
 
 @interface UPMainMenuController ()
+{
+    NSMutableArray<UPBaseViewController *> *viewControllers;
+    BOOL toMyLaunch;
+}
 
 @property (nonatomic) NSInteger selectedIndex;
 
@@ -29,6 +33,7 @@
     self = [super init];
     if (self) {
         self.selectedIndex = 1;
+        toMyLaunch = NO;
     }
     return self;
 }
@@ -44,6 +49,13 @@
     UPMyFriendsViewController *friendVC = [[UPMyFriendsViewController alloc] init];
     UpMyActivityViewController *myActVC = [[UpMyActivityViewController alloc] init];
     UPRulesController *ruleVC = [[UPRulesController alloc] init];
+    viewControllers = [NSMutableArray arrayWithCapacity:6];
+    [viewControllers addObject:upperVC];
+    [viewControllers addObject:hallVC];
+    [viewControllers addObject:launchVC];
+    [viewControllers addObject:friendVC];
+    [viewControllers addObject:myActVC];
+    [viewControllers addObject:ruleVC];
     
     UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:upperVC];
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:hallVC];
@@ -54,7 +66,6 @@
     
     [self addChildViewController:nav1];
     [self addChildViewController:nav2];
-//    [self addChildViewController:nav3];
     [self addChildViewController:nav4];
     [self addChildViewController:nav5];
     [self addChildViewController:nav6];
@@ -79,6 +90,12 @@
     g_sideController.needSwipeShowMenu = NO;
 }
 
+- (void)switchToMyLaunchController
+{
+    toMyLaunch = YES;
+    [self switchController:4];
+}
+
 - (void)switchController:(NSInteger)index
 {
     if (index>=self.childViewControllers.count) {
@@ -92,6 +109,19 @@
             }
             self.selectedIndex = index;
         }];
+        
+        if(index==1 || index==4) //切换到大厅和我的活动时刷新
+        {
+            if (toMyLaunch && index==4) {
+                UpMyActivityViewController *myActVC = (UpMyActivityViewController *)viewControllers[index];
+                [myActVC switchToMyLaunch];
+                [myActVC refresh];
+                toMyLaunch = NO;
+            } else {
+                UPBaseViewController *viewController = viewControllers[index];
+                [viewController refresh];
+            }
+        }
     }
 }
 
@@ -100,5 +130,10 @@
     [g_sideController showLeftViewController:YES];
 }
 
+- (void)enterSlideView
+{
+    UPBaseViewController *viewController = viewControllers[self.selectedIndex];
+    [viewController willShowSlideView];
+}
 
 @end

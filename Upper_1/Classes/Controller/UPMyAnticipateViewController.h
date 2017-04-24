@@ -10,5 +10,4 @@
 #import "UPRefreshTableViewController.h"
 
 @interface UPMyAnticipateViewController : UPRefreshTableViewController
-
 @end

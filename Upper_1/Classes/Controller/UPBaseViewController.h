@@ -20,5 +20,6 @@
 
 - (void)addBadgeValue:(NSNotification *)notification;
 - (void)setBadgeValue:(int)newValue;
-
+- (void)refresh;
+- (void)willShowSlideView;
 @end

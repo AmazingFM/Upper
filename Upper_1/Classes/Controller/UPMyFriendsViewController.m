@@ -28,6 +28,7 @@
     UILabel *tipsLabel;
     
     UIButton *addFriendButton;
+    BOOL hasLoad;
 }
 @property (nonatomic, retain) UITableView *mainTable;
 @property (nonatomic, retain) NSMutableArray *friendlist;
@@ -38,6 +39,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    hasLoad = NO;
     self.navigationItem.title = @"我的好友";
     
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:nil target:self action:@selector(leftClick)];
@@ -85,8 +87,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.mainTable.header beginRefreshing];
     addFriendButton.enabled = YES;
+    if (!hasLoad) {
+        [self.mainTable.header beginRefreshing];
+    }
 }
 
 - (void)leftClick
@@ -251,11 +255,14 @@
                 }
                 self.mainTable.hidden = NO;
                 tipsLabel.hidden = YES;
+                
             } else {
                 [myRefreshView endRefreshing];
                 self.mainTable.hidden = YES;
                 tipsLabel.hidden = NO;
             }
+            
+            hasLoad = YES;
         }
         else
         {

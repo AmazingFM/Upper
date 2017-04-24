@@ -47,13 +47,13 @@
 @implementation UPDetailButtonCellItem
 @end
 
-@implementation UPDetailReviewInfoItem
-- (NSMutableArray *)reviewImages
+@implementation UPDetailReviewInfoCellItem
+- (NSMutableArray *)reviewImageUrls
 {
-    if (_reviewImages==nil) {
-        _reviewImages = [NSMutableArray new];
+    if (_reviewImageUrls==nil) {
+        _reviewImageUrls = [NSMutableArray new];
     }
-    return _reviewImages;
+    return _reviewImageUrls;
 }
 @end
 //------cell
@@ -457,59 +457,98 @@
 
 @interface UPDetailReviewInfoCell()
 {
+    UIView *backView;
     UIView *lineView;
     UILabel *titleLabel;
 }
 
 @end
 
+#define kUPDetailReviewImageTag 100
 @implementation UPDetailReviewInfoCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.backgroundColor = [UIColor clearColor];
+        backView = [[UIView alloc] initWithFrame:CGRectZero];
+        backView.backgroundColor = [UIColor whiteColor];
+
         lineView = [[UIView alloc] initWithFrame:CGRectZero];
+        lineView.backgroundColor = RGBCOLOR(160, 160, 160);
         
         titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         titleLabel.font = kUPThemeSmallFont;
-        titleLabel.backgroundColor = [UIColor clearColor];
+        titleLabel.backgroundColor = [UIColor whiteColor];
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.textColor = RGBCOLOR(160, 160, 160);
+        titleLabel.text = @"活动回顾";
         
         self.reviewLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         self.reviewLabel.font = kUPThemeSmallFont;
         self.reviewLabel.backgroundColor = [UIColor clearColor];
         self.reviewLabel.textAlignment = NSTextAlignmentLeft;
         self.reviewLabel.textColor = RGBCOLOR(160, 160, 160);
+        self.reviewLabel.numberOfLines =0;
         
-        [self addSubview:lineView];
-        [self addSubview:titleLabel];
-        [self addSubview:self.reviewLabel];
+        [self addSubview:backView];
+        [backView addSubview:lineView];
+        [backView addSubview:titleLabel];
+        [backView addSubview:self.reviewLabel];
     }
     
     return self;
 }
 
+- (NSMutableArray *)reviewImages
+{
+    if (_reviewImages==nil) {
+        _reviewImages = [NSMutableArray new];
+    }
+    return _reviewImages;
+}
 
 - (void)setItem:(UPBaseCellItem *)item
 {
     [super setItem: item];
-    UPDetailReviewInfoItem *reviewInfoItem = (UPDetailReviewInfoItem *)item;
+    UPDetailReviewInfoCellItem *reviewInfoItem = (UPDetailReviewInfoCellItem *)item;
     
-    float offsetx = 10;
-    float offsety = 0;
+    CGFloat offsetx = 10;
+    CGFloat offsety = 0;
+    
+    backView.frame = CGRectMake(offsetx, 0, reviewInfoItem.cellWidth-2*offsetx, reviewInfoItem.cellHeight);
+    CGFloat backWidth = backView.width;
 
-    lineView.frame = CGRectMake(offsetx, 15, reviewInfoItem.cellWidth, 0.6);
+    lineView.frame = CGRectMake(0, 15, backWidth, 0.6);
+    titleLabel.frame = CGRectMake((backWidth-100)/2, 0, 100, 30);
     
+    offsety +=30;
     float imageWidth = 75;
-    if (reviewInfoItem.reviewImages.count>0) {
-        
-    } else {
+    if (reviewInfoItem.reviewImageUrls.count>0) {
+        for (int i=0; i<reviewInfoItem.reviewImageUrls.count; i++) {
+            UIImageView *imageView = [self viewWithTag:kUPDetailReviewImageTag+i];
+            if (imageView==nil) {
+                imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+                imageView.layer.borderColor = RGBCOLOR(160, 160, 160).CGColor;
+                imageView.layer.borderWidth = 0.2;
+                imageView.contentMode = UIViewContentModeScaleToFill;
+                imageView.tag = kUPDetailReviewImageTag+i;
+                [backView addSubview:imageView];
+            }
+            offsetx += i*(imageWidth+10);
+            imageView.frame = CGRectMake(offsetx, offsety, imageWidth, imageWidth);
+            [imageView sd_setImageWithURL:[NSURL URLWithString:reviewInfoItem.reviewImageUrls[i]]];
+        }
+        offsety += 80;
     }
+    
+    offsetx = 10;
+    
     if (reviewInfoItem.reviewText.length!=0) {
-        CGSize size = SizeWithFont(reviewInfoItem.reviewText, kUPThemeSmallFont);
-        self.reviewLabel.frame = CGRectMake(10, , <#CGFloat width#>, <#CGFloat height#>)
+        NSString *reviewText = reviewInfoItem.reviewText;
+        self.reviewLabel.frame = CGRectMake(offsetx, offsety, backWidth-2*offsetx,reviewInfoItem.cellHeight-offsety );
+        self.reviewLabel.text = reviewText;
     }
 }
 @end
@@ -524,25 +563,7 @@
     UITableView *_tableView;
     UIButton *_submitBtn;
     NSMutableArray *_itemList;
-//    int loveCount;
-//    
-//    UIView *_actContentV;
-//    UILabel *_titleLabel;
-//    UILabel *_contentLabel;
-//    
-//    UIView *_bottomView;
-//    UIButton *_loveB;
-//    UIButton *_bubbleB;
-//    
-//    UIButton *_joinB;
-//    UIButton *_quitB;
-//    
-//    NSArray<UIButton *> *btnArr;
-//    
-//    NSArray *_cellIdArr;
 }
-
-//@property (nonatomic, retain) UIScrollView *activitiesScro;
 
 - (void)leftClick;
 
@@ -554,6 +575,25 @@
     [super viewDidLoad];
     
     _itemList = [NSMutableArray new];
+    
+    UPDetailImageCellItem *imageItem = [[UPDetailImageCellItem alloc] init];
+    UPDetailTitleInfoCellItem *infoItem = [[UPDetailTitleInfoCellItem alloc] init];
+    UPDetailPeopleInfoCellItem *peopleItem = [[UPDetailPeopleInfoCellItem alloc] init];
+    UPDetailExtraInfoCellItem *extraItem = [[UPDetailExtraInfoCellItem alloc] init];
+    UPBaseCellItem *extraBtnItem = [[UPBaseCellItem alloc] init];
+    UPDetailReviewInfoCellItem *reviewInfoItem = [[UPDetailReviewInfoCellItem alloc] init];
+    
+    [_itemList addObject:imageItem];
+    [_itemList addObject:infoItem];
+    [_itemList addObject:peopleItem];
+    [_itemList addObject:extraItem];
+    [_itemList addObject:extraBtnItem];
+    [_itemList addObject:reviewInfoItem];
+    
+    for (UPBaseCellItem *item in _itemList) {
+        item.cellHeight = 0;
+        item.cellWidth = ScreenWidth;
+    }
     
     self.title = @"活动详情";
 
@@ -594,18 +634,17 @@
 - (void)reloadItems
 {
     if (self.detailActData) {
-        UPDetailImageCellItem *imageItem = [[UPDetailImageCellItem alloc] init];
+        UPDetailImageCellItem *imageItem = _itemList[0];
         imageItem.key = @"ActivityImage";
         imageItem.imageUrl = self.detailActData.activity_image;
         imageItem.imageDefault = @"";
         imageItem.userIconUrl = self.detailActData.user_icon;
         imageItem.userIconDefault = @"activity_user_icon";
         imageItem.userName = self.detailActData.nick_name;
-        imageItem.cellWidth = ScreenWidth;
         imageItem.cellHeight = (int)((ScreenWidth-2*10)*3/4+10+5)+1;
 
         
-        UPDetailTitleInfoCellItem *infoItem = [[UPDetailTitleInfoCellItem alloc] init];
+        UPDetailTitleInfoCellItem *infoItem = _itemList[1];
         infoItem.key = @"ActivityInfo";
         infoItem.title = self.detailActData.activity_name;
         infoItem.cityName = self.detailActData.city;
@@ -613,15 +652,13 @@
         infoItem.endTime = [UPTools dateTransform:self.detailActData.end_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy年MM月dd日"];
         infoItem.payTypeName = [[UPConfig sharedInstance] getPayTypeByID:self.detailActData.is_prepaid].name;
         infoItem.payFee = self.detailActData.activity_fee;
-        infoItem.cellWidth = ScreenWidth;
         CGSize size = SizeWithFont(@"活动时间", kUPThemeMinFont);
         infoItem.cellHeight = (int)(5+30+5*4+size.height*3+5)+1;
         
-        UPDetailPeopleInfoCellItem *peopleItem = [[UPDetailPeopleInfoCellItem alloc] init];
+        UPDetailPeopleInfoCellItem *peopleItem = _itemList[2];
         peopleItem.key = @"ActivityPeople";
         peopleItem.currentNum = self.detailActData.part_count;
         peopleItem.totalNum = self.detailActData.limit_count;
-        peopleItem.cellWidth = ScreenWidth;
         peopleItem.cellHeight = 15;
         if (self.detailActData.join_list.count>0) {
             [peopleItem.userIconUrlList removeAllObjects];
@@ -629,15 +666,14 @@
             peopleItem.cellHeight+=30;
         }
         
-        UPDetailExtraInfoCellItem *extraItem = [[UPDetailExtraInfoCellItem alloc] init];
+        UPDetailExtraInfoCellItem *extraItem = _itemList[3];
         extraItem.key = @"extraInfo";
         extraItem.desc = self.detailActData.activity_desc;
         extraItem.place = self.detailActData.activity_place;
         extraItem.shopName = self.detailActData.activity_place;//[[UPConfig sharedInstance] getPlaceTypeByID:[@(actId) stringValue]].name;
         extraItem.activityTypeName = [[UPConfig sharedInstance] getActivityTypeByID:self.detailActData.activity_class].name;
         extraItem.clothTypeName = [[UPConfig sharedInstance] getClothTypeByID:self.detailActData.clothes_need].name;
-        extraItem.cellWidth = ScreenWidth;
-        
+
         if (extraItem.desc.length==0) {
             extraItem.desc = @"该活动没有描述";
         }
@@ -647,22 +683,71 @@
         size = SizeWithFont(@"商户名称", kUPThemeMinFont);
         extraItem.cellHeight = (int)(5+height+5+5*4+size.height*3+5)+1;
         
-        UPBaseCellItem *extraBtnItem = [[UPBaseCellItem alloc] init];
+        UPBaseCellItem *extraBtnItem = _itemList[4];
         extraBtnItem.cellHeight = 40;
         extraBtnItem.key = @"extraButton";
-        
-        [_itemList removeAllObjects];
-        [_itemList addObject:imageItem];
-        [_itemList addObject:infoItem];
-        [_itemList addObject:peopleItem];
-        [_itemList addObject:extraItem];
-        [_itemList addObject:extraBtnItem];
         
         [_tableView reloadData];
         
         NSString *btnTitle = [NSString stringWithFormat:@"活动还差%d人，我要参加", [self.detailActData.limit_count intValue]-[self.detailActData.part_count intValue]];
         [_submitBtn setTitle:btnTitle forState:UIControlStateNormal];
     }
+}
+
+- (void)reloadReviewCellItem:(NSDictionary *)evaluateInfoDict
+{
+    UPDetailReviewInfoCellItem *reviewInfoItem = _itemList[5];
+    reviewInfoItem.reviewText = evaluateInfoDict[@"evaluate_text"];
+    
+    NSString *image1Url = evaluateInfoDict[@"image_1"];
+    NSString *image2Url = evaluateInfoDict[@"image_2"];
+    NSString *image3Url = evaluateInfoDict[@"image_3"];
+    
+    [reviewInfoItem.reviewImageUrls removeAllObjects];
+    if (image1Url.length>0) {
+        [reviewInfoItem.reviewImageUrls addObject:image1Url];
+    }
+    if (image2Url.length>0) {
+        [reviewInfoItem.reviewImageUrls addObject:image2Url];
+    }
+    if (image3Url.length>0) {
+        [reviewInfoItem.reviewImageUrls addObject:image3Url];
+    }
+    float height = 30+(reviewInfoItem.reviewImageUrls.count>0?80:0);
+    
+    CGSize size=[UPTools sizeOfString:reviewInfoItem.reviewText withWidth:ScreenWidth-40 font:kUPThemeSmallFont];
+    reviewInfoItem.cellHeight = height+size.height+5;
+    
+    [_tableView reloadData];
+}
+
+- (void)getReviewInfo:(NSString *)activityId
+{
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    [params setObject:@"ActivityEvaluateQuery"forKey:@"a"];
+    [params setObject:@"10" forKey:@"page_size"];
+    [params setObject:@"1" forKey:@"current_page"];
+    [params setObject:@"55" forKey:@"activity_id"];
+    [params setObject:@"0" forKey:@"type"];
+    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
+    
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+        NSDictionary *dict = (NSDictionary *)responseObject;
+        NSString *resp_id = dict[@"resp_id"];
+        if ([resp_id intValue]==0) {
+            NSDictionary *resp_data = dict[@"resp_data"];
+            NSArray *evaluateList = resp_data[@"evaluate_list"];
+            if (evaluateList !=nil && [evaluateList isKindOfClass:[NSArray class]]) {
+                if (evaluateList.count>0) {
+                    NSDictionary *evaluateInfoDict = evaluateList[0];
+                    [self reloadReviewCellItem:evaluateInfoDict];
+                }
+            }
+
+        }
+    } failure:^(NSError *error) {
+        //
+    }];
 }
 
 - (void)getActivityDetailInfo:(NSString *)activityId
@@ -693,6 +778,7 @@
                 }
             }
             [self reloadItems];
+            [self getReviewInfo:self.detailActData.ID];
         }
         else
         {
@@ -703,7 +789,6 @@
         
     } failure:^(id error) {
         NSLog(@"%@",error);
-        
     }];
 }
 
@@ -729,7 +814,8 @@
 {
     __block int count = 0;
     
-    NSDictionary *actDataDict = @{@"activity_name":self.actData.activity_name,@"activity_class":self.actData.activity_class,@"begin_time":self.actData.begin_time,@"id":self.actData.ID};
+    //activity_name-活动名称,activity_class-活动类型, start_time-活动开始时间，ID-活动id，nick_name-发起人昵称
+    NSDictionary *actDataDict = @{@"activity_name":self.actData.activity_name,@"activity_class":self.actData.activity_class,@"start_time":self.actData.start_time,@"id":self.actData.ID, @"nick_name":self.actData.nick_name};
     
     NSString *msgDesc = [UPTools stringFromJSON:actDataDict];
     
@@ -749,12 +835,13 @@
             NSLog(@"MessageSend, %@", dict);
             NSString *resp_id = dict[@"resp_id"];
             if ([resp_id intValue]==0) {
-                NSLog(@"send message successful!");
+                [MBProgressHUD showSuccess:@"发送消息成功"];
                 count++;
             } else {
                 count++;
             }
         } failure:^(NSError *error) {
+            [MBProgressHUD showError:@"发送消息失败，请重新操作"];
             count++;
         }];
     }
@@ -770,7 +857,6 @@
             if (self.sourceType == SourceTypeWoCanyu) {
                 //取消参加
                 [self modifyActiviy:ActivityQuit];
-
             } else {
                 [self joinActivity];
             }

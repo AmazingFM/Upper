@@ -9,5 +9,5 @@
 #import "UPBaseViewController.h"
 
 @interface UpMyActivityViewController : UPBaseViewController
-
+- (void)switchToMyLaunch;
 @end

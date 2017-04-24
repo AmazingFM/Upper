@@ -717,6 +717,7 @@
     UIButton *_quitActBtn;
     UIButton *_signActBtn;
     UIButton *_editActBtn;
+    UIButton *_complainBtn;
 }
 
 @end
@@ -872,7 +873,15 @@
         [_editActBtn setTitleColor:[UPTools colorWithHex:0x333333] forState:UIControlStateNormal];
         _editActBtn.titleLabel.font = kUPThemeMiniFont;
         [_editActBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
-        
+
+        _complainBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_complainBtn setTitle:@"投诉" forState:UIControlStateNormal];
+        [_complainBtn setImage:[UIImage imageNamed:@"icon-tipoff"] forState:UIControlStateNormal];
+        _complainBtn.tag = kUPActComplainTag;
+        [_complainBtn setTitleColor:[UPTools colorWithHex:0x333333] forState:UIControlStateNormal];
+        _complainBtn.titleLabel.font = kUPThemeMiniFont;
+        [_complainBtn addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
+
         [_btnContainerView addSubview:_reviewActBtn];
         [_btnContainerView addSubview:_cancelActBtn];
         [_btnContainerView addSubview:_changeActBtn];
@@ -880,6 +889,7 @@
         [_btnContainerView addSubview:_quitActBtn];
         [_btnContainerView addSubview:_signActBtn];
         [_btnContainerView addSubview:_editActBtn];
+        [_btnContainerView addSubview:_complainBtn];
         
         [backView addSubview:_img];
         [backView addSubview:_titleLab];
@@ -1136,13 +1146,14 @@
             if (_actCellItem.type==SourceTypeWoFaqi) {
                 switch ([actStatusID intValue]) {
                     case 0:
-                        _changeActBtn.frame =   CGRectMake(width-btnWidth*2-2*btnPadding-80,5,80,perHeight-10);
-                        _cancelActBtn.frame =   CGRectMake(width-btnWidth*2-btnPadding,5,btnWidth,perHeight-10);
-                        _editActBtn.frame =     CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
+                        _changeActBtn.frame =   CGRectMake(width-btnWidth*2-btnPadding,5,btnWidth,perHeight-10);
+                        _cancelActBtn.frame =   CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
+                        _editActBtn.frame =     CGRectZero;
                         _reviewActBtn.frame =   CGRectZero;
                         _commentActBtn.frame =  CGRectZero;
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
+                        _complainBtn.frame = CGRectZero;
                         break;
                     case 1:
                     case 2:
@@ -1155,6 +1166,7 @@
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
                         _editActBtn.frame =     CGRectZero;
+                        _complainBtn.frame = CGRectZero;
                         break;
                     case 6:
                         _signActBtn.frame =     CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
@@ -1164,6 +1176,7 @@
                         _commentActBtn.frame =  CGRectZero;
                         _quitActBtn.frame =     CGRectZero;
                         _editActBtn.frame =     CGRectZero;
+                        _complainBtn.frame = CGRectZero;
                         break;
                     case 7:
                         _reviewActBtn.frame =   CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
@@ -1173,6 +1186,7 @@
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
                         _editActBtn.frame =     CGRectZero;
+                        _complainBtn.frame = CGRectZero;
                         break;
                     case 5:
                     case 8:
@@ -1184,6 +1198,7 @@
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
                         _editActBtn.frame =     CGRectZero;
+                        _complainBtn.frame = CGRectZero;
                         break;
                 }
             } else if(_actCellItem.type==SourceTypeWoCanyu) {
@@ -1217,6 +1232,7 @@
                         _commentActBtn.frame =  CGRectZero;
                         _signActBtn.frame =     CGRectZero;
                         _editActBtn.frame =     CGRectZero;
+                        _complainBtn.frame = CGRectZero;
                         break;
                     case 5:
                         _reviewActBtn.frame =   CGRectZero;
@@ -1226,8 +1242,10 @@
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
                         _editActBtn.frame =     CGRectZero;
+                        _complainBtn.frame = CGRectZero;
                         break;
                     case 6:
+                        _complainBtn.frame = CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);;
                         _reviewActBtn.frame =   CGRectZero;
                         _changeActBtn.frame =   CGRectZero;
                         _cancelActBtn.frame =   CGRectZero;
@@ -1246,6 +1264,7 @@
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
                         _editActBtn.frame =     CGRectZero;
+                        _complainBtn.frame = CGRectZero;
                         break;
                 }
                 
@@ -1259,6 +1278,9 @@
                 _changeActBtn.frame = CGRectZero;
                 _commentActBtn.frame = CGRectZero;
                 _quitActBtn.frame = CGRectZero;
+                _signActBtn.frame =     CGRectZero;
+                _editActBtn.frame =     CGRectZero;
+                _complainBtn.frame = CGRectZero;
             }
         }
     }
@@ -1292,7 +1314,8 @@
                sender.tag==kUPActCommentTag ||
                sender.tag==kUPActChangeTag  ||
                sender.tag==kUPActSignTag    ||
-               sender.tag==kUPActEditTag) 
+               sender.tag==kUPActEditTag    ||
+               sender.tag==kUPActComplainTag)
         
     {
         if ([self.delegate respondsToSelector:@selector(onButtonSelected:withType:)]) {

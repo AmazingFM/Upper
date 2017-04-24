@@ -31,6 +31,7 @@
 
 +(NSData*)dataFromJSON:(NSObject*)jsonObj;
 +(NSData*)dataFromGBKJSON:(NSObject*)jsonObj;
++ (NSString *)stringFromQuotString:(NSString *)quotString;
 +(NSString*)stringFromJSON:(NSObject*)jsonObj;
 +(NSObject*)JSONFromString:(NSString*)jsonStr;
 + (id)JSONFromData:(NSData *)jsonData;

@@ -72,9 +72,9 @@ typedef NS_ENUM(NSInteger, SourceType) {
 @property (nonatomic, retain) NSString *title;
 @end
 
-@interface UPDetailReviewInfoItem :UPBaseCellItem
+@interface UPDetailReviewInfoCellItem :UPBaseCellItem
 @property (nonatomic, retain) NSString *reviewText;
-@property (nonatomic, retain) NSMutableArray *reviewImages;
+@property (nonatomic, retain) NSMutableArray *reviewImageUrls;
 @end
 
 //------cell

@@ -142,7 +142,8 @@
             ActivityData *activityInfo = [self getActivityInfoFromMsg:msg.msg_desc];
             ActivityType *actType = [[UPConfig sharedInstance] getActivityTypeByID:activityInfo.activity_class];
             
-            NSString *showMsg = [NSString stringWithFormat:@"活动名称:%@\n活动类型:%@\n开始时间:%@", activityInfo.activity_name, actType.name, activityInfo.begin_time];
+            //activity_name-活动名称,activity_class-活动类型, start_time-活动开始时间，ID-活动id，nick_name-发起人昵称
+            NSString *showMsg = [NSString stringWithFormat:@"活动名称:%@\n活动类型:%@\n开始时间:%@", activityInfo.activity_name, actType.name, activityInfo.start_time];
             
             UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"活动邀请" message:showMsg delegate:self cancelButtonTitle:@"忽略" otherButtonTitles:@"查看详情", nil];
             alertview.tag = 99;
@@ -195,7 +196,8 @@
         return nil;
     }
     
-    ActivityData *activityData = [[ActivityData alloc] initWithJsonString:msg];
+    NSString *jsonStr = [UPTools stringFromQuotString:msg];
+    ActivityData *activityData = [[ActivityData alloc] initWithJsonString:jsonStr];
     return activityData;
 }
 

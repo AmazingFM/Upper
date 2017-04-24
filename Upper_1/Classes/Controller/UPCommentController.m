@@ -395,7 +395,7 @@ static const int textViewContentHeight = 150;
         [scrollView addSubview:likeOrDislike];
         [scrollView addSubview:tips];
         [scrollView addSubview:_imageLoadView];
-    } else if (self.type==UPCommentTypeComment) {
+    } else if (self.type==UPCommentTypeComment || self.type==UPCommentTypeComplain) {
         radioBackView = [[UIView alloc] initWithFrame:CGRectMake(LeftRightPadding, textViewContentHeight+5, ScreenWidth-2*LeftRightPadding, 40)];
         radioBackView.backgroundColor = [UIColor clearColor];
         CGFloat viewWidth = ScreenWidth-2*LeftRightPadding;
@@ -469,7 +469,7 @@ static const int textViewContentHeight = 150;
             [appendCommentStr appendString:[NSString stringWithFormat:@"赞：%@", likeInfoStr]];
         }
         if (hasDislike) {
-            [appendCommentStr appendString:[NSString stringWithFormat:@"踩：%@", dislikeInfoStr]];
+            [appendCommentStr appendString:[NSString stringWithFormat:@" 踩：%@", dislikeInfoStr]];
         }
         
         NSString *commentStr = [UPTools encodeToPercentEscapeString:[NSString stringWithFormat:@"%@ %@", commentTextView.text, appendCommentStr]];

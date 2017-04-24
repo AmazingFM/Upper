@@ -21,5 +21,6 @@
 @property (nonatomic) NSInteger pageNum;
 @property (nonatomic) BOOL lastPage;
 @property (nonatomic, retain) MJRefreshComponent *myRefreshView;
-
+@property (nonatomic) BOOL hasLoad;
+- (void)refresh;
 @end

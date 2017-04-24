@@ -23,6 +23,7 @@
 #import "UPFriendListController.h"
 #import "NewLaunchActivityController.h"
 #import "YMNetwork.h"
+#import "MBProgressHUD+MJ.h"
 
 @interface UPMyLaunchViewController () <UPFriendListDelegate>
 {
@@ -141,6 +142,8 @@
                     [self.mainTable.footer noticeNoMoreData];
                 }
             }
+            
+            self.hasLoad = YES;
         }
         else
         {
@@ -239,13 +242,13 @@
         NSLog(@"MessageSend, %@", dict);
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
-            NSLog(@"send message successful!");
+            [MBProgressHUD showSuccess:@"发送消息成功"];
             count++;
         } else {
             count++;
         }
     } failure:^(NSError *error) {
-        count++;
+        [MBProgressHUD showError:@"发送消息失败，请重新操作"];
     }];
 }
 
