@@ -653,7 +653,7 @@ static CGFloat const FixRatio = 4/3.0;
         CGSize sizeOneChar = SizeWithFont(@"至", kUPThemeNormalFont);
         CGFloat perWidth = sizeOneChar.width;
         CGFloat perHeight = sizeOneChar.height+4;
-        UITextField *lowField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-6*perWidth-3*kUPThemeBorder, (detailHeight-perHeight)/2, 2*perWidth, perHeight)];
+        UITextField *lowField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-8*perWidth-3*kUPThemeBorder, (detailHeight-perHeight)/2, 3*perWidth, perHeight)];
         lowField.tag = kFieldTagForPepleLowLimit;
         lowField.keyboardType = UIKeyboardTypeDefault;
         lowField.returnKeyType = UIReturnKeyDone;
@@ -663,7 +663,7 @@ static CGFloat const FixRatio = 4/3.0;
         lowField.text = _lowLimit;
         lowField.layer.borderColor = [UPTools colorWithHex:0x666666].CGColor;
     
-        UITextField *highField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-3*perWidth-kUPThemeBorder, (detailHeight-perHeight)/2, 2*perWidth, perHeight)];
+        UITextField *highField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-4*perWidth-kUPThemeBorder, (detailHeight-perHeight)/2, 3*perWidth, perHeight)];
         highField.tag = kFieldTagForPepleHighLimit;
         highField.keyboardType = UIKeyboardTypeDefault;
         highField.returnKeyType = UIReturnKeyDone;
@@ -673,7 +673,7 @@ static CGFloat const FixRatio = 4/3.0;
         highField.text = _highLimit;
         highField.layer.borderColor = [UPTools colorWithHex:0x666666].CGColor;
         
-        UILabel *zhiLabel = [[UILabel alloc] initWithFrame:CGRectMake(detailWidth-4*perWidth-2*kUPThemeBorder,(detailHeight-perHeight)/2, perWidth, perHeight)];
+        UILabel *zhiLabel = [[UILabel alloc] initWithFrame:CGRectMake(detailWidth-5*perWidth-2*kUPThemeBorder,(detailHeight-perHeight)/2, perWidth, perHeight)];
         zhiLabel.text = @"至";
         zhiLabel.font = kUPThemeNormalFont;
         zhiLabel.backgroundColor = [UIColor clearColor];

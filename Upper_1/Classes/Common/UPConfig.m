@@ -500,4 +500,18 @@
     }
     return provinceInfo;
 }
+
+- (CityInfo *)getCityInfo:(NSString *)cityCode
+{
+    __block CityInfo *cityInfo = nil;
+    [self.cityInfoArr enumerateObjectsUsingBlock:^(CityInfo * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj.city_code isEqualToString:cityCode]) {
+            cityInfo = obj;
+            *stop = YES;
+        }
+    }];
+    
+    return cityInfo;
+}
+
 @end

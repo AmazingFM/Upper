@@ -131,6 +131,9 @@
 		3A04D6911E51A5ED004396D2 /* MessageListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A04D6901E51A5ED004396D2 /* MessageListController.m */; };
 		3A05508E1DB5EB99009EA918 /* UPMyFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A05508D1DB5EB99009EA918 /* UPMyFriendsViewController.m */; };
 		3A0550921DB602EC009EA918 /* UPAddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0550911DB602EC009EA918 /* UPAddFriendViewController.m */; };
+		3A06B2C91EB1B4EC00376ECC /* default_101@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A06B2C61EB1B4EC00376ECC /* default_101@2x.png */; };
+		3A06B2CA1EB1B4EC00376ECC /* default_105@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A06B2C71EB1B4EC00376ECC /* default_105@2x.png */; };
+		3A06B2CB1EB1B4EC00376ECC /* default_106@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A06B2C81EB1B4EC00376ECC /* default_106@2x.png */; };
 		3A08464F1D619D6800170C64 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A08464E1D619D6800170C64 /* libsqlite3.0.tbd */; };
 		3A08A84E1E80EFF9003C55BD /* HTScrollCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A08A84D1E80EFF9003C55BD /* HTScrollCell.m */; };
 		3A0B60EF1DF5B92E009FCC10 /* YMNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0B60EE1DF5B92E009FCC10 /* YMNetwork.m */; };
@@ -598,6 +601,9 @@
 		3A05508D1DB5EB99009EA918 /* UPMyFriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPMyFriendsViewController.m; sourceTree = "<group>"; };
 		3A0550901DB602EC009EA918 /* UPAddFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPAddFriendViewController.h; sourceTree = "<group>"; };
 		3A0550911DB602EC009EA918 /* UPAddFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPAddFriendViewController.m; sourceTree = "<group>"; };
+		3A06B2C61EB1B4EC00376ECC /* default_101@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_101@2x.png"; sourceTree = "<group>"; };
+		3A06B2C71EB1B4EC00376ECC /* default_105@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_105@2x.png"; sourceTree = "<group>"; };
+		3A06B2C81EB1B4EC00376ECC /* default_106@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_106@2x.png"; sourceTree = "<group>"; };
 		3A08464E1D619D6800170C64 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		3A08A84C1E80EFF9003C55BD /* HTScrollCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTScrollCell.h; sourceTree = "<group>"; };
 		3A08A84D1E80EFF9003C55BD /* HTScrollCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTScrollCell.m; sourceTree = "<group>"; };
@@ -1602,6 +1608,9 @@
 		3A8415F71E9B696900D8377B /* activity */ = {
 			isa = PBXGroup;
 			children = (
+				3A06B2C61EB1B4EC00376ECC /* default_101@2x.png */,
+				3A06B2C71EB1B4EC00376ECC /* default_105@2x.png */,
+				3A06B2C81EB1B4EC00376ECC /* default_106@2x.png */,
 				3A61D6631EADE7BA00A328E9 /* icon-invite@2x.png */,
 				3A61D6641EADE7BA00A328E9 /* icon-more@2x.png */,
 				3A61D6651EADE7BA00A328E9 /* icon-share@2x.png */,
@@ -2126,6 +2135,7 @@
 				3A71CBCE1E26267700EBE0A2 /* top_navigation_back_photo@2x.png in Resources */,
 				3A71CB9D1E26267700EBE0A2 /* chat_message_back.png in Resources */,
 				2CDAD6401D0EEC4000C260F4 /* MBProgressHUD.bundle in Resources */,
+				3A06B2CB1EB1B4EC00376ECC /* default_106@2x.png in Resources */,
 				2CDAD6581D0EEC4000C260F4 /* MJRefresh.bundle in Resources */,
 				8559245F1E5828D500FAAFFA /* zysj@2x.png in Resources */,
 				3A71CB961E26267700EBE0A2 /* chat_animation1.png in Resources */,
@@ -2141,6 +2151,7 @@
 				3A6944CD1E51615F00F1BEF5 /* messageComment@2x.png in Resources */,
 				85DE92F61E8C06C7007D8FA6 /* icon-camera@2x.png in Resources */,
 				3A71CBA51E26267700EBE0A2 /* checkbox.png in Resources */,
+				3A06B2C91EB1B4EC00376ECC /* default_101@2x.png in Resources */,
 				8559245E1E5828D500FAAFFA /* xqsj@2x.png in Resources */,
 				3A71CB9B1E26267700EBE0A2 /* chat_animation_white3.png in Resources */,
 				3A6944CE1E51615F00F1BEF5 /* messageInvite@2x.png in Resources */,
@@ -2153,6 +2164,7 @@
 				3A71CBA01E26267700EBE0A2 /* Chat_take_picture.png in Resources */,
 				3A71CBC41E26267700EBE0A2 /* scanline.png in Resources */,
 				3A84160C1E9B69FB00D8377B /* icon-address@2x.png in Resources */,
+				3A06B2CA1EB1B4EC00376ECC /* default_105@2x.png in Resources */,
 				3A91CCF31E6334A200EBEF58 /* toolbar-emoji2@2x.png in Resources */,
 				3A71CBC81E26267700EBE0A2 /* search_btn_line@3x.png in Resources */,
 				3A71CBC31E26267700EBE0A2 /* radio_nor@2x.png in Resources */,

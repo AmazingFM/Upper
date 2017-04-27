@@ -1048,7 +1048,9 @@
     _img.frame = CGRectMake(offsetx, offsety, 60*4/3, 60);
     _img.contentMode = UIViewContentModeScaleAspectFill;
     _img.clipsToBounds = YES;
-    [_img sd_setImageWithURL:[NSURL URLWithString:itemData.activity_image] placeholderImage:[UIImage imageNamed:@"me"]];
+    
+//    NSString *defaultImg = [NSString stringWithFormat:@"default_%@", itemData.activity_class];
+    [_img sd_setImageWithURL:[NSURL URLWithString:itemData.activity_image] placeholderImage:nil];
 
     offsetx += _img.width+5;
     _actDesc.frame = CGRectMake(offsetx, offsety, width-offsetx-5, 40);
@@ -1058,7 +1060,9 @@
     
     CGFloat tmpWidth = (width-offsetx)/3;
     _locationBtn.frame = CGRectMake(offsetx, offsety, tmpWidth-10, 60-_actDesc.height);
-    [_locationBtn setTitle:itemData.city forState:UIControlStateNormal];
+    
+    CityInfo *cityInfo = [[UPConfig sharedInstance].cityContainer getCityInfo:itemData.city_code];
+    [_locationBtn setTitle:cityInfo.city forState:UIControlStateNormal];
     
     offsetx += tmpWidth-8;
     _timeBtn.frame = CGRectMake(offsetx, offsety, tmpWidth, 60-_actDesc.height);
@@ -1146,7 +1150,7 @@
             if (_actCellItem.type==SourceTypeWoFaqi) {
                 switch ([actStatusID intValue]) {
                     case 0:
-                        _changeActBtn.frame =   CGRectMake(width-btnWidth*2-btnPadding,5,btnWidth,perHeight-10);
+                        _changeActBtn.frame =   CGRectMake(width-btnWidth-80-btnPadding,5,80,perHeight-10);
                         _cancelActBtn.frame =   CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
                         _editActBtn.frame =     CGRectZero;
                         _reviewActBtn.frame =   CGRectZero;

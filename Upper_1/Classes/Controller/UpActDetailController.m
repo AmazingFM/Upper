@@ -85,7 +85,7 @@
         userBackView = [[UIView alloc] initWithFrame:CGRectZero];
         userBackView.backgroundColor = [UIColor whiteColor];
         userBackView.layer.borderColor = [UIColor blackColor].CGColor;
-        userBackView.layer.borderWidth = 0.6;
+        userBackView.layer.borderWidth = 1;
         userBackView.layer.cornerRadius = 5.f;
         
         
@@ -496,6 +496,8 @@
         [backView addSubview:lineView];
         [backView addSubview:titleLabel];
         [backView addSubview:self.reviewLabel];
+        
+        self.layer.masksToBounds = YES;
     }
     
     return self;
@@ -520,7 +522,7 @@
     backView.frame = CGRectMake(offsetx, 0, reviewInfoItem.cellWidth-2*offsetx, reviewInfoItem.cellHeight);
     CGFloat backWidth = backView.width;
 
-    lineView.frame = CGRectMake(0, 15, backWidth, 0.6);
+    lineView.frame = CGRectMake(0, 14.5, backWidth, 1);
     titleLabel.frame = CGRectMake((backWidth-100)/2, 0, 100, 30);
     
     offsety +=30;
@@ -727,7 +729,7 @@
     [params setObject:@"ActivityEvaluateQuery"forKey:@"a"];
     [params setObject:@"10" forKey:@"page_size"];
     [params setObject:@"1" forKey:@"current_page"];
-    [params setObject:@"55" forKey:@"activity_id"];
+    [params setObject:activityId forKey:@"activity_id"];
     [params setObject:@"0" forKey:@"type"];
     [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
@@ -1107,7 +1109,7 @@
             backView.tag=100;
             backView.backgroundColor = [UIColor whiteColor];
             
-            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth-20, 0.6)];
+            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth-20, 1)];
             line.backgroundColor = [UIColor grayColor];
             [backView addSubview:line];
 
@@ -1148,7 +1150,6 @@
             shareBtn.layer.masksToBounds = YES;
             [backView addSubview:shareBtn];
             [cell addSubview:backView];
-
         }
     }
     return cell;

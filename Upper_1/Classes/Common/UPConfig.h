@@ -99,5 +99,7 @@
 @property (nonatomic, retain) NSMutableArray<CityInfo *> *cityInfoArr;
 
 - (void)updateCityInfoArr:(NSArray *)cityArr;
+- (CityInfo *)getCityInfo:(NSString *)cityCode;
+
 @end
 

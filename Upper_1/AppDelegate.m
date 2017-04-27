@@ -27,7 +27,7 @@
     NSDictionary *navbarTitleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
     [[UINavigationBar appearance] setTitleTextAttributes:navbarTitleTextAttributes];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setBarTintColor:[UIColor blackColor]];
+    [[UINavigationBar appearance] setBarTintColor:kUPThemeMainColor];
 //    [self test];
     
     self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
