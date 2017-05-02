@@ -242,7 +242,7 @@
         NSLog(@"MessageSend, %@", dict);
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
-            [MBProgressHUD showSuccess:@"发送消息成功"];
+            showDefaultAlert(@"提示", @"已成功发送更改请求给对方，如果对方接受，发起人职位将会移交给对方。为提高成功率，您也可以对多个参与者发起更改请求。");
             count++;
         } else {
             count++;

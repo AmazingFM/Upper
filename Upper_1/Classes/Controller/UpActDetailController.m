@@ -837,7 +837,7 @@
             NSLog(@"MessageSend, %@", dict);
             NSString *resp_id = dict[@"resp_id"];
             if ([resp_id intValue]==0) {
-                [MBProgressHUD showSuccess:@"发送消息成功"];
+                [MBProgressHUD showSuccess:@"已发送邀请给对方"];
                 count++;
             } else {
                 count++;

@@ -350,7 +350,7 @@ NSString *kKeyChainUUIDAccessGroup = @"com.upper";
     UIGraphicsEndImageContext();
     
     NSUInteger maxFileSize = 500 * 1024;
-    CGFloat compressionRatio = 0.7f;
+    CGFloat compressionRatio = 0.8f;
     CGFloat maxCompressionRatio = 0.1f;
     
     NSData *imageData = UIImageJPEGRepresentation(scaledImage, compressionRatio);

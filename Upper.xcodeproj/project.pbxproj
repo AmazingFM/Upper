@@ -265,6 +265,8 @@
 		3ACF2AF51D6AEDD30083E04E /* RecommendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACF2AF41D6AEDD30083E04E /* RecommendController.m */; };
 		3AFCCDBD1D5C09BC0003F6F3 /* NewLaunchActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */; };
 		850D79211E51FA670082D944 /* NSString+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 850D79201E51FA670082D944 /* NSString+Common.m */; };
+		8555DE381EB8C4F80012F162 /* CRNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8555DE351EB8C4F80012F162 /* CRNavigationBar.m */; };
+		8555DE391EB8C4F80012F162 /* CRNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8555DE371EB8C4F80012F162 /* CRNavigationController.m */; };
 		8559245D1E5828D500FAAFFA /* jhsj@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8559245A1E5828D500FAAFFA /* jhsj@2x.png */; };
 		8559245E1E5828D500FAAFFA /* xqsj@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8559245B1E5828D500FAAFFA /* xqsj@2x.png */; };
 		8559245F1E5828D500FAAFFA /* zysj@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8559245C1E5828D500FAAFFA /* zysj@2x.png */; };
@@ -772,6 +774,10 @@
 		3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewLaunchActivityController.m; sourceTree = "<group>"; };
 		850D791F1E51FA670082D944 /* NSString+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Common.h"; sourceTree = "<group>"; };
 		850D79201E51FA670082D944 /* NSString+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Common.m"; sourceTree = "<group>"; };
+		8555DE341EB8C4F80012F162 /* CRNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRNavigationBar.h; sourceTree = "<group>"; };
+		8555DE351EB8C4F80012F162 /* CRNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRNavigationBar.m; sourceTree = "<group>"; };
+		8555DE361EB8C4F80012F162 /* CRNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRNavigationController.h; sourceTree = "<group>"; };
+		8555DE371EB8C4F80012F162 /* CRNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRNavigationController.m; sourceTree = "<group>"; };
 		8559245A1E5828D500FAAFFA /* jhsj@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "jhsj@2x.png"; sourceTree = "<group>"; };
 		8559245B1E5828D500FAAFFA /* xqsj@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xqsj@2x.png"; sourceTree = "<group>"; };
 		8559245C1E5828D500FAAFFA /* zysj@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zysj@2x.png"; sourceTree = "<group>"; };
@@ -1631,6 +1637,17 @@
 			path = activity;
 			sourceTree = "<group>";
 		};
+		8555DE331EB8C4F80012F162 /* CRNavigationController */ = {
+			isa = PBXGroup;
+			children = (
+				8555DE341EB8C4F80012F162 /* CRNavigationBar.h */,
+				8555DE351EB8C4F80012F162 /* CRNavigationBar.m */,
+				8555DE361EB8C4F80012F162 /* CRNavigationController.h */,
+				8555DE371EB8C4F80012F162 /* CRNavigationController.m */,
+			);
+			path = CRNavigationController;
+			sourceTree = "<group>";
+		};
 		857DA6701E4CA2C400250605 /* JSDropDownMenu */ = {
 			isa = PBXGroup;
 			children = (
@@ -1835,6 +1852,7 @@
 		EC3C16FD1CECB16D00223D6B /* thirdparty */ = {
 			isa = PBXGroup;
 			children = (
+				8555DE331EB8C4F80012F162 /* CRNavigationController */,
 				85B344E51E51FCD3002E69A9 /* TTTAttributedLabel */,
 				3A6944D31E5195E700F1BEF5 /* UIBadgeView.h */,
 				3A6944D41E5195E700F1BEF5 /* UIBadgeView.m */,
@@ -2326,6 +2344,7 @@
 				2CDAD6771D0EEC4000C260F4 /* UIImage+GIF.m in Sources */,
 				EC3C189E1CECB2B300223D6B /* RootViewController.m in Sources */,
 				2CDAD66B1D0EEC4000C260F4 /* SDRefreshView.m in Sources */,
+				8555DE381EB8C4F80012F162 /* CRNavigationBar.m in Sources */,
 				2CDAD6C01D0EF42000C260F4 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				3A44AE4A1E547C3600BBD049 /* UIView+UPCacheOperation.m in Sources */,
 				EC3C18861CECB16D00223D6B /* CityCell.m in Sources */,
@@ -2346,6 +2365,7 @@
 				2CDAD6641D0EEC4000C260F4 /* UIView+SDExtension.m in Sources */,
 				2CDAD6C21D0EF42000C260F4 /* UIAlertView+AFNetworking.m in Sources */,
 				2CDAD6C51D0EF42000C260F4 /* UIProgressView+AFNetworking.m in Sources */,
+				8555DE391EB8C4F80012F162 /* CRNavigationController.m in Sources */,
 				2CDAD6461D0EEC4000C260F4 /* NSObject+MJCoding.m in Sources */,
 				3A837D4D1DDEDC9200A9A0BB /* UPActAsistDetailController.m in Sources */,
 				EC3C18921CECB16D00223D6B /* UpRegister1.m in Sources */,

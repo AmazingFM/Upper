@@ -14,6 +14,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        imageWidth = frame.size.width;
         CGRect imgFrame = CGRectMake(0,0,frame.size.width, frame.size.height*2/3);
         self.imageV = [[UIImageView alloc] initWithFrame:imgFrame];
         self.imageV.contentMode = UIViewContentModeScaleAspectFit|UIViewContentModeCenter;
@@ -37,6 +38,17 @@
 {
     self.imageV.image = image;
     self.titleLab.text = title;
+}
+
+- (void)setImageRound
+{
+    self.imageV.layer.cornerRadius = imageWidth/2;
+    self.imageV.layer.masksToBounds = YES;
+}
+
+- (void)setTitleFont:(UIFont *)font
+{
+    self.titleLab.font = font;
 }
 
 @end

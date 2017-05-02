@@ -12,6 +12,7 @@
 #import "UPGlobals.h"
 #import "UPTools.h"
 #import "ActivityData.h"
+#import "CRNavigationController.h"
 
 #import "MessageManager.h"
 
@@ -27,7 +28,7 @@
     NSDictionary *navbarTitleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
     [[UINavigationBar appearance] setTitleTextAttributes:navbarTitleTextAttributes];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setBarTintColor:kUPThemeMainColor];
+
 //    [self test];
     
     self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
@@ -59,7 +60,7 @@
         //如果不是第一次启动的话,使用LoginViewController作为根视图
         if (![UPDataManager shared].isLogin) {
             UpLoginController *login = [[UpLoginController alloc] init];
-            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:login];
+            CRNavigationController *nav = [[CRNavigationController alloc] initWithRootViewController:login];
             nav.navigationBar.shadowImage = [[UIImage alloc] init];
             
             self.window.rootViewController = nav;

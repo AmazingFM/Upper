@@ -445,7 +445,7 @@ static CGFloat const FixRatio = 4/3.0;
         
         cellItem.cellWidth = ScreenWidth;
         if ([cellItem.key isEqualToString:@"imageUpload"]) {
-            cellItem.cellHeight = 200;
+            cellItem.cellHeight = ScreenWidth*3/4;
         } else if ([cellItem.key isEqualToString:@"activity_desc"]) {
             cellItem.cellHeight = 100;
         }else if ([cellItem.key isEqualToString:@"fmale_low"]) {
@@ -618,7 +618,7 @@ static CGFloat const FixRatio = 4/3.0;
             CGFloat perWidth = sizeOneChar.width;
             CGFloat perHeight = sizeOneChar.height+4;
             
-            UITextField *lowField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-3*perWidth-kUPThemeBorder, (detailHeight-perHeight)/2, 2*perWidth, perHeight)];
+            UITextField *lowField = [[UITextField alloc] initWithFrame:CGRectMake(detailWidth-4*perWidth-kUPThemeBorder, (detailHeight-perHeight)/2, 3*perWidth, perHeight)];
             lowField.tag = kFieldTagForFemaleLowLimit;
             lowField.keyboardType = UIKeyboardTypeDefault;
             lowField.returnKeyType = UIReturnKeyDone;
@@ -1034,6 +1034,7 @@ static CGFloat const FixRatio = 4/3.0;
         picker.delegate = self;
         //设置拍照后的图片可被编辑
         picker.allowsEditing = YES;
+        picker.edgesForExtendedLayout = UIRectEdgeNone;
         picker.sourceType = sourceType;
         [self presentViewController:picker animated:YES completion:nil];
     } else
@@ -1049,7 +1050,6 @@ static CGFloat const FixRatio = 4/3.0;
     picker.delegate = self;
     //设置选择后的图片可被编辑
     picker.allowsEditing = YES;
-    
     picker.edgesForExtendedLayout = UIRectEdgeNone;
     
     [self presentViewController:picker animated:YES completion:nil];
@@ -1062,7 +1062,7 @@ static CGFloat const FixRatio = 4/3.0;
     //当选择的类型是图片
     if ([type isEqualToString:@"public.image"]) {
         //先把图片转成NSData
-        UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+        UIImage *image = [info objectForKey:@"UIImagePickerControllerEditedImage"];
         
         CGSize imgSize = [image size];
         CGFloat kWidth;
@@ -1075,22 +1075,13 @@ static CGFloat const FixRatio = 4/3.0;
         }
         UIImage *cutImage = [UPTools cutImage:image withSize:CGSizeMake(kWidth, kWidth/FixRatio)];
         
-        //压缩图片到一定大小size
-        float scale = 0.9f;
-        NSData *data = UIImageJPEGRepresentation(cutImage, scale);
-        while (data.length>20*1024) {
-            scale *= 0.9;
-            cutImage = [UPTools image:cutImage scaledToSize:CGSizeMake(cutImage.size.width*scale, cutImage.size.height*scale)];
-            data = UIImageJPEGRepresentation(cutImage, scale);
-        }
-        
-        _imgData = [[NSData alloc] initWithData:data];
+        _imgData = [UPTools compressImage:cutImage];
         
         //关闭相册界面
         [picker dismissViewControllerAnimated:YES completion:nil];
                 
         UPButtonCellItem *btnItem = self.itemList[0];
-        btnItem.btnImage = image;
+        btnItem.btnImage = cutImage;
         btnItem.defaultImage = NO;
         [_tableView reloadRowsAtIndexPaths:@[btnItem.indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }

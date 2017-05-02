@@ -9,10 +9,14 @@
 #import <UIKit/UIKit.h>
 
 @interface YMImageButton : UIButton
+{
+    CGFloat imageWidth;
+}
 
 @property (nonatomic, retain) UIImageView *imageV;
 @property (nonatomic, retain) UILabel     *titleLab;
 
 - (void)setImage:(UIImage *)image andTitle:(NSString *)title;
-
+- (void)setTitleFont:(UIFont *)font;
+- (void)setImageRound;
 @end

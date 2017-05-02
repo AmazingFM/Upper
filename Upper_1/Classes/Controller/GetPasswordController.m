@@ -8,6 +8,7 @@
 
 #import "GetPasswordController.h"
 #import "MainController.h"
+#import "YMImageButton.h"
 
 @interface GetPasswordController ()
 
@@ -18,6 +19,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self setTitle:@"找回密码"];
+    
+    CGFloat width = ScreenWidth/5;
+    
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {

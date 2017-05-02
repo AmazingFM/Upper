@@ -373,9 +373,6 @@
     picker.delegate = self;
     //设置选择后的图片可被编辑
     picker.allowsEditing = YES;
-    picker.mediaTypes = @[(NSString *)kUTTypeImage];
-    picker.allowsEditing = YES;
-
     [self presentViewController:picker animated:YES completion:nil];
 }
 

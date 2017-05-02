@@ -10,6 +10,7 @@
 
 #import "UpLoginController.h"
 #import "UpRegisterController.h"
+#import "GetPasswordController.h"
 
 #import "Info.h"
 
@@ -75,7 +76,7 @@
     CGFloat y = leftButton.frame.origin.y+leftButton.frame.size.height+5;
 
     NSString *tipsText = @"用户注册须知";
-    CGSize tipsSize = [tipsText sizeWithFont:[UIFont systemFontOfSize:12] constrainedToSize:CGSizeMake(100,20.0f) lineBreakMode:UILineBreakModeWordWrap];
+    CGSize tipsSize = [UPTools sizeOfString:tipsText withWidth:100.f font:[UIFont systemFontOfSize:12]];
     UILabel *tipsLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, y, tipsSize.width, tipsSize.height)];
 
     tipsLabel.text = tipsText;
@@ -85,8 +86,7 @@
     
 
     NSString *userStr = @"用户名\nUsername";
-
-    CGSize size = [userStr sizeWithFont:[UIFont systemFontOfSize:12] constrainedToSize:CGSizeMake(100,10000.0f) lineBreakMode:UILineBreakModeWordWrap];
+    CGSize size = [UPTools sizeOfString:userStr withWidth:100 font:[UIFont systemFontOfSize:12]];
     
     UILabel *user = [[UILabel alloc]initWithFrame:CGRectMake(20, ScreenHeight*0.3, size.width, size.height)];
     user.textAlignment = NSTextAlignmentRight;
@@ -269,7 +269,9 @@
         }
         case 3://忘记密码
         {
-//            [self.parentController OnAction:self withType:CHANGE_VIEW toView:GET_PASSWORD_VIEW withArg:nil];
+            GetPasswordController *getPasswordController = [[GetPasswordController alloc] init];
+            [self.navigationController pushViewController:getPasswordController animated:YES];
+            break;
         }
         default:
             break;
