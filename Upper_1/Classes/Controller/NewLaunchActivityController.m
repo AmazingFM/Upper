@@ -406,7 +406,12 @@ static CGFloat const FixRatio = 4/3.0;
     
     UPSwitchCellItem *item12 = [[UPSwitchCellItem alloc] init];
     item12.title=@"仅限本行业";
-    item12.isOn = [self.actData.industry_id intValue]==-1?NO:YES;
+    
+    BOOL isOn = YES;
+    if (self.actData && [self.actData.industry_id intValue]==-1) {
+        isOn = NO;
+    }
+    item12.isOn = isOn;
     item12.isLock = YES;
     item12.key = @"industry_id";
     
@@ -862,7 +867,7 @@ static CGFloat const FixRatio = 4/3.0;
                     return;
                 }
                 if ([cellItem.key isEqualToString:@"industry_id"]) {
-                    params[cellItem.key] = ((int)cellItem.value==1)?[UPDataManager shared].userInfo.industry_id:@"-1";
+                    params[cellItem.key] = ([cellItem.value intValue]==1)?[UPDataManager shared].userInfo.industry_id:@"-1";
                 } else if([cellItem.key isEqualToString:@"start_time"]|[cellItem.key isEqualToString:@"end_time"]) {
                     if ([cellItem.key isEqualToString:@"start_time"]) {
                         params[cellItem.key] = [UPTools dateTransform:cellItem.value fromFormat:@"yyyy-MM-dd" toFormat:@"yyyyMMdd000000"];
