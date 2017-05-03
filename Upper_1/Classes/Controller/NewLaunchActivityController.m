@@ -888,14 +888,15 @@ static CGFloat const FixRatio = 4/3.0;
         NSString *msg = nil;
         if (_selectedCity==nil) {
             msg = @"请选择城市";
-        } else if (_lowLimit==nil || _lowLimit.length==0 || [_lowLimit intValue]<2) {
-            if ([_lowLimit intValue]<2) {
-                msg = @"活动至少需要2人（包括本人）";
+        } else if ([_lowLimit intValue]<2) {
+            msg = @"活动至少需要2人（包括本人）";
+        } else if ([_highLimit intValue]==0) {
+            if ([_highLimit intValue]<[_lowLimit intValue]) {
+                msg = @"人数上限必须大于下限";
+            } else {
+                msg = @"请输入人数下限";   
             }
-            msg = @"请输入人数上限";
-        } else if (_highLimit==nil || _highLimit.length==0) {
-            msg = @"请输入人数下限";
-        } else if ((_femaleLowLimit==nil || _femaleLowLimit.length==0)&&needFemale) {
+        } else if (([_femaleLowLimit intValue]==0)&&needFemale) {
             msg = @"请输入女性人数要求";
         }
         
