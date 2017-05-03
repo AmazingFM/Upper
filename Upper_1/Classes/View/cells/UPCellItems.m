@@ -189,14 +189,14 @@
 {
     self = [super init];
     if (self) {
-        self.imageName = @"";
+        self.defaultName = @"";
     }
     return self;
 }
 
 - (void)fillWithValue:(NSString *)value
 {
-    self.imageName = value;
+    self.defaultName = value;
 }
 
 @end

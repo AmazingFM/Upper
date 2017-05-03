@@ -407,9 +407,9 @@ static CGFloat const FixRatio = 4/3.0;
     UPSwitchCellItem *item12 = [[UPSwitchCellItem alloc] init];
     item12.title=@"仅限本行业";
     
-    BOOL isOn = YES;
-    if (self.actData && [self.actData.industry_id intValue]==-1) {
-        isOn = NO;
+    BOOL isOn = NO;
+    if (self.actData && [self.actData.industry_id intValue]!=-1) {
+        isOn = YES;
     }
     item12.isOn = isOn;
     item12.isLock = YES;

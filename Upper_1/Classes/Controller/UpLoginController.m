@@ -26,6 +26,7 @@
 #import "UPTools.h"
 #import "UserData.h"
 #import "MBProgressHUD+MJ.h"
+#import "CRNavigationBar.h"
 
 @interface UpLoginController () <UITextFieldDelegate, UIGestureRecognizerDelegate>
 {
@@ -181,16 +182,15 @@
     [self.view addSubview:wangjimima];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    [super viewWillAppear:animated];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+    
+    CRNavigationBar *navigationBar = (CRNavigationBar *)self.navigationController.navigationBar;
+    navigationBar.barTintColor = [UIColor clearColor];
 }
 
 #pragma UITextFieldDelegate

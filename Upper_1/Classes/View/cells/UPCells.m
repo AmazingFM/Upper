@@ -388,14 +388,11 @@
                 _imageDetail.frame = CGRectMake(_backView.width-_backView.height-15, 4, _backView.height-8, _backView.height-8);
             }
             _imageDetail.layer.masksToBounds = YES;
-            if (cellItem.imageData!=nil && cellItem.imageData.length!=0) {
-                NSData *_decodedImageData = [[NSData alloc] initWithBase64EncodedString:cellItem.imageData options:NSDataBase64DecodingIgnoreUnknownCharacters];
-                UIImage *detailImg = [UIImage imageWithData:_decodedImageData];
-                [_imageDetail setImage:detailImg];
+            if (cellItem.imageUrl.length>0) {
+                [_imageDetail sd_setImageWithURL:[NSURL URLWithString:cellItem.imageUrl]];
                 
-            } else if (cellItem.imageName!=nil && cellItem.imageName.length>0) {
-                _imageDetail.layer.cornerRadius = 0;
-                [_imageDetail setImage:[UIImage imageNamed:cellItem.imageName]];
+            } else if (cellItem.defaultName.length>0) {
+                [_imageDetail setImage:[UIImage imageNamed:cellItem.defaultName]];
             }
             
             break;

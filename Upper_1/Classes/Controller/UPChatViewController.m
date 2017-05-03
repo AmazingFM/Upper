@@ -77,7 +77,7 @@
     HUD.removeFromSuperViewOnHide = YES;
     HUD.labelText = @"私信发送中";
     
-    NSMutableArray *params = [NSMutableArray new];
+    NSMutableDictionary *params = [NSMutableDictionary new];
     [params setValue:@"MessageSend" forKey:@"a"];
     
     [params setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];

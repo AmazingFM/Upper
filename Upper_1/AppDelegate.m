@@ -28,8 +28,6 @@
     NSDictionary *navbarTitleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
     [[UINavigationBar appearance] setTitleTextAttributes:navbarTitleTextAttributes];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-
-//    [self test];
     
     self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
@@ -61,8 +59,7 @@
         if (![UPDataManager shared].isLogin) {
             UpLoginController *login = [[UpLoginController alloc] init];
             CRNavigationController *nav = [[CRNavigationController alloc] initWithRootViewController:login];
-            nav.navigationBar.shadowImage = [[UIImage alloc] init];
-            
+
             self.window.rootViewController = nav;
             [self.window makeKeyAndVisible];
         } else {

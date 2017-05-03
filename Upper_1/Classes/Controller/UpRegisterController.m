@@ -70,6 +70,10 @@ typedef enum register_enum
     whichStep = 0;
  
     self.navigationItem.title = @"注册";
+    UIImageView *backImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_cover_gaussian"]];
+    backImg.userInteractionEnabled = NO;
+    backImg.frame = self.view.bounds;
+    [self.view addSubview:backImg];
     
     leftBarItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(leftClick)];
     

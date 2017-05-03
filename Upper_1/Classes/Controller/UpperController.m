@@ -17,6 +17,8 @@
 #import "MBProgressHUD.h"
 #import "UPTools.h"
 #import "UPGlobals.h"
+#import "CRNavigationBar.h"
+#import "YMNetwork.h"
 
 #define kUPTableViewHeight 10
 
@@ -58,6 +60,10 @@ extern NSString * const g_loginFileName;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    UIImageView *backImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_cover_gaussian"]];
+    backImg.userInteractionEnabled = NO;
+    backImg.frame = self.view.bounds;
+    [self.view addSubview:backImg];
     
     paramsDict = [NSMutableDictionary dictionary];
     
@@ -76,14 +82,13 @@ extern NSString * const g_loginFileName;
     
     UPImageDetailCellItem *imageDetailItem1 = [[UPImageDetailCellItem alloc] init];
     imageDetailItem1.title = @"头像";
-    imageDetailItem1.imageName = @"head";
-    imageDetailItem1.imageData = @"";
+    imageDetailItem1.defaultName = @"head";
     imageDetailItem1.style = UPItemStyleUserImg;
     imageDetailItem1.cellID = @"cellID1";
 
     UPImageDetailCellItem *imageDetailItem2 = [[UPImageDetailCellItem alloc] init];
     imageDetailItem2.title = @"我的二维码";
-    imageDetailItem2.imageName = @"qrcode";
+    imageDetailItem2.defaultName = @"qrcode";
     imageDetailItem2.style = UPItemStyleUserQrcode;
     imageDetailItem2.cellID = @"cellID2";
     
@@ -112,8 +117,8 @@ extern NSString * const g_loginFileName;
     
     
     if ([UPDataManager shared].isLogin) {
-        imageDetailItem1.imageName = @"head";
-        imageDetailItem1.imageData=[UPDataManager shared].userInfo.user_icon;
+        imageDetailItem1.defaultName = @"head";
+        imageDetailItem1.imageUrl=[UPDataManager shared].userInfo.user_icon;
         imageDetailItem3.detail = [UPDataManager shared].userInfo.nick_name;
         imageDetailItem4.detail = [[UPDataManager shared].userInfo.sexual intValue]==0?@"男":@"女";
         
@@ -127,8 +132,8 @@ extern NSString * const g_loginFileName;
         
         [_quitBtn setTitle:@"退出登录" forState:UIControlStateNormal];
     } else {
-        imageDetailItem1.imageName = @"head";
-        imageDetailItem1.imageData=@"";
+        imageDetailItem1.defaultName = @"head";
+        imageDetailItem1.imageUrl=@"";
         [_quitBtn setTitle:@"请登录" forState:UIControlStateNormal];
     }
 
@@ -157,15 +162,22 @@ extern NSString * const g_loginFileName;
     [self.view addSubview:self.tableView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recvLogin) name:kNotifierLogin object:nil];
+    
+    if ([UPDataManager shared].isLogin) {
+        [self recvLogin];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    if ([UPDataManager shared].isLogin) {
-        [self recvLogin];
-    }
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+    
+    CRNavigationBar *navigationBar = (CRNavigationBar *)self.navigationController.navigationBar;
+    navigationBar.barTintColor = [UIColor clearColor];
 }
 
 - (void)dealloc
@@ -176,14 +188,42 @@ extern NSString * const g_loginFileName;
 - (void)recvLogin
 {
     UPImageDetailCellItem *item = _itemList[0];
-    item.imageData = [UPDataManager shared].userInfo.user_icon;
+    item.imageUrl = [UPDataManager shared].userInfo.user_icon;
     NSIndexPath *idxPath = [NSIndexPath indexPathForRow:0 inSection:0];
     [self.tableView reloadRowsAtIndexPaths:@[idxPath] withRowAnimation:UITableViewRowAnimationFade];
     
     [_quitBtn setTitle:@"退出登录" forState:UIControlStateNormal];
+    
+    [self userInfoRequest];
 }
 
+- (void)userInfoRequest
+{
+    NSString *user_id = [UPDataManager shared].userInfo.ID;
+    NSString *query_id = user_id;
 
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    [params setObject:@"UserQuery"forKey:@"a"];
+    
+    [params setObject:user_id forKey:@"user_id"];
+    [params setObject:query_id forKey:@"qry_usr_id"];
+    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
+    
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+        NSDictionary *dict = (NSDictionary *)responseObject;
+        NSString *resp_id = dict[@"resp_id"];
+        if ([resp_id intValue]==0) {
+            //处理
+            UserData *userData = [[UserData alloc] initWithDict:dict[@"resp_data"]];
+            [UPDataManager shared].userInfo.birthday = userData.birthday;
+            
+            UPImageDetailCellItem *birthItem = _itemList[4];
+            birthItem.detail = [UPTools dateTransform:userData.birthday fromFormat:@"yyyyMMdd" toFormat:@"yyyy-MM-dd"];
+            [self.tableView reloadData];
+        }
+    } failure:^(NSError *error) {
+    }];
+}
 
 #pragma mark - Table view data source
 
@@ -489,7 +529,7 @@ extern NSString * const g_loginFileName;
         UPImageDetailCellItem *item = _itemList[0];
         
         
-        item.imageData = @"";
+        item.imageUrl = @"";
         NSIndexPath *idxPath = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tableView reloadRowsAtIndexPaths:@[idxPath] withRowAnimation:UITableViewRowAnimationFade];
         
@@ -550,15 +590,13 @@ extern NSString * const g_loginFileName;
     
     __weak typeof(self) weakSelf = self;
     
-    
-    
     [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
         NSDictionary *dict = (NSDictionary *)json;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             UPImageDetailCellItem *cellItem = (UPImageDetailCellItem *)selectedItem;
             if (cellItem.style&UPItemStyleUserImg) {
-                cellItem.imageData=paramsDict[@"user_icon"];
+                cellItem.imageUrl=paramsDict[@"user_icon"];
                 
             }
             else if (cellItem.style&UPItemStyleUserNickName) {

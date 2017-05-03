@@ -110,9 +110,9 @@ typedef enum{
 @end
 
 @interface UPImageDetailCellItem : UPTitleCellItem
-@property (nonatomic, copy) NSString *imageName;
+@property (nonatomic, copy) NSString *defaultName;
 @property (nonatomic, copy) NSString *detail;
-@property (nonatomic, copy) NSString *imageData;
+@property (nonatomic, copy) NSString *imageUrl;
 @end
 
 @interface UPButtonCellItem : UPBaseCellItem
