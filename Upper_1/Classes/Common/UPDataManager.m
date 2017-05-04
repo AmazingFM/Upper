@@ -12,6 +12,13 @@
 #import "Info.h"
 
 NSString * const g_loginFileName = @"login.plist";
+
+@interface UPDataManager()
+{
+    dispatch_queue_t
+}
+
+@end
 @implementation UPDataManager
 
 + (instancetype)shared

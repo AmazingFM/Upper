@@ -18,14 +18,15 @@
 
 @implementation UPChatViewController
 
-- (instancetype)initWithUserID:(NSString *)userID andUserName:(NSString *)userName
+- (instancetype)initWithUserID:(NSString *)userID andUserName:(NSString *)userName andUserIcon:(NSString *)userIcon
 {
     self = [super initWithModeSwitchButton:NO];
     if (self) {
         self.navigationItem.title = userName;
         _remote_id = userID;
         _remote_name = userName;
-        _msgBubbleVC = [[UPMessageBubbleController alloc] initWithUserID:userID andUserName:userName];
+        _remote_icon = userIcon;
+        _msgBubbleVC = [[UPMessageBubbleController alloc] initWithUserID:userID andUserName:userName andUserIcon:userIcon];
         [self addChildViewController:_msgBubbleVC];
         
         [self setUpBlock];

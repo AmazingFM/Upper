@@ -30,7 +30,7 @@
 
 @implementation UPMessageBubbleController
 
-- (instancetype)initWithUserID:(NSString *)userID andUserName:(NSString *)userName
+- (instancetype)initWithUserID:(NSString *)userID andUserName:(NSString *)userName andUserIcon:(NSString *)userIcon
 {
     self = [super init];
     if (self) {

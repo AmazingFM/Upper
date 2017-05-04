@@ -209,7 +209,7 @@
         
     } else {
         PrivateMessage *msg = [priMsgList objectAtIndex:indexPath.row-2];
-        UPChatViewController *chatController = [[UPChatViewController alloc] initWithUserID:msg.remote_id andUserName:msg.remote_name];
+        UPChatViewController *chatController = [[UPChatViewController alloc] initWithUserID:msg.remote_id andUserName:msg.remote_name andUserIcon:@""];
         [self.navigationController pushViewController:chatController animated:YES];
     }
 }

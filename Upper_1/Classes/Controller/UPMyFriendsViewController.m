@@ -193,7 +193,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UPFriendItem *friend = self.friendlist[indexPath.row];
-    UPChatViewController *chatController = [[UPChatViewController alloc] initWithUserID:friend.relation_id andUserName:friend.nick_name];
+    UPChatViewController *chatController = [[UPChatViewController alloc] initWithUserID:friend.relation_id andUserName:friend.nick_name andUserIcon:friend.user_icon];
     [self.navigationController pushViewController:chatController animated:YES];
 }
 

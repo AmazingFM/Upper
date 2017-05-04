@@ -13,7 +13,7 @@
 
 @property (nonatomic, copy) void (^didScroll)();
 
-- (instancetype)initWithUserID:(NSString *)userID andUserName:(NSString *)userName;
+- (instancetype)initWithUserID:(NSString *)userID andUserName:(NSString *)userName andUserIcon:(NSString *)userIcon;
 
 - (void)addMessage:(PrivateMessage *)msg;
 

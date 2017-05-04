@@ -13,8 +13,10 @@
 
 @property (nonatomic, copy) NSString *remote_id;
 @property (nonatomic, copy) NSString *remote_name;
+@property (nonatomic, copy) NSString *remote_icon;
+
 @property (nonatomic, retain) UserData *userData;
 @property (nonatomic, retain) OtherUserData *otherUserData;
 
-- (instancetype)initWithUserID:(NSString *)userID andUserName:(NSString *)userName;
+- (instancetype)initWithUserID:(NSString *)userID andUserName:(NSString *)userName andUserIcon:(NSString *)userIcon;
 @end
