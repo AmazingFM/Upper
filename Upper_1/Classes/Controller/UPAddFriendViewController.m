@@ -341,6 +341,11 @@
         if ([resp_id intValue]==0) {
             NSString *resp_desc = dict[@"resp_desc"];
             hud.labelText = resp_desc;
+            
+            if (self.delegate && [self.delegate respondsToSelector:@selector(addFriendSuccess)])
+            {
+                [self.delegate addFriendSuccess];
+            }
         }
         else
         {

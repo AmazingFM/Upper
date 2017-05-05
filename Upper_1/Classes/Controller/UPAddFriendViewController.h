@@ -8,6 +8,12 @@
 
 #import "UPBaseViewController.h"
 
+@protocol UPAddFriendDelegate <NSObject>
+@optional
+- (void)addFriendSuccess;
+
+@end
 @interface UPAddFriendViewController : UIViewController
+@property (nonatomic, weak) id<UPAddFriendDelegate> delegate;
 
 @end

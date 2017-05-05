@@ -19,7 +19,7 @@
 
 #define kDescHeight 44
 
-@interface UPMyFriendsViewController() <UITableViewDelegate, UITableViewDataSource>
+@interface UPMyFriendsViewController() <UITableViewDelegate, UITableViewDataSource, UPAddFriendDelegate>
 {
     MJRefreshComponent *myRefreshView;
     int pageNum;
@@ -103,6 +103,7 @@
     sender.enabled = NO;
     
     UPAddFriendViewController *addFriend = [[UPAddFriendViewController alloc] init];
+    addFriend.delegate = self;
     [self.navigationController pushViewController:addFriend animated:YES];
 }
 
@@ -277,4 +278,9 @@
     }];
 }
 
+#pragma mark UPAddFriendDelegate
+- (void)addFriendSuccess
+{
+    [self.mainTable.header beginRefreshing];//刷新
+}
 @end

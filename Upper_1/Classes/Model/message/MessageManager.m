@@ -18,6 +18,16 @@
 #define SYSTEMTABLE @"SysTable"
 #define USRTABLE    @"UsrTable"
 
+static dispatch_queue_t message_manager_processing_queue() {
+    static dispatch_queue_t ym_message_manager_processing_queue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ym_message_manager_processing_queue = dispatch_queue_create("com.upper.manager.processing", DISPATCH_QUEUE_SERIAL);
+    });
+    
+    return ym_message_manager_processing_queue;
+}
+
 @implementation GroupMessage
 
 - (NSMutableArray *)messageList
@@ -31,9 +41,6 @@
 @end
 
 @interface MessageManager()
-{
-//    FMDatabase *messageDb;
-}
 
 @property (nonatomic, retain) NSMutableArray<UUMessage *> *messageList;
 @property (nonatomic, retain) NSMutableArray<UUMessage *> *groupMessageList;
@@ -57,7 +64,7 @@
 {
     self = [super init];
     if (self) {
-//        [self initializeDB];
+        
         
         //这是在一个代码块中
         [self.fmQueue inDatabase:^(FMDatabase *db) {
@@ -79,25 +86,11 @@
             }  
         }];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(login:) name:kNotifierLogin object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logout:) name:kNotifierLogout object:nil];
+        [UPTimerManager createTimer:@"TimeToPullMessage" notice:kNotifierMessagePull heartTime:10.0f];
+        [[UPTimerManager shared] startTimeMachine:@"TimeToPullMessage"];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestMessages) name:kNotifierMessagePull object:nil];
     }
     return self;
-}
-
-- (void)login:(NSNotification *)notice
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotifierLogin object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(login:) name:kNotifierLogin object:nil];
-    
-    [UPTimerManager createTimer:@"TimeToPullMessage" notice:kNotifierMessagePull heartTime:10.0f];
-    [[UPTimerManager shared] startTimeMachine:@"TimeToPullMessage"];
-}
-
-- (void)logout:(NSNotification *)notice
-{
-    [[UPTimerManager shared] stopTimeMachine:@"TimeToPullMessage"];
 }
 
 -(FMDatabaseQueue *)fmQueue
@@ -262,33 +255,38 @@
 
 - (void)requestMessages
 {
+    if (![UPDataManager shared].isLogin) {
+        return;
+    }
     NSMutableDictionary *params = [NSMutableDictionary new];
     [params setValue:@"MessageGet" forKey:@"a"];
     [params setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
-        NSDictionary *dict = (NSDictionary *)responseObject;
-        NSLog(@"MessageGet:%@", dict);
-        
-        NSString *resp_id = dict[@"resp_id"];
-        if ([resp_id intValue]==0) {
-            NSDictionary *resp_data = dict[@"resp_data"];
+        dispatch_async(message_manager_processing_queue(), ^{
+            NSDictionary *dict = (NSDictionary *)responseObject;
+            NSLog(@"MessageGet:%@", dict);
             
-            int totalCnt =  [resp_data[@"total_count"] intValue];
-            if (totalCnt!=0) {
-                NSString *msglist = resp_data[@"message_list"];
-                if ([msglist isKindOfClass:[NSArray class]]) {
-                    NSMutableArray *msgArr = (NSMutableArray*)msglist;
-                    
-                    NSDictionary *msgGroupDict = [self parseMessages:msgArr];
-                    
-                    if (msgGroupDict) {
-                        [self insertMsgGroupDict:msgGroupDict];
-                        //发送通知
-                        [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierMessageComing object:nil userInfo:msgGroupDict];
+            NSString *resp_id = dict[@"resp_id"];
+            if ([resp_id intValue]==0) {
+                NSDictionary *resp_data = dict[@"resp_data"];
+                
+                int totalCnt =  [resp_data[@"total_count"] intValue];
+                if (totalCnt!=0) {
+                    NSString *msglist = resp_data[@"message_list"];
+                    if ([msglist isKindOfClass:[NSArray class]]) {
+                        NSMutableArray *msgArr = (NSMutableArray*)msglist;
+                        
+                        NSDictionary *msgGroupDict = [self parseMessages:msgArr];
+                        
+                        if (msgGroupDict) {
+                            [self insertMsgGroupDict:msgGroupDict];
+                            //发送通知
+                            [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierMessageComing object:nil userInfo:msgGroupDict];
+                        }
                     }
                 }
             }
-        }
+        });
     } failure:^(NSError *error) {
         //
     }];

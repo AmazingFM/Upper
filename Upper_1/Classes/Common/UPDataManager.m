@@ -15,7 +15,6 @@ NSString * const g_loginFileName = @"login.plist";
 
 @interface UPDataManager()
 {
-    dispatch_queue_t
 }
 
 @end

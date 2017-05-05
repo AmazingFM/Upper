@@ -334,7 +334,7 @@ static CGFloat const FixRatio = 4/3.0;
     
     UPDetailCellItem *item5 = [[UPDetailCellItem alloc] init];
     item5.title = @"活动类型";
-    item5.detail = (_actType==nil)?@"":_actType.name;//(_actType==nil)?@"选择类型":_actType.name;
+    item5.detail = (_actType==nil)?@"选择类型":_actType.name;
     item5.key = @"activity_class";
     
     UPTitleCellItem *item15 = [[UPTitleCellItem alloc] init];
@@ -532,10 +532,20 @@ static CGFloat const FixRatio = 4/3.0;
     cellItem.indexPath = indexPath;
     
     UPBaseCell *itemCell = [self cellWithItem:cellItem];
-//    
-//    if (indexPath.row==0) {
-//        itemCell.separatorInset = UIEdgeInsetsMake(0, ScreenWidth, 0, 0);
-//    }
+    
+    if (indexPath.row==0) {
+        UILabel *tipsLabel = [itemCell viewWithTag:100];
+        if (tipsLabel==nil) {
+            tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, cellItem.cellHeight-80, cellItem.cellWidth, 30)];
+            tipsLabel.text = @"单击更换活动图片";
+            tipsLabel.backgroundColor = [UIColor clearColor];
+            tipsLabel.font = [UIFont systemFontOfSize:13];
+            tipsLabel.textColor = kUPThemeMainColor;
+            tipsLabel.tag = 100;
+            tipsLabel.textAlignment = NSTextAlignmentCenter;
+            [itemCell addSubview:tipsLabel];
+        }
+    }
     
     itemCell.delegate=self;
     
@@ -1123,6 +1133,11 @@ static CGFloat const FixRatio = 4/3.0;
         }
     }
     
+    UPButtonCellItem *item0 = self.itemList[0];
+    item0.btnStyle = UPBtnStyleImage;
+    item0.defaultImage = NO;
+    item0.btnImage = [UIImage imageNamed:[NSString stringWithFormat:@"default_activity_%@", actType.ID]];
+    
     UPBaseCellItem *femaleItem = nil;
     for (UPBaseCellItem *cellItem in self.itemList) {
         if ([cellItem.key isEqualToString:@"fmale_low"]) {
@@ -1136,7 +1151,7 @@ static CGFloat const FixRatio = 4/3.0;
         femaleItem.cellHeight=0;
         needFemale = NO;
     }
-    [_tableView reloadRowsAtIndexPaths:@[femaleItem.indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [_tableView reloadRowsAtIndexPaths:@[item0.indexPath, femaleItem.indexPath] withRowAnimation:UITableViewRowAnimationNone];
 
     _actType = actType;
 }
