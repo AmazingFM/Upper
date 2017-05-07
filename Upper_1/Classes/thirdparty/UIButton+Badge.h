@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIBarButtonItem (Badge)
+@interface UIButton (Badge)
 
 @property (strong, nonatomic) UILabel *badge;
 
@@ -32,6 +32,4 @@
 // Badge has a bounce animation when value changes
 @property BOOL shouldAnimateBadge;
 
-- (void)showBadgeAt:(CGFloat)originX andY:(CGFloat)originY;
-- (void)hideBadge;
 @end

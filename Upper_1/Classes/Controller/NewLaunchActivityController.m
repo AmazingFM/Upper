@@ -536,12 +536,13 @@ static CGFloat const FixRatio = 4/3.0;
     if (indexPath.row==0) {
         UILabel *tipsLabel = [itemCell viewWithTag:100];
         if (tipsLabel==nil) {
-            tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, cellItem.cellHeight-80, cellItem.cellWidth, 30)];
-            tipsLabel.text = @"单击更换活动图片";
+            tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, cellItem.cellHeight-80, cellItem.cellWidth-60, 80)];
+            tipsLabel.text = @"活动配图(可选)，不上传会使用系统配图";
             tipsLabel.backgroundColor = [UIColor clearColor];
             tipsLabel.font = [UIFont systemFontOfSize:13];
             tipsLabel.textColor = kUPThemeMainColor;
             tipsLabel.tag = 100;
+            tipsLabel.numberOfLines = 0;
             tipsLabel.textAlignment = NSTextAlignmentCenter;
             [itemCell addSubview:tipsLabel];
         }

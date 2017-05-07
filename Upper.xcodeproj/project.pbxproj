@@ -293,6 +293,8 @@
 		8555DE721EBCC62E0012F162 /* default_activity_501@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8555DE551EBCC62E0012F162 /* default_activity_501@2x.png */; };
 		8555DE731EBCC62E0012F162 /* default_activity_502@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8555DE561EBCC62E0012F162 /* default_activity_502@2x.png */; };
 		8555DE741EBCC62E0012F162 /* default_activity_503@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8555DE571EBCC62E0012F162 /* default_activity_503@2x.png */; };
+		8555DE761EBEE2490012F162 /* msg_alert_sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8555DE751EBEE2490012F162 /* msg_alert_sound.mp3 */; };
+		8555DE791EBF4D700012F162 /* UIButton+Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = 8555DE781EBF4D700012F162 /* UIButton+Badge.m */; };
 		8559245D1E5828D500FAAFFA /* jhsj@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8559245A1E5828D500FAAFFA /* jhsj@2x.png */; };
 		8559245E1E5828D500FAAFFA /* xqsj@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8559245B1E5828D500FAAFFA /* xqsj@2x.png */; };
 		8559245F1E5828D500FAAFFA /* zysj@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8559245C1E5828D500FAAFFA /* zysj@2x.png */; };
@@ -830,6 +832,9 @@
 		8555DE551EBCC62E0012F162 /* default_activity_501@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_activity_501@2x.png"; sourceTree = "<group>"; };
 		8555DE561EBCC62E0012F162 /* default_activity_502@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_activity_502@2x.png"; sourceTree = "<group>"; };
 		8555DE571EBCC62E0012F162 /* default_activity_503@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_activity_503@2x.png"; sourceTree = "<group>"; };
+		8555DE751EBEE2490012F162 /* msg_alert_sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = msg_alert_sound.mp3; sourceTree = "<group>"; };
+		8555DE771EBF4D700012F162 /* UIButton+Badge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Badge.h"; sourceTree = "<group>"; };
+		8555DE781EBF4D700012F162 /* UIButton+Badge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Badge.m"; sourceTree = "<group>"; };
 		8559245A1E5828D500FAAFFA /* jhsj@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "jhsj@2x.png"; sourceTree = "<group>"; };
 		8559245B1E5828D500FAAFFA /* xqsj@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xqsj@2x.png"; sourceTree = "<group>"; };
 		8559245C1E5828D500FAAFFA /* zysj@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zysj@2x.png"; sourceTree = "<group>"; };
@@ -1468,6 +1473,7 @@
 		3A71CB391E26267700EBE0A2 /* resource */ = {
 			isa = PBXGroup;
 			children = (
+				8555DE751EBEE2490012F162 /* msg_alert_sound.mp3 */,
 				3A71CB3A1E26267700EBE0A2 /* pic */,
 				3A71CB851E26267700EBE0A2 /* plist */,
 				3A71CB891E26267700EBE0A2 /* slide */,
@@ -1938,6 +1944,8 @@
 		EC3C16FD1CECB16D00223D6B /* thirdparty */ = {
 			isa = PBXGroup;
 			children = (
+				8555DE771EBF4D700012F162 /* UIButton+Badge.h */,
+				8555DE781EBF4D700012F162 /* UIButton+Badge.m */,
 				8555DE331EB8C4F80012F162 /* CRNavigationController */,
 				85B344E51E51FCD3002E69A9 /* TTTAttributedLabel */,
 				3A6944D31E5195E700F1BEF5 /* UIBadgeView.h */,
@@ -2303,6 +2311,7 @@
 				8555DE671EBCC62E0012F162 /* default_activity_303@2x.png in Resources */,
 				3A71CBB11E26267700EBE0A2 /* head.png in Resources */,
 				3A71CBBA1E26267700EBE0A2 /* other.png in Resources */,
+				8555DE761EBEE2490012F162 /* msg_alert_sound.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2332,6 +2341,7 @@
 				2CDAD64C1D0EEC4000C260F4 /* MJRefreshComponent.m in Sources */,
 				3A837D3B1DD8920A00A9A0BB /* UPMsgBubbleCell.m in Sources */,
 				3A7B2CBD1E8117B4004F7F83 /* YMLabel.m in Sources */,
+				8555DE791EBF4D700012F162 /* UIButton+Badge.m in Sources */,
 				EC3C189D1CECB2B300223D6B /* AppDelegate.m in Sources */,
 				2CDAD6501D0EEC4000C260F4 /* MJRefreshAutoNormalFooter.m in Sources */,
 				2CDAD6321D0EEC4000C260F4 /* AFURLConnectionOperation.m in Sources */,

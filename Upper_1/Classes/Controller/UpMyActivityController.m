@@ -10,7 +10,6 @@
 #import "MyActCell.h"
 #import "UpMyActView.h"
 #import "XWHttpTool.h"
-#import "UIBarButtonItem+Badge.h"
 #import "Info.h"
 #import "UPGlobals.h"
 #import "UPMyLaunchViewController.h"

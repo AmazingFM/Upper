@@ -37,6 +37,7 @@
 #import "XWHttpTool.h"
 #import "UPActivityCellItem.h"
 #import "ZouMaDengView.h"
+#import "UIButton+Badge.h"
 #import "UIBarButtonItem+Badge.h"
 #import "UPConfig.h"
 #import "YMNetwork.h"
@@ -67,6 +68,7 @@ static int kMsgCount = 0;
     
     BOOL hasLoad;
     
+    YMImageButton *msgBtn;
     UIBarButtonItem *messageItem;
     
     HTConfigCollectItem *collectItem;
@@ -97,7 +99,6 @@ static int kMsgCount = 0;
     [titleButton setTitle:@"活动大厅" forState:UIControlStateNormal];
     self.navigationItem.titleView = titleButton;
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
-    
     self.navigationItem.rightBarButtonItems = [self rightNavButtonItems];
 
     lastPage = NO;
@@ -145,6 +146,8 @@ static int kMsgCount = 0;
     menu.dataSource = self;
     menu.delegate = self;
     [self.view addSubview:menu];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(showMessageBadge) name:kNotifierMessageComing object:nil];
 }
 
 - (void)loadCollectItem
@@ -166,7 +169,7 @@ static int kMsgCount = 0;
 
 - (NSArray *)rightNavButtonItems
 {
-    YMImageButton *msgBtn = [[YMImageButton alloc] initWithFrame:CGRectMake(0,0,35,35)];
+    msgBtn = [[YMImageButton alloc] initWithFrame:CGRectMake(0,0,35,35)];
     [msgBtn setImage:[UIImage imageNamed:@"message"] andTitle:@"消息"];
     msgBtn.tag = kMainButtonTag;
     [msgBtn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -176,17 +179,19 @@ static int kMsgCount = 0;
     asisBtn.tag = kMainButtonTag+1;
     [asisBtn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
 
-    UIBarButtonItem *msgItem = [[UIBarButtonItem alloc] initWithCustomView:msgBtn];
+    messageItem = [[UIBarButtonItem alloc] initWithCustomView:msgBtn];
     UIBarButtonItem *asisItem = [[UIBarButtonItem alloc] initWithCustomView:asisBtn];
     UIBarButtonItem *spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     spaceItem.width-=15;
     
-    return @[spaceItem, msgItem, asisItem];
+    return @[spaceItem, messageItem, asisItem];
 }
 
 - (void)onButtonClick:(UIButton *)sender
 {
     if (sender.tag==kMainButtonTag) { //消息
+        [self hideMessageBadge];
+        
         MessageCenterController *msgCenterController = [[MessageCenterController alloc] init];
         [self.navigationController pushViewController:msgCenterController animated:YES];
     } else if (sender.tag==kMainButtonTag+1)//活动助手
@@ -197,19 +202,29 @@ static int kMsgCount = 0;
     }
 }
 
-- (void)addBadgeValue:(NSNotification *)notification
+- (void)showMessageBadge
 {
-    NSArray *msgArr = notification.object;
-    long addCount = msgArr.count;
-    kMsgCount += addCount;
-    
-    messageItem.badgeValue = [NSString stringWithFormat:@"%d", kMsgCount];
+    [messageItem showBadgeAt:26 andY:-3];
 }
 
-- (void)setBadgeValue:(int)newValue
+- (void)hideMessageBadge
 {
-    messageItem.badgeValue = newValue==0?@"":[NSString stringWithFormat:@"%d", newValue];
+    [messageItem hideBadge];
 }
+
+//- (void)addBadgeValue:(NSNotification *)notification
+//{
+//    NSArray *msgArr = notification.object;
+//    long addCount = msgArr.count;
+//    kMsgCount += addCount;
+//    
+//    messageItem.badgeValue = [NSString stringWithFormat:@"%d", kMsgCount];
+//}
+//
+//- (void)setBadgeValue:(int)newValue
+//{
+//    messageItem.badgeValue = newValue==0?@"":[NSString stringWithFormat:@"%d", newValue];
+//}
 
 - (void)viewWillAppear:(BOOL)animated
 {

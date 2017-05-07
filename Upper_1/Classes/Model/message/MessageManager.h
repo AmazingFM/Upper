@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import <AudioToolbox/AudioToolbox.h>
 #import "PrivateMessage.h"
 
 
@@ -29,6 +29,11 @@ typedef NS_ENUM(NSUInteger, UPGroupMsgType){
 
 
 @interface MessageManager : NSObject
+{
+    SystemSoundID soundID;
+}
+
+@property (nonatomic) BOOL isBackgound;
 
 + (instancetype)shared;
 //- (void)pullMessage;

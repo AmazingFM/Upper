@@ -41,6 +41,16 @@
     return YES;
 }
 
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    [MessageManager shared].isBackgound = NO;
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+    [MessageManager shared].isBackgound = YES;
+}
+
 - (void)setRootViewController
 {
     //判断是不是第一次启动应用

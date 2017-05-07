@@ -14,7 +14,6 @@
 #import "UUMessage.h"
 #import "YMNetwork.h"
 
-
 #define SYSTEMTABLE @"SysTable"
 #define USRTABLE    @"UsrTable"
 
@@ -64,7 +63,20 @@ static dispatch_queue_t message_manager_processing_queue() {
 {
     self = [super init];
     if (self) {
-        
+        self.isBackgound = NO;
+        //获取路径
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"msg_alert_sound" ofType:@"mp3"];
+        //定义一个带振动的SystemSoundID
+        soundID = 1000;
+        //判断路径是否存在
+        if (path) {
+            //创建一个音频文件的播放系统声音服务器
+            OSStatus error = AudioServicesCreateSystemSoundID((__bridge CFURLRef _Nonnull)([NSURL fileURLWithPath:path]), &soundID);
+            //判断是否有错误
+            if (error != kAudioServicesNoError) {
+                NSLog(@"%d",(int)error);
+            }
+        }
         
         //这是在一个代码块中
         [self.fmQueue inDatabase:^(FMDatabase *db) {
@@ -255,7 +267,7 @@ static dispatch_queue_t message_manager_processing_queue() {
 
 - (void)requestMessages
 {
-    if (![UPDataManager shared].isLogin) {
+    if (![UPDataManager shared].isLogin && self.isBackgound) {
         return;
     }
     NSMutableDictionary *params = [NSMutableDictionary new];
@@ -280,8 +292,12 @@ static dispatch_queue_t message_manager_processing_queue() {
                         
                         if (msgGroupDict) {
                             [self insertMsgGroupDict:msgGroupDict];
-                            //发送通知
-                            [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierMessageComing object:nil userInfo:msgGroupDict];
+                            //播放消息提示音
+                            AudioServicesPlaySystemSound(soundID);
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                //发送通知
+                                [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierMessageComing object:nil userInfo:msgGroupDict];
+                            });
                         }
                     }
                 }
