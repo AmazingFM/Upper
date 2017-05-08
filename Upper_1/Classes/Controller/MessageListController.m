@@ -103,7 +103,9 @@
         NSArray<PrivateMessage *> *msgList = msgGroupDict[msgGroupKey];
         
         if (msgList.count>0) {
-            [priMsgList addObjectsFromArray:msgList];
+            [msgList enumerateObjectsUsingBlock:^(PrivateMessage * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                [priMsgList insertObject:obj atIndex:0];
+            }];
             [_messageTable reloadData];
         }
     });
