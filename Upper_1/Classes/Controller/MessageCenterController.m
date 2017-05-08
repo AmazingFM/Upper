@@ -127,15 +127,17 @@
         }
     }
 
-    //更新用户信息
-    if (usrMsgList.count>0) {
-        [self loadMessage];//重新加载
-        [_messageTable reloadData];
-    } else  {
-        if (showBadgeSys || showBadgeAct) {
-            [_messageTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0],[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //更新用户信息
+        if (usrMsgList.count>0) {
+            [self loadMessage];//重新加载
+            [_messageTable reloadData];
+        } else  {
+            if (showBadgeSys || showBadgeAct) {
+                [_messageTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0],[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+            }
         }
-    }
+    });
 }
 
 #pragma mark UITableViewDelegate, datasource

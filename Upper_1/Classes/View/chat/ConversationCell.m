@@ -41,7 +41,7 @@
             [self.contentView addSubview:_name];
         }
         if (!_time) {
-            _time = [[UILabel alloc] initWithFrame:CGRectMake(ScreenWidth-100-LeftRightPadding, 8, 100, 25)];
+            _time = [[UILabel alloc] initWithFrame:CGRectMake(ScreenWidth-200-LeftRightPadding, 8, 200, 25)];
             _time.font = [UIFont systemFontOfSize:12];
             _time.textAlignment = NSTextAlignmentRight;
             _time.textColor = [UPTools colorWithHex:0x999999];
@@ -65,34 +65,42 @@
     if (!_curPriMsg) {
         return;
     }
-//    [_userIconView sd_setImageWithURL:_curPriMsg.fromId placeholderImage:[UIImage imageNamed:@"head"]];
     
     switch (_curPriMsg.localMsgType) {
         case MessageTypeSystemGeneral:
         {
+            _userIconView.image = [UIImage imageNamed:@""];
             _name.text = @"系统消息";
-            _time.text = _curPriMsg.add_time;
+            NSString *addTime = [UPTools dateTransform:_curPriMsg.add_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy年MM月dd日 HH时mm分"];
+            _time.text = addTime;
             _msg.text = _curPriMsg.msg_desc;
         }
             break;
         case MessageTypeActivityInvite:
         {
+            _userIconView.image = [UIImage imageNamed:@""];
             _name.text = @"活动邀请";
-            _time.text = _curPriMsg.add_time;
-            _msg.text = @"有人向你发送了活动邀请，去看看吧@";
+            NSString *addTime = [UPTools dateTransform:_curPriMsg.add_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy年MM月dd日 HH时mm分"];
+            _time.text = addTime;
+            _msg.text = @"有人向你发送了活动邀请！";
         }
             break;
         case MessageTypeActivityChangeLauncher:
         {
-            _name.text = @"组织活动";
-            _time.text = _curPriMsg.add_time;
-            _msg.text = @"想组织活动吗？快去迎接挑战吧@";
+            _userIconView.image = [UIImage imageNamed:@""];
+            _name.text = @"发起人移交";
+            NSString *addTime = [UPTools dateTransform:_curPriMsg.add_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy年MM月dd日 HH时mm分"];
+            _time.text = addTime;
+            _msg.text = @"有人申请将发起人移交给你！";
         }
             break;
         default:
         {
+            _userIconView.image = [UIImage imageNamed:@"head"];
+//            [_userIconView sd_setImageWithURL:_curPriMsg.remote_id placeholderImage:[UIImage imageNamed:@"head"]];
             _name.text = _curPriMsg.remote_name;
-            _time.text = _curPriMsg.add_time;
+            NSString *addTime = [UPTools dateTransform:_curPriMsg.add_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy年MM月dd日 HH时mm分"];
+            _time.text = addTime;
             _msg.text = _curPriMsg.msg_desc;
         }
             break;
@@ -135,7 +143,6 @@
             break;
     }
     self.imageView.image = [UIImage imageNamed:imageName];
-//    [self.imageView setImageWithUserId:@"3" placeholderImage:[UIImage imageNamed:imageName]];
     self.textLabel.text = titleStr;
 }
 

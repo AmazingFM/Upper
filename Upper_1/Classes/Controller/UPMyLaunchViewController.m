@@ -224,7 +224,7 @@
 {
     __block int count = 0;
     
-    NSDictionary *actDataDict = @{@"activity_name":selectedActData.activity_name,@"activity_class":selectedActData.activity_class,@"begin_time":selectedActData.begin_time,@"id":selectedActData.ID};
+    NSDictionary *actDataDict = @{@"activity_name":selectedActData.activity_name,@"activity_class":selectedActData.activity_class,@"begin_time":selectedActData.begin_time,@"id":selectedActData.ID,@"nick_name":[UPDataManager shared].userInfo.nick_name, @"user_id":[UPDataManager shared].userInfo.ID};
     
     NSString *msgDesc = [UPTools stringFromJSON:actDataDict];
     

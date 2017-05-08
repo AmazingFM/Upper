@@ -39,8 +39,6 @@
         _userName = userName;
         _pageNo = 0;
         priMsgList = [NSMutableArray new];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageComing object:nil];
     }
     return self;
 }
@@ -59,8 +57,6 @@
     
     [_mainTableView registerClass:[PrivateMsgCell class] forCellReuseIdentifier:kMessageBubbleOthers];
     [_mainTableView registerClass:[PrivateMsgCell class] forCellReuseIdentifier:kMessageBubbleMe];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageComing object:nil];
 }
 
 - (void)dealloc
@@ -97,27 +93,29 @@
 
 - (void)updateMsg:(NSNotification *)notification
 {
-    NSDictionary *msgGroupDict = notification.userInfo;
-    NSArray<PrivateMessage *> *usrMsgList = msgGroupDict[UsrMsgKey];
-    
-    //更新用户信息
-    if (usrMsgList.count>0) {
-        NSMutableArray<PrivateMessage *> *myMsgs = [NSMutableArray new];
-        for (PrivateMessage *msg in usrMsgList) {
-            if ([msg.remote_id isEqualToString:_userID]) {
-                [myMsgs addObject:msg];
-            }
-        }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary *msgGroupDict = notification.userInfo;
+        NSArray<PrivateMessage *> *usrMsgList = msgGroupDict[UsrMsgKey];
         
-        if (myMsgs.count>0) {
-            @synchronized (priMsgList) {
-                [priMsgList addObjectsFromArray:myMsgs];
-                [_mainTableView reloadData];
-                [self scrollToBottom:YES];
+        //更新用户信息
+        if (usrMsgList.count>0) {
+            NSMutableArray<PrivateMessage *> *myMsgs = [NSMutableArray new];
+            for (PrivateMessage *msg in usrMsgList) {
+                if ([msg.remote_id isEqualToString:_userID]) {
+                    [myMsgs addObject:msg];
+                }
             }
+            
+            if (myMsgs.count>0) {
+                @synchronized (priMsgList) {
+                    [priMsgList addObjectsFromArray:myMsgs];
+                    [_mainTableView reloadData];
+                    [self scrollToBottom:YES];
+                }
 
+            }
         }
-    }
+    });
 }
 
 - (void)viewWillLayoutSubviews{

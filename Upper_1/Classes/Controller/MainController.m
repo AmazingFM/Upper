@@ -204,7 +204,9 @@ static int kMsgCount = 0;
 
 - (void)showMessageBadge
 {
-    [messageItem showBadgeAt:26 andY:-3];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [messageItem showBadgeAt:26 andY:-3];
+    });
 }
 
 - (void)hideMessageBadge

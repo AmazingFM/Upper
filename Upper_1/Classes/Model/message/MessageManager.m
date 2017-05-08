@@ -116,8 +116,8 @@ static dispatch_queue_t message_manager_processing_queue() {
     return _fmQueue;
 }
 
-- (void)initializeDB
-{
+//- (void)initializeDB
+//{
 //    NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
 //    NSLog(@"home:%@",path);
 //    messageDb = [FMDatabase databaseWithPath:[path stringByAppendingPathComponent:@"message.sqlite"]];
@@ -140,7 +140,7 @@ static dispatch_queue_t message_manager_processing_queue() {
 //        NSLog(@"建表messages失败");
 //    }
 //    [messageDb close];
-}
+//}
 
 - (NSDictionary *)parseMessages:(NSArray *)msgArr
 {
@@ -156,7 +156,7 @@ static dispatch_queue_t message_manager_processing_queue() {
         PrivateMessage *priMsg  = [[PrivateMessage alloc] init];
         priMsg.remote_id        = dict[@"from_id"];
         priMsg.remote_name      = dict[@"nick_name"];
-        priMsg.msg_desc     = dict[@"message_desc"];
+        priMsg.msg_desc         = dict[@"message_desc"];
         priMsg.add_time         = dict[@"add_time"];
         priMsg.status           = dict[@"status"];
         priMsg.message_type     = dict[@"message_type"];//不存数据库
@@ -294,10 +294,10 @@ static dispatch_queue_t message_manager_processing_queue() {
                             [self insertMsgGroupDict:msgGroupDict];
                             //播放消息提示音
                             AudioServicesPlaySystemSound(soundID);
-                            dispatch_async(dispatch_get_main_queue(), ^{
+//                            dispatch_async(dispatch_get_main_queue(), ^{
                                 //发送通知
                                 [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierMessageComing object:nil userInfo:msgGroupDict];
-                            });
+//                            });
                         }
                     }
                 }

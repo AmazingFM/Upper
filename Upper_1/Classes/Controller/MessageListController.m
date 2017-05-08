@@ -91,20 +91,22 @@
 
 - (void)updateMsg:(NSNotification *)notification
 {
-    NSString *msgGroupKey = nil;
-    if (self.messageType==MessageTypeSystem) {
-        msgGroupKey = SysMsgKey;
-    } else if (self.messageType==MessageTypeActivity) {
-        msgGroupKey = ActMsgKey;
-    }
-    
-    NSDictionary *msgGroupDict = notification.userInfo;
-    NSArray<PrivateMessage *> *msgList = msgGroupDict[msgGroupKey];
-    
-    if (msgList.count>0) {
-        [priMsgList addObjectsFromArray:msgList];
-        [_messageTable reloadData];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *msgGroupKey = nil;
+        if (self.messageType==MessageTypeSystem) {
+            msgGroupKey = SysMsgKey;
+        } else if (self.messageType==MessageTypeActivity) {
+            msgGroupKey = ActMsgKey;
+        }
+        
+        NSDictionary *msgGroupDict = notification.userInfo;
+        NSArray<PrivateMessage *> *msgList = msgGroupDict[msgGroupKey];
+        
+        if (msgList.count>0) {
+            [priMsgList addObjectsFromArray:msgList];
+            [_messageTable reloadData];
+        }
+    });
 }
 
 #pragma mark UITableViewDelegate, datasource
@@ -143,7 +145,8 @@
             ActivityType *actType = [[UPConfig sharedInstance] getActivityTypeByID:activityInfo.activity_class];
             
             //activity_name-活动名称,activity_class-活动类型, start_time-活动开始时间，ID-活动id，nick_name-发起人昵称
-            NSString *showMsg = [NSString stringWithFormat:@"活动名称:%@\n活动类型:%@\n开始时间:%@", activityInfo.activity_name, actType.name, activityInfo.start_time];
+            NSString *dateStr = [UPTools dateTransform:activityInfo.start_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy年MM月dd日"];
+            NSString *showMsg = [NSString stringWithFormat:@"活动名称:%@\n活动类型:%@\n开始时间:%@", activityInfo.activity_name, actType.name, dateStr];
             
             UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"活动邀请" message:showMsg delegate:self cancelButtonTitle:@"忽略" otherButtonTitles:@"查看详情", nil];
             alertview.tag = 99;
@@ -157,9 +160,9 @@
             ActivityData *activityInfo = [self getActivityInfoFromMsg:msg.msg_desc];
             ActivityType *actType = [[UPConfig sharedInstance] getActivityTypeByID:activityInfo.activity_class];
             
-            NSString *showMsg = [NSString stringWithFormat:@"活动名称:%@\n活动类型:%@\n发起人:%@", activityInfo.activity_name, actType.name, activityInfo.nick_name];
+            NSString *showMsg = [NSString stringWithFormat:@"活动名称:%@\n活动类型:%@\n发起人:%@\n邀请你接受发起人职位", activityInfo.activity_name, actType.name, activityInfo.nick_name];
             
-            UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"变更发起人" message:showMsg delegate:self cancelButtonTitle:@"忽略" otherButtonTitles:@"接受", nil];
+            UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"发起人移交" message:showMsg delegate:self cancelButtonTitle:@"忽略" otherButtonTitles:@"接受", nil];
             alertview.tag = 100;
             alertview.someObj = activityInfo;
             [alertview show];
@@ -214,10 +217,10 @@
     [params setObject:activityInfo.ID forKey:@"activity_id"];
     [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         [indicator stopAnimating];
         
-        NSDictionary *dict = (NSDictionary *)json;
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             NSString *resp_desc = dict[@"resp_desc"];
@@ -229,7 +232,7 @@
             [MBProgressHUD show:resp_desc icon:nil view:nil];
         }
         
-    } failture:^(id error) {
+    } failure:^(NSError *error) {
         [indicator stopAnimating];
         NSLog(@"%@",error);
         

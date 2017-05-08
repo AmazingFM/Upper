@@ -66,10 +66,12 @@
 
 - (void)updateMsg:(NSNotification *)notice
 {
-    NSMutableArray *msglist = notice.object;
-    if (msglist.count!=0) {
-        [self addMessages:msglist];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableArray *msglist = notice.object;
+        if (msglist.count!=0) {
+            [self addMessages:msglist];
+        }
+    });
 }
 
 - (void)viewWillAppear:(BOOL)animated
