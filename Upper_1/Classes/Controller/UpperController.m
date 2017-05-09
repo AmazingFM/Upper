@@ -18,6 +18,7 @@
 #import "UPTools.h"
 #import "UPGlobals.h"
 #import "CRNavigationBar.h"
+#import "UpSettingController.h"
 #import "YMNetwork.h"
 
 #define kUPTableViewHeight 10
@@ -161,6 +162,9 @@ extern NSString * const g_loginFileName;
     [self.view addSubview:_quitBtn];
     [self.view addSubview:self.tableView];
     
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithRightIcon:@"icon_setting" highIcon:@"" target:self action:@selector(settingClick)];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recvLogin) name:kNotifierLogin object:nil];
     
     if ([UPDataManager shared].isLogin) {
@@ -172,12 +176,12 @@ extern NSString * const g_loginFileName;
 {
     [super viewWillAppear:animated];
     
+    CRNavigationBar *navigationBar = (CRNavigationBar *)self.navigationController.navigationBar;
+    navigationBar.barTintColor = [UIColor clearColor];
+
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
-    
-    CRNavigationBar *navigationBar = (CRNavigationBar *)self.navigationController.navigationBar;
-    navigationBar.barTintColor = [UIColor clearColor];
 }
 
 - (void)dealloc
@@ -299,10 +303,12 @@ extern NSString * const g_loginFileName;
                 break;
             case 3:
             {
-                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"选择性别" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"男",@"女", nil];
-                alertView.tag = 3;
-                alertView.delegate = self;
-                [alertView show];
+                //性别禁止修改
+                return;
+//                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"选择性别" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"男",@"女", nil];
+//                alertView.tag = 3;
+//                alertView.delegate = self;
+//                [alertView show];
             }
                 break;
             case 4:
@@ -513,6 +519,12 @@ extern NSString * const g_loginFileName;
 -(void)leftClick
 {
     [g_sideController showLeftViewController:YES];
+}
+
+- (void)settingClick
+{
+    UpSettingController *settingVC = [[UpSettingController alloc] init];
+    [self.navigationController pushViewController:settingVC animated:YES];
 }
 
 - (void)goBack

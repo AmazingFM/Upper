@@ -9,7 +9,7 @@
 #import "UPBaseViewController.h"
 
 typedef NS_ENUM(NSInteger, UPCommentType) {
-    UPCommentTypeReview,    //回顾
+    UPCommentTypeReview = 0,    //回顾
     UPCommentTypeComment,   //评论
     UPCommentTypeComplain   //投诉
 };
@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger, UPCommentType) {
 @property (nonatomic) int status;//踩：-1， 无：0， 赞：1
 @end
 
-@protocol UPCommentUserDelegate <NSObject, NSCopying>
+@protocol UPCommentUserDelegate <NSObject>
 
 - (void)commentUserStatusChanged:(NSArray *)newCommentUserItems;
 

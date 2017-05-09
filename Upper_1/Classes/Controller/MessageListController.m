@@ -22,6 +22,7 @@
     NSMutableArray<PrivateMessage *> *priMsgList;
     
     NSString *remoteID;
+    NSString *remoteName;
 }
 @end
 
@@ -135,6 +136,7 @@
 {
     PrivateMessage *msg = [priMsgList objectAtIndex:indexPath.row];
     remoteID = msg.remote_id;
+    remoteName = msg.remote_name;
     
     switch (msg.localMsgType) {
         case MessageTypeSystemGeneral:
@@ -162,7 +164,7 @@
             ActivityData *activityInfo = [self getActivityInfoFromMsg:msg.msg_desc];
             ActivityType *actType = [[UPConfig sharedInstance] getActivityTypeByID:activityInfo.activity_class];
             
-            NSString *showMsg = [NSString stringWithFormat:@"活动名称:%@\n活动类型:%@\n发起人:%@\n邀请你接受发起人职位", activityInfo.activity_name, actType.name, activityInfo.nick_name];
+            NSString *showMsg = [NSString stringWithFormat:@"活动名称:%@\n活动类型:%@\n发起人:%@\n邀请你接受发起人职位", activityInfo.activity_name, actType.name, remoteName];
             
             UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"发起人移交" message:showMsg delegate:self cancelButtonTitle:@"忽略" otherButtonTitles:@"接受", nil];
             alertview.tag = 100;

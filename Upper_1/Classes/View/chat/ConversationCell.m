@@ -78,7 +78,7 @@
             break;
         case MessageTypeActivityInvite:
         {
-            _userIconView.image = [UIImage imageNamed:@""];
+            _userIconView.image = [UIImage imageNamed:@"icon_msg_invite"];
             _name.text = @"活动邀请";
             NSString *addTime = [UPTools dateTransform:_curPriMsg.add_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy年MM月dd日 HH时mm分"];
             _time.text = addTime;
@@ -87,7 +87,7 @@
             break;
         case MessageTypeActivityChangeLauncher:
         {
-            _userIconView.image = [UIImage imageNamed:@""];
+            _userIconView.image = [UIImage imageNamed:@"icon_msg_change_launcher"];
             _name.text = @"发起人移交";
             NSString *addTime = [UPTools dateTransform:_curPriMsg.add_time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy年MM月dd日 HH时mm分"];
             _time.text = addTime;

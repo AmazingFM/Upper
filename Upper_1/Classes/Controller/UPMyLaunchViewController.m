@@ -200,6 +200,7 @@
     } else if (type==kUPActSignTag) {
         QRCodeController *qrController = [[QRCodeController alloc] init];
         qrController.title = @"扫描";
+        qrController.actId = cellItem.itemData.ID;
         [self.navigationController pushViewController:qrController animated:YES];
     } else if (type==kUPActChangeTag) {
         //查看报名人数
@@ -224,7 +225,7 @@
 {
     __block int count = 0;
     
-    NSDictionary *actDataDict = @{@"activity_name":selectedActData.activity_name,@"activity_class":selectedActData.activity_class,@"begin_time":selectedActData.begin_time,@"id":selectedActData.ID,@"nick_name":[UPDataManager shared].userInfo.nick_name, @"user_id":[UPDataManager shared].userInfo.ID};
+    NSDictionary *actDataDict = @{@"activity_name":selectedActData.activity_name,@"activity_class":selectedActData.activity_class,@"begin_time":selectedActData.begin_time,@"id":selectedActData.ID};
     
     NSString *msgDesc = [UPTools stringFromJSON:actDataDict];
     

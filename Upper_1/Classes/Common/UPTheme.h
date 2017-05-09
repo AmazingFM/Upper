@@ -76,6 +76,7 @@
 
 //主色调
 #define kUPThemeMainColor           RGBCOLOR(140,25,25) //暗红
+#define kUPThemeLineColor                RGBCOLOR(160, 160, 160)//线条颜色
 #define kUPThemeBackgroundColor     RGBCOLOR(237,237,237) //RGBCOLOR(255,255,255)
 #define kUPThemeHighligUPColor      RGBCOLOR(250,150,40)
 #define kUPThemeUnhighligUPColor    [UIColor lightGrayColor]

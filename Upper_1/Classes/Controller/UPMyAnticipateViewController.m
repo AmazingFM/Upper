@@ -162,20 +162,13 @@
         //发布评论
         UPCommentController *commentController = [[UPCommentController alloc]init];
         commentController.actID = cellItem.itemData.ID;
-        commentController.title = type==kUPActCommentTag?@"我要评论":@"我要投诉";
-        commentController.type = type==kUPActCommentTag?UPCommentTypeComment:UPCommentTypeComplain;
+        commentController.title = (type==kUPActCommentTag)?@"活动评论":@"活动投诉";
+        commentController.type = (type==kUPActCommentTag)?UPCommentTypeComment:UPCommentTypeComplain;
         
-//        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:commentController];
-//        [nav.navigationBar setTintColor:[UIColor whiteColor]];
-//        [nav.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-//        [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"back_shadow"] forBarMetrics:UIBarMetricsDefault];
-//        nav.navigationBar.shadowImage=[[UIImage alloc]init];  //隐藏掉导航栏底部的那条线
         //2.设置导航栏barButton上面文字的颜色
         UIBarButtonItem *item=[UIBarButtonItem appearance];
         [item setTintColor:[UIColor whiteColor]];
         [item setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]} forState:UIControlStateNormal];
-//        [nav.navigationBar setTranslucent:YES];
-//        [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
         
         CATransition* transition = [CATransition animation];
         transition.type = kCATransitionPush;            //改变视图控制器出现的方式

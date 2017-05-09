@@ -22,8 +22,13 @@
 #import "UPConfig.h"
 #import "NewLaunchActivityController.h"
 #import "UPFriendListController.h"
+#import "UIAlertView+NSObject.h"
 
 #import "YMNetwork.h"
+
+#define kUPButtonTagJuBao       100
+#define kUPButtonTagYaoqing     101
+#define kUPButtonTagFenXiang    102
 
 @implementation UPDetailImageCellItem
 @end
@@ -794,13 +799,22 @@
     }];
 }
 
-- (void)inviteBtn:(UIButton *)sender
+- (void)buttonClick:(UIButton *)sender
 {
-    UPFriendListController *inviteFriend = [[UPFriendListController alloc] init];
-    inviteFriend.type = 0; //我的好友列表
-    inviteFriend.delegate = self;
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:inviteFriend];
-    [self presentViewController:nav animated:YES completion:nil];
+    if (sender.tag==kUPButtonTagJuBao) {
+        UIAlertView *jubaoAlert = [[UIAlertView alloc] initWithTitle:@"举报" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"提交", nil];
+        
+        jubaoAlert.someObj =
+        [jubaoAlert show];
+    } else if (sender.tag==kUPButtonTagYaoqing) {
+        UPFriendListController *inviteFriend = [[UPFriendListController alloc] init];
+        inviteFriend.type = 0; //我的好友列表
+        inviteFriend.delegate = self;
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:inviteFriend];
+        [self presentViewController:nav animated:YES completion:nil];
+    } else if (sender.tag==kUPButtonTagFenXiang) {
+        
+    }
 }
 
 #pragma mark UPInviteFriendDelegate
@@ -849,6 +863,7 @@
     }
 }
 
+/*
 - (void)onButtonClick:(UIButton *)sender
 {
 
@@ -903,6 +918,8 @@
             break;
     }
 }
+*/
+
 - (void)modifyActiviy:(RequestType)type
 {
     
@@ -1123,6 +1140,8 @@
             reportBtn.layer.borderColor = [UIColor grayColor].CGColor;
             reportBtn.layer.borderWidth = 1.f;
             reportBtn.layer.masksToBounds = YES;
+            reportBtn.tag = kUPButtonTagJuBao;
+            [reportBtn addTarget:self action:@selector(buttonCLick:) forControlEvents:UIControlEventTouchUpInside];
             [backView addSubview:reportBtn];
             
             UIButton *inviteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -1135,7 +1154,8 @@
             inviteBtn.layer.borderColor = [UIColor grayColor].CGColor;
             inviteBtn.layer.borderWidth = 1.f;
             inviteBtn.layer.masksToBounds = YES;
-            [inviteBtn addTarget:self action:@selector(inviteBtn:) forControlEvents:UIControlEventTouchUpInside];
+            inviteBtn.tag = kUPButtonTagYaoqing;
+            [inviteBtn addTarget:self action:@selector(buttonCLick:) forControlEvents:UIControlEventTouchUpInside];
             [backView addSubview:inviteBtn];
             
             UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -1148,11 +1168,23 @@
             shareBtn.layer.borderColor = [UIColor grayColor].CGColor;
             shareBtn.layer.borderWidth = 1.f;
             shareBtn.layer.masksToBounds = YES;
+            shareBtn.tag = kUPButtonTagFenXiang;
+            [shareBtn addTarget:self action:@selector(buttonCLick:) forControlEvents:UIControlEventTouchUpInside];
             [backView addSubview:shareBtn];
             [cell addSubview:backView];
         }
     }
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row==2) { //活动参与人
+        //查看报名人数
+        EnrollPeopleController *enrollController = [[EnrollPeopleController alloc]init];
+        enrollController.activityId = self.actData.ID;
+        [self.navigationController pushViewController:enrollController animated:YES];
+    }
 }
 
 @end

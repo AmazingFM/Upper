@@ -1246,7 +1246,7 @@
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
                         _editActBtn.frame =     CGRectZero;
-                        _complainBtn.frame = CGRectZero;
+                        _complainBtn.frame    = CGRectZero;
                         break;
                     case 6:
                         _complainBtn.frame = CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);;
@@ -1261,14 +1261,14 @@
                     case 7:
                     case 8:
                     case 9:
-                         _commentActBtn.frame =   CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
+                        _commentActBtn.frame =   CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
+                        _complainBtn.frame = CGRectMake(width-2*btnWidth-btnPadding,5,btnWidth,perHeight-10);
                         _reviewActBtn.frame =   CGRectZero;
                         _changeActBtn.frame =   CGRectZero;
                         _cancelActBtn.frame =   CGRectZero;
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
                         _editActBtn.frame =     CGRectZero;
-                        _complainBtn.frame = CGRectZero;
                         break;
                 }
                 
