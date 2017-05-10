@@ -172,16 +172,4 @@ NSString * const g_loginFileName = @"login.plist";
     
     return [NSString stringWithFormat:@"%@%@", [UPTools dateString:[NSDate date] withFormat:@"yyyyMMdd"],mStr];
 }
-//
-- (NSDictionary *)getHeadParams
-{
-    NSString *uuid = self.uuid;
-    NSString *currentDate = self.currentDate;
-    
-    _reqSeq++;
-    NSString *reqSeq = [self reqSeqStr];
-    NSString *md5Str = [UPTools md5HexDigest:[NSString stringWithFormat:@"upper%@%@%@upper", uuid, reqSeq, currentDate]];
-    return @{@"app_id":uuid, @"req_seq":reqSeq, @"time_stamp":currentDate, @"sign":md5Str};
-}
-
 @end

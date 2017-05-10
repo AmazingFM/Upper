@@ -26,7 +26,6 @@
 @property (nonatomic, retain) NSMutableArray *activityList;
 
 + (instancetype)shared;
-- (NSDictionary *)getHeadParams;
 - (void)writeToDefaults:(UserData *)userData;
 - (void)readFromDefaults;
 - (void)cleanUserDafult;

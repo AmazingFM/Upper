@@ -231,9 +231,7 @@
     if([cellItem.key isEqualToString:@"submit"]){
         NSArray *paramKey = @[@"shop_name", @"shop_desc", @"shop_address", @"shop_class", @"contact_no", @"avg_cost"];
         
-        NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
-        [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
+        NSMutableDictionary *params = [NSMutableDictionary new];
         for (UPBaseCellItem *cellItem in self.itemList) {
             if ([paramKey containsObject:cellItem.key]) {
                 if (![self check:cellItem]) {
@@ -273,7 +271,7 @@
         manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
         
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-        [manager POST:kUPShopPostURL parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        [manager POST:kUPShopPostURL parameters:[self addDescParams:params] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             static float FixRatio = 1.f;
             for (int i=0; i<_imageLoadView.images.count&&i<5; i++) {
                 UIImage *image = _imageLoadView.images[i];
@@ -467,6 +465,46 @@
         UPTextCellItem *fieldItem = (UPTextCellItem*)cellItem;
         [fieldItem fillWithValue:value];
     }
+}
+
+- (NSDictionary *)addDescParams:(NSDictionary *)parameters
+{
+    NSString *uuid = [UPConfig sharedInstance].uuid;
+    NSString *currentDate = [UPConfig sharedInstance].currentDate;
+    NSString *reqSeq = [UPConfig sharedInstance].newReqSeqStr;
+    
+    NSMutableDictionary *newParamsDic = [NSMutableDictionary dictionaryWithDictionary:@{@"app_id":uuid, @"req_seq":reqSeq, @"time_stamp":currentDate}];
+    
+    NSString *actionName = parameters[@"a"];
+    [newParamsDic addEntriesFromDictionary:parameters];
+    [newParamsDic removeObjectForKey:@"a"];
+    
+    
+    if ([UPDataManager shared].isLogin) {
+        [newParamsDic setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
+        
+        NSString *user_id = newParamsDic[@"user_id"];
+        if (user_id==nil || user_id.length==0) {
+            [newParamsDic setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
+        }
+    }
+    
+    NSString *md5Str = newParamsDic[@"sign"];
+    
+    if (md5Str==nil || md5Str.length==0) {
+        NSArray *keys = newParamsDic.allKeys;
+        NSArray *sortedKeys = [keys sortedArrayUsingSelector:@selector(compare:)];
+        
+        NSMutableString *mStr = [NSMutableString stringWithString:@"upper"];
+        for (int i=0; i<sortedKeys.count; i++) {
+            [mStr appendFormat:@"%@%@", sortedKeys[i], newParamsDic[sortedKeys[i]]];
+        }
+        [mStr appendString:@"upper"];
+        md5Str = [UPTools md5HexDigest:mStr];
+        newParamsDic[@"sign"] = md5Str;
+    }
+    newParamsDic[@"a"] = actionName;
+    return newParamsDic;
 }
 
 @end

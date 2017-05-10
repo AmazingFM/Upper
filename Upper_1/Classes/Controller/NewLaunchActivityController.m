@@ -163,6 +163,8 @@ static CGFloat const FixRatio = 4/3.0;
     BOOL needFemale;
     
     BOOL malePay;
+    
+    BOOL waiting;
 }
 @property (nonatomic, retain) NSMutableArray *itemList;
 @end
@@ -179,6 +181,8 @@ static CGFloat const FixRatio = 4/3.0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    waiting = NO;
+    
     self.navigationItem.title = @"发起活动";
     
     if (self.type==ActOperTypeLaunch) {
@@ -851,6 +855,7 @@ static CGFloat const FixRatio = 4/3.0;
         if (buttonIndex==1) {
             [self jumpToMyAct];
         }
+        waiting = NO;
     }
 }
 
@@ -865,12 +870,16 @@ static CGFloat const FixRatio = 4/3.0;
     
     //提交
     if([cellItem.key isEqualToString:@"submit"]){
+        if (waiting) {
+            return;
+        } else {
+            waiting = YES;
+        }
         
         //industry_id, province_code, city_code, town_code, limit_count, limit_low
         NSArray *paramKey = @[@"activity_name", @"activity_desc", @"end_time", @"start_time", @"activity_place_code", @"activity_place", @"is_prepaid", @"industry_id", @"clothes_need"];
         
-        NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-        NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+        NSMutableDictionary *params = [NSMutableDictionary new];
         [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
         for (UPBaseCellItem *cellItem in self.itemList) {
             if ([paramKey containsObject:cellItem.key]) {
@@ -951,7 +960,7 @@ static CGFloat const FixRatio = 4/3.0;
         manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
         
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-        [manager POST:kUPFilePostURL parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        [manager POST:kUPFilePostURL parameters:[self addDescParams:params] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             if (_imgData!=nil) {
                  [formData appendPartWithFileData:_imgData name:@"file" fileName:@"activity.jpg" mimeType:@"image/jpeg"];
             }
@@ -970,10 +979,11 @@ static CGFloat const FixRatio = 4/3.0;
                     showConfirmTagAlert(@"提示", @"活动发起成功，如需修改变更或取消，请点击活动规则查看相关规则和操作方式。", self, 1000);
                 } else {
                     showDefaultAlert(@"提示", respDict[@"resp_desc"]);
+                    waiting = NO;
                 }
             }
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"Error: %@", error);
+            waiting = NO;
         }];
     } else if([cellItem.key isEqualToString:@"imageUpload"]){
         [self openMenu];
@@ -1172,5 +1182,45 @@ static CGFloat const FixRatio = 4/3.0;
     [self resignKeyboard];
 }
 
+
+- (NSDictionary *)addDescParams:(NSDictionary *)parameters
+{
+    NSString *uuid = [UPConfig sharedInstance].uuid;
+    NSString *currentDate = [UPConfig sharedInstance].currentDate;
+    NSString *reqSeq = [UPConfig sharedInstance].newReqSeqStr;
+    
+    NSMutableDictionary *newParamsDic = [NSMutableDictionary dictionaryWithDictionary:@{@"app_id":uuid, @"req_seq":reqSeq, @"time_stamp":currentDate}];
+    
+    NSString *actionName = parameters[@"a"];
+    [newParamsDic addEntriesFromDictionary:parameters];
+    [newParamsDic removeObjectForKey:@"a"];
+    
+    
+    if ([UPDataManager shared].isLogin) {
+        [newParamsDic setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
+        
+        NSString *user_id = newParamsDic[@"user_id"];
+        if (user_id==nil || user_id.length==0) {
+            [newParamsDic setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
+        }
+    }
+    
+    NSString *md5Str = newParamsDic[@"sign"];
+    
+    if (md5Str==nil || md5Str.length==0) {
+        NSArray *keys = newParamsDic.allKeys;
+        NSArray *sortedKeys = [keys sortedArrayUsingSelector:@selector(compare:)];
+        
+        NSMutableString *mStr = [NSMutableString stringWithString:@"upper"];
+        for (int i=0; i<sortedKeys.count; i++) {
+            [mStr appendFormat:@"%@%@", sortedKeys[i], newParamsDic[sortedKeys[i]]];
+        }
+        [mStr appendString:@"upper"];
+        md5Str = [UPTools md5HexDigest:mStr];
+        newParamsDic[@"sign"] = md5Str;
+    }
+    newParamsDic[@"a"] = actionName;
+    return newParamsDic;
+}
 @end
 

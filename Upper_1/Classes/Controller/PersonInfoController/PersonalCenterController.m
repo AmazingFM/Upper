@@ -81,10 +81,6 @@
 - (void)userInfoRequest
 {
     NSString *query_id = self.userID;
-    
-//    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-//    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
-    
     NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"UserQuery"forKey:@"a"];
     [params setObject:query_id forKey:@"qry_usr_id"];
