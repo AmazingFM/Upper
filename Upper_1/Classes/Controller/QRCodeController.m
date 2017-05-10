@@ -9,7 +9,7 @@
 #import "QRCodeController.h"
 #import <AVFoundation/AVFoundation.h>
 
-#import "XWHttpTool.h"
+#import "YMNetwork.h"
 #import "Appdelegate.h"
 #import "Info.h"
 #import "UPTheme.h"
@@ -187,7 +187,7 @@
             [alert show];
         } else {
             userID = [qrStr componentsSeparatedByString:@"="][1];
-            [self startCheckRequest:userID];
+            [self startCheckRequest];
         }
     }
 }
@@ -334,14 +334,11 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
 }
 
-- (void)startCheckRequest:(NSString *)userId;
+- (void)startCheckRequest
 {
-//    [self checkNetStatus];
-    
     [MBProgressHUD showMessage:@"正在签到，请稍后...." toView:self.view];
     
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    NSMutableDictionary *params = [NSMutableDictionary new];
     
     [params setObject:@"ActivityJoinModify"forKey:@"a"];
     if (self.actId) {
@@ -349,11 +346,10 @@
     }
     [params setObject:@"1" forKey:@"user_status"];
     [params setObject:userID forKey:@"user_id"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         [MBProgressHUD hideHUDForView:self.view];
-        NSDictionary *dict = (NSDictionary *)json;
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             NSString *resp_desc = dict[@"resp_desc"];
@@ -365,11 +361,11 @@
             NSString *resp_desc = dict[@"resp_desc"];
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:resp_desc delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
             [alert show];
-
+            
             NSLog(@"%@", @"获取失败");
         }
         
-    } failture:^(id error) {
+    } failure:^(NSError *error) {
         [MBProgressHUD hideHUDForView:self.view];
         NSLog(@"%@",[error localizedDescription]);
     }];

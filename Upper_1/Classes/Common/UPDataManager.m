@@ -60,6 +60,7 @@ NSString * const g_loginFileName = @"login.plist";
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setBool:NO forKey:@"hasLogin"];
+    [userDefaults setObject:nil forKey:@"user"];
     [userDefaults synchronize];
     
     _userInfo = nil;
@@ -171,7 +172,7 @@ NSString * const g_loginFileName = @"login.plist";
     
     return [NSString stringWithFormat:@"%@%@", [UPTools dateString:[NSDate date] withFormat:@"yyyyMMdd"],mStr];
 }
-
+//
 - (NSDictionary *)getHeadParams
 {
     NSString *uuid = self.uuid;

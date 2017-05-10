@@ -9,7 +9,7 @@
 #import "UPAddFriendViewController.h"
 #import <AVFoundation/AVFoundation.h>
 
-#import "XWHttpTool.h"
+#import "YMNetwork.h"
 #import "Appdelegate.h"
 #import "Info.h"
 #import "UPTheme.h"
@@ -325,17 +325,14 @@
     
     [MBProgressHUD showMessage:@"正在处理中，请稍后...." toView:self.view];
     
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    NSMutableDictionary *params = [NSMutableDictionary new];
     
     [params setObject:@"FriendsAdd"forKey:@"a"];
-    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
     [params setObject:userID forKey:@"relation_id"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         [MBProgressHUD hideHUDForView:self.view];
-        NSDictionary *dict = (NSDictionary *)json;
+        NSDictionary *dict = (NSDictionary *)responseObject;
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
@@ -355,7 +352,7 @@
         
         [hud hide:YES afterDelay:0.7];
         [self.navigationController popViewControllerAnimated:YES];
-    } failture:^(id error) {
+    } failure:^(NSError *error) {
         [MBProgressHUD hideHUDForView:self.view];
         NSLog(@"%@",[error localizedDescription]);
     }];

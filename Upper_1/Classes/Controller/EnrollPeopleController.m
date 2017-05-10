@@ -11,6 +11,7 @@
 #import "BubbleChatViewController.h"
 #import "UserData.h"
 #import "Info.h"
+#import "YMNetwork.h"
 
 #define EnrollCellFont [UIFont systemFontOfSize:15.0f]
 static int const kCellHeight = 44;
@@ -154,18 +155,16 @@ static int const kPadding = 5;
 
 - (void)startRequest
 {
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"ActivityJoinInfo"forKey:@"a"];
     
     [params setObject:self.activityId forKey:@"activity_id"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
-        NSDictionary *dict = (NSDictionary *)json;
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         NSString *resp_desc = dict[@"resp_desc"];
-
+        
         NSLog(@"%@:%@", resp_id, resp_desc);
         if ([resp_id intValue]==0) {
             NSDictionary *resp_data = dict[@"resp_data"];
@@ -193,10 +192,9 @@ static int const kPadding = 5;
                 [alertView show];
             }
         }
-    } failture:^(id error) {
+    } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
-    
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

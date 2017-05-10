@@ -219,7 +219,6 @@
     [params setObject:remoteID forKey:@"user_id"];
     [params setObject:[UPDataManager shared].userInfo.ID forKey:@"new_user_id"];
     [params setObject:activityInfo.ID forKey:@"activity_id"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         [indicator stopAnimating];

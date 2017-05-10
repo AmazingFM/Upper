@@ -272,7 +272,6 @@ static dispatch_queue_t message_manager_processing_queue() {
     }
     NSMutableDictionary *params = [NSMutableDictionary new];
     [params setValue:@"MessageGet" forKey:@"a"];
-    [params setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         dispatch_async(message_manager_processing_queue(), ^{
             NSDictionary *dict = (NSDictionary *)responseObject;

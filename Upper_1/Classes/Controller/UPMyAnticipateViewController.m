@@ -13,12 +13,11 @@
 #import "MJRefreshComponent.h"
 #import "UPDataManager.h"
 #import "Info.h"
-#import "XWHttpTool.h"
 #import "UPBaseItem.h"
 #import "ActivityData.h"
 #import "UPActivityCellItem.h"
 #import "UPCommentController.h"
-
+#import "YMNetwork.h"
 @interface UPMyAnticipateViewController ()
 
 @end
@@ -46,12 +45,9 @@
 
 - (void)startRequest
 {
-//    [self checkNetStatus];
-    
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"JoinActivityList"forKey:@"a"];
-    [params setObject:[NSString stringWithFormat:@"%d",self.pageNum] forKey:@"current_page"];
+    [params setObject:[NSString stringWithFormat:@"%ld",(long)self.pageNum] forKey:@"current_page"];
     [params setObject:[NSString stringWithFormat:@"%d", g_PageSize] forKey:@"page_size"];
     [params setObject:@"" forKey:@"activity_status"];
     [params setObject:@""forKey:@"activity_class"];
@@ -61,11 +57,9 @@
     [params setObject:@"" forKey:@"city_code"];
     [params setObject:@""forKey:@"town_code"];
     [params setObject:[UPDataManager shared].userInfo.ID forKey:@"partner_id"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
-    
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
-        NSDictionary *dict = (NSDictionary *)json;
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             NSDictionary *resp_data = dict[@"resp_data"];
@@ -105,7 +99,7 @@
                     if (status!=0) {
                         actCellItem.style = UPItemStyleActJoin;
                     }
-
+                    
                     [arrayM addObject:actCellItem];
                 }
             }
@@ -134,8 +128,7 @@
             NSLog(@"%@", @"获取失败");
             [self.myRefreshView endRefreshing];
         }
-        
-    } failture:^(id error) {
+    } failure:^(NSError *error) {
         NSLog(@"%@",error);
         [self.myRefreshView endRefreshing];
         

@@ -181,11 +181,8 @@
     // 上海31， 071， “”
     NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"FriendsList"forKey:@"a"];
-    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
     [params setObject:[NSString stringWithFormat:@"%d", pageNum] forKey:@"current_page"];
     [params setObject:[NSString stringWithFormat:@"%d", kActivityPageSize] forKey:@"page_size"];
-    
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         NSDictionary *dict = (NSDictionary *)responseObject;
@@ -230,7 +227,6 @@
     [params setObject:@"ActivityJoinInfo"forKey:@"a"];
     
     [params setObject:self.activityId forKey:@"activity_id"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         NSDictionary *dict = (NSDictionary *)responseObject;

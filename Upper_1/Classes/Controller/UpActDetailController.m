@@ -736,7 +736,6 @@
     [params setObject:@"1" forKey:@"current_page"];
     [params setObject:activityId forKey:@"activity_id"];
     [params setObject:@"0" forKey:@"type"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         NSDictionary *dict = (NSDictionary *)responseObject;
@@ -761,9 +760,7 @@
 {
     NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"ActivityInfo"forKey:@"a"];
-    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
     [params setObject:activityId forKey:@"activity_id"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id json) {
         
@@ -802,10 +799,10 @@
 - (void)buttonClick:(UIButton *)sender
 {
     if (sender.tag==kUPButtonTagJuBao) {
-        UIAlertView *jubaoAlert = [[UIAlertView alloc] initWithTitle:@"举报" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"提交", nil];
-        
-        jubaoAlert.someObj =
-        [jubaoAlert show];
+//        UIAlertView *jubaoAlert = [[UIAlertView alloc] initWithTitle:@"举报" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"提交", nil];
+//        
+//        jubaoAlert.someObj =
+//        [jubaoAlert show];
     } else if (sender.tag==kUPButtonTagYaoqing) {
         UPFriendListController *inviteFriend = [[UPFriendListController alloc] init];
         inviteFriend.type = 0; //我的好友列表
@@ -838,7 +835,6 @@
     for (NSString *to_id in friendIds) {
         NSMutableDictionary *params = [NSMutableDictionary new];
         [params setValue:@"MessageSend" forKey:@"a"];
-        [params setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
         [params setValue:[UPDataManager shared].userInfo.ID forKey:@"from_id"];
         [params setValue:to_id forKey:@"to_id"];
         [params setValue:@"99" forKey:@"message_type"];
@@ -924,11 +920,8 @@
 {
     
     [MBProgressHUD showMessage:@"正在提交请求，请稍后...." toView:self.view];
-    
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"ActivityJoinModify"forKey:@"a"];
-    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
     [params setObject:self.actData.ID forKey:@"activity_id"];
     
     NSString *userStatus;
@@ -938,12 +931,11 @@
         userStatus = @"5";
     }
     [params setObject:userStatus forKey:@"user_status"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         [MBProgressHUD hideHUDForView:self.view];
         
-        NSDictionary *dict = (NSDictionary *)json;
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             NSString *resp_desc = dict[@"resp_desc"];
@@ -958,7 +950,7 @@
             
         }
         
-    } failture:^(id error) {
+    } failure:^(NSError *error) {
         [MBProgressHUD hideHUDForView:self.view];
         NSLog(@"%@",error);
         
@@ -970,18 +962,14 @@
     
     [MBProgressHUD showMessage:@"正在提交请求，请稍后...." toView:self.view];
     
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"ActivityModify"forKey:@"a"];
-    
-    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
     [params setObject:self.actData.ID forKey:@"activity_id"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         [MBProgressHUD hideHUDForView:self.view];
         
-        NSDictionary *dict = (NSDictionary *)json;
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             NSString *resp_desc = dict[@"resp_desc"];
@@ -996,7 +984,7 @@
             
         }
         
-    } failture:^(id error) {
+    } failure:^(NSError *error) {
         [MBProgressHUD hideHUDForView:self.view];
         NSLog(@"%@",error);
         
@@ -1005,21 +993,16 @@
 
 - (void)joinActivity
 {
-    
     [MBProgressHUD showMessage:@"正在提交请求，请稍后...." toView:self.view];
     
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"ActivityJoin"forKey:@"a"];
-    
-    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
     [params setObject:self.actData.ID forKey:@"activity_id"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         [MBProgressHUD hideHUDForView:self.view];
         
-        NSDictionary *dict = (NSDictionary *)json;
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             showDefaultAlert(@"提示", @"活动报名成功，如果参与意向有变，请点击活动规则查看相关规则和操作方式。");
@@ -1031,8 +1014,8 @@
             [alert show];
             
         }
-
-    } failture:^(id error) {
+        
+    } failure:^(NSError *error) {
         [MBProgressHUD hideHUDForView:self.view];
         NSLog(@"%@",error);
         

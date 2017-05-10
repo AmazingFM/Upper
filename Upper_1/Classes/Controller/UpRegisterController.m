@@ -17,7 +17,7 @@
 #import "UpRegister4.h"
 #import "UpRegister5.h"
 
-#import "XWHttpTool.h"
+#import "YMNetwork.h"
 
 #import "AFHTTPRequestOperationManager.h"
 #import "UPDataManager.h"
@@ -288,8 +288,7 @@ typedef enum register_enum
 {
     [self checkNetStatus];
 
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    NSMutableDictionary *params = [NSMutableDictionary new];
     
     switch (type) {
         case INDUSTRY_REQ:
@@ -366,10 +365,10 @@ typedef enum register_enum
         isLoading = YES;
     }
     
-    [XWHttpTool getDetailWithUrl:url parms:params success:^(id json) {
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         isLoading = NO;
         
-        NSDictionary *dict = (NSDictionary *)json;
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         
         if ([resp_id intValue]==0) {
@@ -408,13 +407,13 @@ typedef enum register_enum
         }
         else
         {
-            NSDictionary *dict = (NSDictionary *)json;
+            NSDictionary *dict = (NSDictionary *)responseObject;
             NSString *resp_desc = dict[@"resp_desc"];
-
+            
             UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"失败" message:resp_desc delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
             [alertView show];
         }
-    } failture:^(id error) {
+    } failure:^(NSError *error) {
         isLoading = NO;
         
         NSLog(@"%@",error);

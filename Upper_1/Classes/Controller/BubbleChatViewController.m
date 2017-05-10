@@ -19,9 +19,8 @@
 #import "UUMessage.h"
 
 #import "Info.h"
-#import "UPTools.h"
 #import "MBProgressHUD.h"
-
+#import "YMNetwork.h"
 
 @interface BubbleChatViewController ()
 
@@ -86,11 +85,9 @@
     HUD.removeFromSuperViewOnHide = YES;
     HUD.labelText = @"私信发送中";
     
-    NSDictionary *headParam1 = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params1 = [NSMutableDictionary dictionaryWithDictionary:headParam1];
+    NSMutableDictionary *params1 = [NSMutableDictionary new];
     [params1 setValue:@"MessageSend" forKey:@"a"];
 
-    [params1 setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
     [params1 setValue:[UPDataManager shared].userInfo.ID forKey:@"from_id"];
     [params1 setValue:_toUserId forKey:@"to_id"];
     [params1 setValue:@"0"forKey:@"message_type"];
@@ -109,9 +106,9 @@
     message.strTime = [UPTools dateString:[NSDate date] withFormat:@"yyyyMMddHHmmss"];
     [_messageBubbleVC addMessage:message];
 
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params1 success:^(id json) {
-
-        NSDictionary *dict = (NSDictionary *)json;
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params1 success:^(id responseObject) {
+        
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSLog(@"MessageSend, %@", dict);
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
@@ -124,7 +121,7 @@
             HUD.labelText = @"发送私信成功";
             [HUD hide:YES afterDelay:1];
         }
-    } failture:^(id error) {
+    } failure:^(NSError *error) {
         HUD.mode = MBProgressHUDModeCustomView;
         HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HUD-error"]];
         HUD.labelText = @"网络异常，私信发送失败";

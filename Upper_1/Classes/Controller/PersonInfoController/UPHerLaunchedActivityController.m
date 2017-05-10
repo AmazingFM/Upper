@@ -7,7 +7,7 @@
 //
 
 #import "UPHerLaunchedActivityController.h"
-
+#import "YMNetwork.h"
 #import "UPBaseItem.h"
 @interface UPHerLaunchedActivityController ()
 
@@ -32,12 +32,9 @@
         return;
     }
     
-//    [self checkNetStatus];
-    
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"ActivityList"forKey:@"a"];
-    [params setObject:[NSString stringWithFormat:@"%d", self.pageNum] forKey:@"current_page"];
+    [params setObject:[NSString stringWithFormat:@"%ld", (long)self.pageNum] forKey:@"current_page"];
     [params setObject:[NSString stringWithFormat:@"%d", g_PageSize] forKey:@"page_size"];
     [params setObject:@"" forKey:@"activity_status"];
     [params setObject:@""forKey:@"activity_class"];
@@ -47,11 +44,9 @@
     [params setObject:@"" forKey:@"city_code"];
     [params setObject:@""forKey:@"town_code"];
     [params setObject:self.userData.ID forKey:@"creator_id"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
-    
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
-        NSDictionary *dict = (NSDictionary *)json;
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             NSDictionary *resp_data = dict[@"resp_data"];
@@ -124,7 +119,7 @@
             [self.myRefreshView endRefreshing];
         }
         
-    } failture:^(id error) {
+    } failure:^(NSError *error) {
         NSLog(@"%@",error);
         [self.myRefreshView endRefreshing];
         

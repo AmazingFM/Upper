@@ -13,7 +13,6 @@
 #import "MJRefreshComponent.h"
 #import "UPDataManager.h"
 #import "Info.h"
-#import "XWHttpTool.h"
 #import "UPBaseItem.h"
 #import "ActivityData.h"
 #import "UPActivityCellItem.h"
@@ -24,6 +23,7 @@
 #import "NewLaunchActivityController.h"
 #import "YMNetwork.h"
 #import "MBProgressHUD+MJ.h"
+#import "YMNetwork.h"
 
 @interface UPMyLaunchViewController () <UPFriendListDelegate>
 {
@@ -55,12 +55,9 @@
 
 - (void)startRequest
 {
-//    [self checkNetStatus];
-    
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"ActivityList"forKey:@"a"];
-    [params setObject:[NSString stringWithFormat:@"%ld", self.pageNum] forKey:@"current_page"];
+    [params setObject:[NSString stringWithFormat:@"%ld", (long)self.pageNum] forKey:@"current_page"];
     [params setObject:[NSString stringWithFormat:@"%d", g_PageSize] forKey:@"page_size"];
     [params setObject:@"" forKey:@"activity_status"];
     [params setObject:@""forKey:@"activity_class"];
@@ -70,17 +67,15 @@
     [params setObject:@"" forKey:@"city_code"];
     [params setObject:@""forKey:@"town_code"];
     [params setObject:[UPDataManager shared].userInfo.ID forKey:@"creator_id"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
-    
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
-        NSDictionary *dict = (NSDictionary *)json;
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             NSDictionary *resp_data = dict[@"resp_data"];
             NSString *resp_desc = dict[@"resp_desc"];
             NSLog(@"%@", resp_desc);
-
+            
             if (resp_data==nil) {
                 self.tipsLabel.hidden = NO;
                 self.mainTable.footer.hidden = YES;
@@ -125,7 +120,7 @@
                     [arrayM addObject:actCellItem];
                 }
             }
-
+            
             /***************/
             //..下拉刷新
             if (self.myRefreshView == self.mainTable.header) {
@@ -151,7 +146,7 @@
             [self.myRefreshView endRefreshing];
         }
         
-    } failture:^(id error) {
+    } failure:^(NSError *error) {
         NSLog(@"%@",error);
         [self.myRefreshView endRefreshing];
         
@@ -231,7 +226,6 @@
     
     NSMutableDictionary *params = [NSMutableDictionary new];
     [params setValue:@"MessageSend" forKey:@"a"];
-    [params setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
     [params setValue:[UPDataManager shared].userInfo.ID forKey:@"from_id"];
     [params setValue:userId forKey:@"to_id"];
     [params setValue:@"98" forKey:@"message_type"];

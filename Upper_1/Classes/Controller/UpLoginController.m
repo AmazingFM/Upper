@@ -14,7 +14,7 @@
 
 #import "Info.h"
 
-#import "XWHttpTool.h"
+#import "YMNetwork.h"
 #import "AFHTTPRequestOperationManager.h"
 
 #import "UPGlobals.h"
@@ -284,22 +284,19 @@
     //添加一个遮罩，禁止用户操作
     [MBProgressHUD showMessage:@"正在登录...." toView:self.view];
 
-    
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    NSMutableDictionary *params = [NSMutableDictionary new];
     [params setValue:@"UserLogin" forKey:@"a"];
     [params setValue:userName forKey:@"user_name"];
     [params setValue:[UPTools md5HexDigest:password] forKey:@"user_pass"];
     [params setValue:@"0" forKey:@"pass_type"];
-
     
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         //隐藏HUD
         [MBProgressHUD hideHUDForView:self.view];
         _loginB.enabled = YES;
-
-
-        NSDictionary *dict = (NSDictionary *)json;
+        
+        
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             NSDictionary *resp_data = dict[@"resp_data"];
@@ -315,28 +312,28 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierLogin object:nil userInfo:nil];//发送登录成功通知
             
             [g_appDelegate setRootViewControllerWithMain];
-        
+            
             [self resetValue];
         }
         else
         {
             [UPDataManager shared].isLogin = NO;
             
-            NSDictionary *dict = (NSDictionary *)json;
+            NSDictionary *dict = (NSDictionary *)responseObject;
             NSString *resp_desc = dict[@"resp_desc"];
             NSLog(@"%@", resp_desc);
             
             UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:resp_desc delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
             [alertView show];
             
-
+            
         }
         
-    } failture:^(id error) {
+    } failure:^(NSError *error) {
         //隐藏HUD
         [MBProgressHUD hideHUDForView:self.view];
         _loginB.enabled = YES;
-
+        
         NSLog(@"%@",error);
     }];
 }

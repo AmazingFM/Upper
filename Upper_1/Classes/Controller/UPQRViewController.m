@@ -7,7 +7,7 @@
 //
 
 #import "UPQRViewController.h"
-#import "XWHttpTool.h"
+#import "YMNetwork.h"
 #import "AppDelegate.h"
 #import "UserQueryModal.h"
 #import "UPGlobals.h"
@@ -30,16 +30,14 @@
 }
 
 - (void)start2weimaRequest
-{    
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+{
+    NSMutableDictionary *params = [NSMutableDictionary new];
     
     [params setObject:@"UserQuery" forKey:@"a"];
-    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
     [params setObject:[UPDataManager shared].userInfo.ID forKey:@"qry_usr_id"];
     
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
-        NSDictionary *dict = (NSDictionary *)json;
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             NSDictionary *resp_data = dict[@"resp_data"];
@@ -78,7 +76,7 @@
             NSLog(@"%@", @"获取失败");
         }
         
-    } failture:^(id error) {
+    } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
 }

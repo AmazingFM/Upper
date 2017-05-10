@@ -81,7 +81,6 @@
     NSMutableDictionary *params = [NSMutableDictionary new];
     [params setValue:@"MessageSend" forKey:@"a"];
     
-    [params setValue:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
     [params setValue:[UPDataManager shared].userInfo.ID forKey:@"from_id"];
     [params setValue:self.remote_id forKey:@"to_id"];
     [params setValue:@"0"forKey:@"message_type"];

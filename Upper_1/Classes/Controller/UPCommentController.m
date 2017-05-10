@@ -566,13 +566,11 @@ static const int textViewContentHeight = 150;
         
         NSMutableDictionary *params = [NSMutableDictionary new];
         [params setObject:@"ActivityJoinModify"forKey:@"a"];
-        [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
         [params setObject:self.actID forKey:@"activity_id"];
         [params setObject:commentTextView.text forKey:@"evaluate_text"];
         NSString *userStatus = @"5";
         [params setObject:userStatus forKey:@"user_status"];
         [params setObject:commentLevel forKey:@"evaluate_level_1"];
-        [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
         
         [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id json) {
             [MBProgressHUD hideHUDForView:self.view];
@@ -662,7 +660,6 @@ static const int textViewContentHeight = 150;
     [params setObject:@"ActivityJoinInfo"forKey:@"a"];
     
     [params setObject:self.actID forKey:@"activity_id"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id json) {
         NSDictionary *dict = (NSDictionary *)json;

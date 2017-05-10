@@ -16,6 +16,7 @@
 #import "UPChatViewController.h"
 #import "PrivateMessage.h"
 #import "UPFriendItem.h"
+#import "YMNetwork.h"
 
 #define kDescHeight 44
 
@@ -204,18 +205,13 @@
     [self checkNetStatus];
     
     // 上海31， 071， “”
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
+    NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"FriendsList"forKey:@"a"];
-    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
     [params setObject:[NSString stringWithFormat:@"%d", pageNum] forKey:@"current_page"];
     [params setObject:[NSString stringWithFormat:@"%d", kActivityPageSize] forKey:@"page_size"];
     
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
-    
-    
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
-        NSDictionary *dict = (NSDictionary *)json;
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             NSDictionary *resp_data = dict[@"resp_data"];
@@ -271,7 +267,7 @@
             [myRefreshView endRefreshing];
         }
         
-    } failture:^(id error) {
+    } failure:^(NSError *error) {
         NSLog(@"%@",error);
         [myRefreshView endRefreshing];
         

@@ -203,15 +203,11 @@ extern NSString * const g_loginFileName;
 
 - (void)userInfoRequest
 {
-    NSString *user_id = [UPDataManager shared].userInfo.ID;
-    NSString *query_id = user_id;
+    NSString *query_id = [UPDataManager shared].userInfo.ID;
 
     NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"UserQuery"forKey:@"a"];
-    
-    [params setObject:user_id forKey:@"user_id"];
     [params setObject:query_id forKey:@"qry_usr_id"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         NSDictionary *dict = (NSDictionary *)responseObject;
@@ -585,25 +581,16 @@ extern NSString * const g_loginFileName;
  */
 - (void)updateUserInfo
 {
-    [self checkNetStatus];
-    
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
-    
-//    NSString *userDataPath = [[NSBundle mainBundle] pathForResource:@"UserData" ofType:@"plist"];
-//    //所有的数据列表
-//    NSMutableDictionary *datalist= [[[NSMutableDictionary alloc]initWithContentsOfFile:userDataPath]mutableCopy];
-//
+    NSMutableDictionary *params = [NSMutableDictionary new];
     
     [params setObject:@"UserModify" forKey:@"a"];
-    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
     
     [params setValuesForKeysWithDictionary:paramsDict];
     
     __weak typeof(self) weakSelf = self;
     
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
-        NSDictionary *dict = (NSDictionary *)json;
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             UPImageDetailCellItem *cellItem = (UPImageDetailCellItem *)selectedItem;
@@ -631,7 +618,7 @@ extern NSString * const g_loginFileName;
             NSLog(@"%@", @"获取失败");
         }
         
-    } failture:^(id error) {
+    } failure:^(NSError *error) {
         NSLog(@"%@",[error localizedDescription]);
     }];
 }

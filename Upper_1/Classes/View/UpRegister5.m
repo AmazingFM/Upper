@@ -9,6 +9,7 @@
 #import "UpRegister5.h"
 #import "Info.h"
 #import "DrawSomething.h"
+#import "YMNetwork.h"
 
 #define VERTICAL_SPACE 40
 #define VerifyBtnWidth 100
@@ -562,22 +563,20 @@
 }
 - (void)startSMSRequest
 {
-    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:headParam];
-
+    NSMutableDictionary *params = [NSMutableDictionary new];
 
     [params setValue:@"SmsSend" forKey:@"a"];
     [params setValue:self.telenum forKey:@"mobile"];
     [params setValue:@"" forKey:@"text"];
     [params setValue:@"0" forKey:@"send_type"];
 
-    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json) {
-        NSDictionary *dict = (NSDictionary *)json;
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+        NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
-
+        
         if ([resp_id intValue]==0) {
             NSDictionary *resp_data = dict[@"resp_data"];
-
+            
             //设置 smsText
             if (resp_data) {
                 _smsText = resp_data[@"verify_code"];
@@ -589,8 +588,8 @@
             UIAlertView *alertViiew = [[UIAlertView alloc] initWithTitle:@"提示" message:@"获取验证码失败，请重新获取一次" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
             [alertViiew show];
         }
-
-    } failture:^(id error) {
+        
+    } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
 }

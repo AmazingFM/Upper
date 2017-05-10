@@ -326,7 +326,6 @@ static int kMsgCount = 0;
     [params setObject:@"" forKey:@"activity_status"];
     [params setObject:@"0" forKey:@"industry_id"];
     [params setObject:@""forKey:@"creator_id"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
     //复合条件查询
     if (_currentData1Index==0){

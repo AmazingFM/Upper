@@ -80,7 +80,6 @@
 
 - (void)userInfoRequest
 {
-    NSString *user_id = [UPDataManager shared].userInfo.ID;
     NSString *query_id = self.userID;
     
 //    NSDictionary *headParam = [UPDataManager shared].getHeadParams;
@@ -88,10 +87,7 @@
     
     NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"UserQuery"forKey:@"a"];
-    
-    [params setObject:user_id forKey:@"user_id"];
     [params setObject:query_id forKey:@"qry_usr_id"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         NSDictionary *dict = (NSDictionary *)responseObject;
