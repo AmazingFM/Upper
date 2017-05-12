@@ -167,18 +167,19 @@ static dispatch_queue_t message_manager_processing_queue() {
         priMsg.msg_key          = @"uniquexxx";
         
         
-        //99为邀请类消息， from_id为0时为系统消息
-        if ([priMsg.remote_id intValue]==0) {
+        //90~99系统文本消息，含以后可能的各类系统消息类型
+        //80~89活动类文本消息， 含邀请-80， 变更发起人-81
+        //10~19普通聊天类
+        int msgType = [priMsg.message_type intValue];
+        
+        if (msgType/10==9) {
             priMsg.localMsgType = MessageTypeSystemGeneral;
+        } else if (msgType==80) {
+            priMsg.localMsgType = MessageTypeActivityInvite;
+        } else if (msgType==81) {
+            priMsg.localMsgType = MessageTypeActivityChangeLauncher;
         } else {
-            int msgType = [priMsg.message_type intValue];
-            if (msgType==99) {
-                priMsg.localMsgType = MessageTypeActivityInvite;
-            } else if (msgType==98) {
-                priMsg.localMsgType = MessageTypeActivityChangeLauncher;
-            } else {
-                priMsg.localMsgType = MessageTypeCommonText;
-            }
+            priMsg.localMsgType = MessageTypeCommonText;
         }
         
         switch (priMsg.localMsgType) {
