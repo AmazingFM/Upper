@@ -172,11 +172,11 @@ static dispatch_queue_t message_manager_processing_queue() {
         //10~19普通聊天类
         int msgType = [priMsg.message_type intValue];
         
-        if (msgType/10==9) {
+        if (msgType/10==ServerMsgTypeSystem/10) {
             priMsg.localMsgType = MessageTypeSystemGeneral;
-        } else if (msgType==80) {
+        } else if (msgType==ServerMsgTypeInviteFriend) {
             priMsg.localMsgType = MessageTypeActivityInvite;
-        } else if (msgType==81) {
+        } else if (msgType==ServerMsgTypeChangeLauncher) {
             priMsg.localMsgType = MessageTypeActivityChangeLauncher;
         } else {
             priMsg.localMsgType = MessageTypeCommonText;

@@ -433,13 +433,7 @@
             }
             break;
         case 9:
-            if (_actCellItem.type==SourceTypeDaTing){
-                statusName = @"圆满结束";
-            } else if (_actCellItem.type==SourceTypeWoFaqi){
-                statusName = @"待回顾";
-            } else if (_actCellItem.type==SourceTypeWoCanyu){
-                statusName = @"圆满结束";
-            }
+            statusName = @"已取消";
             break;
         default:
             statusName = @"未知";

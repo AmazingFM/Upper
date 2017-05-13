@@ -9,7 +9,7 @@
 #import "BubbleChatViewController.h"
 #import "MessageBubbleViewController.h"
 
-//#import "UUInputFunctionView.h"
+#import "MessageManager.h"
 #import "MJRefresh.h"
 #import "MJExtension.h"
 #import "MJRefreshComponent.h"
@@ -90,7 +90,9 @@
 
     [params1 setValue:[UPDataManager shared].userInfo.ID forKey:@"from_id"];
     [params1 setValue:_toUserId forKey:@"to_id"];
-    [params1 setValue:@"0"forKey:@"message_type"];
+    
+    UPServerMsgType msgType = ServerMsgTypeNormal;
+    [params1 setValue:[@(msgType) stringValue] forKey:@"message_type"];
     [params1 setValue:self.editingBar.editView.text forKey:@"message_desc"];
     [params1 setValue:@"" forKey:@"expire_time"];
     

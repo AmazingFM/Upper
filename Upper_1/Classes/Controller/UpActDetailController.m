@@ -23,7 +23,7 @@
 #import "NewLaunchActivityController.h"
 #import "UPFriendListController.h"
 #import "UPCustomAlertView.h"
-
+#import "MessageManager.h"
 
 #import "YMNetwork.h"
 
@@ -798,12 +798,12 @@
 - (void)buttonClick:(UIButton *)sender
 {
     if (sender.tag==kUPButtonTagJuBao) {
-        UIView *jubaoView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth-100, 60)];
-        NSArray *jubaoArr = @[];
-        
-        
-        UPCustomAlertView *jbAlert = [[UPCustomAlertView alloc] initWithTitle:@"我要举报" CustomView:tmpV];
-        [jbAlert show];
+//        UIView *jubaoView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth-100, 60)];
+//        NSArray *jubaoArr = @[];
+//        
+//        
+//        UPCustomAlertView *jbAlert = [[UPCustomAlertView alloc] initWithTitle:@"我要举报" CustomView:tmpV];
+//        [jbAlert show];
     } else if (sender.tag==kUPButtonTagYaoqing) {
         UPFriendListController *inviteFriend = [[UPFriendListController alloc] init];
         inviteFriend.type = 0; //我的好友列表
@@ -837,7 +837,9 @@
         [params setValue:@"MessageSend" forKey:@"a"];
         [params setValue:[UPDataManager shared].userInfo.ID forKey:@"from_id"];
         [params setValue:to_id forKey:@"to_id"];
-        [params setValue:@"99" forKey:@"message_type"];
+        
+        UPServerMsgType msgType = ServerMsgTypeInviteFriend;
+        [params setValue:[@(msgType) stringValue] forKey:@"message_type"];
         [params setValue:msgDesc forKey:@"message_desc"];
         [params setValue:@"" forKey:@"expire_time"];
         

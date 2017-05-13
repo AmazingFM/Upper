@@ -24,6 +24,7 @@
 #import "YMNetwork.h"
 #import "MBProgressHUD+MJ.h"
 #import "YMNetwork.h"
+#import "MessageManager.h"
 
 @interface UPMyLaunchViewController () <UPFriendListDelegate>
 {
@@ -228,7 +229,8 @@
     [params setValue:@"MessageSend" forKey:@"a"];
     [params setValue:[UPDataManager shared].userInfo.ID forKey:@"from_id"];
     [params setValue:userId forKey:@"to_id"];
-    [params setValue:@"98" forKey:@"message_type"];
+    UPServerMsgType msgType = ServerMsgTypeChangeLauncher;
+    [params setValue:[@(msgType) stringValue] forKey:@"message_type"];
     [params setValue:msgDesc forKey:@"message_desc"];
     [params setValue:@"" forKey:@"expire_time"];
     

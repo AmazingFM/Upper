@@ -11,6 +11,7 @@
 #import "YMNetwork.h"
 #import "MBProgressHUD.h"
 #import "PrivateMessage.h"
+#import "MessageManager.h"
 
 @interface UPChatViewController ()
 @property (nonatomic, retain) UPMessageBubbleController *msgBubbleVC;
@@ -83,7 +84,9 @@
     
     [params setValue:[UPDataManager shared].userInfo.ID forKey:@"from_id"];
     [params setValue:self.remote_id forKey:@"to_id"];
-    [params setValue:@"0"forKey:@"message_type"];
+    
+    UPServerMsgType msgType = ServerMsgTypeNormal;
+    [params setValue:[@(msgType) stringValue] forKey:@"message_type"];
     [params setValue:self.editingBar.editView.text forKey:@"message_desc"];
     [params setValue:@"" forKey:@"expire_time"];
     

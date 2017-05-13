@@ -10,6 +10,17 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "PrivateMessage.h"
 
+//90~99系统文本消息，含以后可能的各类系统消息类型
+//80~89活动类文本消息， 含邀请-80， 变更发起人-81
+//10~19普通聊天类
+typedef NS_ENUM(NSUInteger, UPServerMsgType) {
+    ServerMsgTypeNormal         = 10,
+    
+    ServerMsgTypeInviteFriend   = 80,
+    ServerMsgTypeChangeLauncher = 81,
+    
+    ServerMsgTypeSystem         = 90
+};
 
 #define SysMsgKey @"SysMsg"
 #define ActMsgKey @"ActMsg"
