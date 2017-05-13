@@ -8,6 +8,7 @@
 #import "UPBaseViewController.h"
 @protocol UPFriendListDelegate <NSObject>
 
+@optional
 - (void)inviteFriends:(NSArray *)friendId;
 - (void)changeLauncher:(NSString *)userId;
 

@@ -22,7 +22,8 @@
 #import "UPConfig.h"
 #import "NewLaunchActivityController.h"
 #import "UPFriendListController.h"
-#import "UIAlertView+NSObject.h"
+#import "UPCustomAlertView.h"
+
 
 #import "YMNetwork.h"
 
@@ -89,7 +90,7 @@
         
         userBackView = [[UIView alloc] initWithFrame:CGRectZero];
         userBackView.backgroundColor = [UIColor whiteColor];
-        userBackView.layer.borderColor = [UIColor blackColor].CGColor;
+        userBackView.layer.borderColor = kUPThemeLineColor.CGColor;
         userBackView.layer.borderWidth = 1;
         userBackView.layer.cornerRadius = 5.f;
         
@@ -572,8 +573,6 @@
     NSMutableArray *_itemList;
 }
 
-- (void)leftClick;
-
 @end
 
 @implementation UpActDetailController
@@ -627,12 +626,12 @@
     
     if (self.sourceType==SourceTypeWoFaqi) {
         UIButton *addFriendButton=[UIButton buttonWithType:UIButtonTypeCustom];
-        
+        addFriendButton.tag = kUPButtonTagYaoqing;
         addFriendButton.frame=CGRectMake(0, 0, 35, 35);
         UIImage *image = [UIImage imageNamed:@"add"];
         UIImage *stretchableButtonImage = [image resizableImageWithCapInsets:UIEdgeInsetsZero resizingMode:UIImageResizingModeStretch];
         [addFriendButton setBackgroundImage:stretchableButtonImage forState:UIControlStateNormal];
-        [addFriendButton addTarget:self action:@selector(inviteBtn:) forControlEvents:UIControlEventTouchUpInside];
+        [addFriendButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
         
         self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc] initWithCustomView:addFriendButton];
     }
@@ -799,10 +798,12 @@
 - (void)buttonClick:(UIButton *)sender
 {
     if (sender.tag==kUPButtonTagJuBao) {
-//        UIAlertView *jubaoAlert = [[UIAlertView alloc] initWithTitle:@"举报" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"提交", nil];
-//        
-//        jubaoAlert.someObj =
-//        [jubaoAlert show];
+        UIView *jubaoView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth-100, 60)];
+        NSArray *jubaoArr = @[];
+        
+        
+        UPCustomAlertView *jbAlert = [[UPCustomAlertView alloc] initWithTitle:@"我要举报" CustomView:tmpV];
+        [jbAlert show];
     } else if (sender.tag==kUPButtonTagYaoqing) {
         UPFriendListController *inviteFriend = [[UPFriendListController alloc] init];
         inviteFriend.type = 0; //我的好友列表
@@ -810,7 +811,6 @@
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:inviteFriend];
         [self presentViewController:nav animated:YES completion:nil];
     } else if (sender.tag==kUPButtonTagFenXiang) {
-        
     }
 }
 
@@ -858,63 +858,6 @@
         }];
     }
 }
-
-/*
-- (void)onButtonClick:(UIButton *)sender
-{
-
-    UIButton *btn = (UIButton *)sender;
-    switch (btn.tag) {
-        case DetailBtnTypeSubmit:
-        {
-            if (self.sourceType == SourceTypeWoCanyu) {
-                //取消参加
-                [self modifyActiviy:ActivityQuit];
-            } else {
-                [self joinActivity];
-            }
-        }
-            break;
-        case DetailBtnTypeEnroll:
-        {
-            //查看报名人数
-            EnrollPeopleController *enrollController = [[EnrollPeopleController alloc]init];
-            enrollController.activityId = self.actData.ID;
-            [self.navigationController pushViewController:enrollController animated:YES];
-        }
-            break;
-        case DetailBtnTypeReview:
-        {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:nil delegate:self cancelButtonTitle:@"发布回顾" otherButtonTitles:@"编辑活动",@"取消活动", nil];
-            alertView.tag = AlertTagEdit;
-            [alertView show];
-        }
-            break;
-        case DetailBtnTypeComment:
-        {
-            //弹窗评论窗口
-            UPCommentController *commentController = [[UPCommentController alloc]init];
-            commentController.actID = self.actData.ID;
-            commentController.title=@"我要评论";
-            commentController.type = 1;
-            
-            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:commentController];
-            [nav.navigationBar setTintColor:[UIColor whiteColor]];
-            [nav.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-            [nav.navigationBar setBackgroundImage:[UIImage imageNamed:@"back_shadow"] forBarMetrics:UIBarMetricsDefault];
-            nav.navigationBar.shadowImage=[[UIImage alloc]init];  //隐藏掉导航栏底部的那条线
-            //2.设置导航栏barButton上面文字的颜色
-            UIBarButtonItem *item=[UIBarButtonItem appearance];
-            [item setTintColor:[UIColor whiteColor]];
-            [item setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]} forState:UIControlStateNormal];
-            [nav.navigationBar setTranslucent:YES];
-            [nav setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-            [self presentViewController:nav animated:YES completion:nil];
-        }
-            break;
-    }
-}
-*/
 
 - (void)modifyActiviy:(RequestType)type
 {
@@ -1124,7 +1067,7 @@
             reportBtn.layer.borderWidth = 1.f;
             reportBtn.layer.masksToBounds = YES;
             reportBtn.tag = kUPButtonTagJuBao;
-            [reportBtn addTarget:self action:@selector(buttonCLick:) forControlEvents:UIControlEventTouchUpInside];
+            [reportBtn addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
             [backView addSubview:reportBtn];
             
             UIButton *inviteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -1138,7 +1081,7 @@
             inviteBtn.layer.borderWidth = 1.f;
             inviteBtn.layer.masksToBounds = YES;
             inviteBtn.tag = kUPButtonTagYaoqing;
-            [inviteBtn addTarget:self action:@selector(buttonCLick:) forControlEvents:UIControlEventTouchUpInside];
+            [inviteBtn addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
             [backView addSubview:inviteBtn];
             
             UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -1152,7 +1095,7 @@
             shareBtn.layer.borderWidth = 1.f;
             shareBtn.layer.masksToBounds = YES;
             shareBtn.tag = kUPButtonTagFenXiang;
-            [shareBtn addTarget:self action:@selector(buttonCLick:) forControlEvents:UIControlEventTouchUpInside];
+            [shareBtn addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
             [backView addSubview:shareBtn];
             [cell addSubview:backView];
         }

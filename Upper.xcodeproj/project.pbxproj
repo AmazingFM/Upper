@@ -266,6 +266,8 @@
 		3AF680441EC15021007D3B91 /* icon_setting@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AF680431EC15021007D3B91 /* icon_setting@2x.png */; };
 		3AFCCDBD1D5C09BC0003F6F3 /* NewLaunchActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */; };
 		850D79211E51FA670082D944 /* NSString+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 850D79201E51FA670082D944 /* NSString+Common.m */; };
+		853053811EC66CC900B3CF43 /* UPCustomAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 853053801EC66CC900B3CF43 /* UPCustomAlertView.m */; };
+		853053841EC6842F00B3CF43 /* UPTipOffView.m in Sources */ = {isa = PBXBuildFile; fileRef = 853053831EC6842F00B3CF43 /* UPTipOffView.m */; };
 		8555DE381EB8C4F80012F162 /* CRNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8555DE351EB8C4F80012F162 /* CRNavigationBar.m */; };
 		8555DE391EB8C4F80012F162 /* CRNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8555DE371EB8C4F80012F162 /* CRNavigationController.m */; };
 		8555DE581EBCC62E0012F162 /* default_activity_101@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8555DE3B1EBCC62E0012F162 /* default_activity_101@2x.png */; };
@@ -807,6 +809,10 @@
 		3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewLaunchActivityController.m; sourceTree = "<group>"; };
 		850D791F1E51FA670082D944 /* NSString+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Common.h"; sourceTree = "<group>"; };
 		850D79201E51FA670082D944 /* NSString+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Common.m"; sourceTree = "<group>"; };
+		8530537F1EC66CC900B3CF43 /* UPCustomAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCustomAlertView.h; sourceTree = "<group>"; };
+		853053801EC66CC900B3CF43 /* UPCustomAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPCustomAlertView.m; sourceTree = "<group>"; };
+		853053821EC6842F00B3CF43 /* UPTipOffView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPTipOffView.h; sourceTree = "<group>"; };
+		853053831EC6842F00B3CF43 /* UPTipOffView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPTipOffView.m; sourceTree = "<group>"; };
 		8555DE341EB8C4F80012F162 /* CRNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRNavigationBar.h; sourceTree = "<group>"; };
 		8555DE351EB8C4F80012F162 /* CRNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRNavigationBar.m; sourceTree = "<group>"; };
 		8555DE361EB8C4F80012F162 /* CRNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRNavigationController.h; sourceTree = "<group>"; };
@@ -2038,6 +2044,10 @@
 				2C38F9671D23FEFD002CF240 /* ZouMaDengView.m */,
 				3A2939911D2F80F6005CB3F3 /* UPTextView.h */,
 				3A2939921D2F80F6005CB3F3 /* UPTextView.m */,
+				8530537F1EC66CC900B3CF43 /* UPCustomAlertView.h */,
+				853053801EC66CC900B3CF43 /* UPCustomAlertView.m */,
+				853053821EC6842F00B3CF43 /* UPTipOffView.h */,
+				853053831EC6842F00B3CF43 /* UPTipOffView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2479,6 +2489,7 @@
 				2CDAD6531D0EEC4000C260F4 /* MJRefreshBackNormalFooter.m in Sources */,
 				2CDAD6611D0EEC4000C260F4 /* TAPageControl.m in Sources */,
 				2CDAD6671D0EEC4000C260F4 /* SDWaitingView.m in Sources */,
+				853053811EC66CC900B3CF43 /* UPCustomAlertView.m in Sources */,
 				2CDAD6771D0EEC4000C260F4 /* UIImage+GIF.m in Sources */,
 				EC3C189E1CECB2B300223D6B /* RootViewController.m in Sources */,
 				2CDAD66B1D0EEC4000C260F4 /* SDRefreshView.m in Sources */,
@@ -2488,6 +2499,7 @@
 				EC3C18861CECB16D00223D6B /* CityCell.m in Sources */,
 				EC3C188C1CECB16D00223D6B /* UpActView.m in Sources */,
 				2CDAD4FF1D0ED8A900C260F4 /* UUMessage.m in Sources */,
+				853053841EC6842F00B3CF43 /* UPTipOffView.m in Sources */,
 				2CDAD6431D0EEC4000C260F4 /* MJFoundation.m in Sources */,
 				2CDAD62D1D0EEC4000C260F4 /* AFHTTPRequestOperation.m in Sources */,
 				85B345021E534BB7002E69A9 /* UPWebImageDownloaderOperation.m in Sources */,
