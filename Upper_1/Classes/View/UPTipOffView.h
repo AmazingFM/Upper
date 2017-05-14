@@ -9,5 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface UPTipOffView : UIView
+{
+    NSArray *tipoffArr;
+}
 
+- (NSString *)getTipOffDesc;
 @end

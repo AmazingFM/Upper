@@ -299,19 +299,6 @@
 @end
 
 @implementation UPCommentController
-//
-//- (void)loadView
-//{
-//    [super loadView];
-//    UIControl *control = [[UIControl alloc] init];
-//    
-//    [control addTarget:self action:@selector(action:) forControlEvents:UIControlEventTouchUpInside];
-//    self.view = control;
-//}
-//
-//- (void)action:(id)sender {
-//    [self.view resignFirstResponder];
-//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -342,12 +329,6 @@
     hasLoadEnrolledPeople = NO;
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    [self.view endEditing:YES];
-    [super touchesBegan:touches withEvent:event];
-}
-
 #pragma mark - UITextViewDelegate
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
@@ -369,9 +350,10 @@
 
 #pragma mark - UIGestureRecognizerDelegate
 
-//
+
 -(void)handleSingleTap:(UITapGestureRecognizer *)sender{
     [commentTextView resignFirstResponder];
+    [teleField resignFirstResponder];
 }
 
 - (void)doInit {
@@ -401,7 +383,7 @@ static const int textViewContentHeight = 150;
     [scrollView addSubview:contentView];
     
     if (self.type==UPCommentTypeReview) {
-        likeOrDislike = [[UIButton alloc] initWithFrame:CGRectMake(LeftRightPadding, textViewContentHeight+5, ScreenWidth-2*LeftRightPadding, 40)];
+        likeOrDislike = [[UIButton alloc] initWithFrame:CGRectMake(LeftRightPadding, CGRectGetMaxY(contentView.frame)+8, ScreenWidth-2*LeftRightPadding, 40)];
         [likeOrDislike setTitle:@"踩或赞活动参与人" forState:UIControlStateNormal];
         likeOrDislike.backgroundColor = [UIColor clearColor];
         likeOrDislike.titleLabel.font = kUPThemeNormalFont;
@@ -421,7 +403,7 @@ static const int textViewContentHeight = 150;
         [scrollView addSubview:tips];
         [scrollView addSubview:_imageLoadView];
     } else if (self.type==UPCommentTypeComment) {
-        radioBackView = [[UIView alloc] initWithFrame:CGRectMake(LeftRightPadding, textViewContentHeight+5, ScreenWidth-2*LeftRightPadding, 40)];
+        radioBackView = [[UIView alloc] initWithFrame:CGRectMake(LeftRightPadding, CGRectGetMaxY(contentView.frame)+8, ScreenWidth-2*LeftRightPadding, 40)];
         radioBackView.backgroundColor = [UIColor clearColor];
         CGFloat viewWidth = ScreenWidth-2*LeftRightPadding;
         
@@ -439,20 +421,26 @@ static const int textViewContentHeight = 150;
         
         [scrollView addSubview:radioBackView];
     } else if (self.type==UPCommentTypeComplain) {
-        titleLabel = [self createLabelWithFrame:CGRectMake(LeftRightPadding, textViewContentHeight+5, 90, 40) withText:@"联系方式"];
-        titleLabel.textAlignment = NSTextAlignmentLeft;
+        UIFont *titleFont = [UIFont systemFontOfSize:15];
+        CGSize size = [@"联系方式" sizeWithAttributes: @{NSFontAttributeName:titleFont}];
         
-        teleField = [[UITextField alloc] initWithFrame:CGRectMake(LeftRightPadding+100, textViewContentHeight+5, ScreenWidth-2*LeftRightPadding-100, 40)];
+        titleLabel = [self createLabelWithFrame:CGRectMake(LeftRightPadding, CGRectGetMaxY(contentView.frame)+8, 90, size.height) withText:@"联系方式"];
+        titleLabel.textAlignment = NSTextAlignmentLeft;
+        titleLabel.font = [UIFont systemFontOfSize:15];
+        
+        teleField = [[UITextField alloc] initWithFrame:CGRectMake(LeftRightPadding+100, CGRectGetMinY(titleLabel.frame), ScreenWidth-2*LeftRightPadding-100, size.height)];
         teleField.textColor = [UIColor blackColor];
         teleField.placeholder = @"请输入联系方式";
         teleField.keyboardType = UIKeyboardTypeNumberPad;
         teleField.font = [UIFont systemFontOfSize:15.f];
         
-        line = [[UIView alloc] initWithFrame:CGRectMake(LeftRightPadding,  textViewContentHeight+5+40, ScreenWidth-2*LeftRightPadding, 1)];
+        line = [[UIView alloc] initWithFrame:CGRectMake(LeftRightPadding,  CGRectGetMaxY(titleLabel.frame)+2, ScreenWidth-2*LeftRightPadding, 1)];
         line.backgroundColor = kUPThemeLineColor;
         
-        descLabel = [self createLabelWithFrame:CGRectMake(LeftRightPadding, textViewContentHeight+5+41+5, ScreenWidth-2*LeftRightPadding, 50) withText:@"xxxxx"];
+        NSString *descStr = @"我们会仔细阅读您的投诉意见，并尽早给您回复。感谢您的理解和支持";
+        descLabel = [self createLabelWithFrame:CGRectMake(LeftRightPadding, CGRectGetMaxY(titleLabel.frame)+5, ScreenWidth-2*LeftRightPadding, 50) withText:descStr];
         descLabel.numberOfLines = 0;
+        descLabel.font = [UIFont systemFontOfSize:13.f];
         
         [scrollView addSubview:titleLabel];
         [scrollView addSubview:teleField];
@@ -581,6 +569,12 @@ static const int textViewContentHeight = 150;
             });
         }];
     } else if (self.type == UPCommentTypeComplain) {
+        if (!teleField.text.length) {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请输入您的联系方式" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alertView show];
+            return;
+        }
+
         NSMutableDictionary *params = [NSMutableDictionary new];
         [params setObject:@"ActivityComplain"forKey:@"a"];
         [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
@@ -718,7 +712,6 @@ static const int textViewContentHeight = 150;
     UILabel *label = [[UILabel alloc] initWithFrame:frame];
     label.backgroundColor = [UIColor clearColor];
     label.text = text;
-    label.font = [UIFont systemFontOfSize:15];
     label.textColor = [UIColor blackColor];
     label.textAlignment = NSTextAlignmentLeft;
     return label;

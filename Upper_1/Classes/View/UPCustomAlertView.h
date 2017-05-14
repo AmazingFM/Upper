@@ -20,11 +20,12 @@
     UIView *bgView;
     UIView *mainView;
     UIView *titleLabel;
-    UIView *customView;
+    
     UIButton *confirmBtn;
     UIButton *cancelBtn;
 }
 
+@property (nonatomic, retain) UIView *customView;
 @property (nonatomic, weak) id<UPCustomAlertViewDelegate> delegate;
 
 - (instancetype)initWithTitle:(NSString *)title CustomView:(UIView *)a_customView;

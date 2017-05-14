@@ -113,6 +113,7 @@ typedef enum{
 @property (nonatomic, copy) NSString *defaultName;
 @property (nonatomic, copy) NSString *detail;
 @property (nonatomic, copy) NSString *imageUrl;
+@property (nonatomic)       BOOL    isSwitchOn;
 @end
 
 @interface UPButtonCellItem : UPBaseCellItem

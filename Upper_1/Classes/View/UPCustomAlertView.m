@@ -18,9 +18,10 @@
     self = [super initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
     if (self) {
         self.backgroundColor = [UIColor colorWithWhite:1 alpha:0.5];
-        customView = a_customView;
+        self.customView = a_customView;
+        self.customView.frame = CGRectOffset(a_customView.frame, 0, kUPCustomAlertViewTitleHeight);
         
-        CGRect customRect = CGRectMake(0, 0, self.frame.size.width-100, kUPCustomAlertViewTitleHeight*2+customView.frame.size.height);
+        CGRect customRect = CGRectMake(0, 0, self.frame.size.width-100, kUPCustomAlertViewTitleHeight*2+self.customView.frame.size.height);
         mainView = [[UIView alloc] initWithFrame:customRect];
         mainView.backgroundColor = [UIColor whiteColor];
         mainView.layer.cornerRadius = 10.f;
@@ -32,20 +33,20 @@
         line.backgroundColor = kUPCustomAlertViewLineColor;
         [titleLabel addSubview:line];
         
-        confirmBtn = [self createButtonWithTitle:@"确定" andFrame:CGRectMake(mainView.frame.size.width/2, kUPCustomAlertViewTitleHeight+customView.frame.size.height, mainView.frame.size.width/2, kUPCustomAlertViewTitleHeight)];
+        confirmBtn = [self createButtonWithTitle:@"确定" andFrame:CGRectMake(mainView.frame.size.width/2, kUPCustomAlertViewTitleHeight+self.customView.frame.size.height, mainView.frame.size.width/2, kUPCustomAlertViewTitleHeight)];
         confirmBtn.tag = 100;
         
-        cancelBtn = [self createButtonWithTitle:@"取消" andFrame:CGRectMake(0, kUPCustomAlertViewTitleHeight+customView.frame.size.height, mainView.frame.size.width/2, kUPCustomAlertViewTitleHeight)];
+        cancelBtn = [self createButtonWithTitle:@"取消" andFrame:CGRectMake(0, kUPCustomAlertViewTitleHeight+self.customView.frame.size.height, mainView.frame.size.width/2, kUPCustomAlertViewTitleHeight)];
         cancelBtn.tag = 101;
         
-        UIView *Hline = [[UIView alloc] initWithFrame:CGRectMake(0, kUPCustomAlertViewTitleHeight+customView.frame.size.height, mainView.frame.size.width, 0.6)];
+        UIView *Hline = [[UIView alloc] initWithFrame:CGRectMake(0, kUPCustomAlertViewTitleHeight+self.customView.frame.size.height, mainView.frame.size.width, 0.6)];
         Hline.backgroundColor = kUPCustomAlertViewLineColor;
 
-        UIView *Vline = [[UIView alloc] initWithFrame:CGRectMake(mainView.frame.size.width/2-0.6, kUPCustomAlertViewTitleHeight+customView.frame.size.height, 0.6, kUPCustomAlertViewTitleHeight)];
+        UIView *Vline = [[UIView alloc] initWithFrame:CGRectMake(mainView.frame.size.width/2-0.6, kUPCustomAlertViewTitleHeight+self.customView.frame.size.height, 0.6, kUPCustomAlertViewTitleHeight)];
         Vline.backgroundColor = kUPCustomAlertViewLineColor;
 
         [mainView addSubview:titleLabel];
-        [mainView addSubview:customView];
+        [mainView addSubview:self.customView];
         [mainView addSubview:confirmBtn];
         [mainView addSubview:cancelBtn];
         [mainView addSubview:Hline];
@@ -63,7 +64,10 @@
 
 - (void)dismiss
 {
+    [self.customView removeFromSuperview];
+    [mainView removeFromSuperview];
     [self removeFromSuperview];
+    self.customView = nil;
 }
 
 - (UILabel *)createLabelWithTitle:(NSString *)title andFrame:(CGRect)labelFrame

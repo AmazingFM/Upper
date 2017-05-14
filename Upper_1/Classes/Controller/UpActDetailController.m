@@ -24,6 +24,7 @@
 #import "UPFriendListController.h"
 #import "UPCustomAlertView.h"
 #import "MessageManager.h"
+#import "UPTipOffView.h"
 
 #import "YMNetwork.h"
 
@@ -566,7 +567,7 @@
 #define AlertTagEdit    0
 #define AlertTagCancel  1
 
-@interface UpActDetailController () <UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, UPFriendListDelegate>
+@interface UpActDetailController () <UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, UPFriendListDelegate,UPCustomAlertViewDelegate>
 {
     UITableView *_tableView;
     UIButton *_submitBtn;
@@ -798,12 +799,10 @@
 - (void)buttonClick:(UIButton *)sender
 {
     if (sender.tag==kUPButtonTagJuBao) {
-//        UIView *jubaoView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth-100, 60)];
-//        NSArray *jubaoArr = @[];
-//        
-//        
-//        UPCustomAlertView *jbAlert = [[UPCustomAlertView alloc] initWithTitle:@"我要举报" CustomView:tmpV];
-//        [jbAlert show];
+        UPTipOffView *tipoffView = [[UPTipOffView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth-100, 70)];
+        UPCustomAlertView *jbAlert = [[UPCustomAlertView alloc] initWithTitle:@"我要举报" CustomView:tipoffView];
+        jbAlert.delegate = self;
+        [jbAlert show];
     } else if (sender.tag==kUPButtonTagYaoqing) {
         UPFriendListController *inviteFriend = [[UPFriendListController alloc] init];
         inviteFriend.type = 0; //我的好友列表
@@ -812,6 +811,37 @@
         [self presentViewController:nav animated:YES completion:nil];
     } else if (sender.tag==kUPButtonTagFenXiang) {
     }
+}
+
+#pragma mark UPCustomAlertViewDelegate
+- (void)customAlertView:(UPCustomAlertView *)alertView buttonClickedWithIndex:(NSInteger)index
+{
+    UPTipOffView *tipoffView = (UPTipOffView *)alertView.customView;
+    if (tipoffView) {
+        NSString *tipoffStr = [tipoffView getTipOffDesc];
+        if (tipoffStr!=nil) {
+            [self sendTipOff:tipoffStr];
+        }
+    }
+}
+
+- (void)sendTipOff:(NSString *)tipoffStr
+{
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    [params setValue:@"TipOff" forKey:@"a"];
+    [params setValue:self.actData.ID forKey:@"relation_id"];
+    [params setValue:tipoffStr forKey:@"tip_reason"];
+    
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+        NSDictionary *dict = (NSDictionary *)responseObject;
+        NSString *resp_id = dict[@"resp_id"];
+        if ([resp_id intValue]==0) {
+            [MBProgressHUD showSuccess:@"提交举报信息成功"];
+            
+        }
+    } failure:^(NSError *error) {
+        [MBProgressHUD showError:@"提交失败，请重新提交"];
+    }];
 }
 
 #pragma mark UPInviteFriendDelegate
@@ -863,7 +893,6 @@
 
 - (void)modifyActiviy:(RequestType)type
 {
-    
     [MBProgressHUD showMessage:@"正在提交请求，请稍后...." toView:self.view];
     NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"ActivityJoinModify"forKey:@"a"];

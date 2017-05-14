@@ -30,14 +30,21 @@ extern NSString * const g_loginFileName;
     UIButton *_quitBtn;
     
     NSMutableDictionary *paramsDict;
-    
-    BOOL _userAnony;
+    NSMutableDictionary *newParamsDict;
     
     UPBaseCellItem *selectedItem;
     UIView *_datePanelView;
     UIButton *_hideBtn;
     
     UIDatePicker *datePicker;
+    
+    UPImageDetailCellItem *imageDetailItem1;
+    UPImageDetailCellItem *imageDetailItem2;
+    UPImageDetailCellItem *imageDetailItem3;
+    UPImageDetailCellItem *imageDetailItem4;
+    UPImageDetailCellItem *imageDetailItem5;
+    UPImageDetailCellItem *imageDetailItem6;
+    UPImageDetailCellItem *imageDetailItem7;
 }
 
 @property (nonatomic, retain) UIButton *leftButton;
@@ -67,10 +74,9 @@ extern NSString * const g_loginFileName;
     [self.view addSubview:backImg];
     
     paramsDict = [NSMutableDictionary dictionary];
+    newParamsDict = [NSMutableDictionary dictionary];
     
     self.title = @"Upper";
-
-    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
     
     _quitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _quitBtn.frame = CGRectMake(20, ScreenHeight-80, ScreenWidth-40, 35);
@@ -81,55 +87,56 @@ extern NSString * const g_loginFileName;
     [_quitBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [_quitBtn addTarget:self action:@selector(quit:) forControlEvents:UIControlEventTouchUpInside];
     
-    UPImageDetailCellItem *imageDetailItem1 = [[UPImageDetailCellItem alloc] init];
+    imageDetailItem1 = [[UPImageDetailCellItem alloc] init];
     imageDetailItem1.title = @"头像";
     imageDetailItem1.defaultName = @"head";
     imageDetailItem1.style = UPItemStyleUserImg;
     imageDetailItem1.cellID = @"cellID1";
 
-    UPImageDetailCellItem *imageDetailItem2 = [[UPImageDetailCellItem alloc] init];
+    imageDetailItem2 = [[UPImageDetailCellItem alloc] init];
     imageDetailItem2.title = @"我的二维码";
     imageDetailItem2.defaultName = @"qrcode";
     imageDetailItem2.style = UPItemStyleUserQrcode;
     imageDetailItem2.cellID = @"cellID2";
     
-    UPImageDetailCellItem *imageDetailItem3 = [[UPImageDetailCellItem alloc] init];
+    imageDetailItem3 = [[UPImageDetailCellItem alloc] init];
     imageDetailItem3.title = @"昵称";
     imageDetailItem3.detail = @"设置一个昵称";
     imageDetailItem3.style = UPItemStyleUserNickName;
     imageDetailItem3.cellID = @"cellID3";
     
-    UPImageDetailCellItem *imageDetailItem4 = [[UPImageDetailCellItem alloc] init];
+    imageDetailItem4 = [[UPImageDetailCellItem alloc] init];
     imageDetailItem4.title = @"性别";
     imageDetailItem4.detail = @"请选择";
     imageDetailItem4.style = UPItemStyleUserSexual;
     imageDetailItem4.cellID = @"cellID4";
     
-    UPImageDetailCellItem *imageDetailItem5 = [[UPImageDetailCellItem alloc] init];
+    imageDetailItem5 = [[UPImageDetailCellItem alloc] init];
     imageDetailItem5.title = @"出生日期";
     imageDetailItem5.detail = @"请选择日期";
     imageDetailItem5.style = UPItemStyleUserBirth;
     imageDetailItem5.cellID = @"cellID5";
     
-    UPImageDetailCellItem *imageDetailItem6 = [[UPImageDetailCellItem alloc] init];
+    imageDetailItem6 = [[UPImageDetailCellItem alloc] init];
     imageDetailItem6.title = @"是否公开单位信息";
     imageDetailItem6.style = UPItemStyleUserAnonymous;
     imageDetailItem6.cellID = @"cellID6";
     
+    imageDetailItem7 = [[UPImageDetailCellItem alloc] init];
+    imageDetailItem7.title = @"是否公开行业信息";
+    imageDetailItem7.style = UPItemStyleUserAnonymous;
+    imageDetailItem7.cellID = @"cellID6";
+
+    
     
     if ([UPDataManager shared].isLogin) {
-        imageDetailItem1.defaultName = @"head";
-        imageDetailItem1.imageUrl=[UPDataManager shared].userInfo.user_icon;
-        imageDetailItem3.detail = [UPDataManager shared].userInfo.nick_name;
-        imageDetailItem4.detail = [[UPDataManager shared].userInfo.sexual intValue]==0?@"男":@"女";
+        [paramsDict setValue:[UPDataManager shared].userInfo.user_icon forKey:@"user_icon"];
+        [paramsDict setValue:[UPDataManager shared].userInfo.nick_name forKey:@"nick_name"];
+        [paramsDict setValue:[UPDataManager shared].userInfo.sexual forKey:@"sexual"];
+        [paramsDict setValue:[UPDataManager shared].userInfo.birthday forKey:@"birthday"];
+        [paramsDict setValue:[UPDataManager shared].userInfo.secret_flag forKey:@"secret_flag"];
         
-        
-        NSString *birth = [UPDataManager shared].userInfo.birthday;
-        if (birth==nil ||birth.length==0) {
-            imageDetailItem5.detail =  @"请选择日期";
-        } else {
-            imageDetailItem5.detail = [UPTools dateTransform:birth fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy-MM-dd"];
-        }
+        [self loadDefaultItemData];
         
         [_quitBtn setTitle:@"退出登录" forState:UIControlStateNormal];
     } else {
@@ -144,6 +151,7 @@ extern NSString * const g_loginFileName;
     [self.itemList addObject:imageDetailItem4];
     [self.itemList addObject:imageDetailItem5];
     [self.itemList addObject:imageDetailItem6];
+    [self.itemList addObject:imageDetailItem7];
     
     [_itemList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop){
         if ([obj isKindOfClass:[UPBaseCellItem class]]) {
@@ -163,13 +171,63 @@ extern NSString * const g_loginFileName;
     [self.view addSubview:self.tableView];
     
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithRightIcon:@"icon_setting" highIcon:@"" target:self action:@selector(settingClick)];
+    [self setDefaultRightBarItem:NO];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recvLogin) name:kNotifierLogin object:nil];
     
     if ([UPDataManager shared].isLogin) {
         [self recvLogin];
     }
+}
+
+- (void)loadDefaultItemData
+{
+    imageDetailItem1.defaultName = @"head";
+    imageDetailItem1.imageUrl=[UPDataManager shared].userInfo.user_icon;
+    imageDetailItem3.detail = [UPDataManager shared].userInfo.nick_name;
+    imageDetailItem4.detail = [[UPDataManager shared].userInfo.sexual intValue]==0?@"男":@"女";
+    
+    NSString *birth = [UPDataManager shared].userInfo.birthday;
+    if (birth==nil ||birth.length==0) {
+        imageDetailItem5.detail =  @"请选择日期";
+    } else {
+        imageDetailItem5.detail = [UPTools dateTransform:birth fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy-MM-dd"];
+    }
+    
+    imageDetailItem6.isSwitchOn = [[self getOpenStatus:@"1111"][0] boolValue];
+    imageDetailItem7.isSwitchOn = [[self getOpenStatus:@"1111"][1] boolValue];
+}
+
+- (NSArray *)getOpenStatus:(NSString *)secretFlag
+{
+    int secretValue = [secretFlag intValue];
+    BOOL companySecret = (secretValue/1000==1)?YES:NO;
+    BOOL industrySecret = ((secretValue%1000)/100==1)?YES:NO;
+    BOOL default1 = NO;
+    BOOL default2 = NO;
+    return @[@(companySecret), @(industrySecret), @(default1), @(default2)];
+}
+
+- (void)setDefaultRightBarItem:(BOOL)isNormal
+{
+    if (isNormal) {
+        self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithRightIcon:@"icon_setting" highIcon:@"" target:self action:@selector(settingClick)];
+    } else {
+       UIBarButtonItem *saveItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(saveAction)];
+        UIBarButtonItem *discardItem = [[UIBarButtonItem alloc] initWithTitle:@"放弃" style:UIBarButtonItemStylePlain target:self action:@selector(discardAction)];
+        self.navigationItem.rightBarButtonItems = @[saveItem,discardItem];
+    }
+}
+
+- (void)discardAction
+{
+    [self loadDefaultItemData];
+    [self.tableView reloadData];
+}
+
+- (void)saveAction
+{
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -436,7 +494,7 @@ extern NSString * const g_loginFileName;
 - (void)switchOn:(BOOL)isOn withIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row==5) {
-        _userAnony = isOn;
+        [newParamsDict setValue: forKey:@"ind"];
     }
 }
 
@@ -567,17 +625,19 @@ extern NSString * const g_loginFileName;
 
 /***
 
- $this->user_name = I('user_name');
+ $this->user_name = I('user_id');
  $this->user_pass = I('user_pass');
  $this->new_pass = I('new_pass');
- $this->pass_type = I('pass_type');
  $this->true_name = I('true_name');
  $this->employee_id = I('employee_id');
  $this->node_email = I('node_email');
  $this->mobile = I('mobile');
  $this->sexual = I('sexual');
- $this->user_icon = I('user_icon');
- $this->nick_name = I('nick_name');
+ $this->birthday = I('birthday');
+ this->user_icon = I('user_icon');
+ $this->nick_name = I('nick_name'); 昵称
+ $this->user_desc = I('user_desc'); 简介
+ $this->secret_flag = I('secret_flag'); //格式 0000 1111 四位二进制 首位：公司信息 次位：行>业信息 其它预留 0-公开  1-保密
  */
 - (void)updateUserInfo
 {
