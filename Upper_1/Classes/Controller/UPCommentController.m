@@ -540,6 +540,7 @@ static const int textViewContentHeight = 150;
                 NSString *resp_desc = respDict[@"resp_desc"];
                 
                 [MBProgressHUD showSuccess:resp_desc];
+                [self.navigationController popViewControllerAnimated:YES];
             }
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             [MBProgressHUD showError:@"网络错误"];
@@ -563,6 +564,7 @@ static const int textViewContentHeight = 150;
             NSDictionary *dict = (NSDictionary *)json;
             NSString *resp_desc = dict[@"resp_desc"];
             [MBProgressHUD showSuccess:resp_desc];
+            [self.navigationController popViewControllerAnimated:YES];
         } failure:^(NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [MBProgressHUD showError:@"网络错误"];
@@ -590,6 +592,7 @@ static const int textViewContentHeight = 150;
             if ([resp_id intValue]==0) {
                 NSString *resp_desc = dict[@"resp_desc"];
                 [MBProgressHUD showSuccess:resp_desc];
+                [self.navigationController popViewControllerAnimated:YES];
             }
             else
             {

@@ -45,8 +45,6 @@ extern NSString * const g_loginFileName;
     UPImageDetailCellItem *imageDetailItem5;
     UPImageDetailCellItem *imageDetailItem6;
     UPImageDetailCellItem *imageDetailItem7;
-    
-    BOOL isInfoChanged;
 }
 
 @property (nonatomic, retain) UIButton *leftButton;
@@ -77,7 +75,6 @@ extern NSString * const g_loginFileName;
     
     defaultParamsDict = [NSMutableDictionary dictionary];
     updatedParamsDict = [NSMutableDictionary dictionary];
-    isInfoChanged = NO;
     
     self.title = @"Upper";
     
@@ -171,7 +168,7 @@ extern NSString * const g_loginFileName;
     [self.view addSubview:self.tableView];
     
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
-    [self setDefaultRightBarItem:NO];
+    [self setDefaultRightBarItem:YES];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recvLogin) name:kNotifierLogin object:nil];
     
@@ -193,6 +190,28 @@ extern NSString * const g_loginFileName;
     [updatedParamsDict addEntriesFromDictionary:defaultParamsDict];
 }
 
+- (void)decideIfChange
+{
+    __block BOOL ifChange = NO;
+    [defaultParamsDict enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        if ([key rangeOfString:@"Secret"].location!=NSNotFound) {
+            if([defaultParamsDict[key] boolValue]!=[updatedParamsDict[key] boolValue])
+            {
+                ifChange = YES;
+                *stop = YES;
+            }
+        } else {
+            if (![defaultParamsDict[key] isEqualToString:updatedParamsDict[key]]) {
+                ifChange = YES;
+                *stop = YES;
+            }
+        }
+    }];
+    
+    [self setDefaultRightBarItem:!ifChange];
+    [self loadDefaultItemData:!ifChange];
+}
+
 - (void)loadDefaultItemData:(BOOL)isDefault
 {
     NSDictionary *tmpParamsDict = nil;
@@ -210,17 +229,20 @@ extern NSString * const g_loginFileName;
     if (birth==nil ||birth.length==0) {
         imageDetailItem5.detail =  @"请选择日期";
     } else {
-        imageDetailItem5.detail = [UPTools dateTransform:birth fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy-MM-dd"];
+        imageDetailItem5.detail = [UPTools dateTransform:birth fromFormat:@"yyyyMMdd" toFormat:@"yyyy-MM-dd"];
     }
     
     imageDetailItem6.isSwitchOn = [tmpParamsDict[@"companySecret"] boolValue];
     imageDetailItem7.isSwitchOn = [tmpParamsDict[@"industrySecret"] boolValue];
+    [self.tableView reloadData];
 }
 
 - (void)setDefaultRightBarItem:(BOOL)isNormal
 {
     if (isNormal) {
-        self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithRightIcon:@"icon_setting" highIcon:@"" target:self action:@selector(settingClick)];
+        UIBarButtonItem *settingItem = [UIBarButtonItem itemWithRightIcon:@"icon_setting" highIcon:@"" target:self action:@selector(settingClick)];
+        self.navigationItem.rightBarButtonItems = @[settingItem];
+
     } else {
        UIBarButtonItem *saveItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(saveAction)];
         UIBarButtonItem *discardItem = [[UIBarButtonItem alloc] initWithTitle:@"放弃" style:UIBarButtonItemStylePlain target:self action:@selector(discardAction)];
@@ -486,7 +508,7 @@ extern NSString * const g_loginFileName;
         [picker dismissViewControllerAnimated:YES completion:nil];
         
         updatedParamsDict[@"user_icon"] = [data base64EncodedStringWithOptions:0];
-//        [self updateUserInfo];
+        [self decideIfChange];
     }
 }
 
@@ -505,8 +527,11 @@ extern NSString * const g_loginFileName;
 - (void)switchOn:(BOOL)isOn withIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row==5) {
-//        [newParamsDict setValue: forKey:@"ind"];
+        [updatedParamsDict setValue:@(isOn) forKey:@"companySecret"];
+    } else if (indexPath.row==6) {
+        [updatedParamsDict setValue:@(isOn) forKey:@"industrySecret"];
     }
+    [self decideIfChange];
 }
 
 #pragma mark -UIAlertViewDelegate
@@ -521,7 +546,7 @@ extern NSString * const g_loginFileName;
                 NSString *newNickName = textField.text;
                 if (newNickName!=nil && newNickName.length!=0) {
                     updatedParamsDict[@"nick_name"] = newNickName;
-//                    [self updateUserInfo];
+                    [self decideIfChange];
                 }
             }
         }
@@ -530,15 +555,15 @@ extern NSString * const g_loginFileName;
         {
             if (buttonIndex!=0) {
                 updatedParamsDict[@"sexual"] = [NSString stringWithFormat:@"%ld", (long)buttonIndex-1];
-//                [self updateUserInfo];
+                [self decideIfChange];
             }
         }
             break;
         case 4:
         {
             if (buttonIndex!=0) {
-                updatedParamsDict[@"birthday"] = [UPTools dateString:datePicker.date withFormat:@"yyyyMMddHHmmss"];
-//                [self updateUserInfo];
+                updatedParamsDict[@"birthday"] = [UPTools dateString:datePicker.date withFormat:@"yyyyMMdd"];
+                [self decideIfChange];
             }
         }
         default:
@@ -659,10 +684,6 @@ extern NSString * const g_loginFileName;
         NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
-            UserData *userData = [[UserData alloc] initWithDict:dict[@"resp_data"]];
-            [UPDataManager shared].userInfo.birthday = userData.birthday;
-            [UPDataManager shared].userInfo.secret_flag = userData.secret_flag;
-            
             [self initParamsDict];
             [self loadDefaultItemData:YES];
         }
