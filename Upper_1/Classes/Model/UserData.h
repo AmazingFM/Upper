@@ -29,6 +29,9 @@
 @property (nonatomic,copy) NSString *token;
 
 - (void)setWithUserData:(UserData *)userData;
+- (BOOL)companySecret;
+- (BOOL)industrySecret;
+
 @end
 
 @interface OtherUserData : UPBaseModel
@@ -51,4 +54,5 @@
 @property (nonatomic, copy) NSString *sexual;
 @property (nonatomic, copy) NSString *true_name;
 @property (nonatomic, copy) NSString *user_icon;
+@property (nonatomic,copy) NSString *secret_flag;
 @end

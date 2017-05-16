@@ -29,8 +29,8 @@ extern NSString * const g_loginFileName;
 {
     UIButton *_quitBtn;
     
-    NSMutableDictionary *paramsDict;
-    NSMutableDictionary *newParamsDict;
+    NSMutableDictionary *defaultParamsDict;
+    NSMutableDictionary *updatedParamsDict;
     
     UPBaseCellItem *selectedItem;
     UIView *_datePanelView;
@@ -45,6 +45,8 @@ extern NSString * const g_loginFileName;
     UPImageDetailCellItem *imageDetailItem5;
     UPImageDetailCellItem *imageDetailItem6;
     UPImageDetailCellItem *imageDetailItem7;
+    
+    BOOL isInfoChanged;
 }
 
 @property (nonatomic, retain) UIButton *leftButton;
@@ -73,8 +75,9 @@ extern NSString * const g_loginFileName;
     backImg.frame = self.view.bounds;
     [self.view addSubview:backImg];
     
-    paramsDict = [NSMutableDictionary dictionary];
-    newParamsDict = [NSMutableDictionary dictionary];
+    defaultParamsDict = [NSMutableDictionary dictionary];
+    updatedParamsDict = [NSMutableDictionary dictionary];
+    isInfoChanged = NO;
     
     self.title = @"Upper";
     
@@ -130,13 +133,10 @@ extern NSString * const g_loginFileName;
     
     
     if ([UPDataManager shared].isLogin) {
-        [paramsDict setValue:[UPDataManager shared].userInfo.user_icon forKey:@"user_icon"];
-        [paramsDict setValue:[UPDataManager shared].userInfo.nick_name forKey:@"nick_name"];
-        [paramsDict setValue:[UPDataManager shared].userInfo.sexual forKey:@"sexual"];
-        [paramsDict setValue:[UPDataManager shared].userInfo.birthday forKey:@"birthday"];
-        [paramsDict setValue:[UPDataManager shared].userInfo.secret_flag forKey:@"secret_flag"];
+        [self userInfoRequest];
         
-        [self loadDefaultItemData];
+        [self initParamsDict];
+        [self loadDefaultItemData:YES];
         
         [_quitBtn setTitle:@"退出登录" forState:UIControlStateNormal];
     } else {
@@ -180,32 +180,41 @@ extern NSString * const g_loginFileName;
     }
 }
 
-- (void)loadDefaultItemData
+- (void)initParamsDict
 {
-    imageDetailItem1.defaultName = @"head";
-    imageDetailItem1.imageUrl=[UPDataManager shared].userInfo.user_icon;
-    imageDetailItem3.detail = [UPDataManager shared].userInfo.nick_name;
-    imageDetailItem4.detail = [[UPDataManager shared].userInfo.sexual intValue]==0?@"男":@"女";
+    [defaultParamsDict setValue:[UPDataManager shared].userInfo.user_icon forKey:@"user_icon"];
+    [defaultParamsDict setValue:[UPDataManager shared].userInfo.nick_name forKey:@"nick_name"];
+    [defaultParamsDict setValue:[UPDataManager shared].userInfo.sexual forKey:@"sexual"];
+    [defaultParamsDict setValue:[UPDataManager shared].userInfo.birthday forKey:@"birthday"];
+    [defaultParamsDict setValue:@([UPDataManager shared].userInfo.companySecret) forKey:@"companySecret"];
+    [defaultParamsDict setValue:@([UPDataManager shared].userInfo.industrySecret) forKey:@"industrySecret"];
     
-    NSString *birth = [UPDataManager shared].userInfo.birthday;
+    [updatedParamsDict removeAllObjects];
+    [updatedParamsDict addEntriesFromDictionary:defaultParamsDict];
+}
+
+- (void)loadDefaultItemData:(BOOL)isDefault
+{
+    NSDictionary *tmpParamsDict = nil;
+    if (isDefault) {
+        tmpParamsDict = defaultParamsDict;
+    } else {
+        tmpParamsDict = updatedParamsDict;
+    }
+    imageDetailItem1.defaultName = @"head";
+    imageDetailItem1.imageUrl=tmpParamsDict[@"user_icon"];
+    imageDetailItem3.detail = tmpParamsDict[@"nick_name"];
+    imageDetailItem4.detail = [tmpParamsDict[@"sexual"] intValue]==0?@"男":@"女";
+    
+    NSString *birth = tmpParamsDict[@"birthday"];
     if (birth==nil ||birth.length==0) {
         imageDetailItem5.detail =  @"请选择日期";
     } else {
         imageDetailItem5.detail = [UPTools dateTransform:birth fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy-MM-dd"];
     }
     
-    imageDetailItem6.isSwitchOn = [[self getOpenStatus:@"1111"][0] boolValue];
-    imageDetailItem7.isSwitchOn = [[self getOpenStatus:@"1111"][1] boolValue];
-}
-
-- (NSArray *)getOpenStatus:(NSString *)secretFlag
-{
-    int secretValue = [secretFlag intValue];
-    BOOL companySecret = (secretValue/1000==1)?YES:NO;
-    BOOL industrySecret = ((secretValue%1000)/100==1)?YES:NO;
-    BOOL default1 = NO;
-    BOOL default2 = NO;
-    return @[@(companySecret), @(industrySecret), @(default1), @(default2)];
+    imageDetailItem6.isSwitchOn = [tmpParamsDict[@"companySecret"] boolValue];
+    imageDetailItem7.isSwitchOn = [tmpParamsDict[@"industrySecret"] boolValue];
 }
 
 - (void)setDefaultRightBarItem:(BOOL)isNormal
@@ -221,13 +230,13 @@ extern NSString * const g_loginFileName;
 
 - (void)discardAction
 {
-    [self loadDefaultItemData];
+    [self loadDefaultItemData:YES];
     [self.tableView reloadData];
 }
 
 - (void)saveAction
 {
-    
+    [self updateUserInfo];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -274,10 +283,14 @@ extern NSString * const g_loginFileName;
             //处理
             UserData *userData = [[UserData alloc] initWithDict:dict[@"resp_data"]];
             [UPDataManager shared].userInfo.birthday = userData.birthday;
+            [UPDataManager shared].userInfo.secret_flag = userData.secret_flag;
             
-            UPImageDetailCellItem *birthItem = _itemList[4];
-            birthItem.detail = [UPTools dateTransform:userData.birthday fromFormat:@"yyyyMMdd" toFormat:@"yyyy-MM-dd"];
-            [self.tableView reloadData];
+            [defaultParamsDict setValue:[UPDataManager shared].userInfo.birthday forKey:@"birthday"];
+            [defaultParamsDict setValue:@([UPDataManager shared].userInfo.companySecret) forKey:@"companySecret"];
+            [defaultParamsDict setValue:@([UPDataManager shared].userInfo.industrySecret) forKey:@"industrySecret"];
+            
+            [self initParamsDict];
+            [self loadDefaultItemData:YES];
         }
     } failure:^(NSError *error) {
     }];
@@ -472,10 +485,8 @@ extern NSString * const g_loginFileName;
         //关闭相册界面
         [picker dismissViewControllerAnimated:YES completion:nil];
         
-        
-        [paramsDict removeAllObjects];
-        paramsDict[@"user_icon"] = [data base64EncodedStringWithOptions:0];
-        [self updateUserInfo];
+        updatedParamsDict[@"user_icon"] = [data base64EncodedStringWithOptions:0];
+//        [self updateUserInfo];
     }
 }
 
@@ -494,7 +505,7 @@ extern NSString * const g_loginFileName;
 - (void)switchOn:(BOOL)isOn withIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row==5) {
-        [newParamsDict setValue: forKey:@"ind"];
+//        [newParamsDict setValue: forKey:@"ind"];
     }
 }
 
@@ -509,9 +520,8 @@ extern NSString * const g_loginFileName;
                 UITextField *textField = [alertView textFieldAtIndex:0];
                 NSString *newNickName = textField.text;
                 if (newNickName!=nil && newNickName.length!=0) {
-                    [paramsDict removeAllObjects];
-                    paramsDict[@"nick_name"] = newNickName;
-                    [self updateUserInfo];
+                    updatedParamsDict[@"nick_name"] = newNickName;
+//                    [self updateUserInfo];
                 }
             }
         }
@@ -519,18 +529,16 @@ extern NSString * const g_loginFileName;
         case 3:
         {
             if (buttonIndex!=0) {
-                [paramsDict removeAllObjects];
-                paramsDict[@"sexual"] = [NSString stringWithFormat:@"%ld", (long)buttonIndex-1];
-                [self updateUserInfo];
+                updatedParamsDict[@"sexual"] = [NSString stringWithFormat:@"%ld", (long)buttonIndex-1];
+//                [self updateUserInfo];
             }
         }
             break;
         case 4:
         {
             if (buttonIndex!=0) {
-                [paramsDict removeAllObjects];
-                paramsDict[@"birthday"] = [UPTools dateString:datePicker.date withFormat:@"yyyyMMddHHmmss"];
-                [self updateUserInfo];
+                updatedParamsDict[@"birthday"] = [UPTools dateString:datePicker.date withFormat:@"yyyyMMddHHmmss"];
+//                [self updateUserInfo];
             }
         }
         default:
@@ -645,33 +653,18 @@ extern NSString * const g_loginFileName;
     
     [params setObject:@"UserModify" forKey:@"a"];
     
-    [params setValuesForKeysWithDictionary:paramsDict];
-    
-    __weak typeof(self) weakSelf = self;
+    [params addEntriesFromDictionary:updatedParamsDict];
     
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
-            UPImageDetailCellItem *cellItem = (UPImageDetailCellItem *)selectedItem;
-            if (cellItem.style&UPItemStyleUserImg) {
-                cellItem.imageUrl=paramsDict[@"user_icon"];
-                
-            }
-            else if (cellItem.style&UPItemStyleUserNickName) {
-                cellItem.detail = paramsDict[@"nick_name"];
-            }
-            else if (cellItem.style&UPItemStyleUserSexual) {
-                cellItem.detail = [paramsDict[@"sexual"] intValue]==0?@"男":@"女";
-            }
-            else if (cellItem.style&UPItemStyleUserBirth) {
-                cellItem.detail = [UPTools dateTransform:paramsDict[@"birthday"] fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy-MM-dd"];
-            }
+            UserData *userData = [[UserData alloc] initWithDict:dict[@"resp_data"]];
+            [UPDataManager shared].userInfo.birthday = userData.birthday;
+            [UPDataManager shared].userInfo.secret_flag = userData.secret_flag;
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf.tableView reloadRowsAtIndexPaths:@[cellItem.indexPath] withRowAnimation:UITableViewRowAnimationNone];
-            });
-            
+            [self initParamsDict];
+            [self loadDefaultItemData:YES];
         }
         else
         {
@@ -682,5 +675,4 @@ extern NSString * const g_loginFileName;
         NSLog(@"%@",[error localizedDescription]);
     }];
 }
-
 @end
