@@ -584,7 +584,7 @@ static const int textViewContentHeight = 150;
         [params setObject:commentTextView.text forKey:@"text"];
         [params setObject:teleField.text forKey:@"contact_no"];
         [params setObject:@"1" forKey:@"type"];
-        [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
+        [params setObject:[UPDataManager shared].token forKey:@"token"];
         
         [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id json) {
             NSDictionary *dict = (NSDictionary *)json;
@@ -734,7 +734,7 @@ static const int textViewContentHeight = 150;
     
     
     if ([UPDataManager shared].isLogin) {
-        [newParamsDic setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
+        [newParamsDic setObject:[UPDataManager shared].token forKey:@"token"];
         
         NSString *user_id = newParamsDic[@"user_id"];
         if (user_id==nil || user_id.length==0) {

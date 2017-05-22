@@ -389,8 +389,7 @@
             }
             _imageDetail.layer.masksToBounds = YES;
             if (cellItem.imageUrl.length>0) {
-                [_imageDetail sd_setImageWithURL:[NSURL URLWithString:cellItem.imageUrl]];
-                
+                [_imageDetail sd_setImageWithURL:[NSURL URLWithString:cellItem.imageUrl] placeholderImage:[UIImage imageNamed:cellItem.defaultName] options:SDWebImageRefreshCached ];
             } else if (cellItem.defaultName.length>0) {
                 [_imageDetail setImage:[UIImage imageNamed:cellItem.defaultName]];
             }
@@ -398,6 +397,7 @@
             break;
         case UPItemStyleUserAnonymous:
             self.accessoryView = _switchView;
+            _switchView.on = cellItem.isSwitchOn;
             break;
         default:
             break;

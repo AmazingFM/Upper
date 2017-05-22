@@ -31,7 +31,6 @@
         _user_image = [aDecoder decodeObjectForKey:@"user_image"];
         _user_status = [aDecoder decodeObjectForKey:@"user_status"];
         _birthday = [aDecoder decodeObjectForKey:@"birthday"];
-        _token = [aDecoder decodeObjectForKey:@"token"];
         _province_code = [aDecoder decodeObjectForKey:@"province_code"];
         _secret_flag = [aDecoder decodeObjectForKey:@"secret_flag"];
     }
@@ -52,7 +51,6 @@
     [aCoder encodeObject:_user_image forKey:@"user_image"];
     [aCoder encodeObject:_user_status forKey:@"user_status"];
     [aCoder encodeObject:_birthday forKey:@"birthday"];
-    [aCoder encodeObject:_token forKey:@"token"];
     [aCoder encodeObject:_province_code forKey:@"province_code"];
     [aCoder encodeObject:_secret_flag forKey:@"secret_flag"];
 }
@@ -72,7 +70,6 @@
         _user_image = userData.user_image==nil?@"":userData.user_image;
         _user_status = userData.user_status==nil?@"":userData.user_status;
         _birthday = userData.birthday==nil?@"":userData.birthday;
-        _token = userData.token==nil?@"":userData.token;
         _province_code = userData.province_code==nil?@"":userData.province_code;
         _secret_flag = userData.secret_flag==nil?@"":userData.secret_flag;
     }

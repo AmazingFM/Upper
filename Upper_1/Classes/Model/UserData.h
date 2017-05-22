@@ -26,8 +26,6 @@
 @property (nonatomic,copy) NSString *province_code;
 @property (nonatomic,copy) NSString *secret_flag; //格式 0000 1111 四位二进制 首位：公司信息 次位：行>业信息 其它预留 0-公开  1-保密
 
-@property (nonatomic,copy) NSString *token;
-
 - (void)setWithUserData:(UserData *)userData;
 - (BOOL)companySecret;
 - (BOOL)industrySecret;

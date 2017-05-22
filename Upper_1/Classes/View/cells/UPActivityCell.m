@@ -747,7 +747,6 @@
     [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
     [params setObject:_actCellItem.itemData.ID forKey:@"activity_id"];
     [params setObject:@"2" forKey:@"user_status"];
-    [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
     
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         [MBProgressHUD hideHUDForView:g_mainWindow];

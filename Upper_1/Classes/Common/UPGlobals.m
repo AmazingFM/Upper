@@ -48,10 +48,11 @@ void initialize()
     }
     
     g_appDelegate = nil;
-    [MessageManager shared];
     [UPDataManager shared].isLogin = NO;
     [[UPDataManager shared] readFromDefaults];
     [[UPDataManager shared] readSeqFromDefaults];
+    
+    [MessageManager shared];
 }
 
 UIBarButtonItem* createBarItemTitle(NSString* title ,id target, SEL selector){

@@ -20,13 +20,14 @@
 @property (nonatomic) int reqSeq;
 @property (nonatomic) BOOL hasLoadCities;
 
+@property (nonatomic, retain) NSString *token;
 @property (nonatomic, retain) UserData *userInfo;
 @property (nonatomic, retain) NSMutableArray *cityList;
 @property (nonatomic, retain) NSMutableDictionary *provinceDict;
 @property (nonatomic, retain) NSMutableArray *activityList;
 
 + (instancetype)shared;
-- (void)writeToDefaults:(UserData *)userData;
+- (void)writeToDefaults;
 - (void)readFromDefaults;
 - (void)cleanUserDafult;
 

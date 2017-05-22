@@ -102,7 +102,7 @@ static NSString *const kCompletedCallbackKey = @"completed";
         
         [params setObject:user_id forKey:@"user_id"];
         [params setObject:query_id forKey:@"qry_usr_id"];
-        [params setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
+        [params setObject:[UPDataManager shared].token forKey:@"token"];
 
         NSString *uuid = [UPConfig sharedInstance].uuid;
         NSString *currentDate = [UPConfig sharedInstance].currentDate;

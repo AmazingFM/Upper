@@ -305,9 +305,10 @@
             UserData *userData = [[UserData alloc] initWithDict:resp_data];
             
             [UPDataManager shared].userInfo = userData;
+            [UPDataManager shared].token = resp_data[@"token"];
             
             //写入配置
-            [[UPDataManager shared] writeToDefaults:[UPDataManager shared].userInfo];
+            [[UPDataManager shared] writeToDefaults];
             
             [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierLogin object:nil userInfo:nil];//发送登录成功通知
             

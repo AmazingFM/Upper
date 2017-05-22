@@ -14,7 +14,7 @@
 #import "UPCells.h"
 #import "UPTheme.h"
 #import "UPDataManager.h"
-#import "MBProgressHUD.h"
+#import "MBProgressHUD+MJ.h"
 #import "UPTools.h"
 #import "UPGlobals.h"
 #import "CRNavigationBar.h"
@@ -44,7 +44,7 @@ extern NSString * const g_loginFileName;
     UPImageDetailCellItem *imageDetailItem4;
     UPImageDetailCellItem *imageDetailItem5;
     UPImageDetailCellItem *imageDetailItem6;
-    UPImageDetailCellItem *imageDetailItem7;
+//    UPImageDetailCellItem *imageDetailItem7;
 }
 
 @property (nonatomic, retain) UIButton *leftButton;
@@ -121,26 +121,6 @@ extern NSString * const g_loginFileName;
     imageDetailItem6.title = @"是否公开单位信息";
     imageDetailItem6.style = UPItemStyleUserAnonymous;
     imageDetailItem6.cellID = @"cellID6";
-    
-    imageDetailItem7 = [[UPImageDetailCellItem alloc] init];
-    imageDetailItem7.title = @"是否公开行业信息";
-    imageDetailItem7.style = UPItemStyleUserAnonymous;
-    imageDetailItem7.cellID = @"cellID6";
-
-    
-    
-    if ([UPDataManager shared].isLogin) {
-        [self userInfoRequest];
-        
-        [self initParamsDict];
-        [self loadDefaultItemData:YES];
-        
-        [_quitBtn setTitle:@"退出登录" forState:UIControlStateNormal];
-    } else {
-        imageDetailItem1.defaultName = @"head";
-        imageDetailItem1.imageUrl=@"";
-        [_quitBtn setTitle:@"请登录" forState:UIControlStateNormal];
-    }
 
     [self.itemList addObject:imageDetailItem1];
     [self.itemList addObject:imageDetailItem2];
@@ -148,7 +128,7 @@ extern NSString * const g_loginFileName;
     [self.itemList addObject:imageDetailItem4];
     [self.itemList addObject:imageDetailItem5];
     [self.itemList addObject:imageDetailItem6];
-    [self.itemList addObject:imageDetailItem7];
+//    [self.itemList addObject:imageDetailItem7];
     
     [_itemList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop){
         if ([obj isKindOfClass:[UPBaseCellItem class]]) {
@@ -168,13 +148,13 @@ extern NSString * const g_loginFileName;
     [self.view addSubview:self.tableView];
     
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
-    [self setDefaultRightBarItem:YES];
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithRightIcon:@"icon_setting" highIcon:@"" target:self action:@selector(settingClick)];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recvLogin) name:kNotifierLogin object:nil];
+
+    [_quitBtn setTitle:@"退出登录" forState:UIControlStateNormal];
     
-    if ([UPDataManager shared].isLogin) {
-        [self recvLogin];
-    }
+    [self userInfoRequest];
 }
 
 - (void)initParamsDict
@@ -183,82 +163,25 @@ extern NSString * const g_loginFileName;
     [defaultParamsDict setValue:[UPDataManager shared].userInfo.nick_name forKey:@"nick_name"];
     [defaultParamsDict setValue:[UPDataManager shared].userInfo.sexual forKey:@"sexual"];
     [defaultParamsDict setValue:[UPDataManager shared].userInfo.birthday forKey:@"birthday"];
-    [defaultParamsDict setValue:@([UPDataManager shared].userInfo.companySecret) forKey:@"companySecret"];
-    [defaultParamsDict setValue:@([UPDataManager shared].userInfo.industrySecret) forKey:@"industrySecret"];
+    [defaultParamsDict setValue:@(![UPDataManager shared].userInfo.companySecret) forKey:@"companySecret"];
+    [defaultParamsDict setValue:@(![UPDataManager shared].userInfo.industrySecret) forKey:@"industrySecret"];
     
-    [updatedParamsDict removeAllObjects];
-    [updatedParamsDict addEntriesFromDictionary:defaultParamsDict];
-}
-
-- (void)decideIfChange
-{
-    __block BOOL ifChange = NO;
-    [defaultParamsDict enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        if ([key rangeOfString:@"Secret"].location!=NSNotFound) {
-            if([defaultParamsDict[key] boolValue]!=[updatedParamsDict[key] boolValue])
-            {
-                ifChange = YES;
-                *stop = YES;
-            }
-        } else {
-            if (![defaultParamsDict[key] isEqualToString:updatedParamsDict[key]]) {
-                ifChange = YES;
-                *stop = YES;
-            }
-        }
-    }];
-    
-    [self setDefaultRightBarItem:!ifChange];
-    [self loadDefaultItemData:!ifChange];
-}
-
-- (void)loadDefaultItemData:(BOOL)isDefault
-{
-    NSDictionary *tmpParamsDict = nil;
-    if (isDefault) {
-        tmpParamsDict = defaultParamsDict;
-    } else {
-        tmpParamsDict = updatedParamsDict;
-    }
     imageDetailItem1.defaultName = @"head";
-    imageDetailItem1.imageUrl=tmpParamsDict[@"user_icon"];
-    imageDetailItem3.detail = tmpParamsDict[@"nick_name"];
-    imageDetailItem4.detail = [tmpParamsDict[@"sexual"] intValue]==0?@"男":@"女";
+    imageDetailItem1.imageUrl= defaultParamsDict[@"user_icon"];
+    imageDetailItem3.detail = defaultParamsDict[@"nick_name"];
+    imageDetailItem4.detail = [defaultParamsDict[@"sexual"] intValue]==0?@"男":@"女";
     
-    NSString *birth = tmpParamsDict[@"birthday"];
+    NSString *birth = defaultParamsDict[@"birthday"];
     if (birth==nil ||birth.length==0) {
         imageDetailItem5.detail =  @"请选择日期";
     } else {
         imageDetailItem5.detail = [UPTools dateTransform:birth fromFormat:@"yyyyMMdd" toFormat:@"yyyy-MM-dd"];
     }
     
-    imageDetailItem6.isSwitchOn = [tmpParamsDict[@"companySecret"] boolValue];
-    imageDetailItem7.isSwitchOn = [tmpParamsDict[@"industrySecret"] boolValue];
-    [self.tableView reloadData];
-}
-
-- (void)setDefaultRightBarItem:(BOOL)isNormal
-{
-    if (isNormal) {
-        UIBarButtonItem *settingItem = [UIBarButtonItem itemWithRightIcon:@"icon_setting" highIcon:@"" target:self action:@selector(settingClick)];
-        self.navigationItem.rightBarButtonItems = @[settingItem];
-
-    } else {
-       UIBarButtonItem *saveItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(saveAction)];
-        UIBarButtonItem *discardItem = [[UIBarButtonItem alloc] initWithTitle:@"放弃" style:UIBarButtonItemStylePlain target:self action:@selector(discardAction)];
-        self.navigationItem.rightBarButtonItems = @[saveItem,discardItem];
-    }
-}
-
-- (void)discardAction
-{
-    [self loadDefaultItemData:YES];
-    [self.tableView reloadData];
-}
-
-- (void)saveAction
-{
-    [self updateUserInfo];
+    imageDetailItem6.isSwitchOn = [defaultParamsDict[@"companySecret"] boolValue];
+//    imageDetailItem7.isSwitchOn = [defaultParamsDict[@"industrySecret"] boolValue];
+    
+    [updatedParamsDict removeAllObjects];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -280,14 +203,9 @@ extern NSString * const g_loginFileName;
 
 - (void)recvLogin
 {
-    UPImageDetailCellItem *item = _itemList[0];
-    item.imageUrl = [UPDataManager shared].userInfo.user_icon;
-    NSIndexPath *idxPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self.tableView reloadRowsAtIndexPaths:@[idxPath] withRowAnimation:UITableViewRowAnimationFade];
-    
+    [self initParamsDict];
     [_quitBtn setTitle:@"退出登录" forState:UIControlStateNormal];
-    
-    [self userInfoRequest];
+    [self.tableView reloadData];
 }
 
 - (void)userInfoRequest
@@ -304,15 +222,10 @@ extern NSString * const g_loginFileName;
         if ([resp_id intValue]==0) {
             //处理
             UserData *userData = [[UserData alloc] initWithDict:dict[@"resp_data"]];
-            [UPDataManager shared].userInfo.birthday = userData.birthday;
-            [UPDataManager shared].userInfo.secret_flag = userData.secret_flag;
-            
-            [defaultParamsDict setValue:[UPDataManager shared].userInfo.birthday forKey:@"birthday"];
-            [defaultParamsDict setValue:@([UPDataManager shared].userInfo.companySecret) forKey:@"companySecret"];
-            [defaultParamsDict setValue:@([UPDataManager shared].userInfo.industrySecret) forKey:@"industrySecret"];
-            
+            [UPDataManager shared].userInfo = userData;
+
             [self initParamsDict];
-            [self loadDefaultItemData:YES];
+            [self.tableView reloadData];
         }
     } failure:^(NSError *error) {
     }];
@@ -388,16 +301,6 @@ extern NSString * const g_loginFileName;
                 alertView.tag = 2;
                 alertView.delegate = self;
                 [alertView show];
-            }
-                break;
-            case 3:
-            {
-                //性别禁止修改
-                return;
-//                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"选择性别" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"男",@"女", nil];
-//                alertView.tag = 3;
-//                alertView.delegate = self;
-//                [alertView show];
             }
                 break;
             case 4:
@@ -508,7 +411,7 @@ extern NSString * const g_loginFileName;
         [picker dismissViewControllerAnimated:YES completion:nil];
         
         updatedParamsDict[@"user_icon"] = [data base64EncodedStringWithOptions:0];
-        [self decideIfChange];
+        [self updateUserInfo];
     }
 }
 
@@ -527,11 +430,14 @@ extern NSString * const g_loginFileName;
 - (void)switchOn:(BOOL)isOn withIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row==5) {
-        [updatedParamsDict setValue:@(isOn) forKey:@"companySecret"];
-    } else if (indexPath.row==6) {
-        [updatedParamsDict setValue:@(isOn) forKey:@"industrySecret"];
+        if (isOn) {
+            [updatedParamsDict setValue:@"0000" forKey:@"secret_flag"];
+        } else {
+            [updatedParamsDict setValue:@"1000" forKey:@"secret_flag"];
+        }
+        
     }
-    [self decideIfChange];
+    [self updateUserInfo];
 }
 
 #pragma mark -UIAlertViewDelegate
@@ -546,7 +452,7 @@ extern NSString * const g_loginFileName;
                 NSString *newNickName = textField.text;
                 if (newNickName!=nil && newNickName.length!=0) {
                     updatedParamsDict[@"nick_name"] = newNickName;
-                    [self decideIfChange];
+                    [self updateUserInfo];
                 }
             }
         }
@@ -555,7 +461,7 @@ extern NSString * const g_loginFileName;
         {
             if (buttonIndex!=0) {
                 updatedParamsDict[@"sexual"] = [NSString stringWithFormat:@"%ld", (long)buttonIndex-1];
-                [self decideIfChange];
+                [self updateUserInfo];
             }
         }
             break;
@@ -563,7 +469,7 @@ extern NSString * const g_loginFileName;
         {
             if (buttonIndex!=0) {
                 updatedParamsDict[@"birthday"] = [UPTools dateString:datePicker.date withFormat:@"yyyyMMdd"];
-                [self decideIfChange];
+                [self updateUserInfo];
             }
         }
         default:
@@ -627,7 +533,6 @@ extern NSString * const g_loginFileName;
         [_quitBtn setTitle:@"请登录" forState:UIControlStateNormal];
         UPImageDetailCellItem *item = _itemList[0];
         
-        
         item.imageUrl = @"";
         NSIndexPath *idxPath = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tableView reloadRowsAtIndexPaths:@[idxPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -684,16 +589,11 @@ extern NSString * const g_loginFileName;
         NSDictionary *dict = (NSDictionary *)responseObject;
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
-            [self initParamsDict];
-            [self loadDefaultItemData:YES];
-        }
-        else
-        {
-            NSLog(@"%@", @"获取失败");
-        }
-        
+            [self userInfoRequest];
+            [MBProgressHUD showSuccess:@"资料更新成功"];
+        }        
     } failure:^(NSError *error) {
-        NSLog(@"%@",[error localizedDescription]);
+        [MBProgressHUD showSuccess:@"资料更新失败"];
     }];
 }
 @end

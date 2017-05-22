@@ -11,6 +11,10 @@
 #import "CityItem.h"
 #import "Info.h"
 
+#define kDataUserKey    @"user"
+#define kDataLoginKey   @"hasLogin"
+#define kDataTokenKey   @"token"
+
 NSString * const g_loginFileName = @"login.plist";
 
 @interface UPDataManager()
@@ -43,15 +47,15 @@ NSString * const g_loginFileName = @"login.plist";
     return self;
 }
 
-- (void)writeToDefaults:(UserData *)userData
+- (void)writeToDefaults
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:userData];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.userInfo];
     
-    [userDefaults setObject:data forKey:@"user"];
-    [userDefaults setBool:YES forKey:@"hasLogin"];
-    
+    [userDefaults setObject:data forKey:kDataUserKey];
+    [userDefaults setBool:YES forKey:kDataLoginKey];
+    [userDefaults setObject:self.token forKey:kDataTokenKey];
     
     [userDefaults synchronize];
 }
@@ -78,7 +82,7 @@ NSString * const g_loginFileName = @"login.plist";
 {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
-    NSData *data =  [userDefaults objectForKey:@"user"];
+    NSData *data =  [userDefaults objectForKey:kDataUserKey];
     
     if(data) {
         [NSKeyedUnarchiver unarchiveObjectWithData:data];
@@ -88,7 +92,8 @@ NSString * const g_loginFileName = @"login.plist";
             _userInfo = userData;
         }
     }
-    _isLogin = [userDefaults boolForKey:@"hasLogin"];
+    _isLogin = [userDefaults boolForKey:kDataLoginKey];
+    _token = [userDefaults stringForKey:kDataTokenKey];
     
     if (_isLogin) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierLogin object:nil];

@@ -268,7 +268,7 @@ static dispatch_queue_t message_manager_processing_queue() {
 
 - (void)requestMessages
 {
-    if (![UPDataManager shared].isLogin && self.isBackgound) {
+    if (![UPDataManager shared].isLogin || self.isBackgound) {
         return;
     }
     NSMutableDictionary *params = [NSMutableDictionary new];

@@ -1197,7 +1197,7 @@ static CGFloat const FixRatio = 4/3.0;
     
     
     if ([UPDataManager shared].isLogin) {
-        [newParamsDic setObject:[UPDataManager shared].userInfo.token forKey:@"token"];
+        [newParamsDic setObject:[UPDataManager shared].token forKey:@"token"];
         
         NSString *user_id = newParamsDic[@"user_id"];
         if (user_id==nil || user_id.length==0) {
