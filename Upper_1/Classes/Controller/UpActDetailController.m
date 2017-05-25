@@ -25,7 +25,8 @@
 #import "UPCustomAlertView.h"
 #import "MessageManager.h"
 #import "UPTipOffView.h"
-
+#import "CRNavigationController.h"
+#import "CRNavigationBar.h"
 #import "YMNetwork.h"
 
 #define kUPButtonTagJuBao       100
@@ -807,7 +808,7 @@
         UPFriendListController *inviteFriend = [[UPFriendListController alloc] init];
         inviteFriend.type = 0; //我的好友列表
         inviteFriend.delegate = self;
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:inviteFriend];
+        CRNavigationController *nav = [[CRNavigationController alloc] initWithRootViewController:inviteFriend];
         [self presentViewController:nav animated:YES completion:nil];
     } else if (sender.tag==kUPButtonTagFenXiang) {
     }

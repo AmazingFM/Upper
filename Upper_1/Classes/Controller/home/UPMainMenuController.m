@@ -66,27 +66,6 @@
     CRNavigationController *nav6 = [[CRNavigationController alloc] initWithRootViewController:myActVC];
     CRNavigationController *nav7 = [[CRNavigationController alloc] initWithRootViewController:ruleVC];
     
-    CRNavigationBar *navigationBar1 = (CRNavigationBar *)nav1.navigationBar;
-    CRNavigationBar *navigationBar2 = (CRNavigationBar *)nav2.navigationBar;
-    CRNavigationBar *navigationBar4 = (CRNavigationBar *)nav4.navigationBar;
-    CRNavigationBar *navigationBar5 = (CRNavigationBar *)nav5.navigationBar;
-    CRNavigationBar *navigationBar6 = (CRNavigationBar *)nav6.navigationBar;
-    CRNavigationBar *navigationBar7 = (CRNavigationBar *)nav7.navigationBar;
-    
-    [navigationBar1 displayColorLayer:YES];
-    [navigationBar2 displayColorLayer:YES];
-    [navigationBar4 displayColorLayer:YES];
-    [navigationBar5 displayColorLayer:YES];
-    [navigationBar6 displayColorLayer:YES];
-    [navigationBar7 displayColorLayer:YES];
-    
-    navigationBar1.barTintColor = kUPThemeMainColor;
-    navigationBar2.barTintColor = kUPThemeMainColor;
-    navigationBar4.barTintColor = kUPThemeMainColor;
-    navigationBar5.barTintColor = kUPThemeMainColor;
-    navigationBar6.barTintColor = kUPThemeMainColor;
-    navigationBar7.barTintColor = kUPThemeMainColor;
-    
     [self addChildViewController:nav1];
     [self addChildViewController:nav2];
     [self addChildViewController:nav4];

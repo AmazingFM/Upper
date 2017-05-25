@@ -8,6 +8,7 @@
 
 #import "CRNavigationController.h"
 #import "CRNavigationBar.h"
+#import "UPTheme.h"
 
 @interface CRNavigationController ()
 
@@ -27,6 +28,10 @@
     self = [super initWithNavigationBarClass:[CRNavigationBar class] toolbarClass:nil];
     if(self) {
         self.viewControllers = @[rootViewController];
+        
+        CRNavigationBar *navigationBar = (CRNavigationBar *)self.navigationBar;
+        [navigationBar displayColorLayer:YES];
+        navigationBar.barTintColor = kUPThemeMainColor;
     }
     
     return self;

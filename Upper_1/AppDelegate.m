@@ -15,8 +15,9 @@
 #import "CRNavigationController.h"
 
 #import "MessageManager.h"
+#import "WXApi.h"
 
-@interface AppDelegate ()
+@interface AppDelegate () <WXApiDelegate>
 @end
 
 @implementation AppDelegate
@@ -32,6 +33,8 @@
     self.window =[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
     initialize();
+    [WXApi registerApp:@"wx7ad66aed3e6a5a75"];
+    
     g_appDelegate = self;
     
     [self setRootViewController];
@@ -87,8 +90,21 @@
     [self.window makeKeyAndVisible];
 }
 
-- (void)test {
-    [UPTools stringFromQuotString:@""];
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    return [WXApi handleOpenURL:url delegate:self];
 }
 
+- (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url sourceApplication:(nullable NSString *)sourceApplication annotation:(nonnull id)annotation
+{
+    return [WXApi handleOpenURL:url delegate:self];
+}
+
+#pragma mark WXApiDelegate
+- (void)onReq:(BaseReq *)req{}
+
+- (void)onResp:(BaseResp *)resp
+{
+    
+}
 @end
