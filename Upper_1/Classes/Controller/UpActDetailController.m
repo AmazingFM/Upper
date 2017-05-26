@@ -28,6 +28,8 @@
 #import "CRNavigationController.h"
 #import "CRNavigationBar.h"
 #import "YMNetwork.h"
+#import "WXApiObject.h"
+#import "WXApiManager.h"
 
 #define kUPButtonTagJuBao       100
 #define kUPButtonTagYaoqing     101
@@ -568,7 +570,7 @@
 #define AlertTagEdit    0
 #define AlertTagCancel  1
 
-@interface UpActDetailController () <UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, UPFriendListDelegate,UPCustomAlertViewDelegate>
+@interface UpActDetailController () <UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, UPFriendListDelegate,UPCustomAlertViewDelegate,UIActionSheetDelegate>
 {
     UITableView *_tableView;
     UIButton *_submitBtn;
@@ -811,6 +813,8 @@
         CRNavigationController *nav = [[CRNavigationController alloc] initWithRootViewController:inviteFriend];
         [self presentViewController:nav animated:YES completion:nil];
     } else if (sender.tag==kUPButtonTagFenXiang) {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"分享给朋友", @"分享到朋友圈", nil];
+        [actionSheet showInView:self.view];
     }
 }
 
@@ -995,6 +999,17 @@
         NSLog(@"%@",error);
         
     }];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex==0) {
+        [[WXApiManager sharedManager] sendLinkURL:@"http://www.uppercn.com" TagName:@"UPPER上行" Title:@"我发现了一个活动" Description:@"活动类型：xxxx" ThumbImageName:@"default_activity_101" InScene:WXSceneSession];
+    } else if (buttonIndex==1) {
+        [[WXApiManager sharedManager] sendLinkURL:@"http://www.uppercn.com" TagName:@"UPPER上行" Title:@"我发现了一个活动" Description:@"活动类型：xxxx" ThumbImageName:@"default_activity_101" InScene:WXSceneTimeline];
+    } else {
+        //取消
+    }
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

@@ -270,6 +270,14 @@
 		853053841EC6842F00B3CF43 /* UPTipOffView.m in Sources */ = {isa = PBXBuildFile; fileRef = 853053831EC6842F00B3CF43 /* UPTipOffView.m */; };
 		8530538B1ED70C7100B3CF43 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 853053861ED70C7100B3CF43 /* libWeChatSDK.a */; };
 		8530538C1ED70C7100B3CF43 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 853053871ED70C7100B3CF43 /* README.txt */; };
+		8530538E1ED87DEF00B3CF43 /* Icon-57@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8530538D1ED87DEF00B3CF43 /* Icon-57@2x.png */; };
+		853053901ED883EE00B3CF43 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8530538F1ED883EE00B3CF43 /* CFNetwork.framework */; };
+		853053921ED883F400B3CF43 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853053911ED883F400B3CF43 /* Security.framework */; };
+		853053941ED8840100B3CF43 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853053931ED8840100B3CF43 /* CoreTelephony.framework */; };
+		853053961ED8840F00B3CF43 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 853053951ED8840F00B3CF43 /* SystemConfiguration.framework */; };
+		853053981ED8842600B3CF43 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 853053971ED8842600B3CF43 /* libz.tbd */; };
+		8530539A1ED8844300B3CF43 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 853053991ED8844300B3CF43 /* libc++.tbd */; };
+		8530539D1ED8858400B3CF43 /* WXApiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8530539C1ED8858400B3CF43 /* WXApiManager.m */; };
 		8555DE381EB8C4F80012F162 /* CRNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8555DE351EB8C4F80012F162 /* CRNavigationBar.m */; };
 		8555DE391EB8C4F80012F162 /* CRNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8555DE371EB8C4F80012F162 /* CRNavigationController.m */; };
 		8555DE581EBCC62E0012F162 /* default_activity_101@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8555DE3B1EBCC62E0012F162 /* default_activity_101@2x.png */; };
@@ -820,6 +828,15 @@
 		853053881ED70C7100B3CF43 /* WechatAuthSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatAuthSDK.h; sourceTree = "<group>"; };
 		853053891ED70C7100B3CF43 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
 		8530538A1ED70C7100B3CF43 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		8530538D1ED87DEF00B3CF43 /* Icon-57@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-57@2x.png"; sourceTree = "<group>"; };
+		8530538F1ED883EE00B3CF43 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		853053911ED883F400B3CF43 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		853053931ED8840100B3CF43 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		853053951ED8840F00B3CF43 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		853053971ED8842600B3CF43 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		853053991ED8844300B3CF43 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		8530539B1ED8858400B3CF43 /* WXApiManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiManager.h; sourceTree = "<group>"; };
+		8530539C1ED8858400B3CF43 /* WXApiManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXApiManager.m; sourceTree = "<group>"; };
 		8555DE341EB8C4F80012F162 /* CRNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRNavigationBar.h; sourceTree = "<group>"; };
 		8555DE351EB8C4F80012F162 /* CRNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRNavigationBar.m; sourceTree = "<group>"; };
 		8555DE361EB8C4F80012F162 /* CRNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRNavigationController.h; sourceTree = "<group>"; };
@@ -1017,6 +1034,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8530539A1ED8844300B3CF43 /* libc++.tbd in Frameworks */,
+				853053981ED8842600B3CF43 /* libz.tbd in Frameworks */,
+				853053961ED8840F00B3CF43 /* SystemConfiguration.framework in Frameworks */,
+				853053941ED8840100B3CF43 /* CoreTelephony.framework in Frameworks */,
+				853053921ED883F400B3CF43 /* Security.framework in Frameworks */,
+				853053901ED883EE00B3CF43 /* CFNetwork.framework in Frameworks */,
 				8530538B1ED70C7100B3CF43 /* libWeChatSDK.a in Frameworks */,
 				3A08464F1D619D6800170C64 /* libsqlite3.0.tbd in Frameworks */,
 			);
@@ -1467,6 +1490,12 @@
 		3A08464D1D619D3900170C64 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				853053991ED8844300B3CF43 /* libc++.tbd */,
+				853053971ED8842600B3CF43 /* libz.tbd */,
+				853053951ED8840F00B3CF43 /* SystemConfiguration.framework */,
+				853053931ED8840100B3CF43 /* CoreTelephony.framework */,
+				853053911ED883F400B3CF43 /* Security.framework */,
+				8530538F1ED883EE00B3CF43 /* CFNetwork.framework */,
 				3A08464E1D619D6800170C64 /* libsqlite3.0.tbd */,
 			);
 			name = Frameworks;
@@ -1506,6 +1535,7 @@
 		3A71CB3A1E26267700EBE0A2 /* pic */ = {
 			isa = PBXGroup;
 			children = (
+				8530538D1ED87DEF00B3CF43 /* Icon-57@2x.png */,
 				3AF680431EC15021007D3B91 /* icon_setting@2x.png */,
 				3AF6803B1EC14F69007D3B91 /* icon_msg_change_launcher@2x.png */,
 				3AF6803C1EC14F69007D3B91 /* icon_msg_change_launcher@3x.png */,
@@ -1975,6 +2005,8 @@
 				2C38F9641D1FE386002CF240 /* UPBaseItem.m */,
 				3A6668881E6D09DB00CD7CCC /* UPFriendItem.h */,
 				3A6668891E6D09DB00CD7CCC /* UPFriendItem.m */,
+				8530539B1ED8858400B3CF43 /* WXApiManager.h */,
+				8530539C1ED8858400B3CF43 /* WXApiManager.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2326,6 +2358,7 @@
 				3A6944CD1E51615F00F1BEF5 /* messageComment@2x.png in Resources */,
 				85DE92F61E8C06C7007D8FA6 /* icon-camera@2x.png in Resources */,
 				8555DE5B1EBCC62E0012F162 /* default_activity_104@2x.png in Resources */,
+				8530538E1ED87DEF00B3CF43 /* Icon-57@2x.png in Resources */,
 				8555DE601EBCC62E0012F162 /* default_activity_203@2x.png in Resources */,
 				8555DE6E1EBCC62E0012F162 /* default_activity_403@2x.png in Resources */,
 				3A71CBA51E26267700EBE0A2 /* checkbox.png in Resources */,
@@ -2399,6 +2432,7 @@
 				2CDAD6591D0EEC4000C260F4 /* MJRefreshConst.m in Sources */,
 				EC3C187E1CECB16D00223D6B /* ButtonGroupView.m in Sources */,
 				2CDAD4FD1D0ED8A900C260F4 /* UUImageAvatarBrowser.m in Sources */,
+				8530539D1ED8858400B3CF43 /* WXApiManager.m in Sources */,
 				3A91CCEA1E62FBFC00EBEF58 /* PrivateMsgCell.m in Sources */,
 				2CDAD6621D0EEC4000C260F4 /* SDCollectionViewCell.m in Sources */,
 				EC3C18841CECB16D00223D6B /* CustomField.m in Sources */,

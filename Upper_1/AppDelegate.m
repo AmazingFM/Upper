@@ -15,9 +15,9 @@
 #import "CRNavigationController.h"
 
 #import "MessageManager.h"
-#import "WXApi.h"
+#import "WXApiManager.h"
 
-@interface AppDelegate () <WXApiDelegate>
+@interface AppDelegate ()
 @end
 
 @implementation AppDelegate
@@ -92,19 +92,12 @@
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
-    return [WXApi handleOpenURL:url delegate:self];
+    return [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url sourceApplication:(nullable NSString *)sourceApplication annotation:(nonnull id)annotation
 {
-    return [WXApi handleOpenURL:url delegate:self];
+    return [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
 }
 
-#pragma mark WXApiDelegate
-- (void)onReq:(BaseReq *)req{}
-
-- (void)onResp:(BaseResp *)resp
-{
-    
-}
 @end
