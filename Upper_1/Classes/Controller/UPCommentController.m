@@ -540,7 +540,7 @@ static const int textViewContentHeight = 150;
                 NSString *resp_desc = respDict[@"resp_desc"];
                 
                 [MBProgressHUD showSuccess:resp_desc];
-                [self.navigationController popViewControllerAnimated:YES];
+                [self commentSuccess];
             }
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             [MBProgressHUD showError:@"网络错误"];
@@ -564,7 +564,7 @@ static const int textViewContentHeight = 150;
             NSDictionary *dict = (NSDictionary *)json;
             NSString *resp_desc = dict[@"resp_desc"];
             [MBProgressHUD showSuccess:resp_desc];
-            [self.navigationController popViewControllerAnimated:YES];
+            [self commentSuccess];
         } failure:^(NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [MBProgressHUD showError:@"网络错误"];
@@ -592,7 +592,7 @@ static const int textViewContentHeight = 150;
             if ([resp_id intValue]==0) {
                 NSString *resp_desc = dict[@"resp_desc"];
                 [MBProgressHUD showSuccess:resp_desc];
-                [self.navigationController popViewControllerAnimated:YES];
+                [self commentSuccess];
             }
             else
             {
@@ -606,6 +606,14 @@ static const int textViewContentHeight = 150;
             });
         }];
     }
+}
+
+- (void)commentSuccess
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(commentSuccess)]) {
+        [self.delegate commentSuccess];
+    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{

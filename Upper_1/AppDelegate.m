@@ -17,6 +17,9 @@
 #import "MessageManager.h"
 #import "WXApiManager.h"
 
+#pragma mark
+#import "GetPasswordController.h"
+
 @interface AppDelegate ()
 @end
 
@@ -56,6 +59,9 @@
 
 - (void)setRootViewController
 {
+    [self testViewController];
+    return;
+    
     //判断是不是第一次启动应用
     if(![[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"])
     {
@@ -67,7 +73,6 @@
     else
     {
         NSLog(@"不是第一次启动");
-        
         //如果不是第一次启动的话,使用LoginViewController作为根视图
         if (![UPDataManager shared].isLogin) {
             UpLoginController *login = [[UpLoginController alloc] init];
@@ -100,4 +105,9 @@
     return [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
 }
 
+- (void)testViewController
+{
+    GetPasswordController *testVC = [[GetPasswordController alloc] init];
+    self.window.rootViewController = testVC;
+}
 @end

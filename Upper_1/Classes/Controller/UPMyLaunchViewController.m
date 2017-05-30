@@ -26,7 +26,7 @@
 #import "YMNetwork.h"
 #import "MessageManager.h"
 
-@interface UPMyLaunchViewController () <UPFriendListDelegate>
+@interface UPMyLaunchViewController () <UPFriendListDelegate, UPCommentDelegate>
 {
     ActivityData *selectedActData;
 }
@@ -173,6 +173,7 @@
         UPCommentController *commentController = [[UPCommentController alloc]init];
         commentController.actID = cellItem.itemData.ID;
         commentController.title=@"我要回顾";
+        commentController.delegate = self;
         commentController.type = UPCommentTypeReview;
         
 //        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:commentController];
@@ -247,6 +248,11 @@
     } failure:^(NSError *error) {
         [MBProgressHUD showError:@"发送消息失败，请重新操作"];
     }];
+}
+
+- (void)commentSuccess
+{
+    [self refresh];
 }
 
 @end

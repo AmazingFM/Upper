@@ -9,5 +9,4 @@
 #import "UPBaseViewController.h"
 
 @interface UPGoShareController : UPBaseViewController
-
 @end

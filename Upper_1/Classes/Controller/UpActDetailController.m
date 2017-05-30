@@ -28,7 +28,6 @@
 #import "CRNavigationController.h"
 #import "CRNavigationBar.h"
 #import "YMNetwork.h"
-#import "WXApiObject.h"
 #import "WXApiManager.h"
 
 #define kUPButtonTagJuBao       100

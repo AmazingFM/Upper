@@ -7,6 +7,8 @@
 //
 
 #import "WXApiManager.h"
+#import "UPGlobals.h"
+#import "MBProgressHUD+MJ.h"
 
 @implementation WXApiManager
 
@@ -27,26 +29,30 @@
          ThumbImageName:(NSString *)thumbImageName
             InScene:(enum WXScene)scene
 {
-    UIImage *thumbImage = [UIImage imageNamed:thumbImageName];
-    
-    WXWebpageObject *ext = [WXWebpageObject object];
-    ext.webpageUrl = urlString;
-    
-    WXMediaMessage *message = [WXMediaMessage message];
-    message.title = title;
-    message.description = description;
-    message.mediaObject = ext;
-    message.messageExt = nil;
-    message.messageAction = nil;
-    message.mediaTagName = tagName;
-    [message setThumbImage:thumbImage];
-    
-    SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
-    req.bText = NO;
-    req.message = message;
-    req.scene = scene;
-    
-    [WXApi sendReq:req];
+    if ([WXApi isWXAppInstalled]) {
+        UIImage *thumbImage = [UIImage imageNamed:thumbImageName];
+        
+        WXWebpageObject *ext = [WXWebpageObject object];
+        ext.webpageUrl = urlString;
+        
+        WXMediaMessage *message = [WXMediaMessage message];
+        message.title = title;
+        message.description = description;
+        message.mediaObject = ext;
+        message.messageExt = nil;
+        message.messageAction = nil;
+        message.mediaTagName = tagName;
+        [message setThumbImage:thumbImage];
+        
+        SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
+        req.bText = NO;
+        req.message = message;
+        req.scene = scene;
+        
+        [WXApi sendReq:req];
+    } else {
+        [MBProgressHUD showError:@"未检测到微信"];
+    }
 }
 
 

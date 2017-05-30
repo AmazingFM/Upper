@@ -43,7 +43,14 @@ typedef NS_ENUM(NSInteger, UPCommentType) {
 - (void)reloadData;
 @end
 
+@protocol UPCommentDelegate <NSObject>
+
+- (void)commentSuccess;
+
+@end
+
 @interface UPCommentController : UPBaseViewController <UPCommentUserDelegate, UPCommentUserDatasource>
 @property (nonatomic, copy) NSString *actID;
 @property (nonatomic) UPCommentType type; //0-我要回顾， 1-我要评论
+@property (nonatomic, weak) id<UPCommentDelegate> delegate;
 @end

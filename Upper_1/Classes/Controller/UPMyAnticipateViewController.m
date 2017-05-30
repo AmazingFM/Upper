@@ -18,7 +18,7 @@
 #import "UPActivityCellItem.h"
 #import "UPCommentController.h"
 #import "YMNetwork.h"
-@interface UPMyAnticipateViewController ()
+@interface UPMyAnticipateViewController () <UPCommentDelegate>
 
 @end
 
@@ -157,7 +157,7 @@
         commentController.actID = cellItem.itemData.ID;
         commentController.title = (type==kUPActCommentTag)?@"活动评论":@"活动投诉";
         commentController.type = (type==kUPActCommentTag)?UPCommentTypeComment:UPCommentTypeComplain;
-        
+        commentController.delegate = self;
         //2.设置导航栏barButton上面文字的颜色
         UIBarButtonItem *item=[UIBarButtonItem appearance];
         [item setTintColor:[UIColor whiteColor]];
@@ -169,6 +169,12 @@
         [self.navigationController.view.layer addAnimation:transition forKey:kCATransition];
         [self.navigationController pushViewController:commentController animated:NO];
     }
+}
+
+
+- (void)commentSuccess
+{
+    [self refresh];
 }
 
 @end

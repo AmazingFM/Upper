@@ -21,6 +21,12 @@
 #import "UPGlobals.h"
 #import "YMNetWork.h"
 #import "UPConfig.h"
+#import "UPFriendListController.h"
+#import "CRNavigationController.h"
+#import "CRNavigationBar.h"
+#import "MBProgressHUD+MJ.h"
+#import "MessageManager.h"
+#import "WXApiManager.h"
 
 #define kUPFilePostURL @"http://api.qidianzhan.com.cn/AppServ/index.php?a=ActivityAdd"
 
@@ -165,6 +171,8 @@ static CGFloat const FixRatio = 4/3.0;
     BOOL malePay;
     
     BOOL waiting;
+    
+    NSMutableDictionary *actParams;
 }
 @property (nonatomic, retain) NSMutableArray *itemList;
 @end
@@ -184,6 +192,7 @@ static CGFloat const FixRatio = 4/3.0;
     waiting = NO;
     
     self.navigationItem.title = @"发起活动";
+    actParams = [NSMutableDictionary new];
     
     if (self.type==ActOperTypeLaunch) {
         self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:nil target:self action:@selector(leftClick)];
@@ -853,7 +862,7 @@ static CGFloat const FixRatio = 4/3.0;
 {
     if (alertView.tag ==1000) {
         if (buttonIndex==1) {
-            [self jumpToMyAct];
+            [self showLaunchResultView];
         }
         waiting = NO;
     }
@@ -872,10 +881,7 @@ static CGFloat const FixRatio = 4/3.0;
     if([cellItem.key isEqualToString:@"submit"]){
         if (waiting) {
             return;
-        } else {
-            waiting = YES;
         }
-        
         //industry_id, province_code, city_code, town_code, limit_count, limit_low
         NSArray *paramKey = @[@"activity_name", @"activity_desc", @"end_time", @"start_time", @"activity_place_code", @"activity_place", @"is_prepaid", @"industry_id", @"clothes_need"];
         
@@ -954,6 +960,10 @@ static CGFloat const FixRatio = 4/3.0;
         NSString *begin_time = [formatter stringFromDate:[NSDate date]];
         [params setObject:begin_time forKey:@"begin_time"];
         
+        {
+            waiting = YES;
+        }
+
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         //申明请求的数据是json类型
         //manager.requestSerializer.HTTPMethodsEncodingParametersInURI = [NSSet setWithArray:@[@"POST", @"GET", @"HEAD"]];
@@ -976,6 +986,11 @@ static CGFloat const FixRatio = 4/3.0;
                     self.actData = nil;
                     [self setNewData];
                     [_tableView reloadData];
+                    
+                    [actParams removeAllObjects];
+                    [actParams addEntriesFromDictionary:params];
+                    NSDictionary *respData = respDict[@"resp_data"];
+                    [actParams setObject:respData[@"activity_id"] forKey:@"ID"];
                     showConfirmTagAlert(@"提示", @"活动发起成功，如需修改变更或取消，请点击活动规则查看相关规则和操作方式。", self, 1000);
                 } else {
                     showDefaultAlert(@"提示", respDict[@"resp_desc"]);
@@ -1222,5 +1237,181 @@ static CGFloat const FixRatio = 4/3.0;
     newParamsDic[@"a"] = actionName;
     return newParamsDic;
 }
+
+- (void)showLaunchResultView
+{
+    LaunchActivityResultController *resultVC = [[LaunchActivityResultController alloc] init];
+    resultVC.actData = [[ActivityData alloc] initWithDict:actParams];
+    [self.navigationController pushViewController:resultVC animated:YES];
+}
+@end
+
+@interface LaunchActivityResultController()  <UPFriendListDelegate,UIActionSheetDelegate>
+
+@end
+
+@implementation LaunchActivityResultController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.navigationItem.title = @"发起活动成功";
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    UIImageView *successImageV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon-success"]];
+    successImageV.frame = CGRectMake(ScreenWidth/2-20, FirstLabelHeight+30, 40, 40);
+    successImageV.contentMode = UIViewContentModeScaleToFill;
+    
+    [self.view addSubview:successImageV];
+    
+    
+    UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(successImageV.frame)+20, ScreenWidth, 50)];
+    descLabel.backgroundColor = [UIColor clearColor];
+    descLabel.font = [UIFont boldSystemFontOfSize:18.f];
+    descLabel.textColor = [UIColor blackColor];
+    descLabel.textAlignment = NSTextAlignmentCenter;
+    descLabel.numberOfLines = 0;
+    descLabel.text = @"恭喜您发起活动成功！\n点击\"分享\"或\"邀请好友\"让更多人参与吧！";
+    [self.view addSubview:descLabel];
+
+    CGSize size = [UPTools sizeOfString:@"查看详情" withWidth:320 font:[UIFont systemFontOfSize:15.f]];
+    UIButton *detailBtn = [self createButton:CGRectMake(ScreenWidth/2-30-size.width, CGRectGetMaxY(descLabel.frame)+20, size.width+20, size.height+8) imageName:nil title:@"查看详情"];
+    detailBtn.tag = 1000;
+    detailBtn.layer.cornerRadius = 5.f;
+    detailBtn.layer.masksToBounds = YES;
+    detailBtn.layer.borderColor = kUPThemeLineColor.CGColor;
+    detailBtn.layer.borderWidth = 0.6f;
+    
+    UIButton *inviteBtn = [self createButton:CGRectMake(ScreenWidth/2+10, CGRectGetMaxY(descLabel.frame)+20, size.width+20, size.height+8) imageName:nil title:@"邀请好友"];
+    inviteBtn.tag = 1001;
+    inviteBtn.layer.cornerRadius = 5.f;
+    inviteBtn.layer.masksToBounds = YES;
+    inviteBtn.layer.borderColor = kUPThemeLineColor.CGColor;
+    inviteBtn.layer.borderWidth = 0.6f;
+
+    
+    UIButton *shareBtn = [self createButton:CGRectMake(10, CGRectGetMaxY(detailBtn.frame)+20, ScreenWidth-20, 30) imageName:@"icon_wx_session" title:@"分享到微信"];
+    shareBtn.titleLabel.font = [UIFont systemFontOfSize:13.f];
+    shareBtn.tag = 1002;
+    
+    [self.view addSubview:detailBtn];
+    [self.view addSubview:inviteBtn];
+    [self.view addSubview:shareBtn];
+    
+    self.navigationItem.hidesBackButton = YES;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
+}
+
+- (UIButton *)createButton:(CGRect)frame imageName:(NSString *)imageName title:(NSString *)title
+{
+    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    shareBtn.frame = frame;
+    shareBtn.backgroundColor = [UIColor clearColor];
+    [shareBtn setTitle:title forState:UIControlStateNormal];
+    shareBtn.titleLabel.font = [UIFont systemFontOfSize:15.f];
+    [shareBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [shareBtn addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [shareBtn setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    [shareBtn setImage:[UIImage imageNamed:imageName] forState:UIControlStateHighlighted];
+    shareBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+    return shareBtn;
+}
+
+- (void)buttonClick:(UIButton *)sender
+{
+    if (sender.tag == 1000) {
+        [self jumpToMyAct];
+    } else if (sender.tag == 1001) {
+        [self inviteFriend];
+    } else if (sender.tag == 1002) {
+        [self shareToWX];
+    }
+}
+
+- (void)shareToWX
+{
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"分享给朋友", @"分享到朋友圈", nil];
+    [actionSheet showInView:self.view];
+}
+
+- (void)inviteFriend
+{
+    UPFriendListController *inviteFriend = [[UPFriendListController alloc] init];
+    inviteFriend.type = 0; //我的好友列表
+    inviteFriend.delegate = self;
+    CRNavigationController *nav = [[CRNavigationController alloc] initWithRootViewController:inviteFriend];
+    [self presentViewController:nav animated:YES completion:nil];
+
+}
+
+- (void)cancel
+{
+    [self jumpToMyAct];
+}
+
+- (void)jumpToMyAct
+{
+    [g_homeMenu switchController:4];//4跳转到我发起的活动
+    [self.navigationController popToRootViewControllerAnimated:NO];
+}
+
+#pragma mark UPInviteFriendDelegate
+- (void)inviteFriends:(NSArray *)friendId
+{
+    if (friendId.count==0) {
+        return;
+    }
+    [self sendInvitation:friendId];
+}
+
+- (void)sendInvitation:(NSArray *)friendIds
+{
+    __block int count = 0;
+    
+    //activity_name-活动名称,activity_class-活动类型, start_time-活动开始时间，ID-活动id，nick_name-发起人昵称
+    NSDictionary *actDataDict = @{@"activity_name":self.actData.activity_name,@"activity_class":self.actData.activity_class,@"start_time":self.actData.start_time,@"id":self.actData.ID, @"nick_name":self.actData.nick_name};
+    
+    NSString *msgDesc = [UPTools stringFromJSON:actDataDict];
+    
+    for (NSString *to_id in friendIds) {
+        NSMutableDictionary *params = [NSMutableDictionary new];
+        [params setValue:@"MessageSend" forKey:@"a"];
+        [params setValue:[UPDataManager shared].userInfo.ID forKey:@"from_id"];
+        [params setValue:to_id forKey:@"to_id"];
+        
+        UPServerMsgType msgType = ServerMsgTypeInviteFriend;
+        [params setValue:[@(msgType) stringValue] forKey:@"message_type"];
+        [params setValue:msgDesc forKey:@"message_desc"];
+        [params setValue:@"" forKey:@"expire_time"];
+        
+        [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+            
+            NSDictionary *dict = (NSDictionary *)responseObject;
+            NSLog(@"MessageSend, %@", dict);
+            NSString *resp_id = dict[@"resp_id"];
+            if ([resp_id intValue]==0) {
+                [MBProgressHUD showSuccess:@"已发送邀请给对方"];
+                count++;
+            } else {
+                count++;
+            }
+        } failure:^(NSError *error) {
+            [MBProgressHUD showError:@"发送消息失败，请重新操作"];
+            count++;
+        }];
+    }
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex==0) {
+        [[WXApiManager sharedManager] sendLinkURL:@"http://www.uppercn.com" TagName:@"UPPER上行" Title:@"我发起了一个活动" Description:@"活动类型：xxxx" ThumbImageName:@"default_activity_101" InScene:WXSceneSession];
+    } else if (buttonIndex==1) {
+        [[WXApiManager sharedManager] sendLinkURL:@"http://www.uppercn.com" TagName:@"UPPER上行" Title:@"我发起了一个活动" Description:@"活动类型：xxxx" ThumbImageName:@"default_activity_101" InScene:WXSceneTimeline];
+    } else {
+        //取消
+    }
+}
+
 @end
 

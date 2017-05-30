@@ -89,6 +89,8 @@
     comPhoneField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, frame.size.width-2*LeftRightPadding-size.width, size.height)];
     [comPhoneField setFont:[UIFont systemFontOfSize:15.0]];
     comPhoneField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    comPhoneField.autocorrectionType = UITextAutocorrectionTypeNo;
+    comPhoneField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     comPhoneField.delegate = self;
     
     _seperatorV3 = [[UIView alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY+size.height+1, frame.size.width-2*LeftRightPadding, 1)];
@@ -191,6 +193,8 @@
     _emailField = [[UITextField alloc]init];
     [_emailField setFont:[UIFont systemFontOfSize:15.0]];
     _emailField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _emailField.autocorrectionType = UITextAutocorrectionTypeNo;
+    _emailField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     _emailField.delegate = self;
         
     _seperatorV = [[UIImageView alloc]init];
@@ -587,6 +591,7 @@
             _smsText = @"";
             UIAlertView *alertViiew = [[UIAlertView alloc] initWithTitle:@"提示" message:@"获取验证码失败，请重新获取一次" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
             [alertViiew show];
+            [self stopTimer];
         }
         
     } failure:^(NSError *error) {

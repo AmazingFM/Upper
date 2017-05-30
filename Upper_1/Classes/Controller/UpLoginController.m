@@ -30,7 +30,6 @@
 
 @interface UpLoginController () <UITextFieldDelegate, UIGestureRecognizerDelegate>
 {
-//    UIImage *_2weimaImage;
     NSString *userName;
     NSString *password;
     

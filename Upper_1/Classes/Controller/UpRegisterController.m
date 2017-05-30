@@ -390,9 +390,9 @@ typedef enum register_enum
                 }
                 case REGISTER_REQ:
                 {
-                    NSString *resp_desc = dict[@"resp_desc"];
-                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"注册成功" message:resp_desc delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-                    [alertView show];
+//                    NSString *resp_desc = dict[@"resp_desc"];
+//                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"注册成功" message:resp_desc delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+//                    [alertView show];
                     
                     UPGoShareController *shareVC = [[UPGoShareController alloc] init];
                     [self.navigationController pushViewController:shareVC animated:YES];

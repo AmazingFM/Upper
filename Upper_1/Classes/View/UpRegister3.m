@@ -86,7 +86,7 @@
     _mainTableView.delegate = self;
     _mainTableView.dataSource = self;
     
-    _gouImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"gou"]];
+    _gouImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Selected"]];
     [_gouImage setSize:CGSizeMake(10, 10)];
     [_gouImage setCenter:CGPointMake(-100, -100)];
     

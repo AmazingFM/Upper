@@ -29,3 +29,7 @@ typedef NS_ENUM(NSInteger, ActOperType) {
 @property (nonatomic) ActOperType type;
 @property (nonatomic, retain) ActivityData *actData;
 @end
+
+@interface LaunchActivityResultController : UPBaseViewController
+@property (nonatomic, retain) ActivityData *actData;
+@end
