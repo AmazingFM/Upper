@@ -43,13 +43,21 @@
     
     UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(successImageV.frame)+20, ScreenWidth, 30)];
     descLabel.backgroundColor = [UIColor clearColor];
-    descLabel.font = [UIFont boldSystemFontOfSize:18.f];
+    descLabel.font = [UIFont boldSystemFontOfSize:24];
     descLabel.textColor = [UIColor blackColor];
     descLabel.textAlignment = NSTextAlignmentCenter;
     descLabel.text = @"恭喜您成功注册UPPER账户";
     [self.view addSubview:descLabel];
+    
+    UILabel *descLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(0,  CGRectGetMaxY(descLabel.frame)+5, ScreenWidth, 30)];
+    descLabel1.backgroundColor = [UIColor clearColor];
+    descLabel1.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:18];
+    descLabel1.textColor = [UIColor blackColor];
+    descLabel1.textAlignment = NSTextAlignmentCenter;
+    descLabel1.text = @"验证通过后，您会收到激活邮件/短信";
+    [self.view addSubview:descLabel1];
 
-    UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,  CGRectGetMaxY(descLabel.frame)+30, ScreenWidth, 30)];
+    UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,  CGRectGetMaxY(descLabel1.frame)+30, ScreenWidth, 30)];
     tipsLabel.backgroundColor = [UIColor clearColor];
     tipsLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:24];
     tipsLabel.textColor = [UIColor blackColor];

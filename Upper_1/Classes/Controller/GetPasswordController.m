@@ -10,6 +10,7 @@
 #import "MainController.h"
 #import "YMImageButton.h"
 #import "YMNetwork.h"
+#import "MBProgressHUD+MJ.h"
 
 @interface GetPasswordController ()
 {
@@ -21,13 +22,20 @@
     UIView *stepTwoView;
     UIView *stepThreeView;
     
+    UILabel *descLabel;
+    UILabel *mailLabel;
     UITextField *mailField;
     UITextField *codeField;
     UIButton *codeBtn;
     
+    UITextField *newPassField;
+    UITextField *confirmPassField;
+    
     NSTimer *_timer;
     int interval;
-    NSString *verifyCode;
+    
+    NSString *user_name;
+    NSString *verify_code;
 }
 @end
 
@@ -35,6 +43,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     // Do any additional setup after loading the view.
     self.navigationItem.title = @"找回密码";
     UIImageView *backImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_cover_gaussian"]];
@@ -57,7 +66,18 @@
     [mainScrollView addSubview:stepTwoView];
     [mainScrollView addSubview:stepThreeView];
     
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
+    singleTap.numberOfTouchesRequired = 1;
+    singleTap.numberOfTapsRequired = 1;
+    [mainScrollView addGestureRecognizer:singleTap];
+    
     [self.view addSubview:mainScrollView];
+}
+
+- (void)singleTap:(UIGestureRecognizer *)gesture
+{
+    [mailField resignFirstResponder];
+    [codeField resignFirstResponder];
 }
 
 - (void)configStepOneView
@@ -83,31 +103,33 @@
 
 - (void)configStepTwoView
 {
-    float paddingY = 20;
+    float paddingY = 30;
     if (stepTwoView==nil) {
         stepTwoView = [[UIView alloc] initWithFrame:CGRectMake(ScreenWidth, 0, ScreenWidth, ScreenHeight-FirstLabelHeight)];
 
         NSString *descStr = @"温馨提醒：请输入您注册时填写的行业邮箱地址，系统在验证该邮箱后会发送验证码到该邮箱。";
-//        NSString *descStr = @"温馨提醒：请输入您注册时填写的手机号，系统在验证该手机号后会发送验证码到该手机。";
         CGSize size = [UPTools sizeOfString:descStr withWidth:ScreenWidth-20 font:[UIFont systemFontOfSize:15.f]];
-        UILabel *descLabel = [self createLabel:CGRectMake(10, 20, ScreenWidth-20, size.height) title:descStr];
+        descLabel = [self createLabel:CGRectMake(10, 20, ScreenWidth-20, size.height) title:descStr];
         descLabel.numberOfLines = 0;
         
         size = [UPTools sizeOfString:@"行业邮箱：" withWidth:ScreenWidth-20 font:[UIFont systemFontOfSize:15.f]];
-        UILabel *mailLabel = [self createLabel:CGRectMake(20, CGRectGetMaxY(descLabel.frame)+paddingY, size.width, size.height) title:@"行业邮箱："];
+        size.height += 10;
+        
+        mailLabel = [self createLabel:CGRectMake(20, CGRectGetMaxY(descLabel.frame)+paddingY, size.width, size.height) title:@"行业邮箱："];
         mailField = [self createField:CGRectMake(CGRectGetMaxX(mailLabel.frame)+5, mailLabel.origin.y, ScreenWidth-20-CGRectGetMaxX(mailLabel.frame), size.height)];
         UIView *mailLine = [[UIView alloc] initWithFrame:CGRectMake(mailField.origin.x, CGRectGetMaxY(mailField.frame), mailField.width, 0.6)];
         mailLine.backgroundColor = kUPThemeLineColor;
         
         UILabel *codeLabel = [self createLabel:CGRectMake(20, CGRectGetMaxY(mailLabel.frame)+paddingY, size.width, size.height) title:@"验证码："];
-        codeField = [self createField:CGRectMake(CGRectGetMaxX(codeLabel.frame)+5, codeLabel.origin.y, ScreenWidth-20-CGRectGetMaxX(codeLabel.frame)-45, size.height)];
+        codeField = [self createField:CGRectMake(CGRectGetMaxX(codeLabel.frame)+5, codeLabel.origin.y, ScreenWidth-20-CGRectGetMaxX(codeLabel.frame)-55, size.height)];
+        codeField.keyboardType = UIKeyboardTypeNumberPad;
         UIView *codeLine = [[UIView alloc] initWithFrame:CGRectMake(codeField.origin.x, CGRectGetMaxY(codeField.frame), codeField.width, 0.6)];
         codeLine.backgroundColor = kUPThemeLineColor;
-        codeBtn = [self createButton:CGRectMake(ScreenWidth-20-40, codeLabel.origin.y, 40, size.height) imageName:nil title:@"获取"];
+        codeBtn = [self createButton:CGRectMake(ScreenWidth-20-50, codeLabel.origin.y-10, 50, size.height+10) imageName:nil title:@"获取"];
         codeBtn.backgroundColor = kUPThemeMainColor;
         [codeBtn addTarget:self action:@selector(getVerify:) forControlEvents:UIControlEventTouchUpInside];
         
-        UIButton *nextStep = [self createButton:CGRectMake(ScreenWidth-20-40, codeLabel.origin.y, 40, size.height) imageName:nil title:@"下一步"];
+        UIButton *nextStep = [self createButton:CGRectMake(20, CGRectGetMaxY(codeLine.frame)+paddingY, ScreenWidth-40, size.height) imageName:nil title:@"下一步"];
         nextStep.backgroundColor = kUPThemeMainColor;
         [nextStep addTarget:self action:@selector(nextStep:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -127,20 +149,27 @@
 
 - (void)configStepThreeView
 {
-    float paddingY = 20;
-    if (stepTwoView==nil) {
+    float paddingY = 30;
+    if (stepThreeView==nil) {
         stepThreeView = [[UIView alloc] initWithFrame:CGRectMake(2*ScreenWidth, 0, ScreenWidth, ScreenHeight-FirstLabelHeight)];
         CGSize size = [UPTools sizeOfString:@"确认密码：" withWidth:ScreenWidth-20 font:[UIFont systemFontOfSize:15.f]];
+        size.height += 10;
         UILabel *newPassLabel = [self createLabel:CGRectMake(20, paddingY, size.width, size.height) title:@"新密码："];
-        UITextField *newPassField = [self createField:CGRectMake(CGRectGetMaxX(newPassLabel.frame)+5, newPassLabel.origin.y, ScreenWidth-20-CGRectGetMaxX(newPassLabel.frame), size.height)];
+        newPassField = [self createField:CGRectMake(CGRectGetMaxX(newPassLabel.frame)+5, newPassLabel.origin.y, ScreenWidth-20-CGRectGetMaxX(newPassLabel.frame), size.height)];
+        newPassField.keyboardType = UIKeyboardTypeAlphabet;
         UIView *newPassLine = [[UIView alloc] initWithFrame:CGRectMake(newPassField.origin.x, CGRectGetMaxY(newPassField.frame), newPassField.width, 0.6)];
         newPassLine.backgroundColor = kUPThemeLineColor;
         
         UILabel *confirmPassLabel = [self createLabel:CGRectMake(20, CGRectGetMaxY(newPassLabel.frame)+paddingY, size.width, size.height) title:@"确认密码："];
-        UITextField *confirmPassField = [self createField:CGRectMake(CGRectGetMaxX(confirmPassLabel.frame)+5, confirmPassLabel.origin.y, ScreenWidth-20-CGRectGetMaxX(confirmPassLabel.frame), size.height)];
+        confirmPassField = [self createField:CGRectMake(CGRectGetMaxX(confirmPassLabel.frame)+5, confirmPassLabel.origin.y, ScreenWidth-20-CGRectGetMaxX(confirmPassLabel.frame), size.height)];
+        confirmPassField.keyboardType = UIKeyboardTypeAlphabet;
         UIView *confirmPassLine = [[UIView alloc] initWithFrame:CGRectMake(confirmPassField.origin.x, CGRectGetMaxY(confirmPassField.frame), confirmPassField.width, 0.6)];
         confirmPassLine.backgroundColor = kUPThemeLineColor;
         
+        UIButton *confirmBtn = [self createButton:CGRectMake(20, CGRectGetMaxY(confirmPassLine.frame)+paddingY, ScreenWidth-40, size.height) imageName:nil title:@"确认"];
+        confirmBtn.backgroundColor = kUPThemeMainColor;
+        [confirmBtn addTarget:self action:@selector(changePassRequest:) forControlEvents:UIControlEventTouchUpInside];
+
         [stepThreeView addSubview:newPassLabel];
         [stepThreeView addSubview:newPassField];
         [stepThreeView addSubview:newPassLine];
@@ -148,6 +177,7 @@
         [stepThreeView addSubview:confirmPassLabel];
         [stepThreeView addSubview:confirmPassField];
         [stepThreeView addSubview:confirmPassLine];
+        [stepThreeView addSubview:confirmBtn];
     }
 }
 
@@ -156,7 +186,6 @@
     UITextField *field = [[UITextField alloc]initWithFrame:frame];
     [field setFont:[UIFont systemFontOfSize:18.0]];
     [field setTextColor:[UIColor blackColor]];
-    field.delegate = self;
     [field setAutocorrectionType:UITextAutocorrectionTypeNo];
     [field setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     return field;
@@ -189,35 +218,46 @@
 - (void)channelClick:(UIButton*)sender
 {
     type = sender.tag-100;
-    mainScrollView.contentOffset = CGPointMake(ScreenWidth, 0);
-    
     [self reConfigStepTwoView];
+    [mainScrollView setContentOffset:CGPointMake(ScreenWidth, 0) animated:YES];
 }
 
 - (void)reConfigStepTwoView
 {
-    
+    if (type==0) {
+        NSString *descStr = @"温馨提醒：请输入您注册时填写的行业邮箱地址，系统在验证该邮箱后会发送验证码到该邮箱。";
+        descLabel.text = descStr;
+        mailLabel.text = @"行业邮箱：";
+        mailField.keyboardType = UIKeyboardTypeEmailAddress;
+    } else if (type==1) {
+        NSString *descStr = @"温馨提醒：请输入您注册时填写的手机号，系统在验证该手机号后会发送验证码到该手机。";
+        descLabel.text = descStr;
+        mailLabel.text = @"手机号：";
+        mailField.keyboardType = UIKeyboardTypeNumberPad;
+    }
 }
 
 - (void)getVerify:(UIButton *)sender
 {
+    [mailField resignFirstResponder];
+    [codeField resignFirstResponder];
+
     if (type==0) {
         NSString *mailStr = mailField.text;
-        if (mailStr.length==0 || [mailStr componentsSeparatedByString:@"@"].count!=2) {
+        if (![UPTools validateEmail:mailStr]) {
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提醒" message:@"请输入正确的邮箱号" delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
             [alertView show];
             return;
         }
-        [self startVerifyCodeRequest];
+        [self startMailCodeRequest];
     } else if (type==1) {
         NSString *telenumStr = mailField.text;
-        NSCharacterSet *invertedCS = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet];
-        if (telenumStr.length!=11 || [telenumStr componentsSeparatedByCharactersInSet:invertedCS].count>1) {
+        if (![UPTools validatePhone:telenumStr]) {
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提醒" message:@"请输入正确的手机号" delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
             [alertView show];
             return;
         }
-        [self startVerifyCodeRequest];
+        [self startSMSCodeRequest];
     }
     
 
@@ -226,22 +266,63 @@
 
 - (void)nextStep:(UIButton *)sender
 {
+    [mainScrollView setContentOffset:CGPointMake(2*ScreenWidth, 0) animated:YES];
+    return;
+    
     NSString *code = codeField.text;
-    if ([code isEqualToString:verifyCode]&&verifyCode.length!=0) {
-        mainScrollView.contentOffset = CGPointMake(2*ScreenWidth, 0);
+    if (([code isEqualToString:verify_code]&&verify_code.length!=0)) {
+        [mainScrollView setContentOffset:CGPointMake(2*ScreenWidth, 0) animated:YES];
     } else {
         UIAlertView *alertViiew = [[UIAlertView alloc] initWithTitle:@"提示" message:@"验证码错误" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
         [alertViiew show];
     }
 }
 
-- (void)startVerifyCodeRequest
+- (void)changePassRequest:(UIButton *)sender
+{
+    NSString *newPass = newPassField.text;
+    NSString *confirmPass = confirmPassField.text;
+    
+    NSString *validResult = [UPTools validatePassword:newPass andConfirm:confirmPass];
+    if (validResult.length>0)
+    {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:validResult delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [alertView show];
+        return;
+    }
+    
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    
+    [params setValue:@"UserPassReset" forKey:@"a"];
+    [params setValue:user_name forKey:@"user_name"];
+    [params setValue:[UPTools md5HexDigest:newPass] forKey:@"new_pass"];
+    
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+        NSDictionary *dict = (NSDictionary *)responseObject;
+        NSString *resp_id = dict[@"resp_id"];
+        
+        if ([resp_id intValue]==0) {
+            [MBProgressHUD showSuccess:@"密码重置成功"];
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        else
+        {
+            UIAlertView *alertViiew = [[UIAlertView alloc] initWithTitle:@"提示" message:@"重置失败，请重新提交" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+            [alertViiew show];
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+- (void)startMailCodeRequest
 {
     NSString *mailStr = mailField.text;
     NSMutableDictionary *params = [NSMutableDictionary new];
     
     [params setValue:@"MailSend" forKey:@"a"];
-    [params setValue:mailStr forKey:@"mobile"];
+    [params setValue:mailStr forKey:@"email"];
     [params setValue:@"" forKey:@"text"];
     [params setValue:@"1" forKey:@"send_type"];
     
@@ -254,14 +335,19 @@
             
             //设置 smsText
             if (resp_data) {
-                verifyCode = resp_data[@"verify_code"];
+                NSString *desc = dict[@"resp_desc"];
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:desc delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alertView show];
+                verify_code = resp_data[@"verify_code"];
+                user_name = resp_data[@"user_name"];
             }
         }
         else
         {
-            verifyCode = @"";
-            UIAlertView *alertViiew = [[UIAlertView alloc] initWithTitle:@"提示" message:@"获取验证码失败，请重新获取一次" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-            [alertViiew show];
+            verify_code = @"";
+            NSString *desc = dict[@"resp_desc"];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:desc delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+            [alertView show];
             [self stopTimer];
         }
         
@@ -270,7 +356,7 @@
     }];
 }
 
-- (void)startSMSRequest
+- (void)startSMSCodeRequest
 {
     NSString *telenum = mailField.text;
     NSMutableDictionary *params = [NSMutableDictionary new];
@@ -289,14 +375,19 @@
             
             //设置 smsText
             if (resp_data) {
-                verifyCode = resp_data[@"verify_code"];
+                verify_code = resp_data[@"verify_code"];
+                user_name = resp_data[@"user_name"];
+                NSString *desc = dict[@"resp_desc"];
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:desc delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+                [alertView show];
             }
         }
         else
         {
-            verifyCode = @"";
-            UIAlertView *alertViiew = [[UIAlertView alloc] initWithTitle:@"提示" message:@"获取验证码失败，请重新获取一次" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
-            [alertViiew show];
+            verify_code = @"";
+            NSString *desc = dict[@"resp_desc"];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:desc delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
+            [alertView show];
             [self stopTimer];
         }
         
@@ -327,7 +418,7 @@
 {
     [_timer invalidate];
     _timer = nil;
-    [codeBtn setTitle:@"验证" forState:UIControlStateNormal];
+    [codeBtn setTitle:@"获取" forState:UIControlStateNormal];
     codeBtn.enabled = YES;
 }
 

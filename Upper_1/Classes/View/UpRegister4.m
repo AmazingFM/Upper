@@ -76,9 +76,9 @@
             rad2.frame = CGRectMake(120, 0, 80, size.height);
             [radioBackView addSubview:rad2];
             
-            [rad1 handleButtonTap:rad1];
-            
             [RadioButton addObserverForGroupId:@"mygroup" observer:self];
+            
+            [rad1 handleButtonTap:rad1];
             
             UILabel *seperatorV = [[UILabel alloc] initWithFrame:CGRectMake(LeftRightPadding, tmpLabel.y+size.height, frame.size.width-2*LeftRightPadding, 1)];
             seperatorV.backgroundColor = [UIColor grayColor];
@@ -242,5 +242,4 @@
     
     return @"";
 }
-
 @end

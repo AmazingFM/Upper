@@ -595,4 +595,41 @@ NSString *kKeyChainUUIDAccessGroup = @"com.upper";
     
     return size;
 }
+
++ (NSString *)validatePassword:(NSString *)pass andConfirm:(NSString *)confirmPass
+{
+    if (pass.length==0 || confirmPass.length==0 || ![pass isEqualToString:confirmPass])
+    {
+        return @"密码不能为空且需要保持一致";
+    }
+    
+    if (pass.length<8) {
+        return @"密码长度必须大于8位";
+    }
+    
+    NSArray *regexArr = @[@"[A-Z]+", @"[a-z]+", @"[0-9]+"];
+    
+    for (NSString* regex in regexArr) {
+        NSPredicate *filter = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+        if ([filter evaluateWithObject:pass]) {
+            return @"密码不符合要求，至少包括数字和字母";
+        }
+    }
+    
+    return @"";
+}
+
++ (BOOL)validateEmail:(NSString *)email
+{
+    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:email];
+}
+
++ (BOOL)validatePhone:(NSString *)phone
+{
+    NSString *phoneRegex = @"1[3|5|7|8|][0-9]{9}";
+    NSPredicate *phoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", phoneRegex];
+    return [phoneTest evaluateWithObject:phone];
+}
 @end

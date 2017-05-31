@@ -35,6 +35,8 @@
 @interface OtherUserData : UPBaseModel
 
 @property (nonatomic, copy) NSString *birthday;
+@property (nonatomic, copy) NSString *city;
+@property (nonatomic, copy) NSString *city_code;
 @property (nonatomic, copy) NSString *creator_coin;
 @property (nonatomic, copy) NSString *creator_good_rate;
 @property (nonatomic, copy) NSString *creator_group;
@@ -42,15 +44,20 @@
 @property (nonatomic, copy) NSString *ID;
 @property (nonatomic, copy) NSString *industry_id;
 @property (nonatomic, copy) NSString *industry_name;
+@property (nonatomic, copy) NSString *join_bad_sum;
 @property (nonatomic, copy) NSString *join_coin;
 @property (nonatomic, copy) NSString *join_good_rate;
+@property (nonatomic, copy) NSString *join_good_sum;
 @property (nonatomic, copy) NSString *join_group;
 @property (nonatomic, copy) NSString *join_level;
 @property (nonatomic, copy) NSString *nick_name;
 @property (nonatomic, copy) NSString *node_id;
 @property (nonatomic, copy) NSString *node_name;
+@property (nonatomic, copy) NSString *province;
+@property (nonatomic, copy) NSString *province_code;
+@property (nonatomic, copy) NSString *secret_flag;
 @property (nonatomic, copy) NSString *sexual;
 @property (nonatomic, copy) NSString *true_name;
+@property (nonatomic, copy) NSString *user_desc;
 @property (nonatomic, copy) NSString *user_icon;
-@property (nonatomic,copy) NSString *secret_flag;
 @end

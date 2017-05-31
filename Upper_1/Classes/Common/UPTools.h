@@ -72,4 +72,9 @@
 + (UIColor *)colorWithHex:(int)hexValue;
 
 + (CGSize)sizeOfString:(NSString *)text withWidth:(float)width font:(UIFont *)font;
+
++ (NSString *)validatePassword:(NSString *)pass andConfirm:(NSString *)confirmPass;
++ (BOOL)validateEmail:(NSString *)email;
++ (BOOL)validatePhone:(NSString *)phone;
+
 @end

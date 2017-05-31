@@ -67,7 +67,7 @@ NSString * const g_loginFileName = @"login.plist";
     [userDefaults setObject:nil forKey:@"user"];
     [userDefaults synchronize];
     
-    _userInfo = nil;
+//    _userInfo = nil;
     _isLogin = NO;
 }
 

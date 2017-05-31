@@ -126,6 +126,7 @@
     
     nameField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, frame.size.width-2*LeftRightPadding-size.width, size.height)];
     [nameField setFont:[UIFont systemFontOfSize:15.0]];
+    nameField.keyboardType = UIKeyboardTypeASCIICapable;
     nameField.clearButtonMode = UITextFieldViewModeWhileEditing;
     nameField.delegate = self;
     
@@ -145,6 +146,7 @@
     teleField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, frame.size.width-2*LeftRightPadding-size.width, size.height)];
     [teleField setFont:[UIFont systemFontOfSize:15.0]];
     teleField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    teleField.keyboardType = UIKeyboardTypeNumberPad;
     teleField.delegate = self;
     
     _seperatorV1 = [[UIView alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY+size.height+1, frame.size.width-2*LeftRightPadding, 1)];
@@ -162,6 +164,7 @@
     
     verifyField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, self.frame.size.width-2*LeftRightPadding-size.width, size.height)];
     [verifyField setFont:[UIFont systemFontOfSize:15.0]];
+    verifyField.keyboardType = UIKeyboardTypeNumberPad;
     verifyField.clearButtonMode = UITextFieldViewModeWhileEditing;
     verifyField.delegate = self;
     
@@ -193,6 +196,7 @@
     _emailField = [[UITextField alloc]init];
     [_emailField setFont:[UIFont systemFontOfSize:15.0]];
     _emailField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _emailField.keyboardType = UIKeyboardTypeEmailAddress;
     _emailField.autocorrectionType = UITextAutocorrectionTypeNo;
     _emailField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     _emailField.delegate = self;
@@ -233,6 +237,11 @@
     [self addSubview:_suffixLabel];
     [self addSubview:_emailField];
     [self addSubview:desLabel];
+    
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
+    singleTap.numberOfTapsRequired = 1;
+    singleTap.numberOfTouchesRequired = 1;
+    [self addGestureRecognizer:singleTap];
     
     return self;
 }
@@ -606,4 +615,12 @@
     return YES;
 }
 
+- (void)singleTap:(UIGestureRecognizer *)gesture
+{
+    for (UIView *subView in self.subviews) {
+        if ([subView isKindOfClass:[UITextField class]]) {
+            [subView resignFirstResponder];
+        }
+    }
+}
 @end

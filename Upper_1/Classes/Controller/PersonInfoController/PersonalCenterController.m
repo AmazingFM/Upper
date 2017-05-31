@@ -17,6 +17,7 @@
 #import "UserData.h"
 #import "UPDataManager.h"
 #import "YMNetwork.h"
+#import "CRNavigationBar.h"
 
 #define TopViewHeight 200
 
@@ -51,18 +52,6 @@
     NSLog(@"Index:%d--Query_id:%@", self.index, self.user.ID);
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-//    [self.navigationController setNavigationBarHidden:YES animated:YES];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-//    [self.navigationController setNavigationBarHidden:NO animated:YES];
-}
-
 - (void)letsChat:(UIButton *)sender
 {
     BubbleChatViewController *chatController = [[BubbleChatViewController alloc] init];
@@ -73,17 +62,36 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    CRNavigationBar *navigationBar = (CRNavigationBar *)self.navigationController.navigationBar;
+    navigationBar.barTintColor = [UIColor clearColor];
+    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+    
     [self.zkSegment zk_itemClickByIndex:self.index];
     
     [self userInfoRequest];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    CRNavigationBar *navigationBar = (CRNavigationBar *)self.navigationController.navigationBar;
+    navigationBar.barTintColor = kUPThemeMainColor;
+    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setShadowImage:nil];
+}
+
 - (void)userInfoRequest
 {
-    NSString *query_id = self.userID;
     NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"UserQuery"forKey:@"a"];
-    [params setObject:query_id forKey:@"qry_usr_id"];
+    [params setObject:self.user_id forKey:@"qry_usr_id"];
     
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         NSDictionary *dict = (NSDictionary *)responseObject;
@@ -97,11 +105,6 @@
         }
     } failure:^(NSError *error) {
     }];
-    
-//    [XWHttpTool getDetailWithUrl:kUPBaseURL parms:params success:^(id json){
-//            }failture:^(id error) {
-//        
-//    }];
 }
 
 - (void)addHeader
@@ -121,37 +124,28 @@
     CGFloat headerW=80;
     CGFloat hederH=headerW;
     CGFloat headerX=(headerView.width-headerW)*0.5;
-    UIButton *headButton = [[UIButton alloc]init];
-    headButton.frame = CGRectMake(headerX, 50, headerW, hederH);
     
-    NSString *headImgStr = self.user.user_icon;
-    if (headImgStr) {
-        NSData *_decodedImgData = [[NSData alloc] initWithBase64EncodedString:headImgStr options:NSDataBase64DecodingIgnoreUnknownCharacters];
-        [headButton setBackgroundImage:[UIImage imageWithData:_decodedImgData] forState:UIControlStateNormal];
-    } else {
-        [headButton setBackgroundImage:[UIImage imageNamed:@"head"] forState:UIControlStateNormal];
-    }
-
-    headButton.layer.masksToBounds = YES;
-    [headButton.layer setCornerRadius:headerW/2]; //设置矩形四个圆角半径
-    headButton.layer.borderColor   = [UIColor colorWithRed:220/255.0 green:220/255.0 blue:220/255.0 alpha:1].CGColor;
-    headButton.self.layer.borderWidth   = 1;
-    [headerView addSubview:headButton];
-    
-    
+    UIImageView *headIconView = [[UIImageView alloc] initWithFrame:CGRectMake(headerX, 50, headerW, hederH)];
+    [headIconView sd_setImageWithURL:[NSURL URLWithString:self.user_icon] placeholderImage:[UIImage imageNamed:@"head"]];
+    headIconView.contentMode = UIViewContentModeScaleToFill;
+    headIconView.layer.masksToBounds = YES;
+    headIconView.layer.cornerRadius = headerW/2;
+    headIconView.layer.borderColor = kUPThemeLineColor.CGColor;
+    headIconView.layer.borderWidth = 1.f;
+    [headerView addSubview:headIconView];
     
     //3.添加头像下面的文字
     UILabel *labelStr=[[UILabel alloc]init];
-    labelStr.text=self.user.nick_name;
+    labelStr.text=self.nick_name;
     labelStr.font=[UIFont systemFontOfSize:16];
-    CGFloat labelY=CGRectGetMaxY(headButton.frame)+5;
+    CGFloat labelY=CGRectGetMaxY(headIconView.frame)+5;
     labelStr.textAlignment=NSTextAlignmentCenter;
     labelStr.textColor=[UIColor whiteColor];
     labelStr.frame=CGRectMake(0, labelY, self.view.width, 25);
     [headerView addSubview:labelStr];
     
     UIButton *chatBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, headerW, 30)];
-    chatBtn.center = CGPointMake(headButton.center.x+100, headButton.center.y);
+    chatBtn.center = CGPointMake(headIconView.center.x+100, headIconView.center.y);
     [chatBtn setTitle:@"和他聊天" forState:UIControlStateNormal];
     chatBtn.titleLabel.font = [UIFont systemFontOfSize:14.0f];
     chatBtn.backgroundColor = [UIColor whiteColor];

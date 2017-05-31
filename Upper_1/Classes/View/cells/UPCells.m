@@ -31,12 +31,6 @@
     _item = item;
 }
 
--(void)drawRect:(CGRect)rect{
-    //    CGContextRef context=UIGraphicsGetCurrentContext();
-    //    CGFillRect(context, CGRectMake(10,2,rect.size.width-20,rect.size.height-4), [UIColor whiteColor]);
-    //    CGDrawRect(context, CGRectMake(10,2,rect.size.width-20,rect.size.height-4), kHTThemeMainColor);
-}
-
 -(void)updateTheme{
 }
 

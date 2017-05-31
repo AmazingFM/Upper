@@ -17,6 +17,9 @@
 #import "PrivateMessage.h"
 #import "UPFriendItem.h"
 #import "YMNetwork.h"
+#import "UIImageView+WebCache.h"
+#import "PersonalCenterController.h"
+
 
 #define kDescHeight 44
 
@@ -122,8 +125,15 @@
         _mainTable.dataSource = self;
         _mainTable.backgroundColor = [UIColor whiteColor];
         _mainTable.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-        _mainTable.separatorColor = [UIColor lightGrayColor];
+        _mainTable.separatorColor = kUPThemeLineColor;
         _mainTable.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0,0,ScreenWidth, CGFLOAT_MIN)];
+        
+        UIEdgeInsets separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
+        _mainTable.separatorInset = separatorInsets;
+        
+        if ([_mainTable respondsToSelector:@selector(setLayoutMargins:)]) {
+            _mainTable.layoutMargins = separatorInsets;
+        }
         
            //..下拉刷新
         _mainTable.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
@@ -167,7 +177,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 44.f;
+    return 50.f;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -180,23 +190,42 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    
-    NSData *_decodedImageData = [[NSData alloc] initWithBase64EncodedString:item.user_icon options:NSDataBase64DecodingIgnoreUnknownCharacters];
-    UIImage *detailImg = [UIImage imageWithData:_decodedImageData];
 
-    cell.imageView.image = detailImg;
+    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:item.user_icon] placeholderImage:[UIImage imageNamed:@"activity_user_icon"]];
+    
+    CGSize itemSize = CGSizeMake(40, 40);
+    UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+    CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+    [cell.imageView.image drawInRect:imageRect];
+    cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
     
     cell.textLabel.text = item.nick_name;
-    
+    cell.textLabel.font = [UIFont systemFontOfSize:16.f];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(nonnull UITableViewCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+{
+    UIEdgeInsets separatorInsets = UIEdgeInsetsMake(0, 15, 0, 0);
+    cell.separatorInset = separatorInsets;
+    
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        cell.layoutMargins = separatorInsets;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UPFriendItem *friend = self.friendlist[indexPath.row];
-    UPChatViewController *chatController = [[UPChatViewController alloc] initWithUserID:friend.relation_id andUserName:friend.nick_name andUserIcon:friend.user_icon];
-    [self.navigationController pushViewController:chatController animated:YES];
+
+    PersonalCenterController *personalCenter = [[PersonalCenterController alloc] init];
+    personalCenter.index = 0;
+    personalCenter.user_id = friend.relation_id;
+    personalCenter.nick_name = friend.nick_name;
+    personalCenter.user_icon = friend.user_icon;
+    [self.navigationController pushViewController:personalCenter animated:YES];
 }
 
 #pragma mark - 请求活动列表

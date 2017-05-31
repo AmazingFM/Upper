@@ -153,7 +153,7 @@
 {
     if ([UPDataManager shared].isLogin) {
         [UPDataManager shared].isLogin = NO;
-        [UPDataManager shared].userInfo = nil;//清楚用户信息
+//        [UPDataManager shared].userInfo = nil;//清楚用户信息
         [[UPDataManager shared] cleanUserDafult];
         
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"当前登录已经失效，请重新登录" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
