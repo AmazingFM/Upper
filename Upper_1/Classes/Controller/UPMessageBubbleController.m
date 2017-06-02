@@ -152,7 +152,7 @@
 {
     NSString *userID = [@(recognizer.view.tag) stringValue];
     PersonalCenterController *personInfoVC = [[PersonalCenterController alloc] init];
-    personInfoVC.userID = _userID;
+    personInfoVC.user_id = _userID;
     [self.navigationController pushViewController:personInfoVC animated:YES];
 }
 

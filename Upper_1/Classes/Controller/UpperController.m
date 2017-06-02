@@ -169,7 +169,7 @@ extern NSString * const g_loginFileName;
     imageDetailItem1.defaultName = @"head";
     imageDetailItem1.imageUrl= defaultParamsDict[@"user_icon"];
     imageDetailItem3.detail = defaultParamsDict[@"nick_name"];
-    imageDetailItem4.detail = [defaultParamsDict[@"sexual"] intValue]==0?@"男":@"女";
+    imageDetailItem4.detail = [defaultParamsDict[@"sexual"] intValue]==1?@"男":@"女";
     
     NSString *birth = defaultParamsDict[@"birthday"];
     if (birth==nil ||birth.length==0) {
@@ -179,7 +179,6 @@ extern NSString * const g_loginFileName;
     }
     
     imageDetailItem6.isSwitchOn = [defaultParamsDict[@"companySecret"] boolValue];
-//    imageDetailItem7.isSwitchOn = [defaultParamsDict[@"industrySecret"] boolValue];
     
     [updatedParamsDict removeAllObjects];
 }

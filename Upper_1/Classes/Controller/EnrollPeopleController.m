@@ -148,7 +148,9 @@ static int const kPadding = 5;
     userData.ID = ((UserData *)self.userArr[indexPath.row]).ID;
     userData.user_icon = ((UserData *)self.userArr[indexPath.row]).user_icon;
     userData.nick_name = ((UserData *)self.userArr[indexPath.row]).nick_name;
-    personalCenter.user = userData;
+    personalCenter.user_id = userData.ID;
+    personalCenter.user_icon = userData.user_icon;
+    personalCenter.nick_name = userData.nick_name;
     
     [self.navigationController pushViewController:personalCenter animated:YES];
 }

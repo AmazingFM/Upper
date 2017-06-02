@@ -12,7 +12,7 @@
 #import "UPHerParticipatedActivityController.h"
 #import "ZKSegment.h"
 #import "Info.h"
-#import "BubbleChatViewController.h"
+#import "UPChatViewController.h"
 
 #import "UserData.h"
 #import "UPDataManager.h"
@@ -48,14 +48,11 @@
     [self resetSegment];
     
     [self setupScrollView];
-    
-    NSLog(@"Index:%d--Query_id:%@", self.index, self.user.ID);
 }
 
 - (void)letsChat:(UIButton *)sender
 {
-    BubbleChatViewController *chatController = [[BubbleChatViewController alloc] init];
-    chatController.otherUserData = self.user;
+    UPChatViewController *chatController = [[UPChatViewController alloc] initWithUserID:self.user_id andUserName:self.nick_name andUserIcon:self.user_icon];
     [self.navigationController pushViewController:chatController animated:YES];
 }
 
@@ -98,7 +95,7 @@
         NSString *resp_id = dict[@"resp_id"];
         if ([resp_id intValue]==0) {
             //处理
-            OtherUserData *user = [self.user initWithDict:dict[@"resp_data"]];
+            OtherUserData *user = [[OtherUserData alloc] initWithDict:dict[@"resp_data"]];
             
             PersonInfoController *personController = self.childViewControllers[0];
             [personController setUserData:user];
@@ -193,10 +190,10 @@
     
     //2
     UPHerLaunchedActivityController *vc2 = [[UPHerLaunchedActivityController alloc]init];
-    vc2.userData = _user;
+//    vc2.userData = _user;
 
     UPHerParticipatedActivityController *vc3 = [[UPHerParticipatedActivityController alloc]init];
-    vc3.userData = _user;
+//    vc3.userData = _user;
     
     [self addChildViewController:vc1];
     [self addChildViewController:vc2];
@@ -238,20 +235,6 @@
     
     [self.zkSegment zk_itemClickByIndex:index];
     self.index = index;
-    
-//    UIViewController *vc = self.childViewControllers[index];
-//    if (vc.view.superview) {
-//        return;
-//    }
-    
-//    vc.view.frame = scrollView.bounds;
-//    [self.bigScroll addSubview:vc.view];
-}
-
-/** 正在滚动 */
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    //
 }
 
 - (void)leftClick

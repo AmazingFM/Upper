@@ -12,7 +12,4 @@
 @interface PersonInfoController : UITableViewController
 
 @property (nonatomic, retain) OtherUserData *userData;
-
-- (void)setDetail:(NSString *)value key:(NSString *)key;
-
 @end

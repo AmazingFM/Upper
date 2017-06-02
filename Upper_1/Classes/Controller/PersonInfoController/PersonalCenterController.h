@@ -15,6 +15,5 @@
 @property (nonatomic, copy) NSString *user_id;
 @property (nonatomic, copy) NSString *user_icon;
 @property (nonatomic, copy) NSString *nick_name;
-@property (nonatomic, retain) OtherUserData *user;
 
 @end

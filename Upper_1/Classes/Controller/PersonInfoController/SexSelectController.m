@@ -68,9 +68,9 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSUInteger row = [indexPath row];
-    [self.parentController setDetail:[NSString stringWithFormat:@"%d", row] key:@"xingbie"];
-    [self.navigationController popViewControllerAnimated:YES];
+//    NSUInteger row = [indexPath row];
+//    [self.parentController setDetail:[NSString stringWithFormat:@"%d", row] key:@"xingbie"];
+//    [self.navigationController popViewControllerAnimated:YES];
 }
 
 
