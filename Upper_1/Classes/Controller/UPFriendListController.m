@@ -137,14 +137,17 @@
         cell.tintColor = [UIColor redColor];
     }
     
-    NSData *_decodedImageData = [[NSData alloc] initWithBase64EncodedString:item.user_icon options:NSDataBase64DecodingIgnoreUnknownCharacters];
-    UIImage *detailImg = [UIImage imageWithData:_decodedImageData];
+    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:item.user_icon] placeholderImage:[UIImage imageNamed:@"activity_user_icon"]];
     
-    cell.imageView.image = detailImg;
+    CGSize itemSize = CGSizeMake(40, 40);
+    UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+    CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+    [cell.imageView.image drawInRect:imageRect];
+    cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
     
     cell.textLabel.text = item.nick_name;
-    
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.textLabel.font = [UIFont systemFontOfSize:16.f];
     
     if ([selectStatus[indexPath.row] boolValue]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;

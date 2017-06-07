@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, ActOperType) {
 @property (nonatomic, weak) id<CitySelectDelegate> delegate;
 @end
 
-@interface NewLaunchActivityController : UPBaseViewController <CitySelectDelegate>
+@interface NewLaunchActivityController : UITableViewController <CitySelectDelegate>
 
 @property (nonatomic) ActOperType type;
 @property (nonatomic, retain) ActivityData *actData;

@@ -11,5 +11,7 @@
 #import "UPRefreshTableViewController.h"
 
 @interface UPHerParticipatedActivityController : UPRefreshTableViewController
-@property (nonatomic, retain) OtherUserData *userData;
+
+@property (nonatomic, retain) NSString *user_id;
+
 @end

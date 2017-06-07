@@ -58,7 +58,7 @@
         UPTitleCellItem *cellItem = (UPTitleCellItem *)item;
         _titleLabel.text = cellItem.title;
         CGSize size = SizeWithFont(cellItem.title, kUPThemeMinFont);
-        _titleLabel.frame = CGRectMake(10, 0, size.width, cellItem.cellHeight);
+        _titleLabel.frame = CGRectMake(15, 0, size.width, cellItem.cellHeight);
         _titleLabel.textColor = [UIColor colorWithWhite:0.667 alpha:0.7];
     }
     self.backgroundColor = [UIColor clearColor];

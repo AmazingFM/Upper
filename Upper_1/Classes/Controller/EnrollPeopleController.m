@@ -104,16 +104,16 @@ static int const kPadding = 5;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"userCell"];
     if (cell == nil) {
         cell = [[EnrollCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"userCell"];
-        
-        UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        chatButton.tag = 10;
-        chatButton.frame = CGRectMake(0, 0, 80, kCellHeight-10);
-        chatButton.backgroundColor = [UIColor redColor];
-        [chatButton setTitle:@"发起聊天" forState:UIControlStateNormal];
-        [chatButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        chatButton.titleLabel.font = EnrollCellFont;
-        [chatButton addTarget:self action:@selector(onBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-        cell.accessoryView = chatButton;
+//        
+//        UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//        chatButton.tag = 10;
+//        chatButton.frame = CGRectMake(0, 0, 80, kCellHeight-10);
+//        chatButton.backgroundColor = [UIColor redColor];
+//        [chatButton setTitle:@"发起聊天" forState:UIControlStateNormal];
+//        [chatButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//        chatButton.titleLabel.font = EnrollCellFont;
+//        [chatButton addTarget:self action:@selector(onBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+//        cell.accessoryView = chatButton;
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
@@ -121,19 +121,22 @@ static int const kPadding = 5;
     cell.tag = indexPath.row;
     
     UserData *user= self.userArr[[indexPath row]];
+    
+    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:user.user_icon] placeholderImage:[UIImage imageNamed:@"activity_user_icon"]];
+    
+//    CGSize itemSize = CGSizeMake(40, 40);
+//    UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+//    CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+//    [cell.imageView.image drawInRect:imageRect];
+//    cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+    
+    cell.textLabel.text = user.nick_name;
+    cell.textLabel.font = [UIFont systemFontOfSize:16.f];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
     cell.textLabel.text = user.nick_name;
     cell.textLabel.font = EnrollCellFont;
-    
-    NSString *imageData = self.userArr[[indexPath row]].user_icon;
-    UIImage *image = nil;
-    if (imageData==nil || imageData.length==0) {
-        image = [UIImage imageNamed:@"head"];
-    } else {
-        NSData *_decodedImageData = [[NSData alloc] initWithBase64EncodedString:imageData options:NSDataBase64DecodingIgnoreUnknownCharacters];
-        image = [UIImage imageWithData:_decodedImageData];
-
-    }
-    cell.imageView.image = image;
 
     return cell;
 }

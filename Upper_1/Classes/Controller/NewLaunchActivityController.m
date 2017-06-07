@@ -238,31 +238,24 @@ static CGFloat const FixRatio = 4/3.0;
     
     [self setNewData];
     
-    // Do any additional setup after loading the view.
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight) style:UITableViewStylePlain];
-    _tableView.backgroundColor = [UIColor whiteColor];
-    _tableView.showsVerticalScrollIndicator = NO;
-    _tableView.showsHorizontalScrollIndicator = NO;
-    _tableView.separatorColor = [UIColor lightGrayColor];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-        _tableView.separatorInset = UIEdgeInsetsMake(0,10,0,0);
+    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
+    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.showsVerticalScrollIndicator = NO;
+    self.tableView.separatorColor = [UIColor lightGrayColor];
+    if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+        self.tableView.separatorInset = UIEdgeInsetsMake(0,10,0,0);
     }
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-    if ([_tableView respondsToSelector:@selector(setLayoutMargins:)]) {
-        _tableView.layoutMargins = UIEdgeInsetsMake(0,10,0,0);
+    if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)]) {
+        self.tableView.layoutMargins = UIEdgeInsetsMake(0,10,0,0);
     }
 #endif
-    _tableView.tableFooterView = [[UIView alloc] init];
+    self.tableView.tableFooterView = [[UIView alloc] init];
     
     UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
     gesture.cancelsTouchesInView = NO;
-    [_tableView addGestureRecognizer:gesture];
-    
-    [self.view addSubview:_tableView];
-    
-    [self loadNotificationCell];
+    gesture.numberOfTapsRequired = 1;
+    [self.view addGestureRecognizer:gesture];
 }
 
 -(void)getImageDataFromURL:(NSString *)imageUrl
@@ -352,6 +345,7 @@ static CGFloat const FixRatio = 4/3.0;
     
     UPTitleCellItem *item15 = [[UPTitleCellItem alloc] init];
     item15.key = @"fmale_low";
+    item15.title = @"女性人数下限";
     
     UPDetailCellItem *item6 = [[UPDetailCellItem alloc] init];
     item6.title = @"活动区域";
@@ -482,46 +476,6 @@ static CGFloat const FixRatio = 4/3.0;
     [self.view endEditing:YES];
 }
 
-- (void)loadNotificationCell
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-}
-
-- (void)keyboardWillShow:(NSNotification *)notif
-{
-    if (self.view.hidden == YES) {
-        return;
-    }
-    
-    CGRect rect = [[notif.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.25f];
-    NSArray *subviews = [self.view subviews];
-    for (UIView *sub in subviews) {
-        if ([sub isKindOfClass:[UITableView class]]) {
-            sub.frame = CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight-rect.size.height);
-        }
-    }
-    [UIView commitAnimations];
-}
-
-- (void)keyboardWillHide:(NSNotification *)notif {
-    if (self.view.hidden == YES) {
-        return;
-    }
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.25];
-    _tableView.frame=CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight);
-    [UIView commitAnimations];
-}
-
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 #pragma mark UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -627,10 +581,8 @@ static CGFloat const FixRatio = 4/3.0;
         CGFloat cellHeight = cellItem.cellHeight;
         
         if (cellHeight==0) {
-            itemCell.textLabel.text = @"";
             itemCell.accessoryView = nil;
         } else {
-            itemCell.textLabel.text = @"女性人数下限";
             UIView *detailView = itemCell.accessoryView;
             if (detailView==nil) {
                 detailView = [[UIView alloc] initWithFrame:CGRectMake(cellWidth/2-30,kUPCellVBorder,(cellWidth-2*kUPCellHBorder)/2+30,kUPCellHeight-2*kUPCellVBorder)];
@@ -830,7 +782,7 @@ static CGFloat const FixRatio = 4/3.0;
             UPDetailCellItem *item = (UPDetailCellItem*)cellItem;
             NSString *area = [NSString stringWithFormat:@"%@ %@", cityInfo.province, cityInfo.city];
             item.detail = area;
-            [_tableView reloadRowsAtIndexPaths:@[item.indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            [self.tableView reloadRowsAtIndexPaths:@[item.indexPath] withRowAnimation:UITableViewRowAnimationNone];
             break;
         }
     }
@@ -854,7 +806,7 @@ static CGFloat const FixRatio = 4/3.0;
             cellItem.title = @"预估人均费用";
         }
         
-        [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:13 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:13 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 
@@ -991,6 +943,7 @@ static CGFloat const FixRatio = 4/3.0;
                     [actParams addEntriesFromDictionary:params];
                     NSDictionary *respData = respDict[@"resp_data"];
                     [actParams setObject:respData[@"activity_id"] forKey:@"ID"];
+                    [actParams setObject:respData[@"imag_url"] forKey:@"activity_image"];
                     showConfirmTagAlert(@"提示", @"活动发起成功，如需修改变更或取消，请点击活动规则查看相关规则和操作方式。", self, 1000);
                 } else {
                     showDefaultAlert(@"提示", respDict[@"resp_desc"]);
@@ -1154,7 +1107,7 @@ static CGFloat const FixRatio = 4/3.0;
         if ([cellItem.key isEqualToString:@"activity_class"]) {
             UPDetailCellItem *item = (UPDetailCellItem*)cellItem;
             item.detail = actType.name;
-            [_tableView reloadRowsAtIndexPaths:@[item.indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            [self.tableView reloadRowsAtIndexPaths:@[item.indexPath] withRowAnimation:UITableViewRowAnimationNone];
             break;
         }
     }
@@ -1177,7 +1130,7 @@ static CGFloat const FixRatio = 4/3.0;
         femaleItem.cellHeight=0;
         needFemale = NO;
     }
-    [_tableView reloadRowsAtIndexPaths:@[item0.indexPath, femaleItem.indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadRowsAtIndexPaths:@[item0.indexPath, femaleItem.indexPath] withRowAnimation:UITableViewRowAnimationNone];
 
     _actType = actType;
 }
@@ -1244,6 +1197,7 @@ static CGFloat const FixRatio = 4/3.0;
     resultVC.actData = [[ActivityData alloc] initWithDict:actParams];
     [self.navigationController pushViewController:resultVC animated:YES];
 }
+
 @end
 
 @interface LaunchActivityResultController()  <UPFriendListDelegate,UIActionSheetDelegate>
@@ -1404,10 +1358,22 @@ static CGFloat const FixRatio = 4/3.0;
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    NSString *actId = self.actData.ID;
+    
+    NSData *actIdData = [actId dataUsingEncoding:NSUTF8StringEncoding];
+    NSString *base64Encoded = [actIdData base64EncodedStringWithOptions:0];
+    
+    NSString *md5Str = [UPTools md5HexDigest:[NSString stringWithFormat:@"%@upperinterface", actId]];
+    NSString *shareLinkUrl = [NSString stringWithFormat:@"http://a.uppercn.com/?a=%@&t=%@", base64Encoded, md5Str];
+    
+    ActivityType *activityType = [[UPConfig sharedInstance] getActivityTypeByID:self.actData.activity_class];
+    NSString *actDesc = [NSString stringWithFormat:@"活动类型：%@\n活动描述：%@", activityType.name,self.actData.activity_desc];
+    NSString *actImageName = [NSString stringWithFormat:@"default_activity_%@", activityType.ID];
+    
     if (buttonIndex==0) {
-        [[WXApiManager sharedManager] sendLinkURL:@"http://www.uppercn.com" TagName:@"UPPER上行" Title:@"我发起了一个活动" Description:@"活动类型：xxxx" ThumbImageName:@"default_activity_101" InScene:WXSceneSession];
+        [[WXApiManager sharedManager] sendLinkURL:shareLinkUrl TagName:@"UPPER上行" Title:@"我发起了一个活动" Description:actDesc ThumbImageName:actImageName InScene:WXSceneSession];
     } else if (buttonIndex==1) {
-        [[WXApiManager sharedManager] sendLinkURL:@"http://www.uppercn.com" TagName:@"UPPER上行" Title:@"我发起了一个活动" Description:@"活动类型：xxxx" ThumbImageName:@"default_activity_101" InScene:WXSceneTimeline];
+        [[WXApiManager sharedManager] sendLinkURL:shareLinkUrl TagName:@"UPPER上行" Title:@"我发起了一个活动" Description:actDesc ThumbImageName:actImageName InScene:WXSceneTimeline];
     } else {
         //取消
     }

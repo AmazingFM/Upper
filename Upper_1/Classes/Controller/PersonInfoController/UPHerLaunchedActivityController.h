@@ -12,6 +12,6 @@
 
 @interface UPHerLaunchedActivityController : UPRefreshTableViewController
 
-@property (nonatomic, retain) OtherUserData *userData;
+@property (nonatomic, retain) NSString *user_id;
 
 @end

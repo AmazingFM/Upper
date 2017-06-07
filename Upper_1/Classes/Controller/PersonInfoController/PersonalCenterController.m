@@ -190,10 +190,10 @@
     
     //2
     UPHerLaunchedActivityController *vc2 = [[UPHerLaunchedActivityController alloc]init];
-//    vc2.userData = _user;
+    vc2.user_id = self.user_id;
 
     UPHerParticipatedActivityController *vc3 = [[UPHerParticipatedActivityController alloc]init];
-//    vc3.userData = _user;
+    vc3.user_id = self.user_id;
     
     [self addChildViewController:vc1];
     [self addChildViewController:vc2];

@@ -27,7 +27,7 @@
 
 - (void)startRequest
 {
-    if (self.userData.ID==nil || self.userData.ID.length==0) {
+    if (self.user_id==nil || self.user_id.length==0) {
         [self.myRefreshView endRefreshing];
         return;
     }
@@ -43,7 +43,7 @@
     [params setObject:@"" forKey:@"province_code"];
     [params setObject:@"" forKey:@"city_code"];
     [params setObject:@""forKey:@"town_code"];
-    [params setObject:self.userData.ID forKey:@"creator_id"];
+    [params setObject:self.user_id forKey:@"creator_id"];
     
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         NSDictionary *dict = (NSDictionary *)responseObject;
