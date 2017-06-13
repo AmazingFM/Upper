@@ -678,7 +678,7 @@
         UPDetailExtraInfoCellItem *extraItem = _itemList[3];
         extraItem.key = @"extraInfo";
         extraItem.desc = self.detailActData.activity_desc;
-        extraItem.place = self.detailActData.activity_place;
+        extraItem.place = self.detailActData.activity_addr;
         extraItem.shopName = self.detailActData.activity_place;//[[UPConfig sharedInstance] getPlaceTypeByID:[@(actId) stringValue]].name;
         extraItem.activityTypeName = [[UPConfig sharedInstance] getActivityTypeByID:self.detailActData.activity_class].name;
         extraItem.clothTypeName = [[UPConfig sharedInstance] getClothTypeByID:self.detailActData.clothes_need].name;
@@ -1002,10 +1002,22 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    NSString *actId = self.actData.ID;
+    
+    NSData *actIdData = [actId dataUsingEncoding:NSUTF8StringEncoding];
+    NSString *base64Encoded = [actIdData base64EncodedStringWithOptions:0];
+    
+    NSString *md5Str = [UPTools md5HexDigest:[NSString stringWithFormat:@"%@upperinterface", actId]];
+    NSString *shareLinkUrl = [NSString stringWithFormat:@"http://a.uppercn.com/?a=%@&t=%@", base64Encoded, md5Str];
+    
+    ActivityType *activityType = [[UPConfig sharedInstance] getActivityTypeByID:self.actData.activity_class];
+    NSString *actDesc = [NSString stringWithFormat:@"活动类型：%@\n活动描述：%@", activityType.name,self.actData.activity_desc];
+    NSString *actImageName = [NSString stringWithFormat:@"default_activity_%@", activityType.ID];
+    
     if (buttonIndex==0) {
-        [[WXApiManager sharedManager] sendLinkURL:@"http://www.uppercn.com" TagName:@"UPPER上行" Title:@"我发现了一个活动" Description:@"活动类型：xxxx" ThumbImageName:@"default_activity_101" InScene:WXSceneSession];
+        [[WXApiManager sharedManager] sendLinkURL:shareLinkUrl TagName:@"UPPER上行" Title:@"我发起了一个活动" Description:actDesc ThumbImageName:actImageName InScene:WXSceneSession];
     } else if (buttonIndex==1) {
-        [[WXApiManager sharedManager] sendLinkURL:@"http://www.uppercn.com" TagName:@"UPPER上行" Title:@"我发现了一个活动" Description:@"活动类型：xxxx" ThumbImageName:@"default_activity_101" InScene:WXSceneTimeline];
+        [[WXApiManager sharedManager] sendLinkURL:shareLinkUrl TagName:@"UPPER上行" Title:@"我发起了一个活动" Description:actDesc ThumbImageName:actImageName InScene:WXSceneTimeline];
     } else {
         //取消
     }

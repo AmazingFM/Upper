@@ -355,8 +355,8 @@ static CGFloat const FixRatio = 4/3.0;
     UPFieldCellItem *item7 = [[UPFieldCellItem alloc] init];
     item7.title = @"活动地址";
     item7.placeholder = @"请输入详细地址";
-    item7.fieldText = self.actData.activity_place_code;
-    item7.key = @"activity_place_code";
+    item7.fieldText = self.actData.activity_addr;
+    item7.key = @"activity_addr";
     
     UPFieldCellItem *item8 = [[UPFieldCellItem alloc] init];
     item8.title = @"活动场所";
@@ -835,7 +835,7 @@ static CGFloat const FixRatio = 4/3.0;
             return;
         }
         //industry_id, province_code, city_code, town_code, limit_count, limit_low
-        NSArray *paramKey = @[@"activity_name", @"activity_desc", @"end_time", @"start_time", @"activity_place_code", @"activity_place", @"is_prepaid", @"industry_id", @"clothes_need"];
+        NSArray *paramKey = @[@"activity_name", @"activity_desc", @"end_time", @"start_time", @"activity_addr", @"activity_place", @"is_prepaid", @"industry_id", @"clothes_need"];
         
         NSMutableDictionary *params = [NSMutableDictionary new];
         [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
@@ -960,7 +960,7 @@ static CGFloat const FixRatio = 4/3.0;
 
 - (BOOL)check:(UPBaseCellItem *)cellItem
 {
-    NSDictionary *paramKey = @{@"activity_name":@"请输入活动名称", @"activity_desc":@"请输入活动描述", @"end_time":@"请输入报名截止时间", @"start_time":@"请输入活动开始时间", @"activity_place_code":@"请填写活动场所", @"activity_place":@"请输入详细地址信息"};
+    NSDictionary *paramKey = @{@"activity_name":@"请输入活动名称", @"activity_desc":@"请输入活动描述", @"end_time":@"请输入报名截止时间", @"start_time":@"请输入活动开始时间", @"activity_place":@"请填写活动场所", @"activity_addr":@"请输入活动地址信息"};
 
     NSString *msg = nil;
     NSString *valueStr = cellItem.value;

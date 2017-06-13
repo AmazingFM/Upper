@@ -85,6 +85,7 @@
     cell.textLabel.text = item[@"title"];
     cell.textLabel.font = [UIFont systemFontOfSize:15.f];
     cell.detailTextLabel.text = item[@"value"];
+    cell.detailTextLabel.font = kUPThemeSmallFont;
     
     return cell;
 }

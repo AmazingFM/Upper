@@ -44,8 +44,9 @@
 @property (nonatomic, copy) NSString *activity_fee;
 @property (nonatomic, copy) NSString *activity_image;
 @property (nonatomic, copy) NSString *activity_name;
-@property (nonatomic, copy) NSString *activity_place;
-@property (nonatomic, copy) NSString *activity_place_code;
+@property (nonatomic, copy) NSString *activity_addr;//活动地址
+@property (nonatomic, copy) NSString *activity_place;//活动场所
+@property (nonatomic, copy) NSString *activity_place_code;//场所代码
 @property (nonatomic, copy) NSString *activity_status;
 
 @property (nonatomic, copy) NSString *start_time;
