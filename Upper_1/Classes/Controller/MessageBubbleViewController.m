@@ -48,7 +48,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    _msglist = [[MessageManager shared] getMessages:NSMakeRange(_pageNo, kPageNum) withUserId:_userID];
+//    _msglist = [[MessageManager shared] getMessages:NSMakeRange(_pageNo, kPageNum) withUserId:_userID];
     
     _mainTableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     _mainTableView.separatorStyle = UITableViewCellSeparatorStyleNone;

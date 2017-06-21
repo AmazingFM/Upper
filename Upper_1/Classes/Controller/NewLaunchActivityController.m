@@ -813,9 +813,7 @@ static CGFloat const FixRatio = 4/3.0;
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (alertView.tag ==1000) {
-        if (buttonIndex==1) {
-            [self showLaunchResultView];
-        }
+        [self showLaunchResultView];
         waiting = NO;
     }
 }
@@ -944,7 +942,10 @@ static CGFloat const FixRatio = 4/3.0;
                     NSDictionary *respData = respDict[@"resp_data"];
                     [actParams setObject:respData[@"activity_id"] forKey:@"ID"];
                     [actParams setObject:respData[@"imag_url"] forKey:@"activity_image"];
-                    showConfirmTagAlert(@"提示", @"活动发起成功，如需修改变更或取消，请点击活动规则查看相关规则和操作方式。", self, 1000);
+                    
+                    UIAlertView* alert=[[UIAlertView alloc] initWithTitle:@"提示" message:@"活动发起成功，如需修改变更或取消，请点击活动规则查看相关规则和操作方式。" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确认", nil];
+                    alert.tag=1000;
+                    [alert show];
                 } else {
                     showDefaultAlert(@"提示", respDict[@"resp_desc"]);
                     waiting = NO;
@@ -1323,7 +1324,7 @@ static CGFloat const FixRatio = 4/3.0;
     __block int count = 0;
     
     //activity_name-活动名称,activity_class-活动类型, start_time-活动开始时间，ID-活动id，nick_name-发起人昵称
-    NSDictionary *actDataDict = @{@"activity_name":self.actData.activity_name,@"activity_class":self.actData.activity_class,@"start_time":self.actData.start_time,@"id":self.actData.ID, @"nick_name":self.actData.nick_name};
+    NSDictionary *actDataDict = @{@"activity_name":self.actData.activity_name,@"activity_class":self.actData.activity_class,@"start_time":self.actData.start_time,@"id":self.actData.ID, @"nick_name":[UPDataManager shared].userInfo.nick_name};
     
     NSString *msgDesc = [UPTools stringFromJSON:actDataDict];
     
@@ -1346,6 +1347,7 @@ static CGFloat const FixRatio = 4/3.0;
             if ([resp_id intValue]==0) {
                 [MBProgressHUD showSuccess:@"已发送邀请给对方"];
                 count++;
+                [self cancel];
             } else {
                 count++;
             }

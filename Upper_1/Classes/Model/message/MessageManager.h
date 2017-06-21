@@ -44,14 +44,12 @@ typedef NS_ENUM(NSUInteger, UPGroupMsgType){
     SystemSoundID soundID;
 }
 
-@property (nonatomic) BOOL isBackgound;
-
 + (instancetype)shared;
-//- (void)pullMessage;
+- (void)startMessageTimer;
+- (void)stopMessageTimer;
 - (NSMutableArray *)getMessageGroup;
 - (NSMutableArray *)getMessageGroup:(NSRange)range;
 - (BOOL)updateGropuMessageStatus:(NSString *)user_id;
-- (NSMutableArray *)getMessages:(NSRange)range withUserId:(NSString *)userId;
 - (BOOL)updateOneMessage:(UUMessage *)msg;
 
 - (NSArray<PrivateMessage *> *)getMessagesByType:(MessageType)type;

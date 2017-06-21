@@ -659,14 +659,22 @@
                     case 7:
                     case 8:
                     case 9:
-                        _commentActBtn.frame =   CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
-                        _complainBtn.frame = CGRectMake(width-2*btnWidth-btnPadding,5,btnWidth,perHeight-10);
+                    {
+                        NSString *joinStatus = itemData.join_status;
+                        if ([joinStatus intValue]==1) {
+                            _commentActBtn.frame =   CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
+                            _complainBtn.frame = CGRectMake(width-2*btnWidth-btnPadding,5,btnWidth,perHeight-10);
+                        } else {
+                            _complainBtn.frame = CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
+                        }
+                        
                         _reviewActBtn.frame =   CGRectZero;
                         _changeActBtn.frame =   CGRectZero;
                         _cancelActBtn.frame =   CGRectZero;
                         _quitActBtn.frame =     CGRectZero;
                         _signActBtn.frame =     CGRectZero;
                         _editActBtn.frame =     CGRectZero;
+                    }
                         break;
                 }
                 

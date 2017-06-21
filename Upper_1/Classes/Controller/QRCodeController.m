@@ -346,6 +346,7 @@
     }
     [params setObject:@"1" forKey:@"user_status"];
     [params setObject:userID forKey:@"user_id"];
+    [params setObject:[UPDataManager shared].userInfo.ID forKey:@"creator_id"];
     
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         [MBProgressHUD hideHUDForView:self.view];

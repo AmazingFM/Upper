@@ -40,7 +40,9 @@ static dispatch_queue_t message_manager_processing_queue() {
 @end
 
 @interface MessageManager()
-
+{
+    BOOL timerStarted;
+}
 @property (nonatomic, retain) NSMutableArray<UUMessage *> *messageList;
 @property (nonatomic, retain) NSMutableArray<UUMessage *> *groupMessageList;
 
@@ -63,7 +65,7 @@ static dispatch_queue_t message_manager_processing_queue() {
 {
     self = [super init];
     if (self) {
-        self.isBackgound = NO;
+        timerStarted = NO;
         //获取路径
         NSString *path = [[NSBundle mainBundle] pathForResource:@"msg_alert_sound" ofType:@"mp3"];
         //定义一个带振动的SystemSoundID
@@ -98,11 +100,23 @@ static dispatch_queue_t message_manager_processing_queue() {
             }  
         }];
         
-        [UPTimerManager createTimer:@"TimeToPullMessage" notice:kNotifierMessagePull heartTime:10.0f];
-        [[UPTimerManager shared] startTimeMachine:@"TimeToPullMessage"];
+        [self startMessageTimer];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestMessages) name:kNotifierMessagePull object:nil];
     }
     return self;
+}
+
+- (void)startMessageTimer
+{
+    timerStarted = YES;
+    [UPTimerManager createTimer:kUPMessageTimeMachineName notice:kNotifierMessagePull heartTime:10.f];
+    [[UPTimerManager shared] startTimeMachine:kUPMessageTimeMachineName];
+}
+
+- (void)stopMessageTimer
+{
+    timerStarted = NO;
+    [[UPTimerManager shared] stopTimeMachine:kUPMessageTimeMachineName];
 }
 
 -(FMDatabaseQueue *)fmQueue
@@ -115,32 +129,6 @@ static dispatch_queue_t message_manager_processing_queue() {
     
     return _fmQueue;
 }
-
-//- (void)initializeDB
-//{
-//    NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
-//    NSLog(@"home:%@",path);
-//    messageDb = [FMDatabase databaseWithPath:[path stringByAppendingPathComponent:@"message.sqlite"]];
-//    
-//    BOOL flag = [messageDb open];
-//    if (flag) {
-//        NSLog(@"数据库打开成功");
-//    } else {
-//        NSLog(@"数据库打开失败");
-//    }
-//    
-//    //建表消息列表
-//    flag = [messageDb executeUpdate:@"create table if not exists SysTable (local_id char(10) not null, local_name varchar(50) not null, remote_id varchar(10) not null, remote_name varchar(50) not null, msg_desc varchar(512) not null, source integer not null, add_time char(14) not null, msg_status char(1), msg_type integer not null, msg_key varchar(256)) "];
-//    
-//    flag = [messageDb executeUpdate:@"create table if not exists UsrTable (local_id char(10) not null, local_name varchar(50) not null, remote_id varchar(10) not null, remote_name varchar(50) not null, msg_desc varchar(512) not null, source integer not null, add_time char(14) not null, msg_status char(1), msg_type integer not null, msg_key varchar(256)) "];
-//
-//    if (flag) {
-//        NSLog(@"建表messages成功");
-//    } else {
-//        NSLog(@"建表messages失败");
-//    }
-//    [messageDb close];
-//}
 
 - (NSDictionary *)parseMessages:(NSArray *)msgArr
 {
@@ -268,7 +256,7 @@ static dispatch_queue_t message_manager_processing_queue() {
 
 - (void)requestMessages
 {
-    if (![UPDataManager shared].isLogin || self.isBackgound) {
+    if (![UPDataManager shared].isLogin || !timerStarted) {
         return;
     }
     NSMutableDictionary *params = [NSMutableDictionary new];

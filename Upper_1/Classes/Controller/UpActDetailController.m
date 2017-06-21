@@ -1015,9 +1015,9 @@
     NSString *actImageName = [NSString stringWithFormat:@"default_activity_%@", activityType.ID];
     
     if (buttonIndex==0) {
-        [[WXApiManager sharedManager] sendLinkURL:shareLinkUrl TagName:@"UPPER上行" Title:@"我发起了一个活动" Description:actDesc ThumbImageName:actImageName InScene:WXSceneSession];
+        [[WXApiManager sharedManager] sendLinkURL:shareLinkUrl TagName:@"UPPER上行" Title:@"我发现了一个活动" Description:actDesc ThumbImageName:actImageName InScene:WXSceneSession];
     } else if (buttonIndex==1) {
-        [[WXApiManager sharedManager] sendLinkURL:shareLinkUrl TagName:@"UPPER上行" Title:@"我发起了一个活动" Description:actDesc ThumbImageName:actImageName InScene:WXSceneTimeline];
+        [[WXApiManager sharedManager] sendLinkURL:shareLinkUrl TagName:@"UPPER上行" Title:@"我发现了一个活动" Description:actDesc ThumbImageName:actImageName InScene:WXSceneTimeline];
     } else {
         //取消
     }

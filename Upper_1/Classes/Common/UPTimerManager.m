@@ -124,8 +124,6 @@
             break;
         }
     }
-    
-    
 }
 
 - (void)skipTimerWithName:(NSString *)timerName

@@ -49,12 +49,12 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    [MessageManager shared].isBackgound = NO;
+    [[MessageManager shared] startMessageTimer];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    [MessageManager shared].isBackgound = YES;
+    [[MessageManager shared] stopMessageTimer];
 }
 
 - (void)setRootViewController
