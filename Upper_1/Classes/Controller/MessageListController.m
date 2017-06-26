@@ -138,6 +138,11 @@
     remoteID = msg.remote_id;
     remoteName = msg.remote_name;
     
+    [[MessageManager shared] updateMessageReadStatus:msg];
+    msg.read_status = @"1";
+    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    
+    
     switch (msg.localMsgType) {
         case MessageTypeSystemGeneral:
             showDefaultAlert(@"系统消息", msg.msg_desc);

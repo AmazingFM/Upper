@@ -83,9 +83,9 @@ static dispatch_queue_t message_manager_processing_queue() {
         //这是在一个代码块中
         [self.fmQueue inDatabase:^(FMDatabase *db) {
             //建表消息列表
-            BOOL flag = [db executeUpdate:@"create table if not exists SysTable (local_id char(10) not null, local_name varchar(50) not null, remote_id varchar(10) not null, remote_name varchar(50) not null, msg_desc varchar(512) not null, source integer not null, add_time char(14) not null, msg_status char(1), msg_type integer not null, msg_key varchar(256)) "];
+            BOOL flag = [db executeUpdate:@"create table if not exists SysTable (local_id char(10) not null, local_name varchar(50) not null, remote_id varchar(10) not null, remote_name varchar(50) not null, msg_desc varchar(512) not null, source integer not null, add_time char(14) not null, msg_status char(1), msg_type integer not null, msg_key varchar(256), read_status char(1) )"];
             
-            flag = [db executeUpdate:@"create table if not exists UsrTable (local_id char(10) not null, local_name varchar(50) not null, remote_id varchar(10) not null, remote_name varchar(50) not null, msg_desc varchar(512) not null, source integer not null, add_time char(14) not null, msg_status char(1), msg_type integer not null, msg_key varchar(256)) "];
+            flag = [db executeUpdate:@"create table if not exists UsrTable (local_id char(10) not null, local_name varchar(50) not null, remote_id varchar(10) not null, remote_name varchar(50) not null, msg_desc varchar(512) not null, source integer not null, add_time char(14) not null, msg_status char(1), msg_type integer not null, msg_key varchar(256), read_status char(1))"];
             
             if (flag) {
                 NSLog(@"建表messages成功");
@@ -152,8 +152,8 @@ static dispatch_queue_t message_manager_processing_queue() {
         priMsg.source           = MessageSourceOther;
         priMsg.local_id         = [UPDataManager shared].userInfo.ID;
         priMsg.local_name       = [UPDataManager shared].userInfo.nick_name;
-        priMsg.msg_key          = @"uniquexxx";
-        
+        priMsg.msg_key          = dict[@"id"];
+        priMsg.read_status      = @"0";
         
         //90~99系统文本消息，含以后可能的各类系统消息类型
         //80~89活动类文本消息， 含邀请-80， 变更发起人-81
@@ -208,9 +208,9 @@ static dispatch_queue_t message_manager_processing_queue() {
         [db beginTransaction];
         BOOL isRollBack = NO;
         
-        NSString *sysInsertSql = @"insert into SysTable (local_id, local_name, remote_id, remote_name, msg_desc, source, add_time, msg_status, msg_type, msg_key) values(?,?,?,?,?,?,?,?,?,?)";
+        NSString *sysInsertSql = @"insert into SysTable (local_id, local_name, remote_id, remote_name, msg_desc, source, add_time, msg_status, msg_type, msg_key, read_status) values(?,?,?,?,?,?,?,?,?,?,?)";
         
-        NSString *usrInsertSql = @"insert into UsrTable (local_id, local_name, remote_id, remote_name, msg_desc, source, add_time, msg_status, msg_type, msg_key) values(?,?,?,?,?,?,?,?,?,?)";
+        NSString *usrInsertSql = @"insert into UsrTable (local_id, local_name, remote_id, remote_name, msg_desc, source, add_time, msg_status, msg_type, msg_key, read_status) values(?,?,?,?,?,?,?,?,?,?,?)";
         
         NSArray *insertSqls = @[sysInsertSql, usrInsertSql];
         NSArray *msgKeys = @[SysMsgKey, UsrMsgKey];
@@ -236,7 +236,7 @@ static dispatch_queue_t message_manager_processing_queue() {
                                   msg.msg_desc, [NSNumber numberWithInt:msg.source],
                                   msg.add_time,     msg.status,
                                   [NSNumber numberWithInt:msg.localMsgType],
-                                  msg.msg_key];
+                                  msg.msg_key,msg.read_status];
                         if (!a) {
                             NSLog(@"插入失败：%@",msgKeys[i]);
                         }
@@ -253,6 +253,8 @@ static dispatch_queue_t message_manager_processing_queue() {
         }
     }];
 }
+
+
 
 - (void)requestMessages
 {
@@ -279,6 +281,7 @@ static dispatch_queue_t message_manager_processing_queue() {
                         NSDictionary *msgGroupDict = [self parseMessages:msgArr];
                         
                         if (msgGroupDict) {
+                            //对于系统类的系统需要和用户id关联起来进行存储
                             [self insertMsgGroupDict:msgGroupDict];
                             //播放消息提示音
                             AudioServicesPlaySystemSound(soundID);
@@ -310,7 +313,7 @@ static dispatch_queue_t message_manager_processing_queue() {
         
         if (type==MessageTypeSystem ||
             type==MessageTypeActivity) {
-            NSString *querySql = [NSString stringWithFormat:@"select * from SysTable where %@ order by add_time desc",queryCondition];
+            NSString *querySql = [NSString stringWithFormat:@"select * from SysTable where (%@) and local_id='%@' order by add_time desc",queryCondition, [UPDataManager shared].userInfo.ID];
             FMResultSet *s = [db executeQuery:querySql];
             while (s.next) {
                 PrivateMessage *msg = [[PrivateMessage alloc] init];
@@ -324,6 +327,7 @@ static dispatch_queue_t message_manager_processing_queue() {
                 msg.status          = [s stringForColumn:@"msg_status"];
                 msg.localMsgType    = [s intForColumn:@"msg_type"];
                 msg.msg_key         = [s stringForColumn:@"msg_key"];
+                msg.read_status     = [s stringForColumn:@"read_status"];
                 
                 [msgList addObject:msg];
             }
@@ -343,6 +347,7 @@ static dispatch_queue_t message_manager_processing_queue() {
                 msg.status          = [s stringForColumn:@"msg_status"];
                 msg.localMsgType    = [s intForColumn:@"msg_type"];
                 msg.msg_key         = [s stringForColumn:@"msg_key"];
+                msg.read_status     = [s stringForColumn:@"read_status"];
                 
                 [msgList addObject:msg];
             }
@@ -370,6 +375,7 @@ static dispatch_queue_t message_manager_processing_queue() {
             msg.status          = [s stringForColumn:@"msg_status"];
             msg.localMsgType    = [s intForColumn:@"msg_type"];
             msg.msg_key         = [s stringForColumn:@"msg_key"];
+            msg.read_status     = [s stringForColumn:@"read_status"];
             
             [msgList addObject:msg];
         }
@@ -382,7 +388,7 @@ static dispatch_queue_t message_manager_processing_queue() {
 {
     __block BOOL ret;
     [self.fmQueue inDatabase:^(FMDatabase *db) {
-        NSString *usrInsertSql = @"insert into UsrTable (local_id, local_name, remote_id, remote_name, msg_desc, source, add_time, msg_status, msg_type, msg_key) values(?,?,?,?,?,?,?,?,?,?)";
+        NSString *usrInsertSql = @"insert into UsrTable (local_id, local_name, remote_id, remote_name, msg_desc, source, add_time, msg_status, msg_type, msg_key, read_status) values(?,?,?,?,?,?,?,?,?,?,?)";
         
         ret = [db executeUpdate:usrInsertSql,
                   msg.local_id,     msg.local_name,
@@ -390,11 +396,47 @@ static dispatch_queue_t message_manager_processing_queue() {
                   msg.msg_desc, [NSNumber numberWithInt:msg.source],
                   msg.add_time,     msg.status,
                   [NSNumber numberWithInt:msg.localMsgType],
-                  msg.msg_key];
+                  msg.msg_key, msg.read_status];
         if (!ret) {
             NSLog(@"发送信息插入失败");
         }
 
+    }];
+    return ret;
+}
+
+- (BOOL)updateMessageReadStatus:(PrivateMessage *)msg
+{
+    __block BOOL ret = NO;
+    [self.fmQueue inDatabase:^(FMDatabase *db) {
+        
+        NSString *tableName;
+        switch (msg.localMsgType) {
+            case MessageTypeSystemGeneral:
+            case MessageTypeActivityInvite:
+            case MessageTypeActivityChangeLauncher:
+                tableName = @"SysTable";
+                break;
+            case MessageTypeCommonText:
+            case MessageTypeCommonImage:
+            case MessageTypeCommonMix:
+                tableName = @"UsrTable";
+                break;
+            default:
+                break;
+        }
+        if (tableName.length>0) {
+            NSString *updateSql = [NSString stringWithFormat:@"update %@ set read_status='1' where msg_key='%@'", tableName, msg.msg_key];
+            
+            ret = [db executeUpdate:updateSql];
+
+        }
+        
+        if (!ret) {
+            NSLog(@"更新失败");
+        } else {
+            NSLog(@"更新成功");
+        }
     }];
     return ret;
 }
@@ -528,7 +570,7 @@ static dispatch_queue_t message_manager_processing_queue() {
 }
 
 #pragma mark - 操作表:消息组
-- (BOOL)updateGropuMessageStatus:(NSString *)user_id
+- (BOOL)updateGroupMessageStatus:(NSString *)user_id
 {
 //    [messageDb open];
 //    NSString *updateSql = [NSString stringWithFormat:@"update messages_group set status='1' where from_id='%@'", user_id];

@@ -30,6 +30,7 @@ UPMainMenuController *g_homeMenu;
 
 YRSideViewController* g_sideController;
 
+
 void initialize()
 {
     UIDevice* device=[UIDevice currentDevice];

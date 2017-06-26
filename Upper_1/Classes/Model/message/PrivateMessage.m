@@ -11,6 +11,15 @@
 
 @implementation PrivateMessage
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _read_status = @"0";
+    }
+    return self;
+}
+
 //"08-10 晚上08:09:41.0" ->
 //"昨天 上午10:09"或者"2012-08-10 凌晨07:09"
 - (NSString *)changeTheDateString:(NSString *)Str

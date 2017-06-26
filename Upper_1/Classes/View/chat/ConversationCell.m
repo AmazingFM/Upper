@@ -16,6 +16,7 @@
 
 @interface ConversationCell()
 @property (nonatomic, retain) UIImageView *userIconView;
+@property (nonatomic, retain) UILabel   *badgeLabel;
 @property (nonatomic, retain) UILabel *name, *msg, *time;
 
 @end
@@ -25,6 +26,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
         if (!_userIconView) {
             _userIconView = [[UIImageView alloc] initWithFrame:CGRectMake(LeftRightPadding, ([ConversationCell cellHeight]-48)/2, 48, 48)];
             _userIconView.layer.masksToBounds = YES;
@@ -32,6 +34,15 @@
             self.layer.borderWidth = 0.5;
             self.layer.borderColor = [UPTools colorWithHex:0xdddddd].CGColor;
             [self.contentView addSubview:_userIconView];
+        }
+        
+        if (!_badgeLabel) {
+            _badgeLabel = [[UILabel alloc] initWithFrame:CGRectMake(LeftRightPadding+48-8, ([ConversationCell cellHeight]-48)/2, 8, 8)];
+            _badgeLabel.layer.cornerRadius = 4;
+            _badgeLabel.layer.masksToBounds = YES;
+            _badgeLabel.backgroundColor = [UIColor redColor];
+            _badgeLabel.hidden = YES;
+            [self.contentView addSubview:_badgeLabel];
         }
         if (!_name) {
             _name = [[UILabel alloc] initWithFrame:CGRectMake(75, 8, 150, 25)];
@@ -105,6 +116,9 @@
         }
             break;
     }
+    
+    BOOL read_status = [_curPriMsg.read_status intValue];
+    _badgeLabel.hidden = read_status;
 }
 
 + (CGFloat)cellHeight
@@ -122,6 +136,14 @@
     if (self) {
         self.textLabel.font = kUPThemeTitleFont;
         self.textLabel.textColor = [UPTools colorWithHex:0x222222];
+        
+        _badgeLabel = [[UILabel alloc] initWithFrame:CGRectMake(LeftRightPadding+48-8, ([ToMessageCell cellHeight]-48)/2, 8, 8)];
+        _badgeLabel.layer.cornerRadius = 4;
+        _badgeLabel.layer.masksToBounds = YES;
+        _badgeLabel.backgroundColor = [UIColor redColor];
+        _badgeLabel.hidden = YES;
+        [self.contentView addSubview:_badgeLabel];
+
     }
     return self;
 }
@@ -153,13 +175,10 @@
     self.textLabel.frame = CGRectMake(75, ([ToMessageCell cellHeight]-30)/2, ScreenWidth-120, 30);
     NSString *badgeTip = @"";
     if (_unreadCount && _unreadCount.integerValue > 0) {
-        if (_unreadCount.integerValue > 99) {
-            badgeTip = @"99+";
-        }else{
-            badgeTip = _unreadCount.stringValue;
-        }
-        self.accessoryType = UITableViewCellAccessoryNone;
+        _badgeLabel.hidden = NO;
+        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }else{
+        _badgeLabel.hidden = YES;
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     [self.contentView addBadgeTip:badgeTip withCenterPosition:CGPointMake(ScreenWidth-25, [ToMessageCell cellHeight]/2)];

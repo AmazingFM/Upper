@@ -49,10 +49,11 @@ typedef NS_ENUM(NSUInteger, UPGroupMsgType){
 - (void)stopMessageTimer;
 - (NSMutableArray *)getMessageGroup;
 - (NSMutableArray *)getMessageGroup:(NSRange)range;
-- (BOOL)updateGropuMessageStatus:(NSString *)user_id;
+- (BOOL)updateGroupMessageStatus:(NSString *)user_id;
 - (BOOL)updateOneMessage:(UUMessage *)msg;
 
 - (NSArray<PrivateMessage *> *)getMessagesByType:(MessageType)type;
 - (NSArray<PrivateMessage *> *)getMessagesByUser:(NSString *)userId;
 - (BOOL)insertOneMessage:(PrivateMessage *)msg;
+- (BOOL)updateMessageReadStatus:(PrivateMessage *)msg_key;
 @end

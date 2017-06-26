@@ -49,11 +49,9 @@ typedef NS_ENUM(NSInteger, MessageSource) {
 
 @property (assign, nonatomic) PrivateMessageSendStatus sendStatus;
 @property (nonatomic, copy) NSString *msg_key;
-
+@property (nonatomic, copy) NSString *read_status;//消息是否已读（未读：@“0” 已读：@“1”）
 
 @property (nonatomic, assign) BOOL showDateLabel;
-
-- (void)setWithDict:(NSDictionary *)dict;
 
 - (void)minuteOffSetStart:(NSString *)start end:(NSString *)end;
 

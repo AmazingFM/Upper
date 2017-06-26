@@ -28,6 +28,10 @@
     NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
     NSString *version = [NSString stringWithFormat:@"%@(%@)", infoDict[@"CFBundleShortVersionString"],infoDict[@"CFBundleVersion"]] ;
     
+#ifdef UPTEST
+    version = [NSString stringWithFormat:@"测试版%@", version];
+#endif
+    
     [itemList addObject:@{@"title":@"版本", @"value":version}];
 }
 

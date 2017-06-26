@@ -10,7 +10,6 @@
 #import "MessageListController.h"
 #import "MessageManager.h"
 #import "UPDataManager.h"
-//#import "UPTimerManager.h"
 #import "PrivateMessage.h"
 #import "Info.h"
 #import "UPTheme.h"
@@ -171,12 +170,16 @@
                 cell.type = ToMessageTypeSystemNotification;
                 if (showBadgeSys) {
                     cell.unreadCount = @1;//[notificationDict objectForKey:@"system"];
+                } else {
+                    cell.unreadCount = @0;
                 }
                 break;
             case 1:
                 cell.type = ToMessageTypeInvitation;
                 if (showBadgeAct) {
                     cell.unreadCount = @1;//[notificationDict objectForKey:@"invite"];
+                } else {
+                    cell.unreadCount = @0;
                 }
                 break;
             default:
@@ -213,6 +216,10 @@
         PrivateMessage *msg = [priMsgList objectAtIndex:indexPath.row-2];
         UPChatViewController *chatController = [[UPChatViewController alloc] initWithUserID:msg.remote_id andUserName:msg.remote_name andUserIcon:@""];
         [self.navigationController pushViewController:chatController animated:YES];
+    }
+    
+    if (!showBadgeAct && !showBadgeSys) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierMessageComing object:nil userInfo:nil];
     }
 }
 

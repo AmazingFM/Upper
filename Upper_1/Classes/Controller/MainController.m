@@ -147,7 +147,7 @@ static int kMsgCount = 0;
     menu.delegate = self;
     [self.view addSubview:menu];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(showMessageBadge) name:kNotifierMessageComing object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(showMessageBadge:) name:kNotifierMessageComing object:nil];
 }
 
 - (void)loadCollectItem
@@ -202,10 +202,16 @@ static int kMsgCount = 0;
     }
 }
 
-- (void)showMessageBadge
+- (void)showMessageBadge:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [messageItem showBadgeAt:26 andY:-3];
+        NSDictionary *msgGroupDict = notification.userInfo;
+        
+        if (msgGroupDict!=nil)
+            [messageItem showBadgeAt:26 andY:-3];
+        else {
+            [self hideMessageBadge];
+        }
     });
 }
 
