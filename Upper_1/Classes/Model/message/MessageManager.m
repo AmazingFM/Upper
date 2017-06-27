@@ -216,7 +216,7 @@ static dispatch_queue_t message_manager_processing_queue() {
                 
                 if (sysMsgList.count>0) {
                     for (PrivateMessage *msg in sysMsgList) {
-                        NSString *sysInsertSql = [NSString stringWithFormat:@"insert into SysTable (local_id, local_name, remote_id, remote_name, msg_desc, source, add_time, msg_status, msg_type, msg_key, read_status) select '%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@' from dual where not exists (select 1 from SysTable where msg_key='%@' and local_id='%@')", msg.local_id, msg.local_name, msg.remote_id, msg.remote_name, msg.msg_desc, [NSNumber numberWithInt:msg.source], msg.add_time, msg.status, [NSNumber numberWithInt:msg.localMsgType], msg.msg_key,msg.read_status, msg.msg_key,msg.local_id];
+                        NSString *sysInsertSql = [NSString stringWithFormat:@"insert into SysTable (local_id, local_name, remote_id, remote_name, msg_desc, source, add_time, msg_status, msg_type, msg_key, read_status) select '%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@' where not exists (select 1 from SysTable where msg_key='%@' and local_id='%@')", msg.local_id, msg.local_name, msg.remote_id, msg.remote_name, msg.msg_desc, [NSNumber numberWithInt:msg.source], msg.add_time, msg.status, [NSNumber numberWithInt:msg.localMsgType], msg.msg_key,msg.read_status, msg.msg_key,msg.local_id];
                         BOOL a = [db executeUpdate:sysInsertSql];
                         if (!a) {
                             NSLog(@"系统消息插入失败(含活动类消息)");
