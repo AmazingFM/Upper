@@ -411,15 +411,24 @@ static CGFloat const FixRatio = 4/3.0;
     item16.key = @"activity_fee";
     item16.title = @"预估人均费用";
     
-    UPSwitchCellItem *item12 = [[UPSwitchCellItem alloc] init];
-    item12.title=@"仅限本行业";
-    
-    BOOL isOn = NO;
-    if (self.actData && [self.actData.industry_id intValue]!=-1) {
-        isOn = YES;
-    }
-    item12.isOn = isOn;
-    item12.isLock = YES;
+//    UPSwitchCellItem *item12 = [[UPSwitchCellItem alloc] init];
+//    item12.title=@"仅限本行业";
+//    
+//    BOOL isOn = NO;
+//    if (self.actData && [self.actData.industry_id intValue]!=-1) {
+//        isOn = YES;
+//    }
+//    item12.isOn = isOn;
+//    item12.isLock = YES;
+//    item12.key = @"industry_id";
+//    
+    UPComboxCellItem *item12 = [[UPComboxCellItem alloc] init];  //活动可见范围
+    item12.title = @"可见范围";
+    item12.style = UPItemStyleIndex;
+
+    item12.comboxItems = @[@"不限", @"本行业可见", @"屏蔽本行业"];
+    item12.selectedIndex = _payType!=nil?([_payType.ID intValue]-1):0;
+    item12.style = UPItemStyleIndex;
     item12.key = @"industry_id";
     
     NSString *submitTitle = nil;
@@ -843,7 +852,11 @@ static CGFloat const FixRatio = 4/3.0;
                     return;
                 }
                 if ([cellItem.key isEqualToString:@"industry_id"]) {
-                    params[cellItem.key] = ([cellItem.value intValue]==1)?[UPDataManager shared].userInfo.industry_id:@"-1";
+//                    不限-0, 本行业可见-行业id, 屏蔽本行业-行业id*-1;
+                    int index = [cellItem.value intValue];
+                    int factor = index<=1?index:-1;
+                    int industry_id = [[UPDataManager shared].userInfo.industry_id intValue];
+                    params[cellItem.key] = @(industry_id*factor).stringValue;
                 } else if([cellItem.key isEqualToString:@"start_time"]|[cellItem.key isEqualToString:@"end_time"]) {
                     if ([cellItem.key isEqualToString:@"start_time"]) {
                         params[cellItem.key] = [UPTools dateTransform:cellItem.value fromFormat:@"yyyy-MM-dd" toFormat:@"yyyyMMdd000000"];
