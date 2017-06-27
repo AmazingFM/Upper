@@ -208,29 +208,40 @@ static dispatch_queue_t message_manager_processing_queue() {
         [db beginTransaction];
         BOOL isRollBack = NO;
         
-        NSString *sysInsertSql = @"insert into SysTable (local_id, local_name, remote_id, remote_name, msg_desc, source, add_time, msg_status, msg_type, msg_key, read_status) values(?,?,?,?,?,?,?,?,?,?,?)";
+        NSString *sysInsertSql = @"insert into SysTable (local_id, local_name, remote_id, remote_name, msg_desc, source, add_time, msg_status, msg_type, msg_key, read_status) values(?,?,?,?,?,?,?,?,?,?,?) where not exists (select 1 from SysTable where msg_key=? and local_id=?)";
         
         NSString *usrInsertSql = @"insert into UsrTable (local_id, local_name, remote_id, remote_name, msg_desc, source, add_time, msg_status, msg_type, msg_key, read_status) values(?,?,?,?,?,?,?,?,?,?,?)";
         
-        NSArray *insertSqls = @[sysInsertSql, usrInsertSql];
-        NSArray *msgKeys = @[SysMsgKey, UsrMsgKey];
-        
         @try {
-            for (int i=0; i<2; i++) {
-                NSString *insertSql = insertSqls[i];
+            {
+                NSMutableArray *sysMsgList = [NSMutableArray new];
+                [sysMsgList addObjectsFromArray:msgGroupDict[SysMsgKey]];
+                [sysMsgList addObjectsFromArray:msgGroupDict[ActMsgKey]];
                 
-                NSMutableArray *msgList = [NSMutableArray new];
-                if (i==0) {
-                    [msgList addObjectsFromArray:msgGroupDict[SysMsgKey]];
-                    [msgList addObjectsFromArray:msgGroupDict[ActMsgKey]];
-                } else if (i==1) {
-                    [msgList addObjectsFromArray:msgGroupDict[UsrMsgKey]];
+                if (sysMsgList.count>0) {
+                    for (PrivateMessage *msg in sysMsgList) {
+                        BOOL a = [db executeUpdate:sysInsertSql,
+                                  msg.local_id,     msg.local_name,
+                                  msg.remote_id,    msg.remote_name,
+                                  msg.msg_desc, [NSNumber numberWithInt:msg.source],
+                                  msg.add_time,     msg.status,
+                                  [NSNumber numberWithInt:msg.localMsgType],
+                                  msg.msg_key,msg.read_status,
+                                  msg.msg_key,msg.local_id];
+                        if (!a) {
+                            NSLog(@"系统消息插入失败(含活动类消息)");
+                        }
+                    }
                 }
+            }
+            
+            {
+                NSMutableArray *usrMsgList = [NSMutableArray new];
+                [usrMsgList addObjectsFromArray:msgGroupDict[UsrMsgKey]];
                 
-                
-                if (msgList.count>0) {
-                    for (PrivateMessage *msg in msgList) {
-                        BOOL a = [db executeUpdate:insertSql,
+                if (usrMsgList.count>0) {
+                    for (PrivateMessage *msg in usrMsgList) {
+                        BOOL a = [db executeUpdate:usrInsertSql,
                                   msg.local_id,     msg.local_name,
                                   msg.remote_id,    msg.remote_name,
                                   msg.msg_desc, [NSNumber numberWithInt:msg.source],
@@ -238,7 +249,7 @@ static dispatch_queue_t message_manager_processing_queue() {
                                   [NSNumber numberWithInt:msg.localMsgType],
                                   msg.msg_key,msg.read_status];
                         if (!a) {
-                            NSLog(@"插入失败：%@",msgKeys[i]);
+                            NSLog(@"普通消息插入失败");
                         }
                     }
                 }
