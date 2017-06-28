@@ -666,6 +666,7 @@
                             _complainBtn.frame = CGRectMake(width-2*btnWidth-btnPadding,5,btnWidth,perHeight-10);
                         } else {
                             _complainBtn.frame = CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
+                            _commentActBtn.frame = CGRectZero;
                         }
                         
                         _reviewActBtn.frame =   CGRectZero;
