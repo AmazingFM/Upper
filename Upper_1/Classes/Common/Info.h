@@ -18,7 +18,6 @@
 #define kNotifierMessagePull    @"kNotifierMessagePull"   //从server 定时取消息
 #define kNotifierMessageSending @"kNotifierMessageSending"    //取到消息后，对chatcontroller内容进行更新
 #define kNotifierMessageComing @"kNotifierMessageComing"    //取到消息后，对chatcontroller内容进行更新
-//#define kNotifierMessageBadgeClear @"kNotifierMessageBadgeClear" //清除首页消息红点提示
 
 #define kUPMessageTimeMachineName     @"messageTimer"
 
