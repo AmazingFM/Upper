@@ -288,10 +288,11 @@ static dispatch_queue_t message_manager_processing_queue() {
                             [self insertMsgGroupDict:msgGroupDict];
                             //播放消息提示音
                             AudioServicesPlaySystemSound(soundID);
-//                            dispatch_async(dispatch_get_main_queue(), ^{
-                                //发送通知
-                                [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierMessageComing object:nil userInfo:msgGroupDict];
-//                            });
+                            
+                            //设置红点标志
+                            [self setBadgeFlag:msgGroupDict];
+                            //发送通知
+                            [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierMessageComing object:nil userInfo:msgGroupDict];
                         }
                     }
                 }
@@ -300,6 +301,22 @@ static dispatch_queue_t message_manager_processing_queue() {
     } failure:^(NSError *error) {
         //
     }];
+}
+
+- (void)setBadgeFlag:(NSDictionary *)msgGroupDict
+{
+    NSArray<PrivateMessage *> *sysMsgList = msgGroupDict[SysMsgKey];
+    NSArray<PrivateMessage *> *actMsgList = msgGroupDict[ActMsgKey];
+    
+    //更新系统消息、活动消息红点
+    if (sysMsgList.count>0) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"SysBadgeKey"];
+    }
+    if (actMsgList.count>0) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"ActBadgeKey"];
+    }
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (NSArray<PrivateMessage *> *)getMessagesByType:(MessageType)type

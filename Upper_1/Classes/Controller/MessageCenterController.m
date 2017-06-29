@@ -108,35 +108,37 @@
 - (void)updateMsg:(NSNotification *)notification
 {
     NSDictionary *msgGroupDict = notification.userInfo;
-    NSArray<PrivateMessage *> *sysMsgList = msgGroupDict[SysMsgKey];
-    NSArray<PrivateMessage *> *actMsgList = msgGroupDict[ActMsgKey];
     NSArray<PrivateMessage *> *usrMsgList = msgGroupDict[UsrMsgKey];
     
     //更新系统消息、活动消息红点
-    if (sysMsgList.count>0) {
-        if (!showBadgeSys) {
-            showBadgeSys = YES;
-            [self setBadgeFlag:@"SysBadgeKey" flag:showBadgeAct];
-        }
-    }
-    if (actMsgList.count>0) {
-        if (!showBadgeAct) {
-            showBadgeAct = YES;
-            [self setBadgeFlag:@"ActBadgeKey" flag:showBadgeAct];
-        }
-    }
-
+    showBadgeSys = [self loadBadgeFlag:@"SysBadgeKey"];
+    showBadgeAct = [self loadBadgeFlag:@"ActBadgeKey"];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         //更新用户信息
         if (usrMsgList.count>0) {
             [self loadMessage];//重新加载
             [_messageTable reloadData];
         } else  {
-            if (showBadgeSys || showBadgeAct) {
-                [_messageTable reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0],[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-            }
+            [self reloadSysAndActBadge];
         }
     });
+}
+
+- (void)reloadSysAndActBadge
+{
+    NSMutableArray<NSIndexPath *> *indexPaths = [[NSMutableArray alloc] init];
+    if (showBadgeSys) {
+        [indexPaths addObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+    }
+    
+    if (showBadgeAct) {
+        [indexPaths addObject:[NSIndexPath indexPathForRow:1 inSection:0]];
+    }
+    
+    if (indexPaths.count>0) {
+        [_messageTable reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 #pragma mark UITableViewDelegate, datasource
@@ -214,13 +216,14 @@
         
     } else {
         PrivateMessage *msg = [priMsgList objectAtIndex:indexPath.row-2];
+        [[MessageManager shared] updateMessageReadStatus:msg];
+        msg.read_status = @"1";
+
         UPChatViewController *chatController = [[UPChatViewController alloc] initWithUserID:msg.remote_id andUserName:msg.remote_name andUserIcon:@""];
         [self.navigationController pushViewController:chatController animated:YES];
     }
     
-    if (!showBadgeAct && !showBadgeSys) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNotifierMessageComing object:nil userInfo:nil];
-    }
+    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 @end
