@@ -25,7 +25,8 @@ typedef NS_OPTIONS(NSInteger, UPItemStyle) {
     UPItemStyleUserNickName = 1<<13,
     UPItemStyleUserSexual   = 1<<14,
     UPItemStyleUserBirth    = 1<<15,
-    UPItemStyleUserAnonymous= 1<<16     //单位匿名
+    UPItemStyleUserAnonymous= 1<<16,     //单位匿名
+    UPItemStyleUserIndustry = 1<<17     //行业
 };
 
 typedef enum{

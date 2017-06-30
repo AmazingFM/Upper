@@ -44,7 +44,7 @@ extern NSString * const g_loginFileName;
     UPImageDetailCellItem *imageDetailItem4;
     UPImageDetailCellItem *imageDetailItem5;
     UPImageDetailCellItem *imageDetailItem6;
-//    UPImageDetailCellItem *imageDetailItem7;
+    UPImageDetailCellItem *imageDetailItem7;
 }
 
 @property (nonatomic, retain) UIButton *leftButton;
@@ -112,15 +112,21 @@ extern NSString * const g_loginFileName;
     imageDetailItem4.cellID = @"cellID4";
     
     imageDetailItem5 = [[UPImageDetailCellItem alloc] init];
-    imageDetailItem5.title = @"出生日期";
-    imageDetailItem5.detail = @"请选择日期";
-    imageDetailItem5.style = UPItemStyleUserBirth;
+    imageDetailItem5.title = @"行业";
+    imageDetailItem5.detail = @"请选择";
+    imageDetailItem5.style = UPItemStyleUserIndustry;
     imageDetailItem5.cellID = @"cellID5";
     
     imageDetailItem6 = [[UPImageDetailCellItem alloc] init];
-    imageDetailItem6.title = @"是否公开单位信息";
-    imageDetailItem6.style = UPItemStyleUserAnonymous;
+    imageDetailItem6.title = @"出生日期";
+    imageDetailItem6.detail = @"请选择日期";
+    imageDetailItem6.style = UPItemStyleUserBirth;
     imageDetailItem6.cellID = @"cellID6";
+    
+    imageDetailItem7 = [[UPImageDetailCellItem alloc] init];
+    imageDetailItem7.title = @"是否公开单位信息";
+    imageDetailItem7.style = UPItemStyleUserAnonymous;
+    imageDetailItem7.cellID = @"cellID7";
 
     [self.itemList addObject:imageDetailItem1];
     [self.itemList addObject:imageDetailItem2];
@@ -128,7 +134,7 @@ extern NSString * const g_loginFileName;
     [self.itemList addObject:imageDetailItem4];
     [self.itemList addObject:imageDetailItem5];
     [self.itemList addObject:imageDetailItem6];
-//    [self.itemList addObject:imageDetailItem7];
+    [self.itemList addObject:imageDetailItem7];
     
     [_itemList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop){
         if ([obj isKindOfClass:[UPBaseCellItem class]]) {
@@ -165,20 +171,23 @@ extern NSString * const g_loginFileName;
     [defaultParamsDict setValue:[UPDataManager shared].userInfo.birthday forKey:@"birthday"];
     [defaultParamsDict setValue:@(![UPDataManager shared].userInfo.companySecret) forKey:@"companySecret"];
     [defaultParamsDict setValue:@(![UPDataManager shared].userInfo.industrySecret) forKey:@"industrySecret"];
+    [defaultParamsDict setValue:[UPDataManager shared].userInfo.industry_name forKey:@"industryName"];
     
     imageDetailItem1.defaultName = @"head";
     imageDetailItem1.imageUrl= defaultParamsDict[@"user_icon"];
     imageDetailItem3.detail = defaultParamsDict[@"nick_name"];
     imageDetailItem4.detail = [defaultParamsDict[@"sexual"] intValue]==1?@"男":@"女";
+    imageDetailItem5.detail  = defaultParamsDict[@"industryName"];
+    
     
     NSString *birth = defaultParamsDict[@"birthday"];
     if (birth==nil ||birth.length==0) {
-        imageDetailItem5.detail =  @"请选择日期";
+        imageDetailItem6.detail =  @"请选择日期";
     } else {
-        imageDetailItem5.detail = [UPTools dateTransform:birth fromFormat:@"yyyyMMdd" toFormat:@"yyyy-MM-dd"];
+        imageDetailItem6.detail = [UPTools dateTransform:birth fromFormat:@"yyyyMMdd" toFormat:@"yyyy-MM-dd"];
     }
     
-    imageDetailItem6.isSwitchOn = [defaultParamsDict[@"companySecret"] boolValue];
+    imageDetailItem7.isSwitchOn = [defaultParamsDict[@"companySecret"] boolValue];
     
     [updatedParamsDict removeAllObjects];
 }
@@ -302,7 +311,7 @@ extern NSString * const g_loginFileName;
                 [alertView show];
             }
                 break;
-            case 4:
+            case 5:
             {
                 if (datePicker==nil) {
                     datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0,0,320, 100)];

@@ -330,8 +330,8 @@ static int kMsgCount = 0;
     [params setObject:[NSString stringWithFormat:@"%d", pageNum] forKey:@"current_page"];
     [params setObject:[NSString stringWithFormat:@"%d", kActivityPageSize] forKey:@"page_size"];
     [params setObject:@"" forKey:@"activity_status"];
-    [params setObject:@"0" forKey:@"industry_id"];
-    [params setObject:@""forKey:@"creator_id"];
+    [params setObject:[UPDataManager shared].userInfo.industry_id forKey:@"industry_id"];
+//    [params setObject:@""forKey:@"creator_id"];
     
     //复合条件查询
     if (_currentData1Index==0){

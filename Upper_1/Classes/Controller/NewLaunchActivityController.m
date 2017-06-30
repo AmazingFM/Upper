@@ -1360,7 +1360,7 @@ static CGFloat const FixRatio = 4/3.0;
             if ([resp_id intValue]==0) {
                 [MBProgressHUD showSuccess:@"已发送邀请给对方"];
                 count++;
-                [self cancel];
+//                [self cancel];
             } else {
                 count++;
             }
