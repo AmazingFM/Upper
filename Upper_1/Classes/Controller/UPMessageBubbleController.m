@@ -13,6 +13,7 @@
 #import "PrivateMessage.h"
 #import "MessageManager.h"
 #import "MBProgressHUD.h"
+#import "YMNetwork.h"
 
 #define kPageNum 50
 
@@ -61,6 +62,30 @@
     [_mainTableView registerClass:[PrivateMsgCell class] forCellReuseIdentifier:kMessageBubbleMe];
 }
 
+- (void)userInfoRequest
+{
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    [params setObject:@"UserQuery"forKey:@"a"];
+    [params setObject:_userID forKey:@"qry_usr_id"];
+    
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+        NSDictionary *dict = (NSDictionary *)responseObject;
+        NSString *resp_id = dict[@"resp_id"];
+        if ([resp_id intValue]==0) {
+            //处理
+            OtherUserData *user = [[OtherUserData alloc] initWithDict:dict[@"resp_data"]];
+            [self loadRemoteIcon:user];
+        }
+    } failure:^(NSError *error) {
+    }];
+}
+
+-(void)loadRemoteIcon:(OtherUserData *)otherUser
+{
+    _userIcon = otherUser.user_icon;
+    [_mainTableView reloadData];
+}
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -79,6 +104,8 @@
 
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMsg:) name:kNotifierMessageComing object:nil];
+    
+    [self userInfoRequest];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
