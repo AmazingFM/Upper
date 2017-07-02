@@ -99,6 +99,7 @@
     message.remote_id = self.remote_id;
     message.remote_name = self.remote_name;
     message.msg_desc = self.editingBar.editView.text;
+    message.read_status = @"1";
     message.status = @"1";
     message.add_time = [UPTools dateString:[NSDate date] withFormat:@"yyyyMMddHHmmss"];
     [_msgBubbleVC addMessage:message];

@@ -15,6 +15,6 @@
 
 @property (nonatomic, retain) UIImageView *portrait;
 
-- (void)setContent:(NSString *)content andPortrait:(NSURL *)portraitURL;
+- (void)setContent:(NSString *)content andPortrait:(NSString *)portraitURL;
 
 @end

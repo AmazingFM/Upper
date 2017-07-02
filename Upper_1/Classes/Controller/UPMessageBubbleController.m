@@ -23,6 +23,7 @@
     NSMutableArray<PrivateMessage *> *priMsgList;
     NSString *_userID;
     NSString *_userName;
+    NSString *_userIcon;
     int _pageNo;
 }
 
@@ -37,6 +38,7 @@
         self.navigationItem.title = userName;
         _userID = userID;
         _userName = userName;
+        _userIcon = userIcon;
         _pageNo = 0;
         priMsgList = [NSMutableArray new];
     }
@@ -170,12 +172,12 @@
     if (message.source == MessageSourceMe) {
         cell = [_mainTableView dequeueReusableCellWithIdentifier:kMessageBubbleMe forIndexPath:indexPath];
         
-        [cell setContent:message.msg_desc andPortrait:nil];
+        [cell setContent:message.msg_desc andPortrait:[UPDataManager shared].userInfo.user_icon];
         cell.portrait.tag = [message.remote_id integerValue];
     } else if (message.source == MessageSourceOther) {
         cell = [_mainTableView dequeueReusableCellWithIdentifier:kMessageBubbleOthers forIndexPath:indexPath];
         
-        [cell setContent:message.msg_desc andPortrait:nil];
+        [cell setContent:message.msg_desc andPortrait:_userIcon];
         cell.portrait.tag = [message.remote_id integerValue];
     }
     [cell.portrait addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pushUserDetails:)]];
