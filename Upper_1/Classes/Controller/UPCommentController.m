@@ -583,7 +583,7 @@ static const int textViewContentHeight = 150;
         [params setObject:self.actID forKey:@"activity_id"];
         [params setObject:commentTextView.text forKey:@"text"];
         [params setObject:teleField.text forKey:@"contact_no"];
-        [params setObject:@"1" forKey:@"type"];
+        [params setObject:@"0" forKey:@"type"];
         [params setObject:[UPDataManager shared].token forKey:@"token"];
         
         [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id json) {

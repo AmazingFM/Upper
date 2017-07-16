@@ -1164,10 +1164,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row==2) { //活动参与人
+        UPDetailPeopleInfoCellItem *peopleItem = _itemList[indexPath.row];
+        peopleItem.currentNum = self.detailActData.part_count;
         //查看报名人数
-        EnrollPeopleController *enrollController = [[EnrollPeopleController alloc]init];
-        enrollController.activityId = self.actData.ID;
-        [self.navigationController pushViewController:enrollController animated:YES];
+        if (peopleItem.userIconUrlList.count>0) {
+            EnrollPeopleController *enrollController = [[EnrollPeopleController alloc]init];
+            [enrollController.userList addObjectsFromArray:peopleItem.userIconUrlList];
+            [self.navigationController pushViewController:enrollController animated:YES];
+        }
     }
 }
 

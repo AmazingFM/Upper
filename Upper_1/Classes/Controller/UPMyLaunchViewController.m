@@ -18,7 +18,6 @@
 #import "UPActivityCellItem.h"
 #import "UPCommentController.h"
 #import "QRCodeController.h"
-#import "EnrollPeopleController.h"
 #import "UPFriendListController.h"
 #import "NewLaunchActivityController.h"
 #import "YMNetwork.h"

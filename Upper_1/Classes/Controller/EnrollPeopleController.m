@@ -38,7 +38,6 @@ static int const kPadding = 5;
 }
 
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, retain) NSMutableArray<UserData *> *userArr;
 
 @end
 
@@ -59,27 +58,21 @@ static int const kPadding = 5;
     [self.view addSubview:self.tableView];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (NSMutableArray *)userList
 {
-    [super viewWillAppear:animated];
-    [self startRequest];
-}
-
-- (NSMutableArray *)userArr
-{
-    if (_userArr==nil) {
-        _userArr = [NSMutableArray array];
+    if (_userList==nil) {
+        _userList = [NSMutableArray array];
     }
-    return _userArr;
+    return _userList;
 }
 
-- (void)initHeaderView
-{
-    UILabel *headerView = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, _tableView.frame.size.width, 30)];
-    headerView.backgroundColor = [UIColor grayColor];
-    headerView.text = @"活动参与人";
-    _tableView.tableHeaderView = headerView;
-}
+//- (void)initHeaderView
+//{
+//    UILabel *headerView = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, _tableView.frame.size.width, 30)];
+//    headerView.backgroundColor = [UIColor grayColor];
+//    headerView.text = @"活动参与人";
+//    _tableView.tableHeaderView = headerView;
+//}
 
 #pragma mark-tableView
 
@@ -96,7 +89,7 @@ static int const kPadding = 5;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.userArr count];
+    return [self.userList count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -104,40 +97,18 @@ static int const kPadding = 5;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"userCell"];
     if (cell == nil) {
         cell = [[EnrollCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"userCell"];
-//        
-//        UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//        chatButton.tag = 10;
-//        chatButton.frame = CGRectMake(0, 0, 80, kCellHeight-10);
-//        chatButton.backgroundColor = [UIColor redColor];
-//        [chatButton setTitle:@"发起聊天" forState:UIControlStateNormal];
-//        [chatButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//        chatButton.titleLabel.font = EnrollCellFont;
-//        [chatButton addTarget:self action:@selector(onBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-//        cell.accessoryView = chatButton;
-        
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     cell.tag = indexPath.row;
     
-    UserData *user= self.userArr[[indexPath row]];
+    NSDictionary *user= self.userList[[indexPath row]];
     
-    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:user.user_icon] placeholderImage:[UIImage imageNamed:@"activity_user_icon"]];
+    [cell.imageView sd_setImageWithURL:user[@"user_icon"] placeholderImage:[UIImage imageNamed:@"activity_user_icon"]];
     
-//    CGSize itemSize = CGSizeMake(40, 40);
-//    UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
-//    CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
-//    [cell.imageView.image drawInRect:imageRect];
-//    cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
-    
-    cell.textLabel.text = user.nick_name;
-    cell.textLabel.font = [UIFont systemFontOfSize:16.f];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    
-    cell.textLabel.text = user.nick_name;
+    cell.textLabel.text = user[@"nick_name"];
     cell.textLabel.font = EnrollCellFont;
-
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
 
@@ -147,60 +118,57 @@ static int const kPadding = 5;
     PersonalCenterController *personalCenter = [[PersonalCenterController alloc] init];
     personalCenter.index = 0;
     
-    OtherUserData *userData = [[OtherUserData alloc] init];
-    userData.ID = ((UserData *)self.userArr[indexPath.row]).ID;
-    userData.user_icon = ((UserData *)self.userArr[indexPath.row]).user_icon;
-    userData.nick_name = ((UserData *)self.userArr[indexPath.row]).nick_name;
-    personalCenter.user_id = userData.ID;
-    personalCenter.user_icon = userData.user_icon;
-    personalCenter.nick_name = userData.nick_name;
+    NSDictionary *user= self.userList[[indexPath row]];
+    personalCenter.user_id = user[@"user_id"];
+    personalCenter.user_icon = user[@"user_icon"];
+    personalCenter.nick_name = user[@"nick_name"];
     
     [self.navigationController pushViewController:personalCenter animated:YES];
 }
 
-- (void)startRequest
-{
-    NSMutableDictionary *params = [NSMutableDictionary new];
-    [params setObject:@"ActivityJoinInfo"forKey:@"a"];
-    
-    [params setObject:self.activityId forKey:@"activity_id"];
-    
-    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
-        NSDictionary *dict = (NSDictionary *)responseObject;
-        NSString *resp_id = dict[@"resp_id"];
-        NSString *resp_desc = dict[@"resp_desc"];
-        
-        NSLog(@"%@:%@", resp_id, resp_desc);
-        if ([resp_id intValue]==0) {
-            NSDictionary *resp_data = dict[@"resp_data"];
-            int totalCount = [resp_data[@"total_count"] intValue];
-            if (totalCount>0) {
-                NSString *userList = resp_data[@"user_list"];
-                
-                [self.userArr removeAllObjects];
-                
-                if ([userList isKindOfClass:[NSArray class]]) {
-                    for (NSDictionary *userDict in (NSArray *)userList) {
-                        UserData *user = [[UserData alloc] init];
-                        user.ID = userDict[@"user_id"];
-                        user.nick_name = userDict[@"nick_name"];
-                        user.sexual = userDict[@"sexual"];
-                        user.user_icon = userDict[@"user_icon"];
-                        
-                        [self.userArr addObject:user];
-                    }
-                }
-                [self.tableView reloadData];
-            } else{
-                //目前还没有参与者
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"该活动目前无人参加，赶紧报名吧！" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-                [alertView show];
-            }
-        }
-    } failure:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
-}
+//- (void)startRequest
+//{
+//    NSMutableDictionary *params = [NSMutableDictionary new];
+//    [params setObject:@"ActivityJoinInfo"forKey:@"a"];
+//    
+//    [params setObject:self.activityId forKey:@"activity_id"];
+//    
+//    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+//        NSDictionary *dict = (NSDictionary *)responseObject;
+//        NSString *resp_id = dict[@"resp_id"];
+//        NSString *resp_desc = dict[@"resp_desc"];
+//        
+//        NSLog(@"%@:%@", resp_id, resp_desc);
+//        if ([resp_id intValue]==0) {
+//            NSDictionary *resp_data = dict[@"resp_data"];
+//            int totalCount = [resp_data[@"total_count"] intValue];
+//            if (totalCount>0) {
+//                NSString *userList = resp_data[@"user_list"];
+//                
+//                [self.userArr removeAllObjects];
+//                
+//                if ([userList isKindOfClass:[NSArray class]]) {
+//                    for (NSDictionary *userDict in (NSArray *)userList) {
+//                        UserData *user = [[UserData alloc] init];
+//                        user.ID = userDict[@"user_id"];
+//                        user.nick_name = userDict[@"nick_name"];
+//                        user.sexual = userDict[@"sexual"];
+//                        user.user_icon = userDict[@"user_icon"];
+//                        
+//                        [self.userArr addObject:user];
+//                    }
+//                }
+//                [self.tableView reloadData];
+//            } else{
+//                //目前还没有参与者
+//                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:@"该活动目前无人参加，赶紧报名吧！" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+//                [alertView show];
+//            }
+//        }
+//    } failure:^(NSError *error) {
+//        NSLog(@"%@",error);
+//    }];
+//}
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -212,12 +180,12 @@ static int const kPadding = 5;
     }
 }
 
-- (void)onBtnClick:(UIButton *)sender
-{
-    NSInteger row = ((UITableViewCell *)[sender superview]).tag;
-    
-    BubbleChatViewController *chatController = [[BubbleChatViewController alloc] init];
-    chatController.userData = self.userArr[row];
-    [self.navigationController pushViewController:chatController animated:YES];
-}
+//- (void)onBtnClick:(UIButton *)sender
+//{
+//    NSInteger row = ((UITableViewCell *)[sender superview]).tag;
+//    
+//    BubbleChatViewController *chatController = [[BubbleChatViewController alloc] init];
+//    chatController.userData = self.userArr[row];
+//    [self.navigationController pushViewController:chatController animated:YES];
+//}
 @end

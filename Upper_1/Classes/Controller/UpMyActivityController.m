@@ -77,13 +77,13 @@
     /*
      下面的代码实同正常状态和按下状态的属性控制,比如字体的大小和颜色等
      */
-    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:12],NSFontAttributeName,kUPThemeMainColor, NSForegroundColorAttributeName, nil];
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:12],NSFontAttributeName,[UIColor whiteColor], NSForegroundColorAttributeName, nil];
     [segmentedControl setTitleTextAttributes:attributes forState:UIControlStateNormal];
-    [segmentedControl setBackgroundImage:[UIImage imageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [segmentedControl setBackgroundImage:[UIImage imageWithColor:kUPThemeMainColor] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     
-    NSDictionary *highlightedAttributes = [NSDictionary dictionaryWithObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
+    NSDictionary *highlightedAttributes = [NSDictionary dictionaryWithObject:kUPThemeMainColor forKey:NSForegroundColorAttributeName];
     [segmentedControl setTitleTextAttributes:highlightedAttributes forState:UIControlStateSelected];
-    [segmentedControl setBackgroundImage:[UIImage imageWithColor:kUPThemeMainColor] forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
+    [segmentedControl setBackgroundImage:[UIImage imageWithColor:[UIColor whiteColor]] forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
     
     //设置分段控件点击相应事件
     [segmentedControl addTarget:self action:@selector(segmentAction:)forControlEvents:UIControlEventValueChanged];
