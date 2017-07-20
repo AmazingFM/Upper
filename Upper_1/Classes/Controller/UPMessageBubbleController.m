@@ -60,6 +60,21 @@
     
     [_mainTableView registerClass:[PrivateMsgCell class] forCellReuseIdentifier:kMessageBubbleOthers];
     [_mainTableView registerClass:[PrivateMsgCell class] forCellReuseIdentifier:kMessageBubbleMe];
+    
+    UILongPressGestureRecognizer *longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showTime)];
+    longpress.minimumPressDuration = 5;
+    [self.view addGestureRecognizer:longpress];
+}
+
+- (void)showTime
+{
+    NSMutableString *msgStr = [[NSMutableString alloc] init];
+    for (int i=0; i<priMsgList.count; i++) {
+        PrivateMessage *priMsg = priMsgList[i];
+        [msgStr appendFormat:@"%d:%@-%@\n", i, priMsg.msg_desc, priMsg.add_time];
+    }
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"帮助" message:msgStr delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    [alertView show];
 }
 
 - (void)userInfoRequest

@@ -7,7 +7,6 @@
 //
 
 #import "PersonInfoController.h"
-#import "SexSelectController.h"
 #import "UpSettingController.h"
 
 @interface PersonInfoController ()

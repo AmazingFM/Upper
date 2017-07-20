@@ -196,7 +196,11 @@
 -(void)radioButtonSelectedAtIndex:(NSUInteger)index inGroup:(NSString*)groupId
 {
     NSLog(@"%lu, %@", (unsigned long)index, groupId);
-    _sexType = [NSString stringWithFormat:@"%lu",(unsigned long)index];
+    if (index==0) {
+        _sexType = @"1";
+    } else {
+        _sexType = @"2";
+    }
 }
 
 -(void)clearValue
