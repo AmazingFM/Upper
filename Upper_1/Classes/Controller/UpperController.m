@@ -437,7 +437,7 @@ extern NSString * const g_loginFileName;
 }
 - (void)switchOn:(BOOL)isOn withIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row==5) {
+    if (indexPath.row==6) {
         if (isOn) {
             [updatedParamsDict setValue:@"0000" forKey:@"secret_flag"];
         } else {

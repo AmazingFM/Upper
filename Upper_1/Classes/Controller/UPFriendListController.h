@@ -6,11 +6,13 @@
 //  Copyright © 2017年 aries365.com. All rights reserved.
 //
 #import "UPBaseViewController.h"
+
+@class UPFriendItem;
 @protocol UPFriendListDelegate <NSObject>
 
 @optional
 - (void)inviteFriends:(NSArray *)friendId;
-- (void)changeLauncher:(NSString *)userId;
+- (void)changeLauncher:(UPFriendItem *)userItem;
 
 @end
 

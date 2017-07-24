@@ -24,6 +24,7 @@
 #import "MBProgressHUD+MJ.h"
 #import "YMNetwork.h"
 #import "MessageManager.h"
+#import "UPFriendItem.h"
 
 @interface UPMyLaunchViewController () <UPFriendListDelegate, UPCommentDelegate>
 {
@@ -217,10 +218,22 @@
 }
 
 #pragma mark UPInviteFriendDelegate
-- (void)changeLauncher:(NSString *)userId
+- (void)changeLauncher:(UPFriendItem *)userItem
 {
-    __block int count = 0;
+    //增加人数条件判断，
     
+    NSString *actStatusID = selectedActData.activity_status;
+    
+    if ([actStatusID intValue]==4) {//募集状态为4(募集结束)时需要判断
+        if (selectedActData.part_count<=selectedActData.limit_low) {
+            showDefaultAlert(@"提示", @"报名人数不够，无法转让");
+        } else if (selectedActData.fmale_part_count<=selectedActData.fmale_low
+                   && [userItem.sexual intValue]==2) { //sexual:1-男，2-女
+            showDefaultAlert(@"提示", @"报名人数不够，无法转让给女性");
+        }
+    }
+    
+    __block int count = 0;
     NSDictionary *actDataDict = @{@"activity_name":selectedActData.activity_name,@"activity_class":selectedActData.activity_class,@"begin_time":selectedActData.begin_time,@"id":selectedActData.ID};
     
     NSString *msgDesc = [UPTools stringFromJSON:actDataDict];
@@ -228,7 +241,7 @@
     NSMutableDictionary *params = [NSMutableDictionary new];
     [params setValue:@"MessageSend" forKey:@"a"];
     [params setValue:[UPDataManager shared].userInfo.ID forKey:@"from_id"];
-    [params setValue:userId forKey:@"to_id"];
+    [params setValue:userItem.relation_id forKey:@"to_id"];
     UPServerMsgType msgType = ServerMsgTypeChangeLauncher;
     [params setValue:[@(msgType) stringValue] forKey:@"message_type"];
     [params setValue:msgDesc forKey:@"message_desc"];

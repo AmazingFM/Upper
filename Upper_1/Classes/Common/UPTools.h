@@ -77,4 +77,6 @@
 + (BOOL)validateEmail:(NSString *)email;
 + (BOOL)validatePhone:(NSString *)phone;
 
++ (NSString *)percentNum:(NSString *)num;
+
 @end

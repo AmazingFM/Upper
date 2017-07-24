@@ -105,9 +105,9 @@
     } else if (self.type==1) {
         if (index!=-1) {
             UPFriendItem *item = self.friendlist[index];
-            NSString *userID = item.relation_id;
+//            NSString *userID = item.relation_id;
             if (self.delegate && [self.delegate respondsToSelector:@selector(changeLauncher:)]) {
-                [self.delegate changeLauncher:userID];
+                [self.delegate changeLauncher:item];
             }
         }
     }

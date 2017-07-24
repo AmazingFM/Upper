@@ -632,4 +632,11 @@ NSString *kKeyChainUUIDAccessGroup = @"com.upper";
     NSPredicate *phoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", phoneRegex];
     return [phoneTest evaluateWithObject:phone];
 }
+
++ (NSString *)percentNum:(NSString *)num
+{
+    int newNum = [num intValue]*100;
+    return [NSString stringWithFormat:@"%d%%", newNum];
+}
+
 @end

@@ -132,34 +132,35 @@
 //初次加载
 - (void)loadMessage
 {
-    [priMsgList addObjectsFromArray:[[MessageManager shared] getMessagesByUser:_userID]];
+    @synchronized (priMsgList) {
+        [priMsgList addObjectsFromArray:[[MessageManager shared] getMessagesByUser:_userID]];
+    }
 }
 
 - (void)updateMsg:(NSNotification *)notification
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSDictionary *msgGroupDict = notification.userInfo;
-        NSArray<PrivateMessage *> *usrMsgList = msgGroupDict[UsrMsgKey];
-        
-        //更新用户信息
-        if (usrMsgList.count>0) {
-            NSMutableArray<PrivateMessage *> *myMsgs = [NSMutableArray new];
-            for (PrivateMessage *msg in usrMsgList) {
-                if ([msg.remote_id isEqualToString:_userID]) {
-                    [myMsgs addObject:msg];
-                }
-            }
+    @synchronized (priMsgList) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSDictionary *msgGroupDict = notification.userInfo;
+            NSArray<PrivateMessage *> *usrMsgList = msgGroupDict[UsrMsgKey];
             
-            if (myMsgs.count>0) {
-                @synchronized (priMsgList) {
+            //更新用户信息
+            if (usrMsgList.count>0) {
+                NSMutableArray<PrivateMessage *> *myMsgs = [NSMutableArray new];
+                for (PrivateMessage *msg in usrMsgList) {
+                    if ([msg.remote_id isEqualToString:_userID]) {
+                        [myMsgs addObject:msg];
+                    }
+                }
+                
+                if (myMsgs.count>0) {
                     [priMsgList addObjectsFromArray:myMsgs];
                     [_mainTableView reloadData];
                     [self scrollToBottom:YES];
                 }
-
             }
-        }
-    });
+        });
+    }
 }
 
 - (void)viewWillLayoutSubviews{

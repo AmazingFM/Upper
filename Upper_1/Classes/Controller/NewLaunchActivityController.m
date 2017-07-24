@@ -221,20 +221,8 @@ static CGFloat const FixRatio = 4/3.0;
         _clothType = [[UPConfig sharedInstance] getClothTypeByID:self.actData.clothes_need];
         _payType = [[UPConfig sharedInstance] getPayTypeByID:self.actData.is_prepaid];
     } else {
-        self.actData = nil;
-        
-        _actType = nil;
-        
-        _lowLimit = @"0";
-        _highLimit = @"0";
-        _activityFee = @"0";
-        _femaleLowLimit = @"0";
-        _selectedCity = nil;
-        _clothType = nil;
-        _payType = nil;
+        [self clearValue];
     }
-    
-    
     
     [self setNewData];
     
@@ -283,16 +271,29 @@ static CGFloat const FixRatio = 4/3.0;
         }
     }
     
-    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-
+- (void)clearValue
+{
+    self.actData = nil;
+    
+    _actType = nil;
+    needFemale = NO;
+    _lowLimit = @"0";
+    _highLimit = @"0";
+    _activityFee = @"0";
+    _femaleLowLimit = @"0";
+    _selectedCity = nil;
+    _clothType = nil;
+    _payType = nil;
+    
+    _imgData = nil;
+}
 
 - (void)setNewData
 {
     [self.itemList removeAllObjects];
-    
-    needFemale = NO;
     
     UPButtonCellItem *item0 = [[UPButtonCellItem alloc] init];
     item0.btnStyle = UPBtnStyleImage;
@@ -322,11 +323,13 @@ static CGFloat const FixRatio = 4/3.0;
     NSString *time = nil;
     if (self.actData!=nil) {
         time = self.actData.end_time;
+    } else {
+        time = nil;
     }
 
     UPDateCellItem *item3 = [[UPDateCellItem alloc] init];
     item3.title = @"报名截止时间";
-    item3.date = (self.actData==nil)?@"选择日期":[UPTools dateTransform:time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy-MM-dd"];
+    item3.date = (time.length==0)?@"选择日期":[UPTools dateTransform:time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy-MM-dd"];
     item3.key = @"end_time";
     
     UPDateCellItem *item4 = [[UPDateCellItem alloc] init];
@@ -334,8 +337,10 @@ static CGFloat const FixRatio = 4/3.0;
     
     if (self.actData!=nil) {
         time = self.actData.start_time;
+    } else {
+        time = nil;
     }
-    item4.date = time==nil?@"选择日期":[UPTools dateTransform:time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy-MM-dd"];
+    item4.date = time.length==0?@"选择日期":[UPTools dateTransform:time fromFormat:@"yyyyMMddHHmmss" toFormat:@"yyyy-MM-dd"];
     item4.key = @"start_time";
     
     UPDetailCellItem *item5 = [[UPDetailCellItem alloc] init];
@@ -401,27 +406,11 @@ static CGFloat const FixRatio = 4/3.0;
     选择最后一种，预估费用后面出现提示：费用会随男女比例而浮动
     活动募集：给夜店派对和家庭派对两种活动增加男女比例选项，男女需分别达到人数才能募集成功。男数量为硬上限，达到后男不能报名，女数量为不低于，达到后可继续报名挤占男数量。   另外发起时为这两种派对活动增加一项奖励机制。发起人可设定，男士携__名女士同行可免单。
      */
-
-//    UPTitleCellItem *item17 = [[UPTitleCellItem alloc] init];  //使用 是否预付的 字段传参
-//    item17.title = @"设定";
-//    item17.style = UPItemStyleIndex;
-//    item17.key = @"goodNum";
     
     UPTitleCellItem *item16 = [[UPTitleCellItem alloc] init];
     item16.key = @"activity_fee";
     item16.title = @"预估人均费用";
     
-//    UPSwitchCellItem *item12 = [[UPSwitchCellItem alloc] init];
-//    item12.title=@"仅限本行业";
-//    
-//    BOOL isOn = NO;
-//    if (self.actData && [self.actData.industry_id intValue]!=-1) {
-//        isOn = YES;
-//    }
-//    item12.isOn = isOn;
-//    item12.isLock = YES;
-//    item12.key = @"industry_id";
-//    
     UPComboxCellItem *item12 = [[UPComboxCellItem alloc] init];  //活动可见范围
     item12.title = @"可见范围";
     item12.style = UPItemStyleIndex;
@@ -946,9 +935,9 @@ static CGFloat const FixRatio = 4/3.0;
                 NSDictionary *respDict = (NSDictionary *)jsonObj;
                 NSString *resp_id = respDict[@"resp_id"];
                 if ([resp_id intValue]==0) {
-                    self.actData = nil;
+                    [self clearValue];
                     [self setNewData];
-                    [_tableView reloadData];
+                    [self.tableView reloadData];
                     
                     [actParams removeAllObjects];
                     [actParams addEntriesFromDictionary:params];
@@ -1090,9 +1079,9 @@ static CGFloat const FixRatio = 4/3.0;
         [picker dismissViewControllerAnimated:YES completion:nil];
                 
         UPButtonCellItem *btnItem = self.itemList[0];
-        btnItem.btnImage = cutImage;
+        btnItem.btnImage = [UIImage imageWithData:_imgData];;
         btnItem.defaultImage = NO;
-        [_tableView reloadRowsAtIndexPaths:@[btnItem.indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadRowsAtIndexPaths:@[btnItem.indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 
@@ -1101,13 +1090,13 @@ static CGFloat const FixRatio = 4/3.0;
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
-{
-    if ([navigationController isKindOfClass:[UIImagePickerController class]]) {
-        viewController.navigationController.navigationBar.translucent = NO;
-        viewController.edgesForExtendedLayout = UIRectEdgeNone;
-    }
-}
+//- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+//{
+//    if ([navigationController isKindOfClass:[UIImagePickerController class]]) {
+//        viewController.navigationController.navigationBar.translucent = NO;
+//        viewController.edgesForExtendedLayout = UIRectEdgeNone;
+//    }
+//}
 
 //pragma mark - 上传图片
 - (void)uploadImage:(NSString *)imagePath
@@ -1117,19 +1106,22 @@ static CGFloat const FixRatio = 4/3.0;
 }
 
 - (void)actionTypeDidSelect:(ActivityType *)actType {
+    NSMutableArray *indexpaths = [NSMutableArray new];
     for (UPBaseCellItem *cellItem in self.itemList) {
         if ([cellItem.key isEqualToString:@"activity_class"]) {
             UPDetailCellItem *item = (UPDetailCellItem*)cellItem;
             item.detail = actType.name;
-            [self.tableView reloadRowsAtIndexPaths:@[item.indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            [indexpaths addObject:item.indexPath];
             break;
         }
     }
     
     UPButtonCellItem *item0 = self.itemList[0];
     item0.btnStyle = UPBtnStyleImage;
-    item0.defaultImage = NO;
-    item0.btnImage = [UIImage imageNamed:[NSString stringWithFormat:@"default_activity_%@", actType.ID]];
+    if (_imgData==nil) {
+        item0.btnImage = [UIImage imageNamed:[NSString stringWithFormat:@"default_activity_%@", actType.ID]];
+        item0.defaultImage = NO;
+    }
     
     UPBaseCellItem *femaleItem = nil;
     for (UPBaseCellItem *cellItem in self.itemList) {
@@ -1144,7 +1136,10 @@ static CGFloat const FixRatio = 4/3.0;
         femaleItem.cellHeight=0;
         needFemale = NO;
     }
-    [self.tableView reloadRowsAtIndexPaths:@[item0.indexPath, femaleItem.indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    
+    [indexpaths addObject:item0.indexPath];
+    [indexpaths addObject:femaleItem.indexPath];
+    [self.tableView reloadRowsAtIndexPaths:indexpaths withRowAnimation:UITableViewRowAnimationNone];
 
     _actType = actType;
 }

@@ -170,7 +170,8 @@
         if (rowNum==5) {
             rightTitleLabel.text = @"好评率";
             rightTitleLabel.textColor = [UIColor blackColor];
-            rightDetailLabel.text = [self.userData valueForKey:@"creator_good_rate"];
+            NSString *creator_good_rate = [self.userData valueForKey:@"creator_good_rate"];
+            rightDetailLabel.text = [UPTools percentNum:creator_good_rate];
             rightDetailLabel.textColor = kUPThemeMainColor;
         } else if (rowNum==6) {
             rightTitleLabel.text = [NSString stringWithFormat:@"👍(%@)👎(%@)", self.userData.join_good_sum, self.userData.join_bad_sum];
