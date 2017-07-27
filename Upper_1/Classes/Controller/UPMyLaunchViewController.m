@@ -227,9 +227,11 @@
     if ([actStatusID intValue]==4) {//募集状态为4(募集结束)时需要判断
         if (selectedActData.part_count<=selectedActData.limit_low) {
             showDefaultAlert(@"提示", @"报名人数不够，无法转让");
+            return;
         } else if (selectedActData.fmale_part_count<=selectedActData.fmale_low
                    && [userItem.sexual intValue]==2) { //sexual:1-男，2-女
             showDefaultAlert(@"提示", @"报名人数不够，无法转让给女性");
+            return;
         }
     }
     

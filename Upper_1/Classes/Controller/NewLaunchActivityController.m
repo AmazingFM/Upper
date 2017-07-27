@@ -416,7 +416,7 @@ static CGFloat const FixRatio = 4/3.0;
     item12.style = UPItemStyleIndex;
 
     item12.comboxItems = @[@"不限", @"本行业可见", @"屏蔽本行业"];
-    item12.selectedIndex = _payType!=nil?([_payType.ID intValue]-1):0;
+    item12.selectedIndex = 0;
     item12.style = UPItemStyleIndex;
     item12.key = @"industry_id";
     
