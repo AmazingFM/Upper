@@ -17,7 +17,7 @@
 #import "AFHTTPRequestOperationManager.h"
 #import "YMNetwork.h"
 
-#define kUPReviewCommentPostURL @"http://api.qidianzhan.com.cn/AppServ/index.php?a=ActivityModify"
+#define kUPReviewCommentPostURL [NSString stringWithFormat:@"%@?a=ActivityModify", kBaseURL]
 
 #define kCommentUserRowHeight 30
 

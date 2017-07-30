@@ -2788,9 +2788,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Yongming Zhang (77565T989X)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yongming Zhang (77565T989X)";
-				DEVELOPMENT_TEAM = 77565T989X;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Upper Technology Co. Ltd (8DZS62MHVB)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Upper Technology Co. Ltd (8DZS62MHVB)";
+				DEVELOPMENT_TEAM = 8DZS62MHVB;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Upper_1/PrefixHeader.pch;
 				INFOPLIST_FILE = Upper_1/Info.plist;
@@ -2809,8 +2809,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.upper.UpperForiOS;
 				PRODUCT_NAME = Upper;
-				PROVISIONING_PROFILE = "9ae81dd6-5e49-447f-a0a7-992fb8ab9d51";
-				PROVISIONING_PROFILE_SPECIFIER = YMWildPro_Adhoc;
+				PROVISIONING_PROFILE = "f1f241c4-ed76-4478-a686-ef694d08ba3e";
+				PROVISIONING_PROFILE_SPECIFIER = UpperPro_dis;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

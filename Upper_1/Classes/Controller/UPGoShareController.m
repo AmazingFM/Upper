@@ -145,9 +145,9 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex==0) {
-        [[WXApiManager sharedManager] sendLinkURL:@"http://share.uppercn.com" TagName:@"UPPER上行" Title:_title Description:@"一款专注高端人群的社交活动平台，仅面向选定的高技能行业开放。在这里，用户通过发起活动和参加活动的方式来拓展社交空间。" ThumbImageName:@"Icon-57" InScene:WXSceneSession];
+        [[WXApiManager sharedManager] sendLinkURL:kShareURL TagName:@"UPPER上行" Title:_title Description:@"一款专注高端人群的社交活动平台，仅面向选定的高技能行业开放。在这里，用户通过发起活动和参加活动的方式来拓展社交空间。" ThumbImageName:@"Icon-57" InScene:WXSceneSession];
     } else if (buttonIndex==1) {
-        [[WXApiManager sharedManager] sendLinkURL:@"http://share.uppercn.com" TagName:@"UPPER上行" Title:_title Description:@"一款专注高端人群的社交活动平台，仅面向选定的高技能行业开放。在这里，用户通过发起活动和参加活动的方式来拓展社交空间。" ThumbImageName:@"Icon-57" InScene:WXSceneTimeline];
+        [[WXApiManager sharedManager] sendLinkURL:kShareURL TagName:@"UPPER上行" Title:_title Description:@"一款专注高端人群的社交活动平台，仅面向选定的高技能行业开放。在这里，用户通过发起活动和参加活动的方式来拓展社交空间。" ThumbImageName:@"Icon-57" InScene:WXSceneTimeline];
     } else {
         //取消
     }

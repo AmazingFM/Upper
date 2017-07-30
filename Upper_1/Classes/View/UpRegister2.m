@@ -59,7 +59,16 @@
     industryB.backgroundColor = [UIColor clearColor];
     [industryB setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
+    NSString *privacyText = @"提示：您选择的行业，单位或邮箱信息均只作为验证用途，将会被严格保密，除非您本人要求，否则不会显示给其他用户。";
+    CGRect privacyRect = [privacyText boundingRectWithSize:CGSizeMake( frame.size.width-2*LeftRightPadding, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:kUPThemeMinFont} context:nil];
     
+    UILabel *privacyLabel = [[UILabel alloc] initWithFrame:CGRectMake(LeftRightPadding, floorf(industryL.origin.y- ceilf(privacyRect.size.height+20)), frame.size.width-2*LeftRightPadding, ceilf(privacyRect.size.height+20))];
+    privacyLabel.numberOfLines = 0;
+    privacyLabel.font = kUPThemeMinFont;
+    privacyLabel.textColor = [UIColor whiteColor];
+    privacyLabel.text = privacyText;
+    privacyLabel.textAlignment = NSTextAlignmentLeft;
+    privacyLabel.backgroundColor = [UIColor clearColor];
 
     UIImageView * seperatorV = [[UIImageView alloc]initWithFrame:CGRectMake(LeftRightPadding, frame.size.height-2, frame.size.width-2*LeftRightPadding, 1)];
     seperatorV.backgroundColor = [UIColor blackColor];
@@ -76,6 +85,7 @@
     
     [self addSubview:seperatorV];
     [self addSubview:industryL];
+    [self addSubview:privacyLabel];
     [self addSubview:industryB];
     [self addSubview:_contentScro];
     return self;

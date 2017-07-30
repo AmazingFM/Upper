@@ -12,8 +12,6 @@
 #import "Info.h"
 #import "UPGlobals.h"
 
-#define kBaseURL @"http://api.qidianzhan.com.cn/AppServ/index.php"
-
 @interface YMNetwork() <UIAlertViewDelegate>
 {
     @public

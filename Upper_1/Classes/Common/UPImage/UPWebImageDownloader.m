@@ -10,6 +10,7 @@
 #import "AFURLRequestSerialization.h"
 #import "UPWebImageDownloaderOperation.h"
 #import "UPDataManager.h"
+#import "Info.h"
 
 static NSString *const kProgressCallbackKey = @"progress";
 static NSString *const kCompletedCallbackKey = @"completed";
@@ -114,7 +115,7 @@ static NSString *const kCompletedCallbackKey = @"completed";
         
         
         NSError *serializationError = nil;
-        NSMutableURLRequest *request = [wself.requestSerializer requestWithMethod:@"GET" URLString:@"http://api.qidianzhan.com.cn/AppServ/index.php" parameters:newParamsDic error:&serializationError];
+        NSMutableURLRequest *request = [wself.requestSerializer requestWithMethod:@"GET" URLString:kBaseURL parameters:newParamsDic error:&serializationError];
         
         operation = [[wself.operationClass alloc] initWithRequest:request options:SDWebImageDownloaderLowPriority progress:^(NSInteger receivedSize, NSInteger expectedSize) {
             UPWebImageDownloader *sself = wself;

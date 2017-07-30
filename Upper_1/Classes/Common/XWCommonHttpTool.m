@@ -17,7 +17,7 @@
     static dispatch_once_t onceToekn;
     //单例
     dispatch_once(&onceToekn, ^{
-        NSURL *url = [NSURL URLWithString:kUPBaseURL];
+        NSURL *url = [NSURL URLWithString:kBaseURL];
         NSURLSessionConfiguration *config=[NSURLSessionConfiguration defaultSessionConfiguration];
         httpTool=[[self alloc]initWithBaseURL:url sessionConfiguration:config];
         

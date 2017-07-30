@@ -96,7 +96,15 @@ static int kMsgCount = 0;
     
     UIButton *titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [titleButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [titleButton setTitle:@"活动大厅" forState:UIControlStateNormal];
+    
+    NSString *title;
+#ifdef UPPER_DEBUG
+    title = @"活动大厅(测试版)";
+#else
+    title = @"活动大厅";
+#endif
+    
+    [titleButton setTitle:title forState:UIControlStateNormal];
     self.navigationItem.titleView = titleButton;
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithLeftIcon:@"top_navigation_lefticon" highIcon:@"" target:self action:@selector(leftClick)];
     self.navigationItem.rightBarButtonItems = [self rightNavButtonItems];

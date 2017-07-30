@@ -1008,7 +1008,7 @@
     NSString *base64Encoded = [actIdData base64EncodedStringWithOptions:0];
     
     NSString *md5Str = [UPTools md5HexDigest:[NSString stringWithFormat:@"%@upperinterface", actId]];
-    NSString *shareLinkUrl = [NSString stringWithFormat:@"http://a.uppercn.com/?a=%@&t=%@", base64Encoded, md5Str];
+    NSString *shareLinkUrl = [NSString stringWithFormat:@"%@/?a=%@&t=%@", kShareActivityURL, base64Encoded, md5Str];
     
     ActivityType *activityType = [[UPConfig sharedInstance] getActivityTypeByID:self.actData.activity_class];
     NSString *actDesc = [NSString stringWithFormat:@"活动类型：%@\n活动描述：%@", activityType.name,self.actData.activity_desc];

@@ -17,7 +17,7 @@
 #import "UPTools.h"
 #import "YMImageLoadView.h"
 
-#define kUPShopPostURL @"http://api.qidianzhan.com.cn/AppServ/index.php?a=ShopAdd"
+#define kUPShopPostURL [NSString stringWithFormat:@"%@?a=ShopAdd", kBaseURL]
 
 @interface RecommendController () <UITableViewDelegate, UITableViewDataSource, CitySelectDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate>
 {

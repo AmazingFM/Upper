@@ -10,8 +10,6 @@
 
 #import "UPBaseModel.h"
 
-//http://api.qidianzhan.com.cn/AppServ/index.php?a=UserQuery&app_id=1&req_seq=1&user_id=1&qry_usr_id=1
-
 @interface UserQueryModal : UPBaseModel
 
 @property (nonatomic, copy) NSString *ID;

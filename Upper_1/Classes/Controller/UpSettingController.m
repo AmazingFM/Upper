@@ -28,7 +28,7 @@
     NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
     NSString *version = [NSString stringWithFormat:@"%@(%@)", infoDict[@"CFBundleShortVersionString"],infoDict[@"CFBundleVersion"]] ;
     
-#ifdef UPTEST
+#ifdef UPPER_DEBUG
     version = [NSString stringWithFormat:@"测试版%@", version];
 #endif
     

@@ -353,7 +353,7 @@ typedef enum register_enum
             return;
     }
 
-    [self loadDataForType:type withURL:kUPBaseURL parameters:params];
+    [self loadDataForType:type withURL:kBaseURL parameters:params];
 }
 
 // ------公共方法

@@ -22,7 +22,18 @@
 #define kUPMessageTimeMachineName     @"messageTimer"
 
 #define kMessageRequireTimeInterval 5.0f
-#define kUPBaseURL @"http://api.qidianzhan.com.cn/AppServ/index.php" //http://121.40.70.124:8080/upper/AppServ/index.php
+
+#define UPPER_DEBUG 1
+
+#ifdef UPPER_DEBUG
+#define kBaseURL @"http://api.qidianzhan.com.cn/AppServ/index.php"
+#else
+#define kBaseURL @"http://api.uppercn.com/AppServ/index.php"
+#endif
+
+#define kShareURL @"http://share.uppercn.com"
+#define kShareActivityURL @"http://a.uppercn.com"
+
 //浅灰
 #define GRAYCOLOR [UIColor colorWithRed:248/255.0 green:245/255.0 blue:246/255.0 alpha:1]
 //暗红

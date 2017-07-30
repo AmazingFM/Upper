@@ -12,8 +12,6 @@
 
 #import "UPTheme.h"
 
-#define UPTEST 1
-
 extern int g_PageSize;
 
 extern NSString *g_uuid;

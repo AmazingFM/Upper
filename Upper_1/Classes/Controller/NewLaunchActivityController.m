@@ -28,7 +28,7 @@
 #import "MessageManager.h"
 #import "WXApiManager.h"
 
-#define kUPFilePostURL @"http://api.qidianzhan.com.cn/AppServ/index.php?a=ActivityAdd"
+#define kUPFilePostURL [NSString stringWithFormat:@"%@?a=ActivityAdd", kBaseURL]
 
 #define kFieldTagForPrepay          1004
 #define kFieldTagForFemaleLowLimit  1003
@@ -1261,8 +1261,8 @@ static CGFloat const FixRatio = 4/3.0;
     [self.view addSubview:inviteBtn];
     [self.view addSubview:shareBtn];
     
-    self.navigationItem.hidesBackButton = YES;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
 }
 
 - (UIButton *)createButton:(CGRect)frame imageName:(NSString *)imageName title:(NSString *)title
@@ -1374,7 +1374,7 @@ static CGFloat const FixRatio = 4/3.0;
     NSString *base64Encoded = [actIdData base64EncodedStringWithOptions:0];
     
     NSString *md5Str = [UPTools md5HexDigest:[NSString stringWithFormat:@"%@upperinterface", actId]];
-    NSString *shareLinkUrl = [NSString stringWithFormat:@"http://a.uppercn.com/?a=%@&t=%@", base64Encoded, md5Str];
+    NSString *shareLinkUrl = [NSString stringWithFormat:@"%@/?a=%@&t=%@", kShareActivityURL, base64Encoded, md5Str];
     
     ActivityType *activityType = [[UPConfig sharedInstance] getActivityTypeByID:self.actData.activity_class];
     NSString *actDesc = [NSString stringWithFormat:@"活动类型：%@\n活动描述：%@", activityType.name,self.actData.activity_desc];
