@@ -97,6 +97,7 @@
             //处理
             OtherUserData *user = [[OtherUserData alloc] initWithDict:dict[@"resp_data"]];
             
+            [self showChatButton:user];
             PersonInfoController *personController = self.childViewControllers[0];
             [personController setUserData:user];
         }
@@ -150,6 +151,8 @@
     [chatBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     chatBtn.layer.cornerRadius = 5.0f;
     chatBtn.layer.masksToBounds = YES;
+    chatBtn.hidden = YES;
+    chatBtn.tag = 100;
     [chatBtn addTarget:self action:@selector(letsChat:) forControlEvents:UIControlEventTouchUpInside];
     [self.headerView addSubview:chatBtn];
 
@@ -246,6 +249,17 @@
 -(void)headerTap
 {
     
+}
+
+- (void)showChatButton:(OtherUserData *)userData
+{
+    UIButton *chatButton = [self.headerView viewWithTag:100];
+    if (chatButton!=nil) {
+        chatButton.hidden = NO;
+        int sexual = [userData.sexual intValue];
+        NSString *title = (sexual==1)?@"和他聊天":@"和她聊天";
+        [chatButton setTitle:title forState:UIControlStateNormal];
+    }
 }
 
 @end
