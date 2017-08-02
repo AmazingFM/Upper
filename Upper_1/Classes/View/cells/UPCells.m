@@ -383,7 +383,20 @@
             }
             _imageDetail.layer.masksToBounds = YES;
             if (cellItem.imageUrl.length>0) {
-                [_imageDetail sd_setImageWithURL:[NSURL URLWithString:cellItem.imageUrl] placeholderImage:[UIImage imageNamed:cellItem.defaultName] options:SDWebImageRefreshCached ];
+                NSURLSessionDownloadTask *downloadTask = [[NSURLSession sharedSession] downloadTaskWithURL:[NSURL URLWithString:cellItem.imageUrl] completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                    //下载完成后获取数据 此时已经自动缓存到本地，下次会直接从本地缓存获取，不再进行网络请求
+                    NSData * data = [NSData dataWithContentsOfURL:location];
+                    //回到主线程
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        //设置图片      
+                        _imageDetail.image = [UIImage imageWithData:data];
+                    });
+                    
+//                    NSString *fullPath = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingString:[NSString stringWithFormat:@"/%@", response.suggestedFilename]];
+//                    _imageDetail.image = [UIImage imageWithContentsOfFile:fullPath];
+                }];
+                [downloadTask resume];
             } else if (cellItem.defaultName.length>0) {
                 [_imageDetail setImage:[UIImage imageNamed:cellItem.defaultName]];
             }

@@ -23,8 +23,6 @@
 
 #define kMessageRequireTimeInterval 5.0f
 
-#define UPPER_DEBUG 1
-
 #ifdef UPPER_DEBUG
 #define kBaseURL @"http://api.qidianzhan.com.cn/AppServ/index.php"
 #else

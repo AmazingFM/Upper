@@ -195,6 +195,7 @@ extern NSString * const g_loginFileName;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.tableView reloadData];
     
     CRNavigationBar *navigationBar = (CRNavigationBar *)self.navigationController.navigationBar;
     navigationBar.barTintColor = [UIColor clearColor];
