@@ -2667,6 +2667,83 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		3AEAB6BD1F31A35D00640E15 /* Adhoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Yongming Zhang (77565T989X)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yongming Zhang (77565T989X)";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"UPPER_DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
+			};
+			name = Adhoc;
+		};
+		3AEAB6BE1F31A35D00640E15 /* Adhoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Yongming Zhang (77565T989X)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yongming Zhang (77565T989X)";
+				DEVELOPMENT_TEAM = 77565T989X;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Upper_1/PrefixHeader.pch;
+				INFOPLIST_FILE = Upper_1/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Upper_1/Classes/thirdparty/VoiceLib",
+					"$(PROJECT_DIR)/Upper_1/Classes/thirdparty/MessageLib/VoiceLib",
+					"$(PROJECT_DIR)/Upper_1/Classes/thirdparty/weixin",
+				);
+				OTHER_LDFLAGS = (
+					"-framework",
+					Security,
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.upper.UpperForiOS;
+				PRODUCT_NAME = Upper;
+				PROVISIONING_PROFILE = "233d8a26-78eb-4908-bd92-cdd048564a47";
+				PROVISIONING_PROFILE_SPECIFIER = YMWildPro_Adhoc;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Adhoc;
+		};
 		FECE88341BE344DA00CC8E85 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2684,8 +2761,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Yongming Zhang (V76QA6Q843)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yongming Zhang (V76QA6Q843)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2788,9 +2865,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Upper Technology Co. Ltd (8DZS62MHVB)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Upper Technology Co. Ltd (8DZS62MHVB)";
-				DEVELOPMENT_TEAM = 8DZS62MHVB;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Yongming Zhang (77565T989X)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yongming Zhang (77565T989X)";
+				DEVELOPMENT_TEAM = 77565T989X;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Upper_1/PrefixHeader.pch;
 				INFOPLIST_FILE = Upper_1/Info.plist;
@@ -2809,8 +2886,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.upper.UpperForiOS;
 				PRODUCT_NAME = Upper;
-				PROVISIONING_PROFILE = "f1f241c4-ed76-4478-a686-ef694d08ba3e";
-				PROVISIONING_PROFILE_SPECIFIER = UpperPro_dis;
+				PROVISIONING_PROFILE = "233d8a26-78eb-4908-bd92-cdd048564a47";
+				PROVISIONING_PROFILE_SPECIFIER = YMWildPro_Adhoc;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -2822,6 +2899,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FECE88341BE344DA00CC8E85 /* Debug */,
+				3AEAB6BD1F31A35D00640E15 /* Adhoc */,
 				FECE88351BE344DA00CC8E85 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -2831,6 +2909,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FECE88371BE344DA00CC8E85 /* Debug */,
+				3AEAB6BE1F31A35D00640E15 /* Adhoc */,
 				FECE88381BE344DA00CC8E85 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
