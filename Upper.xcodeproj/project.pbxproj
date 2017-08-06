@@ -49,7 +49,6 @@
 		2CDAD6361D0EEC4000C260F4 /* ASPopUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CDAD5891D0EEC4000C260F4 /* ASPopUpView.m */; };
 		2CDAD6371D0EEC4000C260F4 /* ASProgressPopUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CDAD58B1D0EEC4000C260F4 /* ASProgressPopUpView.m */; };
 		2CDAD6381D0EEC4000C260F4 /* detail.css in Resources */ = {isa = PBXBuildFile; fileRef = 2CDAD58C1D0EEC4000C260F4 /* detail.css */; };
-		2CDAD6391D0EEC4000C260F4 /* UINavigationController+FDFullscreenPopGesture.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CDAD58F1D0EEC4000C260F4 /* UINavigationController+FDFullscreenPopGesture.m */; };
 		2CDAD63A1D0EEC4000C260F4 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CDAD5921D0EEC4000C260F4 /* FMDatabase.m */; };
 		2CDAD63B1D0EEC4000C260F4 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CDAD5941D0EEC4000C260F4 /* FMDatabaseAdditions.m */; };
 		2CDAD63C1D0EEC4000C260F4 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CDAD5961D0EEC4000C260F4 /* FMDatabasePool.m */; };
@@ -484,8 +483,6 @@
 		2CDAD58A1D0EEC4000C260F4 /* ASProgressPopUpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASProgressPopUpView.h; sourceTree = "<group>"; };
 		2CDAD58B1D0EEC4000C260F4 /* ASProgressPopUpView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASProgressPopUpView.m; sourceTree = "<group>"; };
 		2CDAD58C1D0EEC4000C260F4 /* detail.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = detail.css; sourceTree = "<group>"; };
-		2CDAD58E1D0EEC4000C260F4 /* UINavigationController+FDFullscreenPopGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+FDFullscreenPopGesture.h"; sourceTree = "<group>"; };
-		2CDAD58F1D0EEC4000C260F4 /* UINavigationController+FDFullscreenPopGesture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+FDFullscreenPopGesture.m"; sourceTree = "<group>"; };
 		2CDAD5911D0EEC4000C260F4 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		2CDAD5921D0EEC4000C260F4 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
 		2CDAD5931D0EEC4000C260F4 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
@@ -1120,7 +1117,6 @@
 				2CDAD5731D0EEC4000C260F4 /* AFNetworking */,
 				2CDAD5871D0EEC4000C260F4 /* ASProgressPopUpView */,
 				2CDAD58C1D0EEC4000C260F4 /* detail.css */,
-				2CDAD58D1D0EEC4000C260F4 /* FDFullscreenPopGesture */,
 				2CDAD5901D0EEC4000C260F4 /* Fmdb */,
 				2CDAD59C1D0EEC4000C260F4 /* MBProgressHUD */,
 				2CDAD5A21D0EEC4000C260F4 /* MJExtension */,
@@ -1167,15 +1163,6 @@
 				2CDAD58B1D0EEC4000C260F4 /* ASProgressPopUpView.m */,
 			);
 			path = ASProgressPopUpView;
-			sourceTree = "<group>";
-		};
-		2CDAD58D1D0EEC4000C260F4 /* FDFullscreenPopGesture */ = {
-			isa = PBXGroup;
-			children = (
-				2CDAD58E1D0EEC4000C260F4 /* UINavigationController+FDFullscreenPopGesture.h */,
-				2CDAD58F1D0EEC4000C260F4 /* UINavigationController+FDFullscreenPopGesture.m */,
-			);
-			path = FDFullscreenPopGesture;
 			sourceTree = "<group>";
 		};
 		2CDAD5901D0EEC4000C260F4 /* Fmdb */ = {
@@ -2242,7 +2229,7 @@
 				TargetAttributes = {
 					FECE88121BE344DA00CC8E85 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 8DZS62MHVB;
+						DevelopmentTeam = 77565T989X;
 					};
 				};
 			};
@@ -2478,7 +2465,6 @@
 				2CDAD6661D0EEC4000C260F4 /* SDPhotoBrowser.m in Sources */,
 				EC3C18271CECB16D00223D6B /* NSString+Base64.m in Sources */,
 				3A33A3051E44168100144D66 /* UPPresentViewController.m in Sources */,
-				2CDAD6391D0EEC4000C260F4 /* UINavigationController+FDFullscreenPopGesture.m in Sources */,
 				2C10727D1CF32C9900D74AE1 /* UPDataManager.m in Sources */,
 				2CDAD63C1D0EEC4000C260F4 /* FMDatabasePool.m in Sources */,
 				2CDAD5031D0ED8A900C260F4 /* UUProgressHUD.m in Sources */,

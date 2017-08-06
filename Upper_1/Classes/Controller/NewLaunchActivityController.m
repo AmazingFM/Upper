@@ -54,7 +54,6 @@ static CGFloat const FixRatio = 4/3.0;
     self.navigationItem.rightBarButtonItem = rightBtn;
     self.automaticallyAdjustsScrollViewInsets = YES;
     
-    
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, ScreenWidth, ScreenHeight) style:UITableViewStylePlain];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -1090,14 +1089,6 @@ static CGFloat const FixRatio = 4/3.0;
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
-//- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
-//{
-//    if ([navigationController isKindOfClass:[UIImagePickerController class]]) {
-//        viewController.navigationController.navigationBar.translucent = NO;
-//        viewController.edgesForExtendedLayout = UIRectEdgeNone;
-//    }
-//}
-
 //pragma mark - 上传图片
 - (void)uploadImage:(NSString *)imagePath
 {
@@ -1278,6 +1269,23 @@ static CGFloat const FixRatio = 4/3.0;
     [shareBtn setImage:[UIImage imageNamed:imageName] forState:UIControlStateHighlighted];
     shareBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     return shareBtn;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    }
 }
 
 - (void)buttonClick:(UIButton *)sender
