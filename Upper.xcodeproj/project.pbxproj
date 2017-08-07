@@ -268,6 +268,7 @@
 		3AF680441EC15021007D3B91 /* icon_setting@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AF680431EC15021007D3B91 /* icon_setting@2x.png */; };
 		3AFCCDBD1D5C09BC0003F6F3 /* NewLaunchActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */; };
 		850D79211E51FA670082D944 /* NSString+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 850D79201E51FA670082D944 /* NSString+Common.m */; };
+		8520A1BE1F38D31F0025C4BC /* UINavigationController+FDFullscreenPopGesture.m in Sources */ = {isa = PBXBuildFile; fileRef = 8520A1BD1F38D31F0025C4BC /* UINavigationController+FDFullscreenPopGesture.m */; };
 		8520CD621ED96FA600690739 /* icon_wx_session@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8520CD601ED96FA600690739 /* icon_wx_session@2x.png */; };
 		8520CD631ED96FA600690739 /* icon_wx_timeline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8520CD611ED96FA600690739 /* icon_wx_timeline@2x.png */; };
 		8520CD661ED9728000690739 /* Selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8520CD641ED9728000690739 /* Selected@2x.png */; };
@@ -830,6 +831,8 @@
 		3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewLaunchActivityController.m; sourceTree = "<group>"; };
 		850D791F1E51FA670082D944 /* NSString+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Common.h"; sourceTree = "<group>"; };
 		850D79201E51FA670082D944 /* NSString+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Common.m"; sourceTree = "<group>"; };
+		8520A1BC1F38D31F0025C4BC /* UINavigationController+FDFullscreenPopGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+FDFullscreenPopGesture.h"; sourceTree = "<group>"; };
+		8520A1BD1F38D31F0025C4BC /* UINavigationController+FDFullscreenPopGesture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+FDFullscreenPopGesture.m"; sourceTree = "<group>"; };
 		8520CD601ED96FA600690739 /* icon_wx_session@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_wx_session@2x.png"; sourceTree = "<group>"; };
 		8520CD611ED96FA600690739 /* icon_wx_timeline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_wx_timeline@2x.png"; sourceTree = "<group>"; };
 		8520CD641ED9728000690739 /* Selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Selected@2x.png"; sourceTree = "<group>"; };
@@ -1763,6 +1766,16 @@
 			path = activity;
 			sourceTree = "<group>";
 		};
+		8520A1BB1F38D31F0025C4BC /* FDFullscreenPopGesture */ = {
+			isa = PBXGroup;
+			children = (
+				8520A1BC1F38D31F0025C4BC /* UINavigationController+FDFullscreenPopGesture.h */,
+				8520A1BD1F38D31F0025C4BC /* UINavigationController+FDFullscreenPopGesture.m */,
+			);
+			name = FDFullscreenPopGesture;
+			path = Lib/FDFullscreenPopGesture;
+			sourceTree = "<group>";
+		};
 		853053851ED70C7100B3CF43 /* weixin */ = {
 			isa = PBXGroup;
 			children = (
@@ -2030,6 +2043,7 @@
 		EC3C16FD1CECB16D00223D6B /* thirdparty */ = {
 			isa = PBXGroup;
 			children = (
+				8520A1BB1F38D31F0025C4BC /* FDFullscreenPopGesture */,
 				853053851ED70C7100B3CF43 /* weixin */,
 				8555DE771EBF4D700012F162 /* UIButton+Badge.h */,
 				8555DE781EBF4D700012F162 /* UIButton+Badge.m */,
@@ -2440,6 +2454,7 @@
 				EC3C182A1CECB16D00223D6B /* UIView+MJ.m in Sources */,
 				EC3C18111CECB16D00223D6B /* QRCodeController.m in Sources */,
 				2CDAD6711D0EEC4000C260F4 /* SDWebImageDecoder.m in Sources */,
+				8520A1BE1F38D31F0025C4BC /* UINavigationController+FDFullscreenPopGesture.m in Sources */,
 				EC3C18051CECB16D00223D6B /* XWDataCacheTool.m in Sources */,
 				EC3C18911CECB16D00223D6B /* UpMyActView.m in Sources */,
 				2CDAD63A1D0EEC4000C260F4 /* FMDatabase.m in Sources */,
