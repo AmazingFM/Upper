@@ -6,6 +6,7 @@
 //  Copyright (c) 2015年 aries365.com. All rights reserved.
 //
 #import "UpSettingController.h"
+#import "UPAgreementViewController.h"
 #import "CRNavigationBar.h"
 
 @interface UpSettingController () <UITableViewDelegate, UITableViewDataSource>
@@ -31,7 +32,7 @@
 #ifdef UPPER_DEBUG
     version = [NSString stringWithFormat:@"测试版%@", version];
 #endif
-    
+    [itemList addObject:@{@"title":@"用户协议", @"value":@""}];
     [itemList addObject:@{@"title":@"版本", @"value":version}];
 }
 
@@ -84,7 +85,9 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (cell==nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
+    
     NSDictionary *item = itemList[indexPath.row];
     cell.textLabel.text = item[@"title"];
     cell.textLabel.font = [UIFont systemFontOfSize:15.f];
@@ -92,5 +95,17 @@
     cell.detailTextLabel.font = kUPThemeSmallFont;
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row<itemList.count) {
+        NSDictionary *itemDict = itemList[indexPath.row];
+        NSString *rowTitle = itemDict[@"title"];
+        if ([rowTitle isEqualToString:@"用户协议"]) {
+            UPAgreementViewController *agreementViewController = [[UPAgreementViewController alloc] init];
+            [self.navigationController pushViewController:agreementViewController animated:YES];
+        }
+    }
 }
 @end

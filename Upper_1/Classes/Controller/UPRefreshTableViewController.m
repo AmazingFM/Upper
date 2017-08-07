@@ -101,11 +101,11 @@
         cell = [[HTActivityCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
         cell.delegate = self;
     }
-    else {
-        for (UIView *view in [cell.contentView subviews]) {
-            [view removeFromSuperview];
-        }
-    }
+//    else {
+//        for (UIView *view in [cell.contentView subviews]) {
+//            [view removeFromSuperview];
+//        }
+//    }
     
     [cell setActivityItems:(self.itemArray[indexPath.row])];
     return cell;

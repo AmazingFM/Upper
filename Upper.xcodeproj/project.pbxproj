@@ -134,6 +134,7 @@
 		3A08A84E1E80EFF9003C55BD /* HTScrollCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A08A84D1E80EFF9003C55BD /* HTScrollCell.m */; };
 		3A0B60EF1DF5B92E009FCC10 /* YMNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0B60EE1DF5B92E009FCC10 /* YMNetwork.m */; };
 		3A0B60F51DF7A700009FCC10 /* YMNetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A0B60F41DF7A700009FCC10 /* YMNetManager.m */; };
+		3A1C12E81F3875A10046E282 /* agreement in Resources */ = {isa = PBXBuildFile; fileRef = 3A1C12E71F3875A10046E282 /* agreement */; };
 		3A26C5551E52973700339B38 /* ConversationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A26C5541E52973700339B38 /* ConversationCell.m */; };
 		3A26C55B1E52CC0200339B38 /* UIAlertView+NSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A26C55A1E52CC0200339B38 /* UIAlertView+NSObject.m */; };
 		3A2939901D2F798B005CB3F3 /* UPCommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A29398F1D2F798B005CB3F3 /* UPCommentController.m */; };
@@ -257,6 +258,8 @@
 		3A91CCF41E6334A200EBEF58 /* toolbar-emoji2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A91CCF21E6334A200EBEF58 /* toolbar-emoji2@3x.png */; };
 		3AAB8EA51E3875BE00025188 /* asistant@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AAB8EA41E3875BE00025188 /* asistant@2x.png */; };
 		3AAF86391D6C193700248A45 /* YMImageLoadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAF86381D6C193700248A45 /* YMImageLoadView.m */; };
+		3AC782561F380FA800216FE0 /* UPAgreementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC782551F380FA800216FE0 /* UPAgreementViewController.m */; };
+		3AC7825C1F38425900216FE0 /* agreement.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 3AC7825B1F38425900216FE0 /* agreement.rtf */; };
 		3ACF2AF51D6AEDD30083E04E /* RecommendController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACF2AF41D6AEDD30083E04E /* RecommendController.m */; };
 		3AF6803F1EC14F69007D3B91 /* icon_msg_change_launcher@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AF6803B1EC14F69007D3B91 /* icon_msg_change_launcher@2x.png */; };
 		3AF680401EC14F69007D3B91 /* icon_msg_change_launcher@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AF6803C1EC14F69007D3B91 /* icon_msg_change_launcher@3x.png */; };
@@ -657,6 +660,7 @@
 		3A0B60EE1DF5B92E009FCC10 /* YMNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMNetwork.m; sourceTree = "<group>"; };
 		3A0B60F31DF7A700009FCC10 /* YMNetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMNetManager.h; sourceTree = "<group>"; };
 		3A0B60F41DF7A700009FCC10 /* YMNetManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMNetManager.m; sourceTree = "<group>"; };
+		3A1C12E71F3875A10046E282 /* agreement */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = agreement; sourceTree = "<group>"; };
 		3A26C5531E52973700339B38 /* ConversationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationCell.h; sourceTree = "<group>"; };
 		3A26C5541E52973700339B38 /* ConversationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationCell.m; sourceTree = "<group>"; };
 		3A26C5591E52CC0200339B38 /* UIAlertView+NSObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+NSObject.h"; sourceTree = "<group>"; };
@@ -812,6 +816,9 @@
 		3AAB8EA41E3875BE00025188 /* asistant@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "asistant@2x.png"; sourceTree = "<group>"; };
 		3AAF86371D6C193700248A45 /* YMImageLoadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMImageLoadView.h; sourceTree = "<group>"; };
 		3AAF86381D6C193700248A45 /* YMImageLoadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMImageLoadView.m; sourceTree = "<group>"; };
+		3AC782541F380FA800216FE0 /* UPAgreementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPAgreementViewController.h; sourceTree = "<group>"; };
+		3AC782551F380FA800216FE0 /* UPAgreementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPAgreementViewController.m; sourceTree = "<group>"; };
+		3AC7825B1F38425900216FE0 /* agreement.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = agreement.rtf; sourceTree = "<group>"; };
 		3ACF2AF31D6AEDD30083E04E /* RecommendController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecommendController.h; sourceTree = "<group>"; };
 		3ACF2AF41D6AEDD30083E04E /* RecommendController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecommendController.m; sourceTree = "<group>"; };
 		3AF6803B1EC14F69007D3B91 /* icon_msg_change_launcher@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_msg_change_launcher@2x.png"; sourceTree = "<group>"; };
@@ -1524,6 +1531,8 @@
 		3A71CB391E26267700EBE0A2 /* resource */ = {
 			isa = PBXGroup;
 			children = (
+				3A1C12E71F3875A10046E282 /* agreement */,
+				3AC7825B1F38425900216FE0 /* agreement.rtf */,
 				8555DE751EBEE2490012F162 /* msg_alert_sound.mp3 */,
 				3A71CB3A1E26267700EBE0A2 /* pic */,
 				3A71CB851E26267700EBE0A2 /* plist */,
@@ -1961,6 +1970,8 @@
 				3A33A3041E44168100144D66 /* UPPresentViewController.m */,
 				3A6668851E6D060500CD7CCC /* UPFriendListController.h */,
 				3A6668861E6D060500CD7CCC /* UPFriendListController.m */,
+				3AC782541F380FA800216FE0 /* UPAgreementViewController.h */,
+				3AC782551F380FA800216FE0 /* UPAgreementViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -2265,6 +2276,7 @@
 				3A71CBA11E26267700EBE0A2 /* chat_voice_record.png in Resources */,
 				3AAB8EA51E3875BE00025188 /* asistant@2x.png in Resources */,
 				3A71CBB81E26267700EBE0A2 /* next.png in Resources */,
+				3AC7825C1F38425900216FE0 /* agreement.rtf in Resources */,
 				3A71CBB71E26267700EBE0A2 /* message@2x.png in Resources */,
 				FECE88241BE344DA00CC8E85 /* Images.xcassets in Resources */,
 				3AF680401EC14F69007D3B91 /* icon_msg_change_launcher@3x.png in Resources */,
@@ -2330,6 +2342,7 @@
 				8530538C1ED70C7100B3CF43 /* README.txt in Resources */,
 				3A71CBB01E26267700EBE0A2 /* guide_p3.png in Resources */,
 				3A71CBA31E26267700EBE0A2 /* chatfrom_doctor_icon.png in Resources */,
+				3A1C12E81F3875A10046E282 /* agreement in Resources */,
 				3A71CB991E26267700EBE0A2 /* chat_animation_white1.png in Resources */,
 				3A71CBAF1E26267700EBE0A2 /* guide_p2.png in Resources */,
 				8555DE5D1EBCC62E0012F162 /* default_activity_106@2x.png in Resources */,
@@ -2494,6 +2507,7 @@
 				EC3C18251CECB16D00223D6B /* NSData+Base64.m in Sources */,
 				2C38F9681D23FEFD002CF240 /* ZouMaDengView.m in Sources */,
 				2C9793A41CEFF8550043EA50 /* UPTools.m in Sources */,
+				3AC782561F380FA800216FE0 /* UPAgreementViewController.m in Sources */,
 				2CDAD65B1D0EEC4000C260F4 /* UIScrollView+MJRefresh.m in Sources */,
 				2CDAD66F1D0EEC4000C260F4 /* SDImageCache.m in Sources */,
 				2CDAD64E1D0EEC4000C260F4 /* MJRefreshHeader.m in Sources */,

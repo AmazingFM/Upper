@@ -98,8 +98,6 @@
     UIView *backView;
     UIImageView *_img;
     UILabel *_titleLab;
-    UILabel *_freeTips;
-    UILabel *_typeLab;
     UILabel *_statusLab;
     
     
@@ -111,6 +109,8 @@
     
     UIImageView *_userImgView;
     UILabel *_sponserLab;
+    UILabel *_fabuLab;
+    UILabel *_typeLab;
 
     UIView *_btnContainerView;
     
@@ -149,10 +149,10 @@
         _titleLab.textAlignment = NSTextAlignmentLeft;
         _titleLab.textColor = [UPTools colorWithHex:0x333333];
         
-        _freeTips = [[UILabel alloc] initWithFrame:CGRectZero];
-        _freeTips.font = kUPThemeTitleFont;
-        _freeTips.backgroundColor = [UIColor clearColor];
-        _freeTips.textAlignment = NSTextAlignmentRight;
+//        _freeTips = [[UILabel alloc] initWithFrame:CGRectZero];
+//        _freeTips.font = kUPThemeTitleFont;
+//        _freeTips.backgroundColor = [UIColor clearColor];
+//        _freeTips.textAlignment = NSTextAlignmentRight;
         
         _img = [[UIImageView alloc] initWithFrame:CGRectZero];
         _img.layer.cornerRadius = 3.f;
@@ -190,14 +190,6 @@
         _statusLab.layer.cornerRadius = 2.0f;
         _statusLab.layer.masksToBounds = YES;
         
-        _typeLab = [[UILabel alloc] initWithFrame:CGRectZero];
-        _typeLab.font = kUPThemeMinFont;
-        _typeLab.backgroundColor = [UIColor clearColor];
-        _typeLab.textAlignment = NSTextAlignmentLeft;
-        _typeLab.layer.cornerRadius = 2.0f;
-        _typeLab.adjustsFontSizeToFitWidth = YES;
-        _typeLab.layer.masksToBounds = YES;
-        
         _payBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _payBtn.titleLabel.font = kUPThemeMiniFont;
         _payBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -218,6 +210,21 @@
         _sponserLab.adjustsFontSizeToFitWidth = YES;
         _sponserLab.textColor = RGBCOLOR(204, 204, 204);
         _sponserLab.backgroundColor = [UIColor clearColor];
+        
+        _fabuLab = [[UILabel alloc] initWithFrame:CGRectZero];
+        _fabuLab.font = kUPThemeMinFont;
+        _fabuLab.backgroundColor = [UIColor clearColor];
+        _fabuLab.textAlignment = NSTextAlignmentLeft;
+        _fabuLab.text = @" 发布了 ";
+        _fabuLab.textColor = RGBCOLOR(204, 204, 204);
+        
+        _typeLab = [[UILabel alloc] initWithFrame:CGRectZero];
+        _typeLab.font = kUPThemeMinFont;
+        _typeLab.backgroundColor = [UIColor clearColor];
+        _typeLab.textAlignment = NSTextAlignmentLeft;
+        _typeLab.layer.cornerRadius = 2.0f;
+        _typeLab.adjustsFontSizeToFitWidth = YES;
+        _typeLab.layer.masksToBounds = YES;
         
         _btnContainerView = [[UIView alloc] initWithFrame:CGRectZero];
         _btnContainerView.backgroundColor = [UIColor clearColor];
@@ -297,7 +304,6 @@
         
         [backView addSubview:_img];
         [backView addSubview:_titleLab];
-        [backView addSubview:_freeTips];
         [backView addSubview:_typeLab];
         [backView addSubview:_payBtn];
         [backView addSubview:_statusLab];
@@ -307,6 +313,7 @@
         [backView addSubview:_locationBtn];
         [backView addSubview:_userImgView];
         [backView addSubview:_sponserLab];
+        [backView addSubview:_fabuLab];
     }
     return self;
 }
@@ -487,6 +494,8 @@
     offsety += 20;
     
     if (_actCellItem.type==SourceTypeDaTing) {
+        _btnContainerView.hidden = YES;
+        
         NSString *sponser = itemData.nick_name;
         if (sponser.length!=0) {
             _sponserLab.text = sponser;
@@ -511,33 +520,28 @@
                 size = SizeWithFont(@" 发布了 ", kUPThemeMinFont);
                 
                 offsetx += _sponserLab.width;
+
+                _fabuLab.frame = CGRectMake(offsetx, offsety, size.width, _sponserLab.height);
                 
-                UILabel *lab = [self viewWithTag:10000];
-                if (lab==nil) {
-                    lab = [[UILabel alloc] initWithFrame:CGRectZero];
-                    lab.font = kUPThemeMinFont;
-                    lab.backgroundColor = [UIColor clearColor];
-                    lab.textAlignment = NSTextAlignmentLeft;
-                    lab.text = @" 发布了 ";
-                    lab.textColor = RGBCOLOR(204, 204, 204);
-                    lab.tag = 10000;
-                }
-                lab.frame = CGRectMake(offsetx, offsety, size.width, _sponserLab.height);
-                
-                offsetx += lab.width;
+                offsetx += _fabuLab.width;
                 
                 _typeLab.text = actTypeTitle;
                 _typeLab.frame = CGRectMake(offsetx, offsety, width-offsetx, _sponserLab.height);
-                [backView addSubview:lab];
 
             } else {
-                _typeLab.frame = CGRectZero;
+                _typeLab.hidden = YES;
+                _fabuLab.hidden = YES;
             }
 
         } else {
-            _sponserLab.frame = CGRectZero;
+            _sponserLab.hidden = YES;
         }
     } else {
+        _userImgView.hidden = YES;
+        _sponserLab.hidden = YES;;
+        _fabuLab.hidden = YES;;
+        _typeLab.hidden = YES;;
+        
         if (actStatus) {
             _btnContainerView.frame = CGRectMake(offsetx, offsety, width-2*offsetx, 30);
             
@@ -545,62 +549,38 @@
             float btnWidth = 60.f;
             float btnPadding = 10.f;
             
+            _changeActBtn.hidden = YES;
+            _cancelActBtn.hidden = YES;
+            _editActBtn.hidden = YES;
+            _reviewActBtn.hidden = YES;
+            _commentActBtn.hidden = YES;
+            _quitActBtn.hidden = YES;
+            _signActBtn.hidden = YES;
+            _complainBtn.hidden = YES;
+
             if (_actCellItem.type==SourceTypeWoFaqi) {
                 switch ([actStatusID intValue]) {
                     case 0:
-                        _changeActBtn.frame =   CGRectMake(width-btnWidth-80-btnPadding,5,80,perHeight-10);
-                        _cancelActBtn.frame =   CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
-                        _editActBtn.frame =     CGRectZero;
-                        _reviewActBtn.frame =   CGRectZero;
-                        _commentActBtn.frame =  CGRectZero;
-                        _quitActBtn.frame =     CGRectZero;
-                        _signActBtn.frame =     CGRectZero;
-                        _complainBtn.frame = CGRectZero;
-                        break;
                     case 1:
                     case 2:
                     case 3:
                     case 4:
                         _changeActBtn.frame =   CGRectMake(width-btnWidth-btnPadding-80,5,80,perHeight-10);
                         _cancelActBtn.frame =   CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
-                        _reviewActBtn.frame =   CGRectZero;
-                        _commentActBtn.frame =  CGRectZero;
-                        _quitActBtn.frame =     CGRectZero;
-                        _signActBtn.frame =     CGRectZero;
-                        _editActBtn.frame =     CGRectZero;
-                        _complainBtn.frame = CGRectZero;
+                        _changeActBtn.hidden = NO;
+                        _cancelActBtn.hidden = NO;
                         break;
                     case 6:
                         _signActBtn.frame =     CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
-                        _reviewActBtn.frame =   CGRectZero;
-                        _changeActBtn.frame =   CGRectZero;
-                        _cancelActBtn.frame =   CGRectZero;
-                        _commentActBtn.frame =  CGRectZero;
-                        _quitActBtn.frame =     CGRectZero;
-                        _editActBtn.frame =     CGRectZero;
-                        _complainBtn.frame = CGRectZero;
+                        _signActBtn.hidden = NO;
                         break;
                     case 7:
                         _reviewActBtn.frame =   CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
-                        _changeActBtn.frame =   CGRectZero;
-                        _cancelActBtn.frame =   CGRectZero;
-                        _commentActBtn.frame =  CGRectZero;
-                        _quitActBtn.frame =     CGRectZero;
-                        _signActBtn.frame =     CGRectZero;
-                        _editActBtn.frame =     CGRectZero;
-                        _complainBtn.frame = CGRectZero;
+                        _reviewActBtn.hidden = YES;
                         break;
                     case 5:
                     case 8:
                     case 9:
-                        _reviewActBtn.frame =   CGRectZero;
-                        _changeActBtn.frame =   CGRectZero;
-                        _cancelActBtn.frame =   CGRectZero;
-                        _commentActBtn.frame =  CGRectZero;
-                        _quitActBtn.frame =     CGRectZero;
-                        _signActBtn.frame =     CGRectZero;
-                        _editActBtn.frame =     CGRectZero;
-                        _complainBtn.frame = CGRectZero;
                         break;
                 }
             } else if(_actCellItem.type==SourceTypeWoCanyu) {
@@ -628,33 +608,13 @@
                     case 3:
                     case 4:
                         _quitActBtn.frame =   CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
-                        _reviewActBtn.frame =   CGRectZero;
-                        _changeActBtn.frame =   CGRectZero;
-                        _cancelActBtn.frame =   CGRectZero;
-                        _commentActBtn.frame =  CGRectZero;
-                        _signActBtn.frame =     CGRectZero;
-                        _editActBtn.frame =     CGRectZero;
-                        _complainBtn.frame = CGRectZero;
+                        _quitActBtn.hidden = NO;
                         break;
                     case 5:
-                        _reviewActBtn.frame =   CGRectZero;
-                        _changeActBtn.frame =   CGRectZero;
-                        _cancelActBtn.frame =   CGRectZero;
-                        _commentActBtn.frame =  CGRectZero;
-                        _quitActBtn.frame =     CGRectZero;
-                        _signActBtn.frame =     CGRectZero;
-                        _editActBtn.frame =     CGRectZero;
-                        _complainBtn.frame    = CGRectZero;
                         break;
                     case 6:
                         _complainBtn.frame = CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);;
-                        _reviewActBtn.frame =   CGRectZero;
-                        _changeActBtn.frame =   CGRectZero;
-                        _cancelActBtn.frame =   CGRectZero;
-                        _commentActBtn.frame =  CGRectZero;
-                        _quitActBtn.frame =     CGRectZero;
-                        _signActBtn.frame =     CGRectZero;
-                        _editActBtn.frame =     CGRectZero;
+                        _complainBtn.hidden = NO;
                         break;
                     case 7:
                     case 8:
@@ -664,17 +624,12 @@
                         if ([joinStatus intValue]==1) {
                             _commentActBtn.frame =   CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
                             _complainBtn.frame = CGRectMake(width-2*btnWidth-btnPadding,5,btnWidth,perHeight-10);
+                            _commentActBtn.hidden = NO;
+                            _complainBtn.hidden = NO;
                         } else {
                             _complainBtn.frame = CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
-                            _commentActBtn.frame = CGRectZero;
+                            _complainBtn.hidden = NO;
                         }
-                        
-                        _reviewActBtn.frame =   CGRectZero;
-                        _changeActBtn.frame =   CGRectZero;
-                        _cancelActBtn.frame =   CGRectZero;
-                        _quitActBtn.frame =     CGRectZero;
-                        _signActBtn.frame =     CGRectZero;
-                        _editActBtn.frame =     CGRectZero;
                     }
                         break;
                 }
