@@ -12,12 +12,13 @@
 #import "Info.h"
 #import "UPDataManager.h"
 #import "XWHttpTool.h"
+#import "TTTAttributedLabel.h"
 
 #define VERTICAL_SPACE 40
 #define VerifyBtnWidth 100
 #define TimeInterval 10
 
-@interface UpRegister4() <UITextFieldDelegate,UIGestureRecognizerDelegate>
+@interface UpRegister4() <UITextFieldDelegate,UIGestureRecognizerDelegate, TTTAttributedLabelDelegate>
 {
     UIScrollView *contentScro;
 }
@@ -46,7 +47,6 @@
     size.width = size.width+5;
     
     NSArray *labelStr = [NSArray arrayWithObjects:usernameStr,passwordStr,confirmStr,sexualStr,nil];
-    
     
     _fields = [[NSMutableArray alloc]initWithCapacity:5];
     for (int i=0; i<labelStr.count; i++) {
@@ -113,10 +113,14 @@
         [contentScro addSubview:tmpLabel];
         [contentScro addSubview:tmpField];
         [contentScro addSubview:seperatorV];
-        
     }
-
-    [contentScro setContentSize:CGSizeMake(frame.size.width, 5*(size.height+VERTICAL_SPACE)-VERTICAL_SPACE)];
+    
+    TTTAttributedLabel *detailLabel = [self addTTAttributedLabel];
+    CGRect rect = CGRectOffset(detailLabel.frame, 0, 4*(size.height+VERTICAL_SPACE));
+    detailLabel.frame = rect;
+    [contentScro addSubview:detailLabel];
+    
+    [contentScro setContentSize:CGSizeMake(frame.size.width, 5*(size.height+VERTICAL_SPACE)+rect.size.height)];
     [self addSubview:contentScro];
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
@@ -126,6 +130,45 @@
     singleTap.cancelsTouchesInView = NO;
 
     return self;
+}
+
+- (TTTAttributedLabel *)addTTAttributedLabel
+{
+    NSString *detailStr = @"注册即表示同意《upper用户协议》";
+    CGSize size = [detailStr sizeWithFont:[UIFont systemFontOfSize:15] constrainedToSize:CGSizeMake(ScreenWidth-2*LeftRightPadding,10000.0f) lineBreakMode:NSLineBreakByWordWrapping];
+    
+    TTTAttributedLabel *detailLabel = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(LeftRightPadding, 0, ScreenWidth-2*LeftRightPadding, size.height)];
+    detailLabel.delegate = self;
+    detailLabel.font = [UIFont systemFontOfSize:15];
+    detailLabel.textAlignment = NSTextAlignmentCenter;
+    detailLabel.textColor = [UIColor whiteColor];
+    detailLabel.backgroundColor = [UIColor clearColor];
+    detailLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    detailLabel.numberOfLines = 0;
+    [detailLabel setText:detailStr];
+
+    UIFont *boldSystemFont = [UIFont systemFontOfSize:14];
+    CTFontRef font = CTFontCreateWithName((__bridge CFStringRef)boldSystemFont.fontName, boldSystemFont.pointSize, NULL);
+    //添加点击事件
+    detailLabel.enabledTextCheckingTypes = NSTextCheckingTypeLink;
+    detailLabel.delegate = self;
+    detailLabel.linkAttributes = @{(NSString *)kCTFontAttributeName:(__bridge id)font,(id)kCTForegroundColorAttributeName:RGBCOLOR(33, 129, 247)};
+    NSRange range1= [detailLabel.text rangeOfString:@"《upper用户协议》"];
+    NSString* path = @"agreement";
+    NSURL* url = [NSURL fileURLWithPath:path];
+    [detailLabel addLinkToURL:url withRange:range1];
+
+    return detailLabel;
+}
+
+- (void)attributedLabel:(__unused TTTAttributedLabel *)label
+   didSelectLinkWithURL:(NSURL *)url
+{
+    NSString *title = @"用户协议";
+    
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"agreement" ofType:@""];
+    NSString *msgContent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+    showDefaultAlert(title, msgContent);
 }
 
 #pragma mark - UITextFieldDelegate

@@ -381,7 +381,8 @@ static dispatch_queue_t message_manager_processing_queue() {
 {
     __block NSMutableArray<PrivateMessage *> *msgList = [NSMutableArray new];
     [self.fmQueue inDatabase:^(FMDatabase *db) {
-        NSString *querySql = [NSString stringWithFormat:@"select * from UsrTable where local_id='%@' and remote_id='%@' order by add_time asc", [UPDataManager shared].userInfo.ID, userId];
+//        NSString *querySql = [NSString stringWithFormat:@"select * from UsrTable where local_id='%@' and remote_id='%@' order by add_time asc", [UPDataManager shared].userInfo.ID, userId];
+        NSString *querySql = [NSString stringWithFormat:@"select * from UsrTable where local_id='%@' and remote_id='%@'", [UPDataManager shared].userInfo.ID, userId];
         FMResultSet *s = [db executeQuery:querySql];
         while (s.next) {
             PrivateMessage *msg = [[PrivateMessage alloc] init];

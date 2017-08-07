@@ -20,7 +20,7 @@
 {
     [super viewDidLoad];
     self.title = @"用户协议";
-    
+    self.view.backgroundColor = [UIColor whiteColor];
     webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight)];
     [self.view addSubview:webView];
 }
