@@ -145,7 +145,7 @@ static NSMutableDictionary *rb_observers=nil;
     }
 
     [_button setTitle:self.text forState:UIControlStateNormal];
-    [_button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     _button.titleLabel.font = [UIFont systemFontOfSize:14];
 
     //自定义button的点击事件handleButtonTap

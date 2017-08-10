@@ -134,7 +134,7 @@
     float width =(ScreenWidth==320?100:125);
     userBackView.frame = CGRectMake(backWidth-20-width, self.activityImage.height-25, width, 30);
     
-    [self.userIconImage sd_setImageWithURL:[NSURL URLWithString:cellItem.userIconUrl] placeholderImage:[UIImage imageNamed:cellItem.userIconDefault]];
+    [self.userIconImage sd_setImageWithURL:[NSURL URLWithString:cellItem.userIconUrl] placeholderImage:[UIImage imageNamed:cellItem.userIconDefault] options:SDWebImageRefreshCached];
     self.userIconImage.frame = CGRectMake(5, 2, 26, 26);
     self.userIconImage.layer.cornerRadius = 13;
     self.userIconImage.layer.masksToBounds = YES;
@@ -318,7 +318,7 @@
             icon.layer.cornerRadius = 13;
             icon.layer.masksToBounds = YES;
             icon.tag = i+kUPDetailPeopleInfoCellTag;
-            [icon sd_setImageWithURL:userDict[@"user_icon"] placeholderImage:nil];
+            [icon sd_setImageWithURL:userDict[@"user_icon"] placeholderImage:nil options:SDWebImageRefreshCached];
             [backView addSubview:icon];
             
             offsetx += 30;

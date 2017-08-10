@@ -503,7 +503,7 @@
             CGFloat imgWidth = size.height+4;
             _userImgView.frame = CGRectMake(offsetx, offsety+(30-imgWidth)/2, imgWidth, imgWidth);
             _userImgView.layer.cornerRadius = imgWidth/2;
-            [_userImgView sd_setImageWithURL:[NSURL URLWithString:itemData.user_icon] placeholderImage:[UIImage imageNamed:@"activity_user_icon"]];
+            [_userImgView sd_setImageWithURL:[NSURL URLWithString:itemData.user_icon] placeholderImage:[UIImage imageNamed:@"activity_user_icon"] options:SDWebImageRefreshCached];
             
             if (size.width>100) {
                 size.width = 100;

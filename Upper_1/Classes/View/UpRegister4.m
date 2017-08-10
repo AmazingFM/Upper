@@ -168,7 +168,10 @@
     
     NSString *path = [[NSBundle mainBundle] pathForResource:@"agreement" ofType:@""];
     NSString *msgContent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-    showDefaultAlert(title, msgContent);
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:msgContent delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    
+    [alertView show];
 }
 
 #pragma mark - UITextFieldDelegate

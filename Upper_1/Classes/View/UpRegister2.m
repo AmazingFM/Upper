@@ -60,11 +60,12 @@
     [industryB setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
     NSString *privacyText = @"提示：您选择的行业，单位或邮箱信息均只作为验证用途，将会被严格保密，除非您本人要求，否则不会显示给其他用户。";
-    CGRect privacyRect = [privacyText boundingRectWithSize:CGSizeMake( frame.size.width-2*LeftRightPadding, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:kUPThemeMinFont} context:nil];
+    CGRect privacyRect = [privacyText boundingRectWithSize:CGSizeMake( frame.size.width-2*LeftRightPadding, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:kUPThemeNormalFont} context:nil];
     
-    UILabel *privacyLabel = [[UILabel alloc] initWithFrame:CGRectMake(LeftRightPadding, floorf(industryL.origin.y- ceilf(privacyRect.size.height+20)), frame.size.width-2*LeftRightPadding, ceilf(privacyRect.size.height+20))];
+    UILabel *privacyLabel = [[UILabel alloc] initWithFrame:CGRectMake(LeftRightPadding, floorf(industryL.origin.y- ceilf(privacyRect.size.height)), frame.size.width-2*LeftRightPadding, ceilf(privacyRect.size.height+20))];
+    privacyLabel.center = self.center;
     privacyLabel.numberOfLines = 0;
-    privacyLabel.font = kUPThemeMinFont;
+    privacyLabel.font = kUPThemeNormalFont;
     privacyLabel.textColor = [UIColor whiteColor];
     privacyLabel.text = privacyText;
     privacyLabel.textAlignment = NSTextAlignmentLeft;
