@@ -149,6 +149,7 @@
 		3A44D7E61E4D959A004ADA08 /* ClothType.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A44D7E51E4D959A004ADA08 /* ClothType.plist */; };
 		3A44D7E81E4D96BB004ADA08 /* PlaceType.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A44D7E71E4D96BB004ADA08 /* PlaceType.plist */; };
 		3A44D7EA1E4D9C75004ADA08 /* PayType.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A44D7E91E4D9C75004ADA08 /* PayType.plist */; };
+		3A4DF75F1F3D88C100D624AD /* UPTextAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A4DF75E1F3D88C100D624AD /* UPTextAlertView.m */; };
 		3A5368261D54791E00F36FBC /* YRSideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A5368251D54791E00F36FBC /* YRSideViewController.m */; };
 		3A61D6671EADE7BA00A328E9 /* icon-invite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A61D6631EADE7BA00A328E9 /* icon-invite@2x.png */; };
 		3A61D6681EADE7BA00A328E9 /* icon-more@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A61D6641EADE7BA00A328E9 /* icon-more@2x.png */; };
@@ -685,6 +686,8 @@
 		3A44D7E51E4D959A004ADA08 /* ClothType.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ClothType.plist; sourceTree = "<group>"; };
 		3A44D7E71E4D96BB004ADA08 /* PlaceType.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PlaceType.plist; sourceTree = "<group>"; };
 		3A44D7E91E4D9C75004ADA08 /* PayType.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PayType.plist; sourceTree = "<group>"; };
+		3A4DF75D1F3D88C100D624AD /* UPTextAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPTextAlertView.h; sourceTree = "<group>"; };
+		3A4DF75E1F3D88C100D624AD /* UPTextAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPTextAlertView.m; sourceTree = "<group>"; };
 		3A5368241D54791E00F36FBC /* YRSideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YRSideViewController.h; sourceTree = "<group>"; };
 		3A5368251D54791E00F36FBC /* YRSideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YRSideViewController.m; sourceTree = "<group>"; };
 		3A61D6631EADE7BA00A328E9 /* icon-invite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-invite@2x.png"; sourceTree = "<group>"; };
@@ -1531,6 +1534,15 @@
 			path = net;
 			sourceTree = "<group>";
 		};
+		3A4DF75C1F3D861900D624AD /* AlertView */ = {
+			isa = PBXGroup;
+			children = (
+				3A4DF75D1F3D88C100D624AD /* UPTextAlertView.h */,
+				3A4DF75E1F3D88C100D624AD /* UPTextAlertView.m */,
+			);
+			path = AlertView;
+			sourceTree = "<group>";
+		};
 		3A71CB391E26267700EBE0A2 /* resource */ = {
 			isa = PBXGroup;
 			children = (
@@ -2093,6 +2105,7 @@
 		EC3C17CB1CECB16D00223D6B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				3A4DF75C1F3D861900D624AD /* AlertView */,
 				3A7B2CBB1E8117B4004F7F83 /* YMLabel.h */,
 				3A7B2CBC1E8117B4004F7F83 /* YMLabel.m */,
 				3A08A84B1E80ED4C003C55BD /* home */,
@@ -2254,7 +2267,7 @@
 				TargetAttributes = {
 					FECE88121BE344DA00CC8E85 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 8DZS62MHVB;
+						DevelopmentTeam = 77565T989X;
 					};
 				};
 			};
@@ -2653,6 +2666,7 @@
 				85B344FE1E53466E002E69A9 /* UPWebImageDownloader.m in Sources */,
 				EC3C18041CECB16D00223D6B /* XWCommonHttpTool.m in Sources */,
 				EC3C181E1CECB16D00223D6B /* CityButton.m in Sources */,
+				3A4DF75F1F3D88C100D624AD /* UPTextAlertView.m in Sources */,
 				2CC645371D04105200A07408 /* UPBaseViewController.m in Sources */,
 				3A04D6911E51A5ED004396D2 /* MessageListController.m in Sources */,
 				2CDAD63F1D0EEC4000C260F4 /* MBProgressHUD+MJ.m in Sources */,

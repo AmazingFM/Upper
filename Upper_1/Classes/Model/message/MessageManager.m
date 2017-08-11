@@ -352,7 +352,7 @@ static dispatch_queue_t message_manager_processing_queue() {
                 [msgList addObject:msg];
             }
         } else if (type==MessageTypeCommon) {
-            NSString *querySql = [NSString stringWithFormat:@"select * from (select * from UsrTable where local_id='%@' order by add_time asc) group by remote_id", [UPDataManager shared].userInfo.ID];
+            NSString *querySql = [NSString stringWithFormat:@"select * from (select * from UsrTable where local_id='%@') group by remote_id", [UPDataManager shared].userInfo.ID];
             
             FMResultSet *s = [db executeQuery:querySql];
             while (s.next) {

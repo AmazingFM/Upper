@@ -13,6 +13,7 @@
 #import "UPDataManager.h"
 #import "XWHttpTool.h"
 #import "TTTAttributedLabel.h"
+#import "UPTextAlertView.h"
 
 #define VERTICAL_SPACE 40
 #define VerifyBtnWidth 100
@@ -169,8 +170,7 @@
     NSString *path = [[NSBundle mainBundle] pathForResource:@"agreement" ofType:@""];
     NSString *msgContent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:msgContent delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-    
+    UPTextAlertView *alertView = [[UPTextAlertView alloc] initWithTitle:@"用户协议" message:msgContent delegate:nil cancelButtonTitle:@"确定"];
     [alertView show];
 }
 
