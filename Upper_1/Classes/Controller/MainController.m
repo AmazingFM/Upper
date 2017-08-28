@@ -43,13 +43,14 @@
 #import "YMNetwork.h"
 
 #import "HTScrollCell.h"
+#import "UPTextAlertView.h"
 
 #define kActivityPageSize 20
 #define kMainButtonTag 1000
 
 static int kMsgCount = 0;
 
-@interface MainController ()<UIGestureRecognizerDelegate,XWTopMenuDelegate, UITableViewDelegate, UITableViewDataSource, JSDropDownMenuDataSource, JSDropDownMenuDelegate, HTConfigCellDelegate>
+@interface MainController ()<UIGestureRecognizerDelegate,XWTopMenuDelegate, UITableViewDelegate, UITableViewDataSource, JSDropDownMenuDataSource, JSDropDownMenuDelegate, HTConfigCellDelegate,UPTextAlertViewDelegate>
 {
     NSMutableArray *_data1;
     NSMutableArray *_data2;
@@ -228,20 +229,6 @@ static int kMsgCount = 0;
     [messageItem hideBadge];
 }
 
-//- (void)addBadgeValue:(NSNotification *)notification
-//{
-//    NSArray *msgArr = notification.object;
-//    long addCount = msgArr.count;
-//    kMsgCount += addCount;
-//    
-//    messageItem.badgeValue = [NSString stringWithFormat:@"%d", kMsgCount];
-//}
-//
-//- (void)setBadgeValue:(int)newValue
-//{
-//    messageItem.badgeValue = newValue==0?@"":[NSString stringWithFormat:@"%d", newValue];
-//}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -252,6 +239,31 @@ static int kMsgCount = 0;
             [_mainTable.header beginRefreshing];
         }
     }
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL showAgreement = [userDefaults boolForKey:@"showAgreement"];
+
+    if (!showAgreement) {
+        [self showAgreementAlert];
+    }
+}
+
+- (void)showAgreementAlert
+{
+    NSString *title = @"用户协议";
+    
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"agreement" ofType:@""];
+    NSString *msgContent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+    
+    UPTextAlertView *alertView = [[UPTextAlertView alloc] initWithTitle:title message:msgContent delegate:self cancelButtonTitle:@"确定"];
+    [alertView show];
+}
+
+- (void)textAlertView:(UPTextAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setBool:YES forKey:@"showAgreement"];
+    [userDefaults synchronize];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -557,6 +569,7 @@ static int kMsgCount = 0;
     UpActDetailController *actDetailController = [[UpActDetailController alloc] init];
     actDetailController.actData = actCellItem.itemData;
     actDetailController.sourceType = SourceTypeDaTing;
+    actDetailController.preController = self;
     [self.navigationController pushViewController:actDetailController animated:YES];
 }
 

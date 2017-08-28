@@ -27,11 +27,12 @@
 
 @implementation UPTextAlertView
 
-- (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate cancelButtonTitle:(nullable NSString *)cancelButtonTitle
+- (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id<UPTextAlertViewDelegate>)delegate cancelButtonTitle:(nullable NSString *)cancelButtonTitle
 {
     _title = title;
     _message = message;
     _btnTitle = cancelButtonTitle;
+    self.delegate = delegate;
     
     return [self initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
 }
@@ -127,6 +128,9 @@
 
 - (void)buttonClicked:(UIButton *)sender
 {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(textAlertView:clickedButtonAtIndex:)]) {
+        [self.delegate textAlertView:self clickedButtonAtIndex:0];
+    }
     [self dismiss];
 }
 

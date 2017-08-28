@@ -16,6 +16,8 @@
 @property (nonatomic, copy) NSString *relation_id;
 @property (nonatomic, copy) NSString *sexual;
 @property (nonatomic, copy) NSString *user_icon;
+@property (nonatomic, copy) NSString *user_id;
+@property (nonatomic, copy) NSString *group;
 
 @end
 

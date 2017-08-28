@@ -36,6 +36,9 @@
 }
 @property (nonatomic, retain) UITableView *mainTable;
 @property (nonatomic, retain) NSMutableArray *friendlist;
+@property (nonatomic, retain) NSMutableArray<NSMutableArray *> *friendGroups;
+
+
 @end
 
 @implementation UPMyFriendsViewController
@@ -169,10 +172,55 @@
     return _friendlist;
 }
 
+- (NSMutableArray<NSMutableArray *> *)friendGroups
+{
+    if (_friendGroups==nil) {
+        _friendGroups = [[NSMutableArray alloc] initWithCapacity:2];
+        
+        NSMutableArray *group1 = [NSMutableArray new];
+        NSMutableArray *group2 = [NSMutableArray new];
+        [_friendGroups addObject:group1];
+        [_friendGroups addObject:group2];
+    }
+    return _friendGroups;
+}
+
 #pragma mark - tableView delegate
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 30.0;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 30.0)];
+    view.backgroundColor = [UPTools colorWithHex:0xf3f3f3];
+    UILabel *groupLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 200, 30.0)];
+    groupLabel.backgroundColor = [UIColor clearColor];
+    groupLabel.text = section==0?@"好友":@"黑名单";
+    groupLabel.font = kUPThemeSmallFont;
+    
+    [view addSubview:groupLabel];
+    return view;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return self.friendGroups.count;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.friendlist.count;
+    if (section<self.friendGroups.count) {
+        NSMutableArray *friendGroup = self.friendGroups[section];
+        if (friendGroup.count==0) {
+            return 1;
+        } else {
+            return friendGroup.count;
+        }
+    }
+    
+    return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -182,28 +230,46 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UPFriendItem *item = self.friendlist[indexPath.row];
-    
-    NSString *cellIdentifier = @"cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    NSMutableArray *friendGroup = self.friendGroups[indexPath.section];
+    if (friendGroup.count==0) {
+        NSString *cellId = @"noFriendID";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        if (cell==nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        cell.textLabel.font = [UIFont systemFontOfSize:16.f];
+        if (indexPath.section==0) {
+            cell.textLabel.text = @"您暂时还没有好友哦，快去添加吧~";
+        } else{
+            cell.textLabel.text = @"黑名单为空";
+        }
+        return cell;
+    } else {
+        
+        UPFriendItem *item = friendGroup[indexPath.row];
+        
+        NSString *cellIdentifier = @"cell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        
+        [cell.imageView sd_setImageWithURL:[NSURL URLWithString:item.user_icon] placeholderImage:[UIImage imageNamed:@"activity_user_icon"]];
+        
+        CGSize itemSize = CGSizeMake(40, 40);
+        UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+        CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+        [cell.imageView.image drawInRect:imageRect];
+        cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        cell.textLabel.text = item.nick_name;
+        cell.textLabel.font = [UIFont systemFontOfSize:16.f];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        return cell;
     }
-
-    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:item.user_icon] placeholderImage:[UIImage imageNamed:@"activity_user_icon"]];
-    
-    CGSize itemSize = CGSizeMake(40, 40);
-    UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
-    CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
-    [cell.imageView.image drawInRect:imageRect];
-    cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    cell.textLabel.text = item.nick_name;
-    cell.textLabel.font = [UIFont systemFontOfSize:16.f];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(nonnull UITableViewCell *)cell forRowAtIndexPath:(nonnull NSIndexPath *)indexPath
@@ -245,7 +311,6 @@
         if ([resp_id intValue]==0) {
             NSDictionary *resp_data = dict[@"resp_data"];
             
-            
             if (resp_data) {
                 /***************/
                 NSMutableDictionary *pageNav = resp_data[@"page_nav"];
@@ -268,17 +333,18 @@
                     [self.friendlist removeAllObjects];
                     [self.friendlist addObjectsFromArray:arrayM];
                     _mainTable.footer.hidden = lastPage;
-                    [_mainTable reloadData];
                     [myRefreshView endRefreshing];
                     
                 } else if (myRefreshView == _mainTable.footer) {
                     [self.friendlist addObjectsFromArray:arrayM];
-                    [_mainTable reloadData];
                     [myRefreshView endRefreshing];
                     if (lastPage) {
                         [_mainTable.footer noticeNoMoreData];
                     }
                 }
+                
+                [self reloadFriendList];
+                
                 self.mainTable.hidden = NO;
                 tipsLabel.hidden = YES;
                 
@@ -301,6 +367,34 @@
         [myRefreshView endRefreshing];
         
     }];
+}
+
+- (void)reloadFriendList
+{
+    for (NSMutableArray *friendGroup in self.friendGroups) {
+        [friendGroup removeAllObjects];
+    }
+    
+    for (int i=0; i<self.friendlist.count; i++) {
+        UPFriendItem *friendItem = self.friendlist[i];
+        
+        switch ([friendItem.group intValue]) {
+            case 0:
+            {
+                [self.friendGroups[0] addObject:friendItem];
+            }
+                break;
+            case 9: //黑名单
+            {
+                [self.friendGroups[1] addObject:friendItem];
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    
+    [_mainTable reloadData];
 }
 
 #pragma mark UPAddFriendDelegate

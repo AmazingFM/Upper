@@ -33,6 +33,7 @@
 #define kUPButtonTagJuBao       100
 #define kUPButtonTagYaoqing     101
 #define kUPButtonTagFenXiang    102
+#define kUPButtonTagBlock       103
 
 @implementation UPDetailImageCellItem
 @end
@@ -406,9 +407,10 @@
     if (cellItem.desc.length==0) {
         cellItem.desc = @"该活动没有描述";
     }
-    size = SizeWithFont(cellItem.desc, kUPThemeSmallFont);
     
-    self.descLabel.frame = CGRectMake(offsetx, offsety, backWidth-2*offsetx, size.height);
+    size = [UPTools sizeOfString:cellItem.desc withWidth:backWidth-2*offsetx font:kUPThemeSmallFont];
+    
+    self.descLabel.frame = CGRectMake(offsetx, offsety, backWidth-2*offsetx, ceil(size.height));
     self.descLabel.text = cellItem.desc;
     
     offsety+=self.descLabel.height+5;
@@ -568,6 +570,7 @@
 #define LabelHeight 17
 #define AlertTagEdit    0
 #define AlertTagCancel  1
+#define AlertTagBlock   2
 
 @interface UpActDetailController () <UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, UPFriendListDelegate,UPCustomAlertViewDelegate,UIActionSheetDelegate>
 {
@@ -686,8 +689,8 @@
         if (extraItem.desc.length==0) {
             extraItem.desc = @"该活动没有描述";
         }
-        size = SizeWithFont(extraItem.desc, kUPThemeSmallFont);
-        float height = size.height;
+        size = [UPTools sizeOfString:extraItem.desc withWidth:ScreenWidth-40 font:kUPThemeSmallFont];
+        float height = ceil(size.height);
 
         size = SizeWithFont(@"商户名称", kUPThemeMinFont);
         extraItem.cellHeight = (int)(5+height+5+5*4+size.height*3+5)+1;
@@ -728,6 +731,35 @@
     reviewInfoItem.cellHeight = height+size.height+5;
     
     [_tableView reloadData];
+}
+
+- (void)blockThisUser
+{
+    NSString *relation_id = self.detailActData.user_id;
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    [params setObject:@"FriendsWhiteBlack"forKey:@"a"];
+    [params setObject:relation_id forKey:@"relation_id"];
+    [params setObject:@"9" forKey:@"group"];
+    
+    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
+        NSDictionary *dict = (NSDictionary *)responseObject;
+        NSString *resp_id = dict[@"resp_id"];
+        if ([resp_id intValue]==0) {
+            NSString *resp_desc = dict[@"resp_desc"];
+            [MBProgressHUD showSuccess:resp_desc];
+            [self refreshMainController];
+        }
+    } failure:^(NSError *error) {
+        //
+    }];
+}
+
+- (void)refreshMainController
+{
+    if (self.preController&&[self.preController isKindOfClass:[MainController class]]) {
+        MainController *mainController = (MainController *)self.preController;
+        [mainController refresh];
+    }
 }
 
 - (void)getReviewInfo:(NSString *)activityId
@@ -800,7 +832,9 @@
 
 - (void)buttonClick:(UIButton *)sender
 {
-    if (sender.tag==kUPButtonTagJuBao) {
+    if (sender.tag==kUPButtonTagBlock) {
+        showConfirmTagAlert(@"提示", @"屏蔽该用户发起的所有活动", self, AlertTagBlock);
+    } else if (sender.tag==kUPButtonTagJuBao) {
         UPTipOffView *tipoffView = [[UPTipOffView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth-100, 70)];
         UPCustomAlertView *jbAlert = [[UPCustomAlertView alloc] initWithTitle:@"我要举报" CustomView:tipoffView];
         jbAlert.delegate = self;
@@ -1025,7 +1059,11 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (alertView.tag == AlertTagEdit) {
+    if (alertView.tag==AlertTagBlock) {
+        if (buttonIndex==1) { //确定
+            [self blockThisUser];
+        }
+    } else if (alertView.tag == AlertTagEdit) {
         if (buttonIndex==0) {
             //发布回顾
             UPCommentController *commentController = [[UPCommentController alloc]init];
@@ -1113,45 +1151,77 @@
             UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth-20, 1)];
             line.backgroundColor = [UIColor grayColor];
             [backView addSubview:line];
+            
+            UIButton *blockBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            blockBtn.frame = CGRectMake(10, 8, 70, cellItem.cellHeight-16);
+            blockBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            blockBtn.highlighted = NO;
+            [blockBtn setImage:[UIImage imageNamed:@"ic_block"] forState:UIControlStateNormal];
+            [blockBtn setTitle:@"不看TA" forState:UIControlStateNormal];
+            [blockBtn setTitleColor:RGBCOLOR(160, 160, 160) forState:UIControlStateNormal];
+            blockBtn.titleLabel.font = kUPThemeMinFont;
+            blockBtn.backgroundColor = [UIColor clearColor];
+//            blockBtn.layer.cornerRadius = 2.f;
+//            blockBtn.layer.borderColor = [UIColor grayColor].CGColor;
+//            blockBtn.layer.borderWidth = 1.f;
+//            blockBtn.layer.masksToBounds = YES;
+            blockBtn.tag = kUPButtonTagBlock;
+            [blockBtn addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+            [backView addSubview:blockBtn];
+            
+            if (self.sourceType==SourceTypeDaTing) {
+                blockBtn.hidden = NO;
+            } else {
+                blockBtn.hidden = YES;
+            }
 
             UIButton *reportBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             reportBtn.frame = CGRectMake(ScreenWidth-20-60, 8, 50, cellItem.cellHeight-16);
+            reportBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+            reportBtn.highlighted = NO;
+            [reportBtn setImage:[UIImage imageNamed:@"ic_tipoff"] forState:UIControlStateNormal];
             [reportBtn setTitle:@"举报" forState:UIControlStateNormal];
             [reportBtn setTitleColor:RGBCOLOR(160, 160, 160) forState:UIControlStateNormal];
             reportBtn.titleLabel.font = kUPThemeMinFont;
             reportBtn.backgroundColor = [UIColor clearColor];
-            reportBtn.layer.cornerRadius = 2.f;
-            reportBtn.layer.borderColor = [UIColor grayColor].CGColor;
-            reportBtn.layer.borderWidth = 1.f;
-            reportBtn.layer.masksToBounds = YES;
+//            reportBtn.layer.cornerRadius = 2.f;
+//            reportBtn.layer.borderColor = [UIColor grayColor].CGColor;
+//            reportBtn.layer.borderWidth = 1.f;
+//            reportBtn.layer.masksToBounds = YES;
             reportBtn.tag = kUPButtonTagJuBao;
             [reportBtn addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
             [backView addSubview:reportBtn];
             
             UIButton *inviteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             inviteBtn.frame = CGRectMake(ScreenWidth-20-120, 8, 50, cellItem.cellHeight-16);
+            inviteBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+            inviteBtn.highlighted = NO;
+            [inviteBtn setImage:[UIImage imageNamed:@"ic_invite"] forState:UIControlStateNormal];
             [inviteBtn setTitle:@"邀请" forState:UIControlStateNormal];
             [inviteBtn setTitleColor:RGBCOLOR(160, 160, 160) forState:UIControlStateNormal];
             inviteBtn.titleLabel.font = kUPThemeMinFont;
             inviteBtn.backgroundColor = [UIColor clearColor];
-            inviteBtn.layer.cornerRadius = 2.f;
-            inviteBtn.layer.borderColor = [UIColor grayColor].CGColor;
-            inviteBtn.layer.borderWidth = 1.f;
-            inviteBtn.layer.masksToBounds = YES;
+//            inviteBtn.layer.cornerRadius = 2.f;
+//            inviteBtn.layer.borderColor = [UIColor grayColor].CGColor;
+//            inviteBtn.layer.borderWidth = 1.f;
+//            inviteBtn.layer.masksToBounds = YES;
             inviteBtn.tag = kUPButtonTagYaoqing;
             [inviteBtn addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
             [backView addSubview:inviteBtn];
             
             UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             shareBtn.frame = CGRectMake(ScreenWidth-20-180, 8, 50, cellItem.cellHeight-16);
+            shareBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+            shareBtn.highlighted = NO;
+            [shareBtn setImage:[UIImage imageNamed:@"ic_share"] forState:UIControlStateNormal];
             [shareBtn setTitle:@"分享" forState:UIControlStateNormal];
             [shareBtn setTitleColor:RGBCOLOR(160, 160, 160) forState:UIControlStateNormal];
             shareBtn.titleLabel.font = kUPThemeMinFont;
             shareBtn.backgroundColor = [UIColor clearColor];
-            shareBtn.layer.cornerRadius = 2.f;
-            shareBtn.layer.borderColor = [UIColor grayColor].CGColor;
-            shareBtn.layer.borderWidth = 1.f;
-            shareBtn.layer.masksToBounds = YES;
+//            shareBtn.layer.cornerRadius = 2.f;
+//            shareBtn.layer.borderColor = [UIColor grayColor].CGColor;
+//            shareBtn.layer.borderWidth = 1.f;
+//            shareBtn.layer.masksToBounds = YES;
             shareBtn.tag = kUPButtonTagFenXiang;
             [shareBtn addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
             [backView addSubview:shareBtn];

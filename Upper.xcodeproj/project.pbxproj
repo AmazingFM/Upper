@@ -268,6 +268,10 @@
 		3AF680421EC14F69007D3B91 /* icon_msg_invite@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AF6803E1EC14F69007D3B91 /* icon_msg_invite@3x.png */; };
 		3AF680441EC15021007D3B91 /* icon_setting@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AF680431EC15021007D3B91 /* icon_setting@2x.png */; };
 		3AFCCDBD1D5C09BC0003F6F3 /* NewLaunchActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */; };
+		8500A8181F5448EF002064DF /* ic_block@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8500A8141F5448EF002064DF /* ic_block@2x.png */; };
+		8500A8191F5448EF002064DF /* ic_invite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8500A8151F5448EF002064DF /* ic_invite@2x.png */; };
+		8500A81A1F5448EF002064DF /* ic_share@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8500A8161F5448EF002064DF /* ic_share@2x.png */; };
+		8500A81B1F5448EF002064DF /* ic_tipoff@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8500A8171F5448EF002064DF /* ic_tipoff@2x.png */; };
 		850D79211E51FA670082D944 /* NSString+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 850D79201E51FA670082D944 /* NSString+Common.m */; };
 		8520A1BE1F38D31F0025C4BC /* UINavigationController+FDFullscreenPopGesture.m in Sources */ = {isa = PBXBuildFile; fileRef = 8520A1BD1F38D31F0025C4BC /* UINavigationController+FDFullscreenPopGesture.m */; };
 		8520CD621ED96FA600690739 /* icon_wx_session@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8520CD601ED96FA600690739 /* icon_wx_session@2x.png */; };
@@ -832,6 +836,10 @@
 		3AF680431EC15021007D3B91 /* icon_setting@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_setting@2x.png"; sourceTree = "<group>"; };
 		3AFCCDBB1D5C09BC0003F6F3 /* NewLaunchActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewLaunchActivityController.h; sourceTree = "<group>"; };
 		3AFCCDBC1D5C09BC0003F6F3 /* NewLaunchActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewLaunchActivityController.m; sourceTree = "<group>"; };
+		8500A8141F5448EF002064DF /* ic_block@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_block@2x.png"; sourceTree = "<group>"; };
+		8500A8151F5448EF002064DF /* ic_invite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_invite@2x.png"; sourceTree = "<group>"; };
+		8500A8161F5448EF002064DF /* ic_share@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_share@2x.png"; sourceTree = "<group>"; };
+		8500A8171F5448EF002064DF /* ic_tipoff@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_tipoff@2x.png"; sourceTree = "<group>"; };
 		850D791F1E51FA670082D944 /* NSString+Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Common.h"; sourceTree = "<group>"; };
 		850D79201E51FA670082D944 /* NSString+Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Common.m"; sourceTree = "<group>"; };
 		8520A1BC1F38D31F0025C4BC /* UINavigationController+FDFullscreenPopGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+FDFullscreenPopGesture.h"; sourceTree = "<group>"; };
@@ -1559,6 +1567,7 @@
 		3A71CB3A1E26267700EBE0A2 /* pic */ = {
 			isa = PBXGroup;
 			children = (
+				8500A8131F5448EF002064DF /* activity_detail */,
 				85E63FDE1EDA825F0023BEBE /* icon_password_mail@2x.png */,
 				8520CD641ED9728000690739 /* Selected@2x.png */,
 				8520CD651ED9728000690739 /* Unselected@2x.png */,
@@ -1776,6 +1785,17 @@
 				3A8415FE1E9B696900D8377B /* icon-sign@2x.png */,
 			);
 			path = activity;
+			sourceTree = "<group>";
+		};
+		8500A8131F5448EF002064DF /* activity_detail */ = {
+			isa = PBXGroup;
+			children = (
+				8500A8141F5448EF002064DF /* ic_block@2x.png */,
+				8500A8151F5448EF002064DF /* ic_invite@2x.png */,
+				8500A8161F5448EF002064DF /* ic_share@2x.png */,
+				8500A8171F5448EF002064DF /* ic_tipoff@2x.png */,
+			);
+			path = activity_detail;
 			sourceTree = "<group>";
 		};
 		8520A1BB1F38D31F0025C4BC /* FDFullscreenPopGesture */ = {
@@ -2311,6 +2331,7 @@
 				3A71CBD01E26267700EBE0A2 /* uncheckbox.png in Resources */,
 				3A71CBAC1E26267700EBE0A2 /* error@3x.png in Resources */,
 				3A84160E1E9B69FB00D8377B /* icon-time@2x.png in Resources */,
+				8500A81A1F5448EF002064DF /* ic_share@2x.png in Resources */,
 				8559245D1E5828D500FAAFFA /* jhsj@2x.png in Resources */,
 				8555DE641EBCC62E0012F162 /* default_activity_207@2x.png in Resources */,
 				3A8416031E9B696900D8377B /* icon-quit@2x.png in Resources */,
@@ -2370,6 +2391,7 @@
 				3A71CBB01E26267700EBE0A2 /* guide_p3.png in Resources */,
 				3A71CBA31E26267700EBE0A2 /* chatfrom_doctor_icon.png in Resources */,
 				3A1C12E81F3875A10046E282 /* agreement in Resources */,
+				8500A81B1F5448EF002064DF /* ic_tipoff@2x.png in Resources */,
 				3A71CB991E26267700EBE0A2 /* chat_animation_white1.png in Resources */,
 				3A71CBAF1E26267700EBE0A2 /* guide_p2.png in Resources */,
 				8555DE5D1EBCC62E0012F162 /* default_activity_106@2x.png in Resources */,
@@ -2387,6 +2409,7 @@
 				3AF680421EC14F69007D3B91 /* icon_msg_invite@3x.png in Resources */,
 				8555DE611EBCC62E0012F162 /* default_activity_204@2x.png in Resources */,
 				8555DE6F1EBCC62E0012F162 /* default_activity_404@2x.png in Resources */,
+				8500A8181F5448EF002064DF /* ic_block@2x.png in Resources */,
 				3A71CBCE1E26267700EBE0A2 /* top_navigation_back_photo@2x.png in Resources */,
 				3A71CB9D1E26267700EBE0A2 /* chat_message_back.png in Resources */,
 				8530539F1ED92E1000B3CF43 /* icon-success@2x.png in Resources */,
@@ -2404,6 +2427,7 @@
 				3A71CBB31E26267700EBE0A2 /* location@2x.png in Resources */,
 				3A71CBB51E26267700EBE0A2 /* love.png in Resources */,
 				3A71CB941E26267700EBE0A2 /* bubble.png in Resources */,
+				8500A8191F5448EF002064DF /* ic_invite@2x.png in Resources */,
 				3A71CBC51E26267700EBE0A2 /* scanrect.png in Resources */,
 				85E63FDF1EDA825F0023BEBE /* icon_password_mail@2x.png in Resources */,
 				856A4CED1E4F76AF0051ED4E /* cityInfo.json in Resources */,

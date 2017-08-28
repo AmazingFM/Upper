@@ -10,6 +10,7 @@
 #import "ActivityData.h"
 #import "UPCells.h"
 #import "UIImageView+WebCache.h"
+#import "MainController.h"
 
 typedef NS_ENUM(NSInteger, DetailBtnType) {
 //    DetailBtnTypeLove,
@@ -121,4 +122,5 @@ typedef NS_ENUM(NSInteger, SourceType) {
 @property (nonatomic, retain) ActivityData *detailActData;
 @property (nonatomic) UPItemStyle style;
 @property (nonatomic) SourceType sourceType;
+@property (nonatomic, weak) UIViewController * preController;
 @end

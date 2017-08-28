@@ -170,7 +170,7 @@
     NSString *path = [[NSBundle mainBundle] pathForResource:@"agreement" ofType:@""];
     NSString *msgContent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     
-    UPTextAlertView *alertView = [[UPTextAlertView alloc] initWithTitle:@"用户协议" message:msgContent delegate:nil cancelButtonTitle:@"确定"];
+    UPTextAlertView *alertView = [[UPTextAlertView alloc] initWithTitle:title message:msgContent delegate:nil cancelButtonTitle:@"确定"];
     [alertView show];
 }
 
