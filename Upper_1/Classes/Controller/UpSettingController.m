@@ -31,6 +31,10 @@
     
 #ifdef UPPER_DEBUG
     version = [NSString stringWithFormat:@"测试版%@", version];
+#elif UPPER_DEBUG_REAL
+    version = [NSString stringWithFormat:@"生产版%@", version];
+#else
+    version = @"";
 #endif
     [itemList addObject:@{@"title":@"用户协议", @"value":@""}];
     [itemList addObject:@{@"title":@"版本", @"value":version}];

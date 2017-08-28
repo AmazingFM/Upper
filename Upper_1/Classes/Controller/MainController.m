@@ -101,6 +101,8 @@ static int kMsgCount = 0;
     NSString *title;
 #ifdef UPPER_DEBUG
     title = @"活动大厅(测试版)";
+#elif UPPER_DEBUG_REAL
+    title = @"活动大厅(生产版)";
 #else
     title = @"活动大厅";
 #endif
