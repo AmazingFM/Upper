@@ -27,8 +27,10 @@
 #import "UserData.h"
 #import "MBProgressHUD+MJ.h"
 #import "CRNavigationBar.h"
+#import "TTTAttributedLabel.h"
+#import "UPTextAlertView.h"
 
-@interface UpLoginController () <UITextFieldDelegate, UIGestureRecognizerDelegate>
+@interface UpLoginController () <UITextFieldDelegate, UIGestureRecognizerDelegate, TTTAttributedLabelDelegate>
 {
     NSString *userName;
     NSString *password;
@@ -179,6 +181,9 @@
     [self.view addSubview:_loginB];
     [self.view addSubview:zhuce];
     [self.view addSubview:wangjimima];
+    
+    TTTAttributedLabel *detailLabel = [self addTTAttributedLabel];
+    [self.view addSubview:detailLabel];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -349,4 +354,45 @@
     [self.alert dismissWithClickedButtonIndex:0 animated:YES];
 }
 
+- (TTTAttributedLabel *)addTTAttributedLabel
+{
+    NSString *detailStr = @"登录即代表阅读及同意《用户协议》";
+    CGSize size = [detailStr sizeWithFont:[UIFont systemFontOfSize:15] constrainedToSize:CGSizeMake(ScreenWidth-2*LeftRightPadding,10000.0f) lineBreakMode:NSLineBreakByWordWrapping];
+    
+    TTTAttributedLabel *detailLabel = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(LeftRightPadding, ScreenHeight-44, ScreenWidth-2*LeftRightPadding, size.height)];
+    detailLabel.delegate = self;
+    detailLabel.font = [UIFont systemFontOfSize:13.0];
+    detailLabel.textAlignment = NSTextAlignmentCenter;
+    detailLabel.textColor = [UIColor whiteColor];
+    detailLabel.backgroundColor = [UIColor clearColor];
+    detailLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    detailLabel.numberOfLines = 0;
+    [detailLabel setText:detailStr];
+    
+    UIFont *boldSystemFont = [UIFont systemFontOfSize:13.0];
+    CTFontRef font = CTFontCreateWithName((__bridge CFStringRef)boldSystemFont.fontName, boldSystemFont.pointSize, NULL);
+    //添加点击事件
+    detailLabel.enabledTextCheckingTypes = NSTextCheckingTypeLink;
+    detailLabel.delegate = self;
+    detailLabel.linkAttributes = @{(NSString *)kCTFontAttributeName:(__bridge id)font,(id)kCTForegroundColorAttributeName:RGBCOLOR(33, 129, 247)};
+    detailLabel.activeLinkAttributes = nil;
+    NSRange range1= [detailLabel.text rangeOfString:@"《用户协议》"];
+    NSString* path = @"agreement";
+    NSURL* url = [NSURL fileURLWithPath:path];
+    [detailLabel addLinkToURL:url withRange:range1];
+    
+    return detailLabel;
+}
+
+- (void)attributedLabel:(__unused TTTAttributedLabel *)label
+   didSelectLinkWithURL:(NSURL *)url
+{
+    NSString *title = @"用户协议";
+    
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"agreement" ofType:@""];
+    NSString *msgContent = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+    
+    UPTextAlertView *alertView = [[UPTextAlertView alloc] initWithTitle:title message:msgContent delegate:nil cancelButtonTitle:@"确定"];
+    [alertView show];
+}
 @end

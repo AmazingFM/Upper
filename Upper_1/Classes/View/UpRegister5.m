@@ -126,7 +126,6 @@
     
     nameField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, frame.size.width-2*LeftRightPadding-size.width, size.height)];
     [nameField setFont:[UIFont systemFontOfSize:15.0]];
-    nameField.keyboardType = UIKeyboardTypeASCIICapable;
     nameField.clearButtonMode = UITextFieldViewModeWhileEditing;
     nameField.delegate = self;
     
@@ -389,6 +388,7 @@
             verifyField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, verifyBtn.origin.x-LeftRightPadding-size.width-margin, size.height);
             
             _seperatorV2.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
+            desLabel.text = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的姓名、好医生ID和手机号，我们会进行后续核实验证。";
         } else {
             empID = @"员工号\nEmp NO.";
             float offsetY = 0;
@@ -432,6 +432,7 @@
             verifyField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, verifyBtn.origin.x-LeftRightPadding-size.width-margin, size.height);
             
             _seperatorV2.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
+            desLabel.text = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的单位电话、员工号和姓名，我们会进行后续核实验证。";
         }
         _tipLabel.hidden = YES;
         _seperatorV.hidden = YES;
@@ -439,7 +440,6 @@
         _suffixLabel.hidden = YES;
         
         desLabel.frame = CGRectMake(LeftRightPadding, CGRectGetMaxY(_seperatorV2.frame)+25, self.frame.size.width-2*LeftRightPadding, 10);
-        desLabel.text = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的单位电话、员工号和姓名，我们会进行后续核实验证。";
         [desLabel sizeToFit];
     } else {
         comPhoneLabel.hidden = YES;

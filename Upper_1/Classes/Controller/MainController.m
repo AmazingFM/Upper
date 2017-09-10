@@ -242,12 +242,12 @@ static int kMsgCount = 0;
         }
     }
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    BOOL showAgreement = [userDefaults boolForKey:@"showAgreement"];
-
-    if (!showAgreement) {
-        [self showAgreementAlert];
-    }
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    BOOL showAgreement = [userDefaults boolForKey:@"showAgreement"];
+//
+//    if (!showAgreement) {
+//        [self showAgreementAlert];
+//    }
 }
 
 - (void)showAgreementAlert

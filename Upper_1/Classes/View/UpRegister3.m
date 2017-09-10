@@ -74,7 +74,7 @@
     companyName.textAlignment = NSTextAlignmentCenter;
     companyName.adjustsFontSizeToFitWidth = YES;
     
-    UIImageView * seperatorV = [[UIImageView alloc]initWithFrame:CGRectMake(LeftRightPadding, frame.size.height-2*LeftRightPadding, frame.size.width, 1)];
+    UIImageView * seperatorV = [[UIImageView alloc]initWithFrame:CGRectMake(LeftRightPadding, frame.size.height-2*2, frame.size.width, 1)];
     seperatorV.backgroundColor = [UIColor blackColor];
     
     _mainTableView = [[UITableView alloc] initWithFrame:CGRectMake(LeftRightPadding, self.searchBar.height+5, frame.size.width-2*LeftRightPadding, companyName.origin.y-10-self.searchBar.height-5) style:UITableViewStylePlain];

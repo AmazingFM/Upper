@@ -154,6 +154,7 @@
     detailLabel.enabledTextCheckingTypes = NSTextCheckingTypeLink;
     detailLabel.delegate = self;
     detailLabel.linkAttributes = @{(NSString *)kCTFontAttributeName:(__bridge id)font,(id)kCTForegroundColorAttributeName:RGBCOLOR(33, 129, 247)};
+    detailLabel.activeLinkAttributes = nil;
     NSRange range1= [detailLabel.text rangeOfString:@"《upper用户协议》"];
     NSString* path = @"agreement";
     NSURL* url = [NSURL fileURLWithPath:path];
