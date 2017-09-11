@@ -113,12 +113,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    UPActivityCellItem *actCellItem = (UPActivityCellItem *)self.itemArray[indexPath.row];
-//    //跳转到详情页面
-//    UpActDetailController *actDetailController = [[UpActDetailController alloc] init];
-//    actDetailController.actData = actCellItem.itemData;
-//    actDetailController.style = actCellItem.style;
-//    [((UPBaseViewController *)self.parentController).navigationController pushViewController:actDetailController animated:YES];
+    UPActivityCellItem *actCellItem = (UPActivityCellItem *)self.itemArray[indexPath.row];
+    if (self.clickBlock) {
+        self.clickBlock(actCellItem);
+    }
 }
 
 @end

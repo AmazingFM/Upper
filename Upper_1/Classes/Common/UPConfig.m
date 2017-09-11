@@ -58,7 +58,9 @@
             
             
             NSArray *cityArr = respDict[@"resp_data"][@"city_list"];
+            NSArray *hotCityArr = respDict[@"resp_data"][@"city_hot"];
             [self.cityContainer updateCityInfoArr:cityArr];
+            [self.cityContainer updateHotCityInfoArr:hotCityArr];
         }
     } failure:^(NSError *error) {
     }];
@@ -405,7 +407,7 @@
         _cityInfoArr = [NSMutableArray<CityInfo *> new];
         _provinceInfoArr = [NSMutableArray<ProvinceInfo *> new];
         _alphaCityInfoArr = [NSMutableArray<AlphabetCityInfo *> new];
-        
+        _hotCityInfoArr = [NSMutableArray<CityInfo *> new];
         [self loadLocalCityInfo];
     }
     return self;
@@ -420,6 +422,14 @@
     } else  {
         NSArray *cityArr = [UPTools loadLocalDataWithName:CityInfoFileName];
         [self loadCityInfoArr:cityArr];
+        
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *hotCityArrStr = [userDefaults objectForKey:@"HotCityKey"];
+        if (hotCityArrStr.length>0) {
+            NSArray *hotCityArr = (NSArray *)[UPTools JSONFromString:hotCityArrStr];
+            [self loadHotCityInfoArr:hotCityArr];
+        }
     }
 }
 
@@ -434,6 +444,25 @@
 {
     [self saveToLocalFile:cityArr];
     [self loadCityInfoArr:cityArr];
+}
+
+- (void)updateHotCityInfoArr:(NSArray *)hotCityArr
+{
+    NSString *hotCityArrStr = [UPTools stringFromJSON:hotCityArr];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:hotCityArrStr forKey:@"HotCityKey"];
+    [userDefaults synchronize];
+    
+    [self loadHotCityInfoArr:hotCityArr];
+}
+
+- (void)loadHotCityInfoArr:(NSArray *)hotCityArr
+{
+    [self.hotCityInfoArr removeAllObjects];
+    for (NSDictionary *cityDic in hotCityArr) {
+        CityInfo *cityInfo = [[CityInfo alloc] initWithDict:cityDic];
+        [self.hotCityInfoArr addObject:cityInfo];
+    }
 }
 
 - (void)clearAllInfo
@@ -512,6 +541,14 @@
     }];
     
     return cityInfo;
+}
+
+- (NSArray *)getHotCityInfo
+{
+    if (self.hotCityInfoArr.count>0) {
+        return self.hotCityInfoArr;
+    }
+    return @[];
 }
 
 @end

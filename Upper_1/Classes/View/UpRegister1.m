@@ -25,9 +25,6 @@
 @property (nonatomic, retain) ButtonGroupView *locatingCityGV;
 @property (nonatomic, retain) ButtonGroupView *hotCityGV;
 @property (nonatomic, retain) UIView *tableHeaderView;
-//@property (retain, nonatomic) NSMutableArray *allCities;
-//@property (retain, nonatomic) NSMutableDictionary *cityDict;
-//@property (retain, nonatomic) NSArray *keyArray;
 
 @end
 @implementation UpRegister1
@@ -62,7 +59,7 @@
     [_tableHeaderView addSubview:title3];
     
     [_arrayHotCity removeAllObjects];
-    [_arrayHotCity addObjectsFromArray:[self GetCityDataSoucre:[UPConfig sharedInstance].cityContainer.cityInfoArr count:10]];
+    [_arrayHotCity addObjectsFromArray:[self GetCityDataSoucre:[[UPConfig sharedInstance].cityContainer getHotCityInfo] withCount:12]];
     long row = _arrayHotCity.count/3;
     if (_arrayHotCity.count%3 > 0) {
         row += 1;
@@ -81,10 +78,10 @@
     _tableView.tableHeaderView = _tableHeaderView;
 }
 
-- (NSArray*)GetCityDataSoucre:(NSArray*)ary count:(int)nCount
+- (NSArray*)GetCityDataSoucre:(NSArray*)ary withCount:(int)cnt
 {
     NSMutableArray *cityAry = [[NSMutableArray alloc]init];
-    for (int i=0; i<nCount&&i<ary.count; i++) {
+    for (int i=0; i<cnt&&i<ary.count; i++) {
         CityInfo *cityInfo = ary[i];
         CityItem *cityItem = [[CityItem alloc] init];
         cityItem.cityInfo = cityInfo;

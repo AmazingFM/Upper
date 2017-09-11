@@ -97,9 +97,11 @@
 @property (nonatomic, retain) NSMutableArray<ProvinceInfo *> *provinceInfoArr;
 @property (nonatomic, retain) NSMutableArray<AlphabetCityInfo *> *alphaCityInfoArr;
 @property (nonatomic, retain) NSMutableArray<CityInfo *> *cityInfoArr;
+@property (nonatomic, retain) NSMutableArray<CityInfo *> *hotCityInfoArr;
 
 - (void)updateCityInfoArr:(NSArray *)cityArr;
+- (void)updateHotCityInfoArr:(NSArray *)hotCityArr;
 - (CityInfo *)getCityInfo:(NSString *)cityCode;
-
+- (NSArray *)getHotCityInfo;
 @end
 

@@ -85,7 +85,7 @@
     tipsLabel.font = [UIFont systemFontOfSize:12];
     tipsLabel.textColor = [UIColor whiteColor];
     tipsLabel.backgroundColor = [UIColor blackColor];
-    
+    tipsLabel.hidden = YES;
 
     NSString *userStr = @"用户名\nUsername";
     CGSize size = [UPTools sizeOfString:userStr withWidth:100 font:[UIFont systemFontOfSize:12]];

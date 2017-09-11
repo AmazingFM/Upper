@@ -25,6 +25,7 @@
 #import "YMNetwork.h"
 #import "MessageManager.h"
 #import "UPFriendItem.h"
+#import "CRNavigationController.h"
 
 @interface UPMyLaunchViewController () <UPFriendListDelegate, UPCommentDelegate>
 {
@@ -207,7 +208,7 @@
         friendlistController.type = 1; //活动参与者列表
         friendlistController.activityId = cellItem.itemData.ID;
         friendlistController.delegate = self;
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:friendlistController];
+        CRNavigationController *nav = [[CRNavigationController alloc] initWithRootViewController:friendlistController];
         [self presentViewController:nav animated:YES completion:nil];
     } else if (type==kUPActEditTag) {
         NewLaunchActivityController *launchVC = [[NewLaunchActivityController alloc] init];

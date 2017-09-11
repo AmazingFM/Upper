@@ -194,9 +194,25 @@
     //2
     UPHerLaunchedActivityController *vc2 = [[UPHerLaunchedActivityController alloc]init];
     vc2.user_id = self.user_id;
+    vc2.clickBlock = ^(id item) {
+        UPActivityCellItem *actCellItem = (UPActivityCellItem *)item;
+        //跳转到详情页面
+        UpActDetailController *actDetailController = [[UpActDetailController alloc] init];
+        actDetailController.actData = actCellItem.itemData;
+        actDetailController.style = actCellItem.style;
+        [self.navigationController pushViewController:actDetailController animated:YES];
+    };
 
     UPHerParticipatedActivityController *vc3 = [[UPHerParticipatedActivityController alloc]init];
     vc3.user_id = self.user_id;
+    vc3.clickBlock = ^(id item) {
+        UPActivityCellItem *actCellItem = (UPActivityCellItem *)item;
+        //跳转到详情页面
+        UpActDetailController *actDetailController = [[UpActDetailController alloc] init];
+        actDetailController.actData = actCellItem.itemData;
+        actDetailController.style = actCellItem.style;
+        [self.navigationController pushViewController:actDetailController animated:YES];
+    };
     
     [self addChildViewController:vc1];
     [self addChildViewController:vc2];

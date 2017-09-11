@@ -16,7 +16,6 @@
 #import "UPRulesController.h"
 #import "UpExpertController.h"
 #import "CRNavigationController.h"
-#import "CRNavigationBar.h"
 
 @interface UPMainMenuController ()
 {
