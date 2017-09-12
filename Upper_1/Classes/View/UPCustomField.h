@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CustomField : UITextField
+@interface UPCustomField : UITextField
+
+@end
+
+@interface UPUnderLineField : UITextField
 
 @end

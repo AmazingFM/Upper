@@ -32,17 +32,24 @@
         return;
     }
 
+//    NSMutableDictionary *params = [NSMutableDictionary new];
+//    [params setObject:@"ActivityList"forKey:@"a"];
+//    [params setObject:[NSString stringWithFormat:@"%ld", (long)self.pageNum] forKey:@"current_page"];
+//    [params setObject:[NSString stringWithFormat:@"%d", g_PageSize] forKey:@"page_size"];
+//    [params setObject:@"" forKey:@"activity_status"];
+//    [params setObject:@""forKey:@"activity_class"];
+//    [params setObject:@"-1" forKey:@"industry_id"];
+//    [params setObject:@"" forKey:@"start_begin_time"];
+//    [params setObject:@"" forKey:@"province_code"];
+//    [params setObject:@"" forKey:@"city_code"];
+//    [params setObject:@""forKey:@"town_code"];
+//    [params setObject:self.user_id forKey:@"partner_id"];
+    
     NSMutableDictionary *params = [NSMutableDictionary new];
-    [params setObject:@"ActivityList"forKey:@"a"];
-    [params setObject:[NSString stringWithFormat:@"%ld", (long)self.pageNum] forKey:@"current_page"];
+    [params setObject:@"JoinActivityList"forKey:@"a"];
+    [params setObject:[NSString stringWithFormat:@"%ld",(long)self.pageNum] forKey:@"current_page"];
     [params setObject:[NSString stringWithFormat:@"%d", g_PageSize] forKey:@"page_size"];
-    [params setObject:@"" forKey:@"activity_status"];
-    [params setObject:@""forKey:@"activity_class"];
     [params setObject:@"-1" forKey:@"industry_id"];
-    [params setObject:@"" forKey:@"start_begin_time"];
-    [params setObject:@"" forKey:@"province_code"];
-    [params setObject:@"" forKey:@"city_code"];
-    [params setObject:@""forKey:@"town_code"];
     [params setObject:self.user_id forKey:@"partner_id"];
     
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {

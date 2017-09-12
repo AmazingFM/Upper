@@ -100,7 +100,7 @@ static dispatch_queue_t message_manager_processing_queue() {
             }  
         }];
         
-        [self startMessageTimer];
+//        [self startMessageTimer];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestMessages) name:kNotifierMessagePull object:nil];
     }
     return self;

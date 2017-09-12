@@ -366,7 +366,9 @@
             break;
         case 1:
         {
-            if (_actCellItem.type==SourceTypeDaTing){
+            if (_actCellItem.type==SourceTypeDaTing ||
+                _actCellItem.type==SourceTypeTaFaqi ||
+                _actCellItem.type==SourceTypeTaCanyu){
                 statusName = @"募集中";
             } else if (_actCellItem.type==SourceTypeWoFaqi){
                 statusName = @"募集成功";
@@ -376,7 +378,9 @@
         }
             break;
         case 2:
-            if (_actCellItem.type==SourceTypeDaTing){
+            if (_actCellItem.type==SourceTypeDaTing||
+                _actCellItem.type==SourceTypeTaFaqi||
+                _actCellItem.type==SourceTypeTaCanyu){
                 NSString *sexual = [UPDataManager shared].userInfo.sexual;
                 if ([sexual intValue]==0) {
                     statusName = @"满员";
@@ -391,7 +395,9 @@
 
             break;
         case 3:
-            if (_actCellItem.type==SourceTypeDaTing){
+            if (_actCellItem.type==SourceTypeDaTing||
+                _actCellItem.type==SourceTypeTaFaqi||
+                _actCellItem.type==SourceTypeTaCanyu){
                 statusName = @"满员";
             } else if (_actCellItem.type==SourceTypeWoFaqi){
                 statusName = @"满员";
@@ -401,7 +407,9 @@
 
             break;
         case 4:
-            if (_actCellItem.type==SourceTypeDaTing){
+            if (_actCellItem.type==SourceTypeDaTing ||
+                _actCellItem.type==SourceTypeTaFaqi ||
+                _actCellItem.type==SourceTypeTaCanyu){
                 statusName = @"募集截止";
             } else if (_actCellItem.type==SourceTypeWoFaqi){
                 statusName = @"募集成功";
@@ -410,7 +418,9 @@
             }
             break;
         case 5:
-            if (_actCellItem.type==SourceTypeDaTing){
+            if (_actCellItem.type==SourceTypeDaTing ||
+                _actCellItem.type==SourceTypeTaFaqi ||
+                _actCellItem.type==SourceTypeTaCanyu){
                 statusName = @"募集截止";
             } else if (_actCellItem.type==SourceTypeWoFaqi){
                 statusName = @"募集失败";
@@ -422,7 +432,9 @@
             statusName = @"进行中";
             break;
         case 7:
-            if (_actCellItem.type==SourceTypeDaTing){
+            if (_actCellItem.type==SourceTypeDaTing ||
+                _actCellItem.type==SourceTypeTaFaqi ||
+                _actCellItem.type==SourceTypeTaCanyu){
                 statusName = @"圆满结束";
             } else if (_actCellItem.type==SourceTypeWoFaqi){
                 statusName = @"待回顾";
@@ -431,7 +443,9 @@
             }
             break;
         case 8:
-            if (_actCellItem.type==SourceTypeDaTing){
+            if (_actCellItem.type==SourceTypeDaTing ||
+                _actCellItem.type==SourceTypeTaFaqi ||
+                _actCellItem.type==SourceTypeTaCanyu){
                 statusName = @"圆满结束";
             } else if (_actCellItem.type==SourceTypeWoFaqi){
                 statusName = @"已回顾";

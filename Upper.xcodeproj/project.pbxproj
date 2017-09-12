@@ -382,7 +382,7 @@
 		EC3C18811CECB16D00223D6B /* UPCellItems.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C17D41CECB16D00223D6B /* UPCellItems.m */; };
 		EC3C18821CECB16D00223D6B /* UPCells.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C17D61CECB16D00223D6B /* UPCells.m */; };
 		EC3C18831CECB16D00223D6B /* UPExpertCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C17D81CECB16D00223D6B /* UPExpertCell.m */; };
-		EC3C18841CECB16D00223D6B /* CustomField.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C17DA1CECB16D00223D6B /* CustomField.m */; };
+		EC3C18841CECB16D00223D6B /* UPCustomField.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C17DA1CECB16D00223D6B /* UPCustomField.m */; };
 		EC3C18851CECB16D00223D6B /* RadioButton.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C17DC1CECB16D00223D6B /* RadioButton.m */; };
 		EC3C18861CECB16D00223D6B /* CityCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C17DF1CECB16D00223D6B /* CityCell.m */; };
 		EC3C18881CECB16D00223D6B /* FriendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EC3C17E21CECB16D00223D6B /* FriendCell.m */; };
@@ -1013,8 +1013,8 @@
 		EC3C17D61CECB16D00223D6B /* UPCells.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPCells.m; sourceTree = "<group>"; };
 		EC3C17D71CECB16D00223D6B /* UPExpertCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPExpertCell.h; sourceTree = "<group>"; };
 		EC3C17D81CECB16D00223D6B /* UPExpertCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPExpertCell.m; sourceTree = "<group>"; };
-		EC3C17D91CECB16D00223D6B /* CustomField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomField.h; sourceTree = "<group>"; };
-		EC3C17DA1CECB16D00223D6B /* CustomField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomField.m; sourceTree = "<group>"; };
+		EC3C17D91CECB16D00223D6B /* UPCustomField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCustomField.h; sourceTree = "<group>"; };
+		EC3C17DA1CECB16D00223D6B /* UPCustomField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPCustomField.m; sourceTree = "<group>"; };
 		EC3C17DB1CECB16D00223D6B /* RadioButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadioButton.h; sourceTree = "<group>"; };
 		EC3C17DC1CECB16D00223D6B /* RadioButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RadioButton.m; sourceTree = "<group>"; };
 		EC3C17DE1CECB16D00223D6B /* CityCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CityCell.h; sourceTree = "<group>"; };
@@ -2135,8 +2135,8 @@
 				EC3C17CC1CECB16D00223D6B /* ButtonGroupView.h */,
 				EC3C17CD1CECB16D00223D6B /* ButtonGroupView.m */,
 				EC3C17CE1CECB16D00223D6B /* cells */,
-				EC3C17D91CECB16D00223D6B /* CustomField.h */,
-				EC3C17DA1CECB16D00223D6B /* CustomField.m */,
+				EC3C17D91CECB16D00223D6B /* UPCustomField.h */,
+				EC3C17DA1CECB16D00223D6B /* UPCustomField.m */,
 				EC3C17DB1CECB16D00223D6B /* RadioButton.h */,
 				EC3C17DC1CECB16D00223D6B /* RadioButton.m */,
 				EC3C17DD1CECB16D00223D6B /* RegisterView */,
@@ -2287,7 +2287,7 @@
 				TargetAttributes = {
 					FECE88121BE344DA00CC8E85 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 8DZS62MHVB;
+						DevelopmentTeam = 77565T989X;
 					};
 				};
 			};
@@ -2512,7 +2512,7 @@
 				8530539D1ED8858400B3CF43 /* WXApiManager.m in Sources */,
 				3A91CCEA1E62FBFC00EBEF58 /* PrivateMsgCell.m in Sources */,
 				2CDAD6621D0EEC4000C260F4 /* SDCollectionViewCell.m in Sources */,
-				EC3C18841CECB16D00223D6B /* CustomField.m in Sources */,
+				EC3C18841CECB16D00223D6B /* UPCustomField.m in Sources */,
 				2CDAD67B1D0EEC4000C260F4 /* UIImageView+WebCache.m in Sources */,
 				3A91CCED1E62FF8000EBEF58 /* UPMessageBubbleController.m in Sources */,
 				2CDAD6761D0EEC4000C260F4 /* UIButton+WebCache.m in Sources */,

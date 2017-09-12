@@ -27,6 +27,7 @@
 #import "MBProgressHUD+MJ.h"
 #import "MessageManager.h"
 #import "WXApiManager.h"
+#import "CRNavigationController.h"
 
 #define kUPFilePostURL [NSString stringWithFormat:@"%@?a=ActivityAdd", kBaseURL]
 
@@ -689,12 +690,12 @@ static CGFloat const FixRatio = 4/3.0;
     UPBaseCellItem *cellItem = cell.item;
     if ([cellItem.key isEqualToString:@"activity_area"]) {
         UPCitySelectController *citySelectController = [[UPCitySelectController alloc] init];
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:citySelectController];
+        CRNavigationController *nav = [[CRNavigationController alloc] initWithRootViewController:citySelectController];
         citySelectController.delegate = self;
         [self presentViewController:nav animated:YES completion:nil];
     } else if([cellItem.key isEqualToString:@"activity_class"]){
         UPActTypeController *actTypeSelectVC = [[UPActTypeController alloc] init];
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:actTypeSelectVC];
+        CRNavigationController *nav = [[CRNavigationController alloc] initWithRootViewController:actTypeSelectVC];
         actTypeSelectVC.delegate = self;
         [self presentViewController:nav animated:YES completion:nil];
     }
@@ -1033,7 +1034,9 @@ static CGFloat const FixRatio = 4/3.0;
         picker.allowsEditing = YES;
         picker.edgesForExtendedLayout = UIRectEdgeNone;
         picker.sourceType = sourceType;
-        [self presentViewController:picker animated:YES completion:nil];
+        
+        CRNavigationController *nav = [[CRNavigationController alloc] initWithRootViewController:picker];
+        [self presentViewController:nav animated:YES completion:nil];
     } else
     {
         NSLog(@"模拟器无法打开照相机");

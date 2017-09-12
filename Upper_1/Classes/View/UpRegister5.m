@@ -11,11 +11,137 @@
 #import "DrawSomething.h"
 #import "YMNetwork.h"
 
+#import "UPCustomField.h"
+
 #define VERTICAL_SPACE 40
 #define VerifyBtnWidth 100
 #define TimeInterval 10
 
-@interface UpRegister5() <UITextFieldDelegate>
+@implementation UPRegisterCellItem
+
+@end
+
+@interface UPRegisterCell()
+
+@property (nonatomic, strong) UILabel *descLabel;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *emailLabel;
+@property (nonatomic, strong) UPUnderLineField *field;
+@property (nonatomic, strong) UIButton *actionButton;
+
+@end
+@implementation UPRegisterCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        self.descLabel = [self createLabelWithFont:[UIFont systemFontOfSize:15.f]];
+        self.descLabel.numberOfLines = 0;
+        
+        self.titleLabel = [self createLabelWithFont:[UIFont systemFontOfSize:12.f]];
+        self.titleLabel.textAlignment = NSTextAlignmentRight;
+        
+        self.emailLabel = [self createLabelWithFont:[UIFont systemFontOfSize:15.f]];
+        self.emailLabel.adjustsFontSizeToFitWidth = YES;
+        self.emailLabel.minimumScaleFactor = 0.5;
+        
+        self.field = [self createField];
+        
+        self.actionButton = [self createButton];
+        
+        [self addSubview:self.descLabel];
+        [self addSubview:self.titleLabel];
+        [self addSubview:self.emailLabel];
+        [self addSubview:self.field];
+        [self addSubview:self.actionButton];
+    }
+    return self;
+}
+
+- (void)setCellItem:(UPRegisterCellItem *)cellItem
+{
+    _cellItem = cellItem;
+    
+    switch (cellItem.cellStyle) {
+        case UPRegisterCellStyleText:
+        {
+            self.descLabel.hidden = NO;
+            
+            self.titleLabel.hidden = YES;
+            self.emailLabel.hidden = YES;
+            self.field.hidden = YES;
+            
+            self.actionButton.hidden = YES;
+        }
+            break;
+        case UPRegisterCellStyleEmail:
+        {
+            self.descLabel.hidden = YES;
+            
+            self.titleLabel.hidden = NO;
+            self.emailLabel.hidden = NO;
+            self.field.hidden = NO;
+            
+            self.actionButton.hidden = NO;
+        }
+            break;
+        case UPRegisterCellStyleButton:
+        {
+            self.descLabel.hidden = YES;
+            
+            self.titleLabel.hidden = YES;
+            self.emailLabel.hidden = YES;
+            self.field.hidden = YES;
+            
+            self.actionButton.hidden = NO;
+        }
+            break;
+        default:
+        {
+            self.descLabel.hidden = YES;
+            
+            self.titleLabel.hidden = YES;
+            self.emailLabel.hidden = YES;
+            self.field.hidden = YES;
+            
+            self.actionButton.hidden = YES;
+        }
+            break;
+    }
+}
+
+- (UILabel *)createLabelWithFont:(UIFont *)font
+{
+    UILabel *label = [UILabel new];
+    label.font = font;
+    label.textColor = [UIColor whiteColor];
+    return label;
+}
+
+- (UPUnderLineField *)createField
+{
+    UPUnderLineField *field = [[UPUnderLineField alloc]initWithFrame:CGRectZero];
+    [field setFont:[UIFont systemFontOfSize:15.0]];
+    field.clearButtonMode = UITextFieldViewModeWhileEditing;
+    return field;
+}
+
+- (UIButton *)createButton
+{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setTitle:@"xxx" forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    return button;
+}
+
+- (void)buttonClick:(UIButton *)button
+{
+    
+}
+@end
+
+@interface UpRegister5() <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
 {
     UIButton *verifyBtn;
     NSTimer *_timer;
@@ -41,6 +167,8 @@
     NSString *comPhone;
     
     CGRect viewframe;
+    
+    UIButton *viewChangeBtn;
 }
 
 @property (nonatomic, copy) NSString *verifyCode;
@@ -53,6 +181,9 @@
 @property (nonatomic, retain) UIView *seperatorV4;
 @property (nonatomic, retain) UIView *seperatorV5;
 
+@property (nonatomic, strong) NSMutableArray<UPRegisterCellItem*> *itemList;
+@property (nonatomic, strong) UITableView *tableView;
+
 @end
 
 @implementation UpRegister5
@@ -62,12 +193,71 @@
     self = [super initWithFrame:frame];
     viewframe = frame;
     
+    _tableView = [[UITableView alloc] initWithFrame:self.bounds style:UITableViewStyleGrouped];
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    _tableView.backgroundColor = [UPTools colorWithHex:0xf3f3f3];
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    if([_tableView respondsToSelector:@selector(setSeparatorInset:)]){
+        [_tableView setSeparatorInset:UIEdgeInsetsZero];
+    }
+    
+    if ([_tableView respondsToSelector:@selector(setLayoutMargins:)]) {
+        [_tableView setLayoutMargins:UIEdgeInsetsZero];
+    }
+    
+    [self addSubview:_tableView];
+//----------------------------------
     float offsetY = 0;
     
+    UPRegisterCellItem *descItem = [[UPRegisterCellItem alloc] init];
+    descItem.key = @"desc";
+    descItem.cellStyle = UPRegisterCellStyleText;
+    descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的公司邮箱，我们会向您提供的邮箱内发送一份验证邮件，点击邮件中的激活链接即可激活您的账号。";
     
+    UPRegisterCellItem *emailItem = [[UPRegisterCellItem alloc] init];
+    emailItem.key = @"email";
+    emailItem.cellStyle = UPRegisterCellStyleEmail;
+    emailItem.title = @"行业邮箱\nEmail";
+    
+    UPRegisterCellItem *comPhoneItem = [[UPRegisterCellItem alloc] init];
+    comPhoneItem.key = @"comPhone";
+    comPhoneItem.cellStyle = UPRegisterCellStyleNumField;
+    comPhoneItem.title = @"单位电话\nCom Tele";
+    
+    UPRegisterCellItem *empIdItem = [[UPRegisterCellItem alloc] init];
+    empIdItem.key = @"empID";
+    empIdItem.cellStyle = UPRegisterCellStyleField;
+    empIdItem.title = @"员工号\nEmp NO.";
+
+    UPRegisterCellItem *nameItem = [[UPRegisterCellItem alloc] init];
+    nameItem.key = @"name";
+    nameItem.cellStyle = UPRegisterCellStyleField;
+    nameItem.title = @"姓名\nName";
+    
+    UPRegisterCellItem *telephoneItem = [[UPRegisterCellItem alloc] init];
+    telephoneItem.key = @"telephone";
+    telephoneItem.cellStyle = UPRegisterCellStyleTelephoneField;
+    telephoneItem.title = @"手机号\nCellphone";
+    
+    __weak typeof(self) weakSelf = self;
+    telephoneItem.actionBlock = ^{
+        [weakSelf startSMSRequest];
+    };
+    
+    UPRegisterCellItem *noEmailBtnItem = [[UPRegisterCellItem alloc] init];
+    noEmailBtnItem.cellStyle = UPRegisterCellStyleButton;
+    noEmailBtnItem.title = @"没有公司邮箱?";
+    noEmailBtnItem.actionBlock = ^{
+        [weakSelf resize];
+    };
+
     telenumStr = @"手机号\nCellphone";
     NSString *verifyCodeStr = @"验证码\nVerifyCode";
     NSString *emailStr = @"行业邮箱\nEmail";
+    
     
     
     comPhone = @"单位电话\nCom Tele";
@@ -212,30 +402,13 @@
     desLabel.font = [UIFont systemFontOfSize:12];
     [desLabel sizeToFit];
     
-    [self addSubview:comPhoneLabel];
-    [self addSubview:comPhoneField];
-    [self addSubview:empIDLabel];
-    [self addSubview:empIDField];
-    [self addSubview:nameLabel];
-    [self addSubview:nameField];
-
-    
-    [self addSubview:telLabel];
-    [self addSubview:teleField];
-    [self addSubview:verifyLabel];
-    [self addSubview:verifyField];
-    [self addSubview:verifyBtn];
-    [self addSubview:_seperatorV1];
-    [self addSubview:_seperatorV2];
-    [self addSubview:_seperatorV3];
-    [self addSubview:_seperatorV4];
-    [self addSubview:_seperatorV5];
-    
-    [self addSubview:_tipLabel];
-    [self addSubview:_seperatorV];
-    [self addSubview:_suffixLabel];
-    [self addSubview:_emailField];
-    [self addSubview:desLabel];
+    viewChangeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    viewChangeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [viewChangeBtn setTitle:@"没有公司邮箱?" forState:UIControlStateNormal];
+    [viewChangeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    viewChangeBtn.highlighted = NO;
+    viewChangeBtn.titleLabel.font = [UIFont systemFontOfSize:15.f];
+    [viewChangeBtn addTarget:self action:@selector(changeViewType:) forControlEvents:UIControlEventTouchUpInside];
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
     singleTap.numberOfTapsRequired = 1;
@@ -243,6 +416,19 @@
     [self addGestureRecognizer:singleTap];
     
     return self;
+}
+
+- (NSMutableArray<UPRegisterCellItem*> *)itemList
+{
+    if (_itemList==nil) {
+        _itemList = [NSMutableArray new];
+    }
+    return _itemList;
+}
+
+- (void)reloadItems
+{
+    [self.tableView reloadData];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -329,156 +515,130 @@
 - (void)resize
 {
     if (_noEmail) {
-        comPhoneLabel.hidden = NO;
-        comPhoneField.hidden = NO;
-        empIDLabel.hidden = NO;
-        empIDField.hidden = NO;
-        nameLabel.hidden = NO;
-        nameField.hidden = NO;
-        
-        telLabel.hidden = NO;
-        teleField.hidden = NO;
-        verifyLabel.hidden = NO;
-        verifyField.hidden = NO;
-        verifyBtn.hidden = NO;
-        _seperatorV2.hidden = NO;
-        _seperatorV1.hidden = NO;
-        _seperatorV3.hidden = NO;
-        _seperatorV5.hidden = NO;
-        _seperatorV4.hidden = NO;
-        
         if ([self.industryID isEqualToString:@"1"]) {//医生
-            empID = @"好医生ID\nDoctor ID";
+            [self.itemList removeAllObjects];
             
+            UPRegisterCellItem *descItem = [[UPRegisterCellItem alloc] init];
+            descItem.key = @"desc";
+            descItem.cellStyle = UPRegisterCellStyleText;
+            descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的姓名、好医生ID和手机号，我们会进行后续核实验证。";
             
-            CGSize size = SizeWithFont(telenumStr, [UIFont systemFontOfSize:12]);
+            UPRegisterCellItem *empIdItem = [[UPRegisterCellItem alloc] init];
+            empIdItem.key = @"doctorID";
+            empIdItem.cellStyle = UPRegisterCellStyleField;
+            empIdItem.title = @"好医生ID\nDoctor ID";
             
-            //隐藏单位电话
-            comPhoneLabel.frame = CGRectZero;
-            comPhoneField.frame = CGRectZero;
-            _seperatorV3.frame = CGRectZero;
+            UPRegisterCellItem *nameItem = [[UPRegisterCellItem alloc] init];
+            nameItem.key = @"name";
+            nameItem.cellStyle = UPRegisterCellStyleField;
+            nameItem.title = @"姓名\nName";
             
-            float offsetY = 0;
+            UPRegisterCellItem *telephoneItem = [[UPRegisterCellItem alloc] init];
+            telephoneItem.key = @"telephone";
+            telephoneItem.cellStyle = UPRegisterCellStyleTelephoneField;
+            telephoneItem.title = @"手机号\nCellphone";
+            __weak typeof(self) weakSelf = self;
+            telephoneItem.actionBlock = ^{
+                [weakSelf startSMSRequest];
+            };
             
-            float margin = 10;
-            empIDLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
-            empIDLabel.text = empID;
-            empIDField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, viewframe.size.width-2*LeftRightPadding-size.width-margin, size.height);
+            UPRegisterCellItem *verifyItem = [[UPRegisterCellItem alloc] init];
+            verifyItem.key = @"verify";
+            verifyItem.cellStyle = UPRegisterCellStyleVerifyCode;
+            verifyItem.title = @"验证码\nVerifyCode";
             
-            _seperatorV4.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
-            
-            offsetY += size.height+25;
-            
-            nameLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
-            nameField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, viewframe.size.width-2*LeftRightPadding-size.width-margin, size.height);
-            
-            _seperatorV5.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
-            
-            offsetY += size.height+25;
-            
-            telLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
-            teleField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, viewframe.size.width-2*LeftRightPadding-size.width-margin, size.height);
-            
-            _seperatorV1.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
-            
-            offsetY += size.height+25;
-            
-            verifyLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
-            verifyBtn.frame = CGRectMake(viewframe.size.width-LeftRightPadding-VerifyBtnWidth, offsetY, VerifyBtnWidth, size.height);
-            verifyField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, verifyBtn.origin.x-LeftRightPadding-size.width-margin, size.height);
-            
-            _seperatorV2.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
-            desLabel.text = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的姓名、好医生ID和手机号，我们会进行后续核实验证。";
+            [self.itemList addObject:descItem];
+            [self.itemList addObject:empIdItem];
+            [self.itemList addObject:nameItem];
+            [self.itemList addObject:telephoneItem];
+            [self.itemList addObject:verifyItem];
         } else {
-            empID = @"员工号\nEmp NO.";
-            float offsetY = 0;
-            float margin = 10;
+            [self.itemList removeAllObjects];
+            UPRegisterCellItem *descItem = [[UPRegisterCellItem alloc] init];
+            descItem.key = @"desc";
+            descItem.cellStyle = UPRegisterCellStyleText;
+            descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的单位电话、员工号和姓名，我们会进行后续核实验证。";
             
-            CGSize size1 = SizeWithFont(comPhone, [UIFont systemFontOfSize:12]);
-            CGSize size2 = SizeWithFont(telenumStr, [UIFont systemFontOfSize:12]);
-            CGSize size = (size1.width>size2.width)?size1:size2;
+            __weak typeof(self) weakSelf = self;
+            if([self.industryID isEqualToString:@"1"]) {//航空) {
+                UPRegisterCellItem *noEmailBtnItem = [[UPRegisterCellItem alloc] init];
+                noEmailBtnItem.cellStyle = UPRegisterCellStyleButton;
+                noEmailBtnItem.title = @"没有公司邮箱?";
+                noEmailBtnItem.actionBlock = ^{
+                    [weakSelf resize];
+                    [weakSelf reloadItems];
+                };
+                [self.itemList addObject:noEmailBtnItem];
+            }
             
-            comPhoneLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
-            comPhoneField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, viewframe.size.width-2*LeftRightPadding-size.width-margin, size.height);
+            UPRegisterCellItem *empIdItem = [[UPRegisterCellItem alloc] init];
+            empIdItem.key = @"empID";
+            empIdItem.cellStyle = UPRegisterCellStyleField;
+            empIdItem.title = @"员工号\nEmp NO.";
             
-            _seperatorV3.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
+            UPRegisterCellItem *nameItem = [[UPRegisterCellItem alloc] init];
+            nameItem.key = @"name";
+            nameItem.cellStyle = UPRegisterCellStyleField;
+            nameItem.title = @"姓名\nName";
             
-            offsetY += size.height+25;
+            UPRegisterCellItem *telephoneItem = [[UPRegisterCellItem alloc] init];
+            telephoneItem.key = @"telephone";
+            telephoneItem.cellStyle = UPRegisterCellStyleTelephoneField;
+            telephoneItem.title = @"手机号\nCellphone";
+            telephoneItem.actionBlock = ^{
+                [weakSelf startSMSRequest];
+            };
             
-            empIDLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
-            empIDLabel.text = empID;
-            empIDField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, viewframe.size.width-2*LeftRightPadding-size.width-margin, size.height);
+            UPRegisterCellItem *verifyItem = [[UPRegisterCellItem alloc] init];
+            verifyItem.key = @"verify";
+            verifyItem.cellStyle = UPRegisterCellStyleVerifyCode;
+            verifyItem.title = @"验证码\nVerifyCode";
             
-            _seperatorV4.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
-            
-            offsetY += size.height+25;
-            
-            nameLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
-            nameField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, viewframe.size.width-2*LeftRightPadding-size.width-margin, size.height);
-            
-            _seperatorV5.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
-            
-            offsetY += size.height+25;
-            
-            telLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
-            teleField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, viewframe.size.width-2*LeftRightPadding-size.width-margin, size.height);
-            
-            _seperatorV1.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
-            
-            offsetY += size.height+25;
-            
-            verifyLabel.frame = CGRectMake(LeftRightPadding, offsetY, size.width, size.height);
-            verifyBtn.frame = CGRectMake(viewframe.size.width-LeftRightPadding-VerifyBtnWidth, offsetY, VerifyBtnWidth, size.height);
-            verifyField.frame = CGRectMake(LeftRightPadding+size.width+margin, offsetY, verifyBtn.origin.x-LeftRightPadding-size.width-margin, size.height);
-            
-            _seperatorV2.frame = CGRectMake(LeftRightPadding, offsetY+size.height+1, viewframe.size.width-2*LeftRightPadding, 1);
-            desLabel.text = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的单位电话、员工号和姓名，我们会进行后续核实验证。";
+            [self.itemList addObject:descItem];
+            [self.itemList addObject:empIdItem];
+            [self.itemList addObject:nameItem];
+            [self.itemList addObject:telephoneItem];
+            [self.itemList addObject:verifyItem];
         }
-        _tipLabel.hidden = YES;
-        _seperatorV.hidden = YES;
-        _emailField.hidden = YES;
-        _suffixLabel.hidden = YES;
-        
-        desLabel.frame = CGRectMake(LeftRightPadding, CGRectGetMaxY(_seperatorV2.frame)+25, self.frame.size.width-2*LeftRightPadding, 10);
-        [desLabel sizeToFit];
     } else {
-        comPhoneLabel.hidden = YES;
-        comPhoneField.hidden = YES;
-        empIDLabel.hidden = YES;
-        empIDField.hidden = YES;
-        nameLabel.hidden = YES;
-        nameField.hidden = YES;
-
-        telLabel.hidden = YES;
-        teleField.hidden = YES;
-        verifyLabel.hidden = YES;
-        verifyField.hidden = YES;
-        verifyBtn.hidden = YES;
-        _seperatorV2.hidden = YES;
-        _seperatorV1.hidden = YES;
-        _seperatorV3.hidden = YES;
-        _seperatorV5.hidden = YES;
-        _seperatorV4.hidden = YES;
-
-
-        _tipLabel.hidden = NO;
-        _seperatorV.hidden = NO;
-        _emailField.hidden = NO;
-        _suffixLabel.hidden = NO;
-        NSString *s = [NSString stringWithFormat:@"%@",_emailSuffix];
+        [self.itemList removeAllObjects];
+        UPRegisterCellItem *descItem = [[UPRegisterCellItem alloc] init];
+        descItem.key = @"desc";
+        descItem.cellStyle = UPRegisterCellStyleText;
+        descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的公司邮箱，我们会向您提供的邮箱内发送一份验证邮件，点击邮件中的激活链接即可激活您的账号。";
         
-        _suffixLabel.frame = CGRectMake(self.frame.size.width*2/3, 0, self.frame.size.width/3-LeftRightPadding, _tipLabel.height);
-        _suffixLabel.text = s;
-        _suffixLabel.textAlignment = NSTextAlignmentLeft|NSTextAlignmentCenter;
-        _suffixLabel.adjustsFontSizeToFitWidth = YES;
-        _suffixLabel.minimumScaleFactor = 0.5;
+        UPRegisterCellItem *emailItem = [[UPRegisterCellItem alloc] init];
+        emailItem.key = @"email";
+        emailItem.cellStyle = UPRegisterCellStyleEmail;
+        emailItem.title = @"行业邮箱\nEmail";
         
-        _emailField.frame = CGRectMake(5+_tipLabel.origin.x+_tipLabel.width, 0, self.frame.size.width*2/3-_tipLabel.origin.x-_tipLabel.width-5, _tipLabel.height);
-        _seperatorV.frame = CGRectMake(5+_tipLabel.origin.x+_tipLabel.width, _tipLabel.y+_tipLabel.height, self.frame.size.width*2/3-_tipLabel.origin.x-_tipLabel.width-5, 1);
-        desLabel.frame = CGRectMake(LeftRightPadding, CGRectGetMaxY(_seperatorV.frame)+25, self.frame.size.width-2*LeftRightPadding, 10);
-        desLabel.text = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的公司邮箱，我们会向您提供的邮箱内发送一份验证邮件，点击邮件中的激活链接即可激活您的账号。";
-        [desLabel sizeToFit];
+        [self.itemList addObject:descItem];
+        [self.itemList addObject:emailItem];
+        
+        __weak typeof(self) weakSelf = self;
+        if([self.industryID isEqualToString:@"1"]) {//航空) {
+            UPRegisterCellItem *noEmailBtnItem = [[UPRegisterCellItem alloc] init];
+            noEmailBtnItem.cellStyle = UPRegisterCellStyleButton;
+            noEmailBtnItem.title = @"没有公司邮箱?";
+            noEmailBtnItem.actionBlock = ^{
+                [weakSelf resize];
+                [weakSelf reloadItems];
+            };
+            [self.itemList addObject:noEmailBtnItem];
+        }
     }
+    
+    [self.itemList enumerateObjectsUsingBlock:^(UPRegisterCellItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.cellWidth = viewframe.size.width;
+        
+        if ([obj.key isEqualToString:@"desc"]) {
+            NSString *titleStr = obj.title;
+            CGRect rect = [titleStr boundingRectWithSize:CGSizeMake(obj.cellWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.f]} context:nil];
+            obj.cellHeight = rect.size.height;
+        } else {
+            obj.cellHeight = 44;
+        }
+    }];
 }
 
 
@@ -622,5 +782,31 @@
             [subView resignFirstResponder];
         }
     }
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.itemList.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UPRegisterCellItem *cellItem = self.itemList[indexPath.row];
+    return cellItem.cellHeight;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *cellId = @"cellId";
+    UPRegisterCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    if (cell==nil) {
+        cell = [[UPRegisterCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+    
+    UPRegisterCellItem *cellItem = self.itemList[indexPath.row];
+    cell.cellItem = cellItem;
+    
+    return cell;
 }
 @end

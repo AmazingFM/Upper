@@ -124,7 +124,7 @@ extern NSString * const g_loginFileName;
     imageDetailItem6.cellID = @"cellID6";
     
     imageDetailItem7 = [[UPImageDetailCellItem alloc] init];
-    imageDetailItem7.title = @"是否公开单位信息";
+    imageDetailItem7.title = @"显示单位信息";
     imageDetailItem7.style = UPItemStyleUserAnonymous;
     imageDetailItem7.cellID = @"cellID7";
 
