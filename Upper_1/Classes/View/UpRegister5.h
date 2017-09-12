@@ -22,20 +22,27 @@ typedef NS_ENUM(NSInteger, UPRegisterCellStyle)
     UPRegisterCellStyleButton
 };
 
-typedef void (^CellActionBlock) ();
+@class UPRegisterCellItem;
+typedef void (^CellBtnActionBlock) ();
+typedef void (^CellFieldActionBlock) (UPRegisterCellItem *cellItem);
 
 @interface UPRegisterCellItem : NSObject
 
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *email;
 @property (nonatomic, copy) NSString *cellId;
-@property (nonatomic) NSString *key;
-@property (nonatomic) NSString *value;
+@property (nonatomic, copy) NSString *key;
+@property (nonatomic, copy) NSString *value;
 @property (nonatomic) UPRegisterCellStyle cellStyle;
-@property (nonatomic) CellActionBlock actionBlock;
+@property (nonatomic) CellBtnActionBlock actionBlock;
+@property (nonatomic) CellFieldActionBlock fieldActionBlock;
+@property (nonatomic, retain) NSIndexPath *indexPath;
 
 @property (nonatomic) CGFloat cellHeight;
 @property (nonatomic) CGFloat cellWidth;
+
+@property (nonatomic) CGFloat titleWidth;
+@property (nonatomic) CGFloat titleHeight;
 
 @end
 

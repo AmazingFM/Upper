@@ -15,13 +15,17 @@
 
 #define VERTICAL_SPACE 40
 #define VerifyBtnWidth 100
-#define TimeInterval 10
+#define TimeInterval 60
 
 @implementation UPRegisterCellItem
 
 @end
 
-@interface UPRegisterCell()
+@interface UPRegisterCell() <UITextFieldDelegate>
+{
+    NSTimer *_timer;
+    int interval;
+}
 
 @property (nonatomic, strong) UILabel *descLabel;
 @property (nonatomic, strong) UILabel *titleLabel;
@@ -36,11 +40,13 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.descLabel = [self createLabelWithFont:[UIFont systemFontOfSize:15.f]];
+        self.backgroundColor = [UIColor clearColor];
+        self.descLabel = [self createLabelWithFont:[UIFont systemFontOfSize:13.f]];
         self.descLabel.numberOfLines = 0;
         
         self.titleLabel = [self createLabelWithFont:[UIFont systemFontOfSize:12.f]];
         self.titleLabel.textAlignment = NSTextAlignmentRight;
+        self.titleLabel.numberOfLines = 0;
         
         self.emailLabel = [self createLabelWithFont:[UIFont systemFontOfSize:15.f]];
         self.emailLabel.adjustsFontSizeToFitWidth = YES;
@@ -73,6 +79,9 @@
             self.field.hidden = YES;
             
             self.actionButton.hidden = YES;
+            
+            self.descLabel.frame = CGRectMake(LeftRightPadding, 0, cellItem.cellWidth-2*LeftRightPadding, cellItem.cellHeight);
+            self.descLabel.text = cellItem.title;
         }
             break;
         case UPRegisterCellStyleEmail:
@@ -83,7 +92,22 @@
             self.emailLabel.hidden = NO;
             self.field.hidden = NO;
             
-            self.actionButton.hidden = NO;
+            self.actionButton.hidden = YES;
+            
+            CGFloat originy = cellItem.cellHeight-cellItem.titleHeight;
+            self.titleLabel.frame = CGRectMake(LeftRightPadding, originy, cellItem.titleWidth, cellItem.titleHeight);
+            self.titleLabel.text = cellItem.title;
+            
+            CGSize size = [cellItem.email sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15.f]}];
+            CGFloat emailWidth = ceil(size.width);
+            if (emailWidth>100) {
+                emailWidth = 100;
+            }
+            self.emailLabel.frame = CGRectMake(cellItem.cellWidth-emailWidth-LeftRightPadding, originy, emailWidth, cellItem.titleHeight);
+            self.emailLabel.text = cellItem.email;
+            
+            CGFloat leftX = LeftRightPadding+cellItem.titleWidth+5;
+            self.field.frame = CGRectMake(leftX, originy, cellItem.cellWidth-leftX-emailWidth-LeftRightPadding, cellItem.titleHeight);
         }
             break;
         case UPRegisterCellStyleButton:
@@ -95,6 +119,57 @@
             self.field.hidden = YES;
             
             self.actionButton.hidden = NO;
+            
+            CGSize size = [cellItem.title sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15.f]}];
+            CGFloat btnWidth = ceil(size.width)+10;
+            [self.actionButton setTitle:cellItem.title forState:UIControlStateNormal];
+            self.actionButton.frame = CGRectMake(LeftRightPadding, 5, btnWidth, cellItem.cellHeight-10);
+        }
+            break;
+        case UPRegisterCellStyleField:
+        case UPRegisterCellStyleNumField:
+        case UPRegisterCellStyleTelephoneField:
+        {
+            self.descLabel.hidden = YES;
+            
+            self.titleLabel.hidden = NO;
+            self.emailLabel.hidden = YES;
+            self.field.hidden = NO;
+            
+            self.actionButton.hidden = YES;
+            
+            CGFloat originy = cellItem.cellHeight-cellItem.titleHeight;
+            self.titleLabel.frame = CGRectMake(0, originy, cellItem.titleWidth+LeftRightPadding, cellItem.titleHeight);
+            self.titleLabel.text = cellItem.title;
+            
+            CGFloat leftX = LeftRightPadding+ cellItem.titleWidth +5;
+            self.field.frame = CGRectMake(leftX, originy, cellItem.cellWidth-leftX-LeftRightPadding, cellItem.titleHeight);
+        }
+            break;
+        case UPRegisterCellStyleVerifyCode:
+        {
+            self.descLabel.hidden = YES;
+            
+            self.titleLabel.hidden = NO;
+            self.emailLabel.hidden = YES;
+            self.field.hidden = NO;
+            
+            self.actionButton.hidden = NO;
+            
+            CGFloat originy = cellItem.cellHeight-cellItem.titleHeight;
+            self.titleLabel.frame = CGRectMake(LeftRightPadding, originy, cellItem.titleWidth, cellItem.titleHeight);
+            self.titleLabel.text = cellItem.title;
+            
+            NSString *btnTitle = @"发送验证码";
+            CGSize size = [btnTitle sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15.f]}];
+            CGFloat btnWidth = ceil(size.width)+10;
+            CGFloat btnHeight = cellItem.cellHeight-10;
+
+            self.actionButton.frame = CGRectMake(cellItem.cellWidth-btnWidth-LeftRightPadding, 5, btnWidth, btnHeight);
+            [self.actionButton setTitle:btnTitle forState:UIControlStateNormal];
+            
+            CGFloat leftX = LeftRightPadding+cellItem.titleWidth+5;
+            self.field.frame = CGRectMake(leftX, originy, cellItem.cellWidth-leftX-btnWidth-LeftRightPadding, cellItem.titleHeight);
         }
             break;
         default:
@@ -122,23 +197,75 @@
 - (UPUnderLineField *)createField
 {
     UPUnderLineField *field = [[UPUnderLineField alloc]initWithFrame:CGRectZero];
-    [field setFont:[UIFont systemFontOfSize:15.0]];
+    [field setFont:[UIFont systemFontOfSize:18.0]];
+    field.adjustsFontSizeToFitWidth = YES;
     field.clearButtonMode = UITextFieldViewModeWhileEditing;
+    field.delegate = self;
     return field;
 }
 
 - (UIButton *)createButton
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setTitle:@"xxx" forState:UIControlStateNormal];
     [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
+    button.titleLabel.font = [UIFont systemFontOfSize:15.f];
+    button.layer.cornerRadius = 5.0f;
+    button.layer.borderWidth = 1;
+    [button setBackgroundColor:[UIColor lightGrayColor]];
+    
     return button;
 }
 
 - (void)buttonClick:(UIButton *)button
 {
+    if (self.cellItem.cellStyle==UPRegisterCellStyleVerifyCode) {
+        [self startTimer];
+    } else {
+        [self stopTimer];
+    }
     
+    if (self.cellItem.actionBlock) {
+        self.cellItem.actionBlock();
+    }
 }
+
+-(void)refreshBtn
+{
+    interval--;
+    if (interval==0) {
+        [self stopTimer];
+        return;
+    }
+    [self.actionButton setTitle:[NSString stringWithFormat:@"%ds", interval] forState:UIControlStateNormal];
+}
+
+-(void)startTimer
+{
+    interval = TimeInterval;
+    _timer= [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(refreshBtn) userInfo:nil repeats:YES];
+    [self.actionButton setEnabled:NO];
+}
+-(void)stopTimer
+{
+    [_timer invalidate];
+    _timer = nil;
+    [self.actionButton setTitle:@"再次发送" forState:UIControlStateNormal];
+    self.actionButton.enabled = YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if (self.cellItem.fieldActionBlock) {
+        self.cellItem.fieldActionBlock(self.cellItem);
+    }
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    NSString *text = textField.text;
+    _cellItem.value = text;
+}
+
 @end
 
 @interface UpRegister5() <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
@@ -183,6 +310,7 @@
 
 @property (nonatomic, strong) NSMutableArray<UPRegisterCellItem*> *itemList;
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSIndexPath *currentIndexPath;
 
 @end
 
@@ -191,12 +319,14 @@
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
+    self.clipsToBounds = YES;
+    
     viewframe = frame;
     
-    _tableView = [[UITableView alloc] initWithFrame:self.bounds style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc] initWithFrame:self.bounds style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    _tableView.backgroundColor = [UPTools colorWithHex:0xf3f3f3];
+    _tableView.backgroundColor = [UIColor clearColor];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
@@ -209,206 +339,209 @@
     }
     
     [self addSubview:_tableView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShown:) name:UIKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardHidden:) name:UIKeyboardDidHideNotification object:nil];
 //----------------------------------
-    float offsetY = 0;
-    
-    UPRegisterCellItem *descItem = [[UPRegisterCellItem alloc] init];
-    descItem.key = @"desc";
-    descItem.cellStyle = UPRegisterCellStyleText;
-    descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的公司邮箱，我们会向您提供的邮箱内发送一份验证邮件，点击邮件中的激活链接即可激活您的账号。";
-    
-    UPRegisterCellItem *emailItem = [[UPRegisterCellItem alloc] init];
-    emailItem.key = @"email";
-    emailItem.cellStyle = UPRegisterCellStyleEmail;
-    emailItem.title = @"行业邮箱\nEmail";
-    
-    UPRegisterCellItem *comPhoneItem = [[UPRegisterCellItem alloc] init];
-    comPhoneItem.key = @"comPhone";
-    comPhoneItem.cellStyle = UPRegisterCellStyleNumField;
-    comPhoneItem.title = @"单位电话\nCom Tele";
-    
-    UPRegisterCellItem *empIdItem = [[UPRegisterCellItem alloc] init];
-    empIdItem.key = @"empID";
-    empIdItem.cellStyle = UPRegisterCellStyleField;
-    empIdItem.title = @"员工号\nEmp NO.";
-
-    UPRegisterCellItem *nameItem = [[UPRegisterCellItem alloc] init];
-    nameItem.key = @"name";
-    nameItem.cellStyle = UPRegisterCellStyleField;
-    nameItem.title = @"姓名\nName";
-    
-    UPRegisterCellItem *telephoneItem = [[UPRegisterCellItem alloc] init];
-    telephoneItem.key = @"telephone";
-    telephoneItem.cellStyle = UPRegisterCellStyleTelephoneField;
-    telephoneItem.title = @"手机号\nCellphone";
-    
-    __weak typeof(self) weakSelf = self;
-    telephoneItem.actionBlock = ^{
-        [weakSelf startSMSRequest];
-    };
-    
-    UPRegisterCellItem *noEmailBtnItem = [[UPRegisterCellItem alloc] init];
-    noEmailBtnItem.cellStyle = UPRegisterCellStyleButton;
-    noEmailBtnItem.title = @"没有公司邮箱?";
-    noEmailBtnItem.actionBlock = ^{
-        [weakSelf resize];
-    };
-
-    telenumStr = @"手机号\nCellphone";
-    NSString *verifyCodeStr = @"验证码\nVerifyCode";
-    NSString *emailStr = @"行业邮箱\nEmail";
-    
-    
-    
-    comPhone = @"单位电话\nCom Tele";
-    empID = @"员工号\nEmp NO.";
-    NSString *empName = @"姓名\nName";
-    
-    CGSize size1 = SizeWithFont(comPhone, [UIFont systemFontOfSize:12]);
-    CGSize size2 = SizeWithFont(telenumStr, [UIFont systemFontOfSize:12]);
-    CGSize size = (size1.width>size2.width)?size1:size2;
-    
-    comPhoneLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY, size.width, size.height)];
-    comPhoneLabel.textAlignment = NSTextAlignmentRight;
-    comPhoneLabel.numberOfLines = 0;
-    comPhoneLabel.text = comPhone;
-    comPhoneLabel.backgroundColor = [UIColor clearColor];
-    comPhoneLabel.textColor = [UIColor whiteColor];
-    comPhoneLabel.font = [UIFont systemFontOfSize:12];
-    
-    comPhoneField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, frame.size.width-2*LeftRightPadding-size.width, size.height)];
-    [comPhoneField setFont:[UIFont systemFontOfSize:15.0]];
-    comPhoneField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    comPhoneField.autocorrectionType = UITextAutocorrectionTypeNo;
-    comPhoneField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    comPhoneField.delegate = self;
-    
-    _seperatorV3 = [[UIView alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY+size.height+1, frame.size.width-2*LeftRightPadding, 1)];
-    _seperatorV3.backgroundColor = [UIColor grayColor];
-    
-    offsetY += size.height+25;
-    
-    empIDLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY, size.width, size.height)];
-    empIDLabel.textAlignment = NSTextAlignmentRight;
-    empIDLabel.numberOfLines = 0;
-    empIDLabel.text = empID;
-    empIDLabel.backgroundColor = [UIColor clearColor];
-    empIDLabel.textColor = [UIColor whiteColor];
-    empIDLabel.font = [UIFont systemFontOfSize:12];
-    
-    empIDField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, frame.size.width-2*LeftRightPadding-size.width, size.height)];
-    [empIDField setFont:[UIFont systemFontOfSize:15.0]];
-    empIDField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    empIDField.delegate = self;
-    
-    _seperatorV4 = [[UIView alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY+size.height+1, frame.size.width-2*LeftRightPadding, 1)];
-    _seperatorV4.backgroundColor = [UIColor grayColor];
-
-    offsetY += size.height+25;
-    
-    nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY, size.width, size.height)];
-    nameLabel.textAlignment = NSTextAlignmentRight;
-    nameLabel.numberOfLines = 0;
-    nameLabel.text = empName;
-    nameLabel.backgroundColor = [UIColor clearColor];
-    nameLabel.textColor = [UIColor whiteColor];
-    nameLabel.font = [UIFont systemFontOfSize:12];
-    
-    nameField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, frame.size.width-2*LeftRightPadding-size.width, size.height)];
-    [nameField setFont:[UIFont systemFontOfSize:15.0]];
-    nameField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    nameField.delegate = self;
-    
-    _seperatorV5 = [[UIView alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY+size.height+1, frame.size.width-2*LeftRightPadding, 1)];
-    _seperatorV5.backgroundColor = [UIColor grayColor];
-    
-    offsetY += size.height+25;
-
-    telLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY, size.width, size.height)];
-    telLabel.textAlignment = NSTextAlignmentRight;
-    telLabel.numberOfLines = 0;
-    telLabel.text = telenumStr;
-    telLabel.backgroundColor = [UIColor clearColor];
-    telLabel.textColor = [UIColor whiteColor];
-    telLabel.font = [UIFont systemFontOfSize:12];
-    
-    teleField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, frame.size.width-2*LeftRightPadding-size.width, size.height)];
-    [teleField setFont:[UIFont systemFontOfSize:15.0]];
-    teleField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    teleField.keyboardType = UIKeyboardTypeNumberPad;
-    teleField.delegate = self;
-    
-    _seperatorV1 = [[UIView alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY+size.height+1, frame.size.width-2*LeftRightPadding, 1)];
-    _seperatorV1.backgroundColor = [UIColor grayColor];
-    
-    offsetY += size.height+25;
-    
-    verifyLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY, size.width, size.height)];
-    verifyLabel.textAlignment = NSTextAlignmentRight;
-    verifyLabel.numberOfLines = 0;
-    verifyLabel.text = verifyCodeStr;
-    verifyLabel.backgroundColor = [UIColor clearColor];
-    verifyLabel.textColor = [UIColor whiteColor];
-    verifyLabel.font = [UIFont systemFontOfSize:12];
-    
-    verifyField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, self.frame.size.width-2*LeftRightPadding-size.width, size.height)];
-    [verifyField setFont:[UIFont systemFontOfSize:15.0]];
-    verifyField.keyboardType = UIKeyboardTypeNumberPad;
-    verifyField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    verifyField.delegate = self;
-    
-    verifyBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    verifyBtn.frame = CGRectMake(frame.size.width-LeftRightPadding-VerifyBtnWidth, offsetY, VerifyBtnWidth, size.height);
-    verifyBtn.layer.cornerRadius = 5.0f;
-    verifyBtn.layer.borderWidth = 1;
-    [verifyBtn setTitle:@"发送验证码" forState:UIControlStateNormal];
-    verifyBtn.titleLabel.font = [UIFont systemFontOfSize:15.0f];
-    [verifyBtn setBackgroundColor:[UIColor lightGrayColor]];
-    [verifyBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [verifyBtn addTarget:self action:@selector(sendSMS:) forControlEvents:UIControlEventTouchUpInside];
-    verifyField.frame = CGRectMake(20+verifyLabel.size.width, offsetY, verifyBtn.origin.x-20-verifyLabel.size.width, size.height);
-    _seperatorV2 = [[UIView alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY+size.height+1, frame.size.width-2*LeftRightPadding, 1)];
-    _seperatorV2.backgroundColor = [UIColor grayColor];
-    
-    _tipLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, 0, size.width, size.height)];
-    _tipLabel.textAlignment = NSTextAlignmentRight;
-    _tipLabel.numberOfLines = 0;
-    _tipLabel.text = emailStr;
-    _tipLabel.backgroundColor = [UIColor clearColor];
-    _tipLabel.textColor = [UIColor whiteColor];
-    _tipLabel.font = [UIFont systemFontOfSize:12];
-    
-    _suffixLabel = [[UILabel alloc]init];
-    _suffixLabel.backgroundColor = [UIColor clearColor];
-    _suffixLabel.textColor = [UIColor whiteColor];
-    
-    _emailField = [[UITextField alloc]init];
-    [_emailField setFont:[UIFont systemFontOfSize:15.0]];
-    _emailField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    _emailField.keyboardType = UIKeyboardTypeEmailAddress;
-    _emailField.autocorrectionType = UITextAutocorrectionTypeNo;
-    _emailField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    _emailField.delegate = self;
-        
-    _seperatorV = [[UIImageView alloc]init];
-    _seperatorV.backgroundColor = [UIColor grayColor];
-    
-    desLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-    desLabel.numberOfLines = 0;
-    desLabel.text = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的公司邮箱，我们会向您提供的邮箱内发送一份验证邮件，点击邮件中的激活链接即可激活您的账号。";
-    desLabel.textAlignment = NSTextAlignmentLeft;
-    desLabel.backgroundColor = [UIColor clearColor];
-    desLabel.textColor = [UIColor whiteColor];
-    desLabel.font = [UIFont systemFontOfSize:12];
-    [desLabel sizeToFit];
-    
-    viewChangeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    viewChangeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [viewChangeBtn setTitle:@"没有公司邮箱?" forState:UIControlStateNormal];
-    [viewChangeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    viewChangeBtn.highlighted = NO;
-    viewChangeBtn.titleLabel.font = [UIFont systemFontOfSize:15.f];
-    [viewChangeBtn addTarget:self action:@selector(changeViewType:) forControlEvents:UIControlEventTouchUpInside];
+//    float offsetY = 0;
+//    
+//    UPRegisterCellItem *descItem = [[UPRegisterCellItem alloc] init];
+//    descItem.key = @"desc";
+//    descItem.cellStyle = UPRegisterCellStyleText;
+//    descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的公司邮箱，我们会向您提供的邮箱内发送一份验证邮件，点击邮件中的激活链接即可激活您的账号。";
+//    
+//    UPRegisterCellItem *emailItem = [[UPRegisterCellItem alloc] init];
+//    emailItem.key = @"email";
+//    emailItem.cellStyle = UPRegisterCellStyleEmail;
+//    emailItem.title = @"行业邮箱\nEmail";
+//    
+//    UPRegisterCellItem *comPhoneItem = [[UPRegisterCellItem alloc] init];
+//    comPhoneItem.key = @"comPhone";
+//    comPhoneItem.cellStyle = UPRegisterCellStyleNumField;
+//    comPhoneItem.title = @"单位电话\nCom Tele";
+//    
+//    UPRegisterCellItem *empIdItem = [[UPRegisterCellItem alloc] init];
+//    empIdItem.key = @"empID";
+//    empIdItem.cellStyle = UPRegisterCellStyleField;
+//    empIdItem.title = @"员工号\nEmp NO.";
+//
+//    UPRegisterCellItem *nameItem = [[UPRegisterCellItem alloc] init];
+//    nameItem.key = @"name";
+//    nameItem.cellStyle = UPRegisterCellStyleField;
+//    nameItem.title = @"姓名\nName";
+//    
+//    UPRegisterCellItem *telephoneItem = [[UPRegisterCellItem alloc] init];
+//    telephoneItem.key = @"telephone";
+//    telephoneItem.cellStyle = UPRegisterCellStyleTelephoneField;
+//    telephoneItem.title = @"手机号\nCellphone";
+//    
+//    __weak typeof(self) weakSelf = self;
+//    telephoneItem.actionBlock = ^{
+//        [weakSelf startSMSRequest];
+//    };
+//    
+//    UPRegisterCellItem *noEmailBtnItem = [[UPRegisterCellItem alloc] init];
+//    noEmailBtnItem.cellStyle = UPRegisterCellStyleButton;
+//    noEmailBtnItem.title = @"没有公司邮箱?";
+//    noEmailBtnItem.actionBlock = ^{
+//        [weakSelf resize];
+//    };
+//
+//    telenumStr = @"手机号\nCellphone";
+//    NSString *verifyCodeStr = @"验证码\nVerifyCode";
+//    NSString *emailStr = @"行业邮箱\nEmail";
+//    
+//    
+//    
+//    comPhone = @"单位电话\nCom Tele";
+//    empID = @"员工号\nEmp NO.";
+//    NSString *empName = @"姓名\nName";
+//    
+//    CGSize size1 = SizeWithFont(comPhone, [UIFont systemFontOfSize:12]);
+//    CGSize size2 = SizeWithFont(telenumStr, [UIFont systemFontOfSize:12]);
+//    CGSize size = (size1.width>size2.width)?size1:size2;
+//    
+//    comPhoneLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY, size.width, size.height)];
+//    comPhoneLabel.textAlignment = NSTextAlignmentRight;
+//    comPhoneLabel.numberOfLines = 0;
+//    comPhoneLabel.text = comPhone;
+//    comPhoneLabel.backgroundColor = [UIColor clearColor];
+//    comPhoneLabel.textColor = [UIColor whiteColor];
+//    comPhoneLabel.font = [UIFont systemFontOfSize:12];
+//    
+//    comPhoneField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, frame.size.width-2*LeftRightPadding-size.width, size.height)];
+//    [comPhoneField setFont:[UIFont systemFontOfSize:15.0]];
+//    comPhoneField.clearButtonMode = UITextFieldViewModeWhileEditing;
+//    comPhoneField.autocorrectionType = UITextAutocorrectionTypeNo;
+//    comPhoneField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+//    comPhoneField.delegate = self;
+//    
+//    _seperatorV3 = [[UIView alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY+size.height+1, frame.size.width-2*LeftRightPadding, 1)];
+//    _seperatorV3.backgroundColor = [UIColor grayColor];
+//    
+//    offsetY += size.height+25;
+//    
+//    empIDLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY, size.width, size.height)];
+//    empIDLabel.textAlignment = NSTextAlignmentRight;
+//    empIDLabel.numberOfLines = 0;
+//    empIDLabel.text = empID;
+//    empIDLabel.backgroundColor = [UIColor clearColor];
+//    empIDLabel.textColor = [UIColor whiteColor];
+//    empIDLabel.font = [UIFont systemFontOfSize:12];
+//    
+//    empIDField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, frame.size.width-2*LeftRightPadding-size.width, size.height)];
+//    [empIDField setFont:[UIFont systemFontOfSize:15.0]];
+//    empIDField.clearButtonMode = UITextFieldViewModeWhileEditing;
+//    empIDField.delegate = self;
+//    
+//    _seperatorV4 = [[UIView alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY+size.height+1, frame.size.width-2*LeftRightPadding, 1)];
+//    _seperatorV4.backgroundColor = [UIColor grayColor];
+//
+//    offsetY += size.height+25;
+//    
+//    nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY, size.width, size.height)];
+//    nameLabel.textAlignment = NSTextAlignmentRight;
+//    nameLabel.numberOfLines = 0;
+//    nameLabel.text = empName;
+//    nameLabel.backgroundColor = [UIColor clearColor];
+//    nameLabel.textColor = [UIColor whiteColor];
+//    nameLabel.font = [UIFont systemFontOfSize:12];
+//    
+//    nameField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, frame.size.width-2*LeftRightPadding-size.width, size.height)];
+//    [nameField setFont:[UIFont systemFontOfSize:15.0]];
+//    nameField.clearButtonMode = UITextFieldViewModeWhileEditing;
+//    nameField.delegate = self;
+//    
+//    _seperatorV5 = [[UIView alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY+size.height+1, frame.size.width-2*LeftRightPadding, 1)];
+//    _seperatorV5.backgroundColor = [UIColor grayColor];
+//    
+//    offsetY += size.height+25;
+//
+//    telLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY, size.width, size.height)];
+//    telLabel.textAlignment = NSTextAlignmentRight;
+//    telLabel.numberOfLines = 0;
+//    telLabel.text = telenumStr;
+//    telLabel.backgroundColor = [UIColor clearColor];
+//    telLabel.textColor = [UIColor whiteColor];
+//    telLabel.font = [UIFont systemFontOfSize:12];
+//    
+//    teleField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, frame.size.width-2*LeftRightPadding-size.width, size.height)];
+//    [teleField setFont:[UIFont systemFontOfSize:15.0]];
+//    teleField.clearButtonMode = UITextFieldViewModeWhileEditing;
+//    teleField.keyboardType = UIKeyboardTypeNumberPad;
+//    teleField.delegate = self;
+//    
+//    _seperatorV1 = [[UIView alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY+size.height+1, frame.size.width-2*LeftRightPadding, 1)];
+//    _seperatorV1.backgroundColor = [UIColor grayColor];
+//    
+//    offsetY += size.height+25;
+//    
+//    verifyLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY, size.width, size.height)];
+//    verifyLabel.textAlignment = NSTextAlignmentRight;
+//    verifyLabel.numberOfLines = 0;
+//    verifyLabel.text = verifyCodeStr;
+//    verifyLabel.backgroundColor = [UIColor clearColor];
+//    verifyLabel.textColor = [UIColor whiteColor];
+//    verifyLabel.font = [UIFont systemFontOfSize:12];
+//    
+//    verifyField = [[UITextField alloc]initWithFrame:CGRectMake(LeftRightPadding+size.width, offsetY, self.frame.size.width-2*LeftRightPadding-size.width, size.height)];
+//    [verifyField setFont:[UIFont systemFontOfSize:15.0]];
+//    verifyField.keyboardType = UIKeyboardTypeNumberPad;
+//    verifyField.clearButtonMode = UITextFieldViewModeWhileEditing;
+//    verifyField.delegate = self;
+//    
+//    verifyBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    verifyBtn.frame = CGRectMake(frame.size.width-LeftRightPadding-VerifyBtnWidth, offsetY, VerifyBtnWidth, size.height);
+//    verifyBtn.layer.cornerRadius = 5.0f;
+//    verifyBtn.layer.borderWidth = 1;
+//    [verifyBtn setTitle:@"发送验证码" forState:UIControlStateNormal];
+//    verifyBtn.titleLabel.font = [UIFont systemFontOfSize:15.0f];
+//    [verifyBtn setBackgroundColor:[UIColor lightGrayColor]];
+//    [verifyBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//    [verifyBtn addTarget:self action:@selector(sendSMS:) forControlEvents:UIControlEventTouchUpInside];
+//    verifyField.frame = CGRectMake(20+verifyLabel.size.width, offsetY, verifyBtn.origin.x-20-verifyLabel.size.width, size.height);
+//    _seperatorV2 = [[UIView alloc]initWithFrame:CGRectMake(LeftRightPadding, offsetY+size.height+1, frame.size.width-2*LeftRightPadding, 1)];
+//    _seperatorV2.backgroundColor = [UIColor grayColor];
+//    
+//    _tipLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, 0, size.width, size.height)];
+//    _tipLabel.textAlignment = NSTextAlignmentRight;
+//    _tipLabel.numberOfLines = 0;
+//    _tipLabel.text = emailStr;
+//    _tipLabel.backgroundColor = [UIColor clearColor];
+//    _tipLabel.textColor = [UIColor whiteColor];
+//    _tipLabel.font = [UIFont systemFontOfSize:12];
+//    
+//    _suffixLabel = [[UILabel alloc]init];
+//    _suffixLabel.backgroundColor = [UIColor clearColor];
+//    _suffixLabel.textColor = [UIColor whiteColor];
+//    
+//    _emailField = [[UITextField alloc]init];
+//    [_emailField setFont:[UIFont systemFontOfSize:15.0]];
+//    _emailField.clearButtonMode = UITextFieldViewModeWhileEditing;
+//    _emailField.keyboardType = UIKeyboardTypeEmailAddress;
+//    _emailField.autocorrectionType = UITextAutocorrectionTypeNo;
+//    _emailField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+//    _emailField.delegate = self;
+//        
+//    _seperatorV = [[UIImageView alloc]init];
+//    _seperatorV.backgroundColor = [UIColor grayColor];
+//    
+//    desLabel = [[UILabel alloc]initWithFrame:CGRectZero];
+//    desLabel.numberOfLines = 0;
+//    desLabel.text = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的公司邮箱，我们会向您提供的邮箱内发送一份验证邮件，点击邮件中的激活链接即可激活您的账号。";
+//    desLabel.textAlignment = NSTextAlignmentLeft;
+//    desLabel.backgroundColor = [UIColor clearColor];
+//    desLabel.textColor = [UIColor whiteColor];
+//    desLabel.font = [UIFont systemFontOfSize:12];
+//    [desLabel sizeToFit];
+//    
+//    viewChangeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    viewChangeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+//    [viewChangeBtn setTitle:@"没有公司邮箱?" forState:UIControlStateNormal];
+//    [viewChangeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    viewChangeBtn.highlighted = NO;
+//    viewChangeBtn.titleLabel.font = [UIFont systemFontOfSize:15.f];
+//    [viewChangeBtn addTarget:self action:@selector(changeViewType:) forControlEvents:UIControlEventTouchUpInside];
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
     singleTap.numberOfTapsRequired = 1;
@@ -428,7 +561,7 @@
 
 - (void)reloadItems
 {
-    [self.tableView reloadData];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationTop];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -450,7 +583,8 @@
     if (!_noEmail) {
         return [NSString stringWithFormat:@"%@%@", self.emailPrefix, _emailSuffix];
     } else {
-        if ([_industryID isEqualToString:@"1"]) {
+        if ([_industryID isEqualToString:@"1"]||
+            [_industryID isEqualToString:@"6"]) {
             return [NSString stringWithFormat:@"%@", self.empID];
         } else {
             return [NSString stringWithFormat:@"%@|%@", self.comPhone, self.empID];
@@ -558,17 +692,25 @@
             descItem.key = @"desc";
             descItem.cellStyle = UPRegisterCellStyleText;
             descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的单位电话、员工号和姓名，我们会进行后续核实验证。";
+            [self.itemList addObject:descItem];
             
             __weak typeof(self) weakSelf = self;
-            if([self.industryID isEqualToString:@"1"]) {//航空) {
+            if([self.industryID isEqualToString:@"6"]) {//航空) {
                 UPRegisterCellItem *noEmailBtnItem = [[UPRegisterCellItem alloc] init];
                 noEmailBtnItem.cellStyle = UPRegisterCellStyleButton;
-                noEmailBtnItem.title = @"没有公司邮箱?";
+                noEmailBtnItem.title = @"有公司邮箱?";
                 noEmailBtnItem.actionBlock = ^{
+                    weakSelf.noEmail = NO;
                     [weakSelf resize];
                     [weakSelf reloadItems];
                 };
                 [self.itemList addObject:noEmailBtnItem];
+            }else {
+                UPRegisterCellItem *comphoneItem = [[UPRegisterCellItem alloc] init];
+                comphoneItem.key = @"comphone";
+                comphoneItem.cellStyle = UPRegisterCellStyleTelephoneField;
+                comphoneItem.title = @"单位电话\nCompany phone";
+                [self.itemList addObject:comphoneItem];
             }
             
             UPRegisterCellItem *empIdItem = [[UPRegisterCellItem alloc] init];
@@ -594,7 +736,6 @@
             verifyItem.cellStyle = UPRegisterCellStyleVerifyCode;
             verifyItem.title = @"验证码\nVerifyCode";
             
-            [self.itemList addObject:descItem];
             [self.itemList addObject:empIdItem];
             [self.itemList addObject:nameItem];
             [self.itemList addObject:telephoneItem];
@@ -611,36 +752,82 @@
         emailItem.key = @"email";
         emailItem.cellStyle = UPRegisterCellStyleEmail;
         emailItem.title = @"行业邮箱\nEmail";
+        emailItem.email = self.emailSuffix;
         
         [self.itemList addObject:descItem];
         [self.itemList addObject:emailItem];
         
         __weak typeof(self) weakSelf = self;
-        if([self.industryID isEqualToString:@"1"]) {//航空) {
+        if([self.industryID isEqualToString:@"6"]) {//航空) {
             UPRegisterCellItem *noEmailBtnItem = [[UPRegisterCellItem alloc] init];
             noEmailBtnItem.cellStyle = UPRegisterCellStyleButton;
             noEmailBtnItem.title = @"没有公司邮箱?";
             noEmailBtnItem.actionBlock = ^{
+                weakSelf.noEmail = YES;
                 [weakSelf resize];
                 [weakSelf reloadItems];
             };
             [self.itemList addObject:noEmailBtnItem];
         }
     }
-    
+
+    __weak typeof(self) weakSelf = self;
+    CGSize size = SizeWithFont(@"单位电话\nCom Tele", [UIFont systemFontOfSize:12]);
     [self.itemList enumerateObjectsUsingBlock:^(UPRegisterCellItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        obj.cellWidth = viewframe.size.width;
+        obj.titleWidth = ceil(size.width)+10;
+        obj.titleHeight = ceil(size.height)+4;
         
-        if ([obj.key isEqualToString:@"desc"]) {
+        obj.cellWidth = viewframe.size.width;
+        if (obj.cellStyle==UPRegisterCellStyleText) {
             NSString *titleStr = obj.title;
-            CGRect rect = [titleStr boundingRectWithSize:CGSizeMake(obj.cellWidth, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.f]} context:nil];
+            CGRect rect = [titleStr boundingRectWithSize:CGSizeMake(obj.cellWidth-2*LeftRightPadding, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.f]} context:nil];
             obj.cellHeight = rect.size.height;
         } else {
             obj.cellHeight = 44;
         }
+        
+        if (obj.cellStyle==UPRegisterCellStyleField||
+            obj.cellStyle==UPRegisterCellStyleNumField||
+            obj.cellStyle==UPRegisterCellStyleTelephoneField||
+            obj.cellStyle==UPRegisterCellStyleVerifyCode) {
+            obj.fieldActionBlock = ^(UPRegisterCellItem *cellItem) {
+                weakSelf.currentIndexPath = cellItem.indexPath;
+                [weakSelf performSelector:@selector(scrollToCell:) withObject:cellItem.indexPath afterDelay:0.5f];
+            };
+        }
+        
     }];
+    [self reloadItems];
 }
 
+- (void)scrollToCell:(NSIndexPath *)indexPath
+{
+    UPRegisterCell *cell = [self.tableView cellForRowAtIndexPath:self.currentIndexPath];
+    [self.tableView scrollRectToVisible:cell.frame animated:YES];
+//    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
+}
+
+-(void) keyboardShown:(NSNotification*) notification {
+    CGRect initialFrame = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect convertedFrame = [self convertRect:initialFrame fromView:nil];
+
+    UPRegisterCell *cell = [self.tableView cellForRowAtIndexPath:self.currentIndexPath];
+    CGRect cellFrame = [self convertRect:cell.frame fromView:self.tableView];
+    if (CGRectGetMaxY(cellFrame)>convertedFrame.origin.y) {
+        CGRect newFrame = CGRectOffset(self.bounds, 0, convertedFrame.origin.y-CGRectGetMaxY(cellFrame));
+        [UIView beginAnimations:@"TableViewUP" context:NULL];
+        [UIView setAnimationDuration:0.3f];
+        self.tableView.frame = newFrame;
+        [UIView commitAnimations];
+    }
+}
+
+-(void) keyboardHidden:(NSNotification*) notification {
+    [UIView beginAnimations:@"TableViewDown" context:NULL];
+    [UIView setAnimationDuration:0.3f];
+    self.tableView.frame = self.bounds;
+    [UIView commitAnimations];
+}
 
 -(void)clearValue
 {
@@ -706,7 +893,6 @@
         return;
     }
     [verifyBtn setTitle:[NSString stringWithFormat:@"%d秒再次发送", interval] forState:UIControlStateNormal];
-    
 }
 
 -(void)startTimer
@@ -768,20 +954,20 @@
     }];
 }
 
-#pragma mark - UITextFieldDelegate
-- (BOOL) textFieldShouldReturn:(UITextField *)textField
-{
-    [textField resignFirstResponder];
-    return YES;
-}
+//#pragma mark - UITextFieldDelegate
+//- (BOOL) textFieldShouldReturn:(UITextField *)textField
+//{
+//    [textField resignFirstResponder];
+//    return YES;
+//}
 
 - (void)singleTap:(UIGestureRecognizer *)gesture
 {
-    for (UIView *subView in self.subviews) {
-        if ([subView isKindOfClass:[UITextField class]]) {
-            [subView resignFirstResponder];
-        }
-    }
+    [self.tableView endEditing:YES];
+//    UPRegisterCell *cell = [self.tableView cellForRowAtIndexPath:self.currentIndexPath];
+//    if (cell) {
+//        [cell.field resignFirstResponder];
+//    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -803,8 +989,8 @@
         cell = [[UPRegisterCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    
     UPRegisterCellItem *cellItem = self.itemList[indexPath.row];
+    cellItem.indexPath = indexPath;
     cell.cellItem = cellItem;
     
     return cell;
