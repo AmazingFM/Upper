@@ -54,11 +54,11 @@ typedef void (^CellFieldActionBlock) (UPRegisterCellItem *cellItem);
 
 @interface UpRegister5 : UPRegisterView <UITextFieldDelegate>
 
-@property (nonatomic, retain) UITextField *emailField;
+//@property (nonatomic, retain) UITextField *emailField;
 @property (nonatomic, copy) NSString *emailPrefix;
 @property (nonatomic, copy) NSString *emailSuffix;
 
-@property (nonatomic, retain) UILabel *suffixLabel;
+//@property (nonatomic, retain) UILabel *suffixLabel;
 @property (nonatomic) BOOL noEmail;
 @property (nonatomic) NSString *industryID;
 
@@ -72,6 +72,5 @@ typedef void (^CellFieldActionBlock) (UPRegisterCellItem *cellItem);
 - (NSString *)identifyType;
 - (void)resize;
 - (void)reloadItems;
--(void)stopTimer;
 - (void)startSMSRequest;
 @end

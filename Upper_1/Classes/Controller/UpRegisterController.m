@@ -430,7 +430,6 @@ typedef enum register_enum
 
 - (void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
-    [self.registerV5 stopTimer];
 }
 
 - (void)didReceiveMemoryWarning {
