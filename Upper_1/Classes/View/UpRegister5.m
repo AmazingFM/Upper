@@ -363,10 +363,10 @@
     if (!_noEmail) {
         return [NSString stringWithFormat:@"%@%@", self.emailPrefix, _emailSuffix];
     } else {
-        if ([_industryID isEqualToString:@"1"]||
-            [_industryID isEqualToString:@"6"]) {
+        if ([_industryID isEqualToString:@"1"]) {
             return [NSString stringWithFormat:@"%@", self.empID];
         } else {
+//          [_industryID isEqualToString:@"6"]，航空业属于特殊情况，没有单位电话
             if (self.comPhone.length==0) {
                 return [NSString stringWithFormat:@"%@|%@", self.comPhone, self.empID];
             } else {
@@ -492,11 +492,12 @@
             UPRegisterCellItem *descItem = [[UPRegisterCellItem alloc] init];
             descItem.key = @"desc";
             descItem.cellStyle = UPRegisterCellStyleText;
-            descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的单位电话、员工号和姓名，我们会进行后续核实验证。";
+            
             [self.itemList addObject:descItem];
             
             __weak typeof(self) weakSelf = self;
-            if([self.industryID isEqualToString:@"6"]) {//航空) {
+            if([self.industryID isEqualToString:@"6"]) {//航空
+                descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的员工号和姓名，我们会进行后续核实验证。";
                 UPRegisterCellItem *noEmailBtnItem = [[UPRegisterCellItem alloc] init];
                 noEmailBtnItem.cellStyle = UPRegisterCellStyleButton;
                 noEmailBtnItem.title = @"有公司邮箱?";
@@ -507,6 +508,7 @@
                 };
                 [self.itemList addObject:noEmailBtnItem];
             }else {
+                descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的单位电话、员工号和姓名，我们会进行后续核实验证。";
                 UPRegisterCellItem *comphoneItem = [[UPRegisterCellItem alloc] init];
                 comphoneItem.key = @"comphone";
                 comphoneItem.cellStyle = UPRegisterCellStyleTelephoneField;
@@ -637,7 +639,7 @@
         NSMutableString *str = [[NSMutableString alloc] init];
         
         if ([self.industryID isEqualToString:@"1"]) {
-            NSDictionary *alertMsgDict = @{@"doctorID":@"医生ID不能为空\n", @"name":@"姓名不能为空\n", @"telephone":@"手机号不正确\n"};
+            NSDictionary *alertMsgDict = @{@"empID":@"医生ID不能为空\n", @"name":@"姓名不能为空\n", @"telephone":@"手机号不正确\n"};
             for (NSString *key in alertMsgDict.allKeys) {
                 for (UPRegisterCellItem *cellItem in self.itemList) {
                     if ([cellItem.key isEqualToString:key]) {
@@ -649,7 +651,7 @@
             }
         } else {
             if ([self.industryID isEqualToString:@"6"]) {
-                NSDictionary *alertMsgDict = @{@"name":@"姓名不能为空\n", @"telephone":@"手机号不正确\n"};
+                NSDictionary *alertMsgDict = @{@"empID":@"员工号不能为空\n", @"name":@"姓名不能为空\n", @"telephone":@"手机号不正确\n"};
                 
                 for (NSString *key in alertMsgDict.allKeys) {
                     for (UPRegisterCellItem *cellItem in self.itemList) {
