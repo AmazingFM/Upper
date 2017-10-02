@@ -85,6 +85,18 @@
     }
 
     self.navigationItem.rightBarButtonItem = nil;
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(showAwardGuide)];
+}
+
+- (void)showAwardGuide
+{
+    
+}
+
+- (void)goToLogin
+{
+    [[UPDataManager shared] cleanUserDafult];
+    [g_appDelegate setRootViewController];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -150,7 +162,10 @@
         [[WXApiManager sharedManager] sendLinkURL:kShareURL TagName:@"UPPER上行" Title:_title Description:@"一款专注高端人群的社交活动平台，仅面向选定的高技能行业开放。在这里，用户通过发起活动和参加活动的方式来拓展社交空间。" ThumbImageName:@"Icon-57" InScene:WXSceneTimeline];
     } else {
         //取消
+        [self showAwardGuide];
+        return;
     }
+    [self goToLogin];
 }
 
 @end
