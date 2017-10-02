@@ -366,11 +366,11 @@
         if ([_industryID isEqualToString:@"1"]) {
             return [NSString stringWithFormat:@"%@", self.empID];
         } else {
-//          [_industryID isEqualToString:@"6"]，航空业属于特殊情况，没有单位电话
-            if (self.comPhone.length==0) {
-                return [NSString stringWithFormat:@"%@|%@", self.comPhone, self.empID];
+
+            if ([_industryID intValue]==6) {//[_industryID isEqualToString:@"6"]，航空业属于特殊情况，没有单位电话，使用公司id加工号
+                return [NSString stringWithFormat:@"%@|%@", self.companyID, self.empID];
             } else {
-                return [NSString stringWithFormat:@"%@|%@", self.telenum, self.empID];
+                return [NSString stringWithFormat:@"%@|%@", self.comPhone, self.empID];
             }
         }
     }

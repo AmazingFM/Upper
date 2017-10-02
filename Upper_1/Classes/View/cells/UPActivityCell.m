@@ -515,7 +515,8 @@
             _sponserLab.text = sponser;
             size = SizeWithFont(sponser, kUPThemeMinFont);
             CGFloat imgWidth = size.height+4;
-            _userImgView.frame = CGRectMake(offsetx, offsety+(30-imgWidth)/2, imgWidth, imgWidth);
+            _userImgView.
+            frame = CGRectMake(offsetx, offsety+(30-imgWidth)/2, imgWidth, imgWidth);
             _userImgView.layer.cornerRadius = imgWidth/2;
             [_userImgView sd_setImageWithURL:[NSURL URLWithString:itemData.user_icon] placeholderImage:[UIImage imageNamed:@"activity_user_icon"] options:SDWebImageRefreshCached];
             
@@ -590,7 +591,7 @@
                         break;
                     case 7:
                         _reviewActBtn.frame =   CGRectMake(width-btnWidth,5,btnWidth,perHeight-10);
-                        _reviewActBtn.hidden = YES;
+                        _reviewActBtn.hidden = NO;
                         break;
                     case 5:
                     case 8:

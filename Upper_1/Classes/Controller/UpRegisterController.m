@@ -270,6 +270,7 @@ typedef enum register_enum
         }
         
         self.registerV5.industryID = _industryId;
+        self.registerV5.companyID = _companyId;
         
         [self.registerV5 resize];
         [self.nextBtn setTitle:@"提交" forState:UIControlStateNormal];

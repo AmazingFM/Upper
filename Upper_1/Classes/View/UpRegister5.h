@@ -61,6 +61,7 @@ typedef void (^CellFieldActionBlock) (UPRegisterCellItem *cellItem);
 //@property (nonatomic, retain) UILabel *suffixLabel;
 @property (nonatomic) BOOL noEmail;
 @property (nonatomic) NSString *industryID;
+@property (nonatomic) NSString *companyID;//公司id
 
 @property (nonatomic, copy) NSString *comPhone;
 @property (nonatomic, copy) NSString *empName;
