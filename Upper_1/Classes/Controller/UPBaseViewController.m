@@ -60,3 +60,34 @@
 - (void)checkNetStatus{
 }
 @end
+
+@interface UPBaseWebViewController()
+{
+    UIWebView *webView;
+}
+
+@end
+
+@implementation UPBaseWebViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
+    webView.scalesPageToFit = YES;
+    [self.view addSubview:webView];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self loadWithURLString:self.urlString];
+}
+
+- (void)loadWithURLString:(NSString *)urlString
+{
+    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlString]]];
+}
+
+@end

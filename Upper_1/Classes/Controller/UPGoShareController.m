@@ -12,6 +12,7 @@
 #import "UPGlobals.h"
 #import "CRNavigationBar.h"
 
+#import "UPAwardGuideController.h"
 @interface UPGoShareController () <UIActionSheetDelegate>
 {
     NSString *_title;
@@ -25,11 +26,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.navigationItem.title = @"注册成功";
-//    UIImageView *backImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_cover_gaussian"]];
-//    backImg.userInteractionEnabled = NO;
-//    backImg.frame = self.view.bounds;
-//    [self.view addSubview:backImg];
-//
     
     _btnArr = [NSMutableArray new];
     self.view.backgroundColor = [UIColor whiteColor];
@@ -90,7 +86,8 @@
 
 - (void)showAwardGuide
 {
-    
+    UPAwardGuideController *awardGuideController = [[UPAwardGuideController alloc] init];
+    [self.navigationController pushViewController:awardGuideController animated:YES];
 }
 
 - (void)goToLogin
@@ -140,15 +137,6 @@
 
 - (void)share:(UIButton *)sender
 {
-//    BOOL status = sender.selected;
-//    for (UIButton *btn in _btnArr) {
-//        if (btn.tag==sender.tag) {
-//            btn.selected = !status;
-//        } else {
-//            btn.selected = status;
-//        }
-//    }
-    
     _title = sender.titleLabel.text;
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"分享给朋友", @"分享到朋友圈", nil];
     [actionSheet showInView:self.view];

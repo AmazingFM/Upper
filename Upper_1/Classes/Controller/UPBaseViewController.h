@@ -20,3 +20,12 @@
 - (void)refresh;
 - (void)willShowSlideView;
 @end
+
+
+@interface UPBaseWebViewController : UPBaseViewController
+
+@property (nonatomic, copy) NSString *urlString;
+
+- (void)loadWithURLString:(NSString *)urlString;
+
+@end

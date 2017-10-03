@@ -38,8 +38,6 @@
     UITextField *_userNameT;
     UITextField *_passwordT;
     UIButton *_loginB;
-
-
 }
 
 

@@ -8,6 +8,7 @@
 
 #import "WXApiManager.h"
 #import "UPGlobals.h"
+#import "Info.h"
 #import "MBProgressHUD+MJ.h"
 
 @implementation WXApiManager
@@ -61,7 +62,13 @@
 
 - (void)onResp:(BaseResp *)resp
 {
-    
+    if ([resp isKindOfClass:[SendMessageToWXResp class]]) {
+        if (_delegate
+            && [_delegate respondsToSelector:@selector(managerDidRecvMessageResponse:)]) {
+            SendMessageToWXResp *messageResp = (SendMessageToWXResp *)resp;
+            [_delegate managerDidRecvMessageResponse:messageResp];
+        }
+    }
 }
 
 @end

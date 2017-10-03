@@ -17,7 +17,10 @@
 #import "MessageManager.h"
 #import "WXApiManager.h"
 
-#pragma mark
+
+
+#pragma mark ForTest
+#import "UPAwardGuideController.h"
 #import "GetPasswordController.h"
 
 @interface AppDelegate ()
@@ -59,9 +62,9 @@
 
 - (void)setRootViewController
 {
-//    [self testViewController];
-//    return;
-//    
+    [self testViewController];
+    return;
+    
     //判断是不是第一次启动应用
     if(![[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"])
     {
@@ -105,9 +108,15 @@
     return [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
 }
 
+- (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url options:(nonnull NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+    return [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
+}
+
 - (void)testViewController
 {
-    GetPasswordController *testVC = [[GetPasswordController alloc] init];
-    self.window.rootViewController = testVC;
+    UPAwardGuideController *testVC = [[UPAwardGuideController alloc] init];
+    CRNavigationController *nav1 = [[CRNavigationController alloc] initWithRootViewController:testVC];
+    self.window.rootViewController = nav1;
 }
 @end
