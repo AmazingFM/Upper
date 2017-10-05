@@ -62,8 +62,8 @@
 
 - (void)setRootViewController
 {
-    [self testViewController];
-    return;
+//    [self testViewController];
+//    return;
     
     //判断是不是第一次启动应用
     if(![[NSUserDefaults standardUserDefaults] boolForKey:@"firstLaunch"])
