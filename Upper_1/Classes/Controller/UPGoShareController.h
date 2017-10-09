@@ -9,4 +9,5 @@
 #import "UPBaseViewController.h"
 
 @interface UPGoShareController : UPBaseViewController
+@property (nonatomic, copy) NSString *registName;
 @end

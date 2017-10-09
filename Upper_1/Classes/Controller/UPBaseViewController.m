@@ -9,6 +9,7 @@
 #import "UPBaseViewController.h"
 #import "MainController.h"
 #import "MessageCenterController.h"
+#import "UINavigationController+FDFullscreenPopGesture.h"
 
 @interface UPBaseViewController ()
 {
@@ -41,7 +42,6 @@
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
 }
 
 - (void)keyboardWillShow:(NSNotification *)note
@@ -73,10 +73,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
+    [self setFd_interactivePopDisabled:YES];
+    webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, ScreenHeight-FirstLabelHeight)];
     webView.scalesPageToFit = YES;
     [self.view addSubview:webView];
+    self.navigationItem.hidesBackButton=YES;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"去登陆" style:UIBarButtonItemStylePlain target:self action:@selector(goToLogin)];
+}
+
+- (void)goToLogin
+{
+    [[UPDataManager shared] cleanUserDafult];
+    [g_appDelegate setRootViewController];
 }
 
 - (void)viewWillAppear:(BOOL)animated

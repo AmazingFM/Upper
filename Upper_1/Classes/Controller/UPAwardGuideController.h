@@ -9,5 +9,5 @@
 #import "UPBaseViewController.h"
 
 @interface UPAwardGuideController : UPBaseViewController
-
+@property (nonatomic, copy) NSString *registName;
 @end

@@ -8,6 +8,7 @@
 
 #import "UpRegisterController.h"
 #import "UPGoShareController.h"
+#import "UINavigationController+FDFullscreenPopGesture.h"
 #import "MainController.h"
 #import "AppDelegate.h"
 #import "UPRegisterView.h"
@@ -159,6 +160,7 @@ typedef enum register_enum
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self setFd_interactivePopDisabled:YES];
     [self showRegisterView:whichStep];
     [self.registerV1 loadAlphabetCitInfo];
 }
@@ -391,13 +393,9 @@ typedef enum register_enum
                 }
                 case REGISTER_REQ:
                 {
-//                    NSString *resp_desc = dict[@"resp_desc"];
-//                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"注册成功" message:resp_desc delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-//                    [alertView show];
-                    
                     UPGoShareController *shareVC = [[UPGoShareController alloc] init];
+                    shareVC.registName = self.name;
                     [self.navigationController pushViewController:shareVC animated:YES];
-                    
                     [self clearRegisterInfo];
                     
                     break;

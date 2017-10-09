@@ -11,7 +11,7 @@
 #import "WXApiManager.h"
 #import "UPGlobals.h"
 #import "CRNavigationBar.h"
-
+#import "UINavigationController+FDFullscreenPopGesture.h"
 #import "UPAwardGuideController.h"
 @interface UPGoShareController () <UIActionSheetDelegate>
 {
@@ -87,6 +87,7 @@
 - (void)showAwardGuide
 {
     UPAwardGuideController *awardGuideController = [[UPAwardGuideController alloc] init];
+    awardGuideController.registName = self.registName;
     [self.navigationController pushViewController:awardGuideController animated:YES];
 }
 
@@ -99,6 +100,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self setFd_interactivePopDisabled:YES];
     
     CRNavigationBar *navigationBar = (CRNavigationBar *)self.navigationController.navigationBar;
     navigationBar.barTintColor = kUPThemeMainColor;
@@ -106,17 +108,6 @@
     self.automaticallyAdjustsScrollViewInsets = YES;
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setShadowImage:nil];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    CRNavigationBar *navigationBar = (CRNavigationBar *)self.navigationController.navigationBar;
-    navigationBar.barTintColor = [UIColor clearColor];
-    
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
 }
 
 - (UIButton *)createButton:(CGRect)frame imageName:(NSString *)imageName title:(NSString *)title
@@ -149,8 +140,6 @@
     } else if (buttonIndex==1) {
         [[WXApiManager sharedManager] sendLinkURL:kShareURL TagName:@"UPPER上行" Title:_title Description:@"一款专注高端人群的社交活动平台，仅面向选定的高技能行业开放。在这里，用户通过发起活动和参加活动的方式来拓展社交空间。" ThumbImageName:@"Icon-57" InScene:WXSceneTimeline];
     } else {
-        //取消
-        [self showAwardGuide];
         return;
     }
     [self goToLogin];

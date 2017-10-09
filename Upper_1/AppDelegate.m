@@ -112,11 +112,15 @@
 {
     return [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
 }
-
+#define ChouJiangURL(u,t) [NSString stringWithFormat:@"http://121.40.167.50:8099/?u=%@&t=%@", u, t]
 - (void)testViewController
 {
-    UPAwardGuideController *testVC = [[UPAwardGuideController alloc] init];
-    CRNavigationController *nav1 = [[CRNavigationController alloc] initWithRootViewController:testVC];
+    NSString *name = @"amazing";
+    UPBaseWebViewController *webController = [[UPBaseWebViewController alloc] init];
+    webController.title = @"抽奖";
+    NSString *md5Key = [UPTools md5HexDigest:[NSString stringWithFormat:@"%@_0",name]];
+    webController.urlString = ChouJiangURL(name, md5Key);
+    CRNavigationController *nav1 = [[CRNavigationController alloc] initWithRootViewController:webController];
     self.window.rootViewController = nav1;
 }
 @end

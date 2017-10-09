@@ -7,9 +7,11 @@
 //
 
 #import "UPAwardGuideController.h"
+#import "UINavigationController+FDFullscreenPopGesture.h"
 #import "WXApiManager.h"
 
 #define kBoarderMargin 15
+#define ChouJiangURL(u,t) [NSString stringWithFormat:@"http://121.40.167.50:8099/?u=%@&t=%@", u, t]
 
 @interface UPAwardGuideController () <WXApiManagerDelegate>
 
@@ -20,20 +22,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self setFd_interactivePopDisabled:YES];
     self.navigationItem.title = @"分享赢取精美礼品";
     
     self.view.backgroundColor = [UIColor whiteColor];
     
     UILabel *descLabel = [[UILabel alloc] initWithFrame:CGRectMake(kBoarderMargin, FirstLabelHeight+20, ScreenWidth-2*kBoarderMargin, 30)];
     descLabel.backgroundColor = [UIColor clearColor];
-    descLabel.font = [UIFont boldSystemFontOfSize:24];
+    descLabel.font = [UIFont boldSystemFontOfSize:22];
     descLabel.textColor = [UIColor blackColor];
     descLabel.textAlignment = NSTextAlignmentCenter;
     descLabel.adjustsFontSizeToFitWidth = YES;
     descLabel.text = @"不想炫耀，那也帮我们宣传一下";
     [self.view addSubview:descLabel];
 
-    UILabel *descLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(0,  CGRectGetMaxY(descLabel.frame)+15, ScreenWidth, 30)];
+    UILabel *descLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(5,  CGRectGetMaxY(descLabel.frame)+15, ScreenWidth-2*5, 30)];
     descLabel1.backgroundColor = [UIColor clearColor];
     descLabel1.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:18];
     descLabel1.textColor = [UIColor blackColor];
@@ -53,6 +56,17 @@
     
     UIButton *shareBtn = [self createButton:CGRectMake(kBoarderMargin, CGRectGetMaxY(awardImageView.frame)+25, ScreenWidth-2*kBoarderMargin, 30) imageName:@"" title:@"分享到朋友圈"];
     [self.view addSubview:shareBtn];
+    
+    CGFloat originY = CGRectGetMaxY(shareBtn.frame)+5;
+    UILabel *tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(kBoarderMargin, originY, ScreenWidth-2*kBoarderMargin, 30)];
+    tipsLabel.backgroundColor = [UIColor clearColor];
+    tipsLabel.font = [UIFont fontWithName:@"MarkerFelt-Thin" size:13.f];
+    tipsLabel.textColor = [UIColor blackColor];
+    tipsLabel.textAlignment = NSTextAlignmentLeft;
+    tipsLabel.text = @"分享标题：UPPER，高技能行业活动社交";
+    tipsLabel.adjustsFontSizeToFitWidth = YES;
+    tipsLabel.numberOfLines = 0;
+    [self.view addSubview:tipsLabel];
     
     self.navigationItem.rightBarButtonItem = nil;
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(goToLogin)];
@@ -86,20 +100,12 @@
 
 
 - (void)managerDidRecvMessageResponse:(SendMessageToWXResp *)response {
-//    NSString *strTitle = [NSString stringWithFormat:@"发送媒体消息结果"];
-//    NSString *strMsg = [NSString stringWithFormat:@"errcode:%d", response.errCode];
-//    UIAlertView *view = [[UIAlertView alloc] initWithTitle:strTitle
-//                                                   message:strMsg
-//                                                  delegate:nil
-//                                         cancelButtonTitle:@"取消"
-//                                         otherButtonTitles:@"确认", nil];
-//    [view show];
     if (response.errCode==0) {
         //打开跳转页面
         UPBaseWebViewController *webController = [[UPBaseWebViewController alloc] init];
         webController.title = @"抽奖";
-        webController.urlString = @"http://www.uppercn.com";
-//        [webController loadWithURLString:@"https://www.baidu.com"];
+        NSString *md5Key = [UPTools md5HexDigest:[NSString stringWithFormat:@"%@_0",self.registName]];
+        webController.urlString = ChouJiangURL(self.registName, md5Key);
         [self.navigationController pushViewController:webController animated:YES];
     }
 }
