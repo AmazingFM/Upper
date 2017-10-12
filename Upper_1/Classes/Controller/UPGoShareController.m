@@ -81,7 +81,7 @@
     }
 
     self.navigationItem.rightBarButtonItem = nil;
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(showAwardGuide)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(showAwardGuide)];
 }
 
 - (void)showAwardGuide

@@ -173,6 +173,8 @@ typedef enum register_enum
         if (whichStep==2) {
             self.registerV3.searchBar.showsCancelButton = NO;
             [self.registerV3.searchBar resignFirstResponder];
+        } else {
+            [self.view endEditing:YES];
         }
         
         int toStep = whichStep-1;

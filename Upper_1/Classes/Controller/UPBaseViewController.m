@@ -79,6 +79,33 @@
     [self.view addSubview:webView];
     self.navigationItem.hidesBackButton=YES;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"去登陆" style:UIBarButtonItemStylePlain target:self action:@selector(goToLogin)];
+    
+    UIButton *refreshBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    [refreshBtn setBackgroundImage:[UIImage imageNamed:@"icon_refresh"] forState:UIControlStateNormal];
+    refreshBtn.frame=CGRectMake(0, 0, 35, 35);
+    [refreshBtn addTarget:self action:@selector(refreshAction) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:refreshBtn];
+}
+
+- (void)refreshAction
+{
+    UIBarButtonItem *refreshItem=self.navigationItem.leftBarButtonItem;
+    UIButton *refreshBtn=(UIButton *)[refreshItem customView];
+    
+    if(refreshBtn!=nil){
+        CABasicAnimation* rotationAnimation;
+        rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+        rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0 ];
+        [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+        rotationAnimation.duration = 0.5;
+        rotationAnimation.repeatCount = 1;
+        rotationAnimation.cumulative = NO;
+        rotationAnimation.removedOnCompletion = NO;
+        rotationAnimation.fillMode = kCAFillModeForwards;
+        [refreshBtn.layer addAnimation:rotationAnimation forKey:@"Rotation"];
+    }
+    
+    [webView reload];
 }
 
 - (void)goToLogin

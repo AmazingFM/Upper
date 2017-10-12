@@ -118,6 +118,7 @@
             
             CGFloat leftX = LeftRightPadding+cellItem.titleWidth+5;
             self.field.frame = CGRectMake(leftX, originy, cellItem.cellWidth-leftX-emailWidth-LeftRightPadding, cellItem.titleHeight);
+            self.field.keyboardType = UIKeyboardTypeDefault;
         }
             break;
         case UPRegisterCellStyleButton:
@@ -157,6 +158,8 @@
             if (cellItem.cellStyle==UPRegisterCellStyleTelephoneField ||
                 cellItem.cellStyle==UPRegisterCellStyleNumField) {
                 self.field.keyboardType = UIKeyboardTypeNumberPad;
+            } else {
+                self.field.keyboardType = UIKeyboardTypeDefault;
             }
         }
             break;
@@ -184,6 +187,7 @@
             
             CGFloat leftX = LeftRightPadding+cellItem.titleWidth+5;
             self.field.frame = CGRectMake(leftX, originy, cellItem.cellWidth-leftX-btnWidth-LeftRightPadding, cellItem.titleHeight);
+            self.field.keyboardType = UIKeyboardTypeDefault;
         }
             break;
         default:
