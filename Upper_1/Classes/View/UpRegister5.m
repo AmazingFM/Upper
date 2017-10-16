@@ -459,12 +459,12 @@
             UPRegisterCellItem *descItem = [[UPRegisterCellItem alloc] init];
             descItem.key = @"desc";
             descItem.cellStyle = UPRegisterCellStyleText;
-            descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的姓名、好医生ID和手机号，我们会进行后续核实验证。";
+            descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的姓名、好医生IC卡号和手机号，我们会进行后续核实验证。";
             
             UPRegisterCellItem *empIdItem = [[UPRegisterCellItem alloc] init];
             empIdItem.key = @"empID";
             empIdItem.cellStyle = UPRegisterCellStyleField;
-            empIdItem.title = @"好医生ID\nDoctor ID";
+            empIdItem.title = @"好医生IC卡号\nDoctor ID";
             
             UPRegisterCellItem *nameItem = [[UPRegisterCellItem alloc] init];
             nameItem.key = @"name";
@@ -643,7 +643,7 @@
         NSMutableString *str = [[NSMutableString alloc] init];
         
         if ([self.industryID isEqualToString:@"1"]) {
-            NSDictionary *alertMsgDict = @{@"empID":@"医生ID不能为空\n", @"name":@"姓名不能为空\n", @"telephone":@"手机号不正确\n"};
+            NSDictionary *alertMsgDict = @{@"empID":@"医生IC卡号不能为空\n", @"name":@"姓名不能为空\n", @"telephone":@"手机号不正确\n"};
             for (NSString *key in alertMsgDict.allKeys) {
                 for (UPRegisterCellItem *cellItem in self.itemList) {
                     if ([cellItem.key isEqualToString:key]) {

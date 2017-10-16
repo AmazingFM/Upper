@@ -382,6 +382,9 @@ extern NSString * const g_loginFileName;
         //设置拍照后的图片可被编辑
         picker.allowsEditing = YES;
         picker.sourceType = sourceType;
+        picker.navigationBar.barTintColor = kUPThemeMainColor;
+        picker.navigationBar.tintColor = [UIColor whiteColor];
+
         [self presentViewController:picker animated:YES completion:nil];
     } else
     {
@@ -396,6 +399,9 @@ extern NSString * const g_loginFileName;
     picker.delegate = self;
     //设置选择后的图片可被编辑
     picker.allowsEditing = YES;
+    picker.navigationBar.barTintColor = kUPThemeMainColor;
+    picker.navigationBar.tintColor = [UIColor whiteColor];
+
     [self presentViewController:picker animated:YES completion:nil];
 }
 

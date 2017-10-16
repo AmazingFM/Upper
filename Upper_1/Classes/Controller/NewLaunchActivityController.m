@@ -1034,9 +1034,9 @@ static CGFloat const FixRatio = 4/3.0;
         picker.allowsEditing = YES;
         picker.edgesForExtendedLayout = UIRectEdgeNone;
         picker.sourceType = sourceType;
-        
-        CRNavigationController *nav = [[CRNavigationController alloc] initWithRootViewController:picker];
-        [self presentViewController:nav animated:YES completion:nil];
+        picker.navigationBar.barTintColor = kUPThemeMainColor;
+        picker.navigationBar.tintColor = [UIColor whiteColor];
+        [self presentViewController:picker animated:YES completion:nil];
     } else
     {
         NSLog(@"模拟器无法打开照相机");
@@ -1051,7 +1051,8 @@ static CGFloat const FixRatio = 4/3.0;
     //设置选择后的图片可被编辑
     picker.allowsEditing = YES;
     picker.edgesForExtendedLayout = UIRectEdgeNone;
-    
+    picker.navigationBar.barTintColor = kUPThemeMainColor;
+    picker.navigationBar.tintColor = [UIColor whiteColor];
     [self presentViewController:picker animated:YES completion:nil];
 }
 
