@@ -376,10 +376,10 @@
             }
             
             if (cellItem.style==UPItemStyleUserImg) {
-                _imageDetail.frame = CGRectMake(_backView.width-_backView.height-15, 2, _backView.height-4, _backView.height-4);
-                _imageDetail.layer.cornerRadius = (_backView.height-4)/2;
+                _imageDetail.frame = CGRectMake(_backView.width-_backView.height-13, 4, _backView.height-8, _backView.height-8);
+                _imageDetail.layer.cornerRadius = (_backView.height-8)/2;
             } else {
-                _imageDetail.frame = CGRectMake(_backView.width-_backView.height-15, 4, _backView.height-8, _backView.height-8);
+                _imageDetail.frame = CGRectMake(_backView.width-_backView.height-11, 8, _backView.height-16, _backView.height-16);
             }
             _imageDetail.layer.masksToBounds = YES;
             if (cellItem.imageUrl.length>0) {
@@ -399,9 +399,8 @@
 ////                    _imageDetail.image = [UIImage imageWithContentsOfFile:fullPath];
 //                }];
 //                [downloadTask resume];
-//            } else if (cellItem.defaultName.length>0) {
-//                [_imageDetail setImage:[UIImage imageNamed:cellItem.defaultName]];
-//            }
+            } else if (cellItem.defaultName.length>0) {
+                [_imageDetail setImage:[UIImage imageNamed:cellItem.defaultName]];
             }
             break;
         case UPItemStyleUserAnonymous:

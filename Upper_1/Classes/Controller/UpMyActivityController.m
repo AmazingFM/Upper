@@ -7,7 +7,6 @@
 //
 #import "UpMyActivityController.h"
 #import "MainController.h"
-#import "MyActCell.h"
 #import "UpMyActView.h"
 #import "XWHttpTool.h"
 #import "Info.h"

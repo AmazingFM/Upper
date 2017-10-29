@@ -24,7 +24,7 @@
 #define kMessageRequireTimeInterval 5.0f
 
 #ifdef UPPER_DEBUG
-#define kBaseURL @"http://api.qidianzhan.com.cn/AppServ/index.php"
+#define kBaseURL @"http://118.31.69.166"
 #else
 #define kBaseURL @"http://api.uppercn.com/AppServ/index.php"
 #endif

@@ -147,6 +147,7 @@ typedef enum register_enum
     
     registerArr = [[NSMutableArray alloc]initWithObjects:_registerV1, _registerV2, _registerV3,_registerV4,_registerV5, nil];
     
+    self.registerV5.parentController = self;
     [self.view addSubview:_tipsLabel];
     [self.view addSubview:self.nextBtn];
     [self.view addSubview:self.preBtn];
@@ -155,14 +156,15 @@ typedef enum register_enum
     [self.view addSubview:self.registerV3];
     [self.view addSubview:self.registerV4];
     [self.view addSubview:self.registerV5];
+    
+    [self showRegisterView:0];
+    [self.registerV1 loadAlphabetCitInfo];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self setFd_interactivePopDisabled:YES];
-    [self showRegisterView:whichStep];
-    [self.registerV1 loadAlphabetCitInfo];
 }
 
 - (void)leftClick
@@ -352,13 +354,89 @@ typedef enum register_enum
             [params setValue:self.registerV5.empID forKey:@"employee_id"];
             [params setValue:self.registerV5.identifyType forKey:@"identify_type"];
             [params setValue:self.registerV5.identifyID forKey:@"identify_id"];
-            
             break;
         default:
             return;
     }
 
-    [self loadDataForType:type withURL:kBaseURL parameters:params];
+    if (type==REGISTER_REQ && [_industryId isEqualToString:@"6"] && self.registerV5.noEmail) {
+        
+        NSString *registeUrlStr = [NSString stringWithFormat:@"%@?a=Register", kBaseURL];
+        NSData *imageData = self.registerV5.imageData;
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        //申明请求的数据是json类型
+        //manager.requestSerializer.HTTPMethodsEncodingParametersInURI = [NSSet setWithArray:@[@"POST", @"GET", @"HEAD"]];
+        manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+        
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        [manager POST:registeUrlStr parameters:[self addDescParams:params] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            if (imageData!=nil) {
+                [formData appendPartWithFileData:imageData name:@"identify_file" fileName:@"identify_file" mimeType:@"image/jpeg"];
+            }
+        } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSString *resp = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+            NSLog(@"Success:%@,", resp);
+            
+            NSObject *jsonObj = [UPTools JSONFromString:resp];
+            if ([jsonObj isKindOfClass:[NSDictionary class]]) {
+                NSDictionary *respDict = (NSDictionary *)jsonObj;
+                NSString *resp_id = respDict[@"resp_id"];
+                if ([resp_id intValue]==0) {
+                    UPGoShareController *shareVC = [[UPGoShareController alloc] init];
+                    shareVC.registName = self.name;
+                    [self.navigationController pushViewController:shareVC animated:YES];
+                    [self clearRegisterInfo];
+                    
+                } else {
+                    showDefaultAlert(@"提示", respDict[@"resp_desc"]);
+                }
+            }
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            isLoading = NO;
+        }];
+    } else {
+        [self loadDataForType:type withURL:kBaseURL parameters:params];
+    }
+}
+
+- (NSDictionary *)addDescParams:(NSDictionary *)parameters
+{
+    NSString *uuid = [UPConfig sharedInstance].uuid;
+    NSString *currentDate = [UPConfig sharedInstance].currentDate;
+    NSString *reqSeq = [UPConfig sharedInstance].newReqSeqStr;
+    
+    NSMutableDictionary *newParamsDic = [NSMutableDictionary dictionaryWithDictionary:@{@"app_id":uuid, @"req_seq":reqSeq, @"time_stamp":currentDate}];
+    
+    NSString *actionName = parameters[@"a"];
+    [newParamsDic addEntriesFromDictionary:parameters];
+    [newParamsDic removeObjectForKey:@"a"];
+    
+    
+    if ([UPDataManager shared].isLogin) {
+        [newParamsDic setObject:[UPDataManager shared].token forKey:@"token"];
+        
+        NSString *user_id = newParamsDic[@"user_id"];
+        if (user_id==nil || user_id.length==0) {
+            [newParamsDic setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
+        }
+    }
+    
+    NSString *md5Str = newParamsDic[@"sign"];
+    
+    if (md5Str==nil || md5Str.length==0) {
+        NSArray *keys = newParamsDic.allKeys;
+        NSArray *sortedKeys = [keys sortedArrayUsingSelector:@selector(compare:)];
+        
+        NSMutableString *mStr = [NSMutableString stringWithString:@"upper"];
+        for (int i=0; i<sortedKeys.count; i++) {
+            [mStr appendFormat:@"%@%@", sortedKeys[i], newParamsDic[sortedKeys[i]]];
+        }
+        [mStr appendString:@"upper"];
+        md5Str = [UPTools md5HexDigest:mStr];
+        newParamsDic[@"sign"] = md5Str;
+    }
+    newParamsDic[@"a"] = actionName;
+    return newParamsDic;
 }
 
 // ------公共方法

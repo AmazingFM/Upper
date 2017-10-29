@@ -130,11 +130,26 @@
             self.field.hidden = YES;
             
             self.actionButton.hidden = NO;
-            
+            [self.actionButton setBackgroundColor:[UIColor lightGrayColor]];
             CGSize size = [cellItem.title sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15.f]}];
             CGFloat btnWidth = ceil(size.width)+10;
             [self.actionButton setTitle:cellItem.title forState:UIControlStateNormal];
             self.actionButton.frame = CGRectMake(LeftRightPadding, 5, btnWidth, cellItem.cellHeight-10);
+        }
+            break;
+        case UPRegisterCellStylePhoto:
+        {
+            self.descLabel.hidden = YES;
+            
+            self.titleLabel.hidden = YES;
+            self.emailLabel.hidden = YES;
+            self.field.hidden = YES;
+            
+            self.actionButton.hidden = NO;
+            [self.actionButton setBackgroundColor:[UIColor whiteColor]];
+            [self.actionButton setImage:[UIImage imageWithData:cellItem.imageData] forState:UIControlStateNormal];
+            self.actionButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
+            self.actionButton.frame = CGRectMake(LeftRightPadding, 5, cellItem.cellWidth-2*LeftRightPadding, cellItem.cellHeight-10);
         }
             break;
         case UPRegisterCellStyleField:
@@ -172,7 +187,7 @@
             self.field.hidden = NO;
             
             self.actionButton.hidden = NO;
-            
+            [self.actionButton setBackgroundColor:[UIColor lightGrayColor]];
             CGFloat originy = cellItem.cellHeight-cellItem.titleHeight;
             self.titleLabel.frame = CGRectMake(LeftRightPadding, originy, cellItem.titleWidth, cellItem.titleHeight);
             self.titleLabel.text = cellItem.title;
@@ -248,8 +263,11 @@
     
     if (self.cellItem.cellStyle==UPRegisterCellStyleVerifyCode) {
         [self startTimer];
-    } else {
-        [self stopTimer];
+    } else if (self.cellItem.cellStyle==UPRegisterCellStyleButton ||
+               self.cellItem.cellStyle==UPRegisterCellStylePhoto) {
+        if (self.cellItem.actionBlock) {
+            self.cellItem.actionBlock();
+        }
     }
 }
 
@@ -298,7 +316,7 @@
 
 @end
 
-@interface UpRegister5() <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface UpRegister5() <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 {
     CGRect viewframe;
 }
@@ -369,13 +387,10 @@
     } else {
         if ([_industryID isEqualToString:@"1"]) {
             return [NSString stringWithFormat:@"%@", self.empID];
+        } else if ([_industryID intValue]==6) {//航空业属于特殊情况，使用证件照
+            return @"upload_image";
         } else {
-
-            if ([_industryID intValue]==6) {//[_industryID isEqualToString:@"6"]，航空业属于特殊情况，没有单位电话，使用公司id加工号
-                return [NSString stringWithFormat:@"%@|%@", self.companyID, self.empID];
-            } else {
-                return [NSString stringWithFormat:@"%@|%@", self.comPhone, self.empID];
-            }
+            return [NSString stringWithFormat:@"%@|%@", self.comPhone, self.empID];
         }
     }
 }
@@ -387,6 +402,8 @@
     } else {
         if ([_industryID isEqualToString:@"1"]) {//医生
             return @"1";
+        } else if ([_industryID intValue]==6) { //航空
+            return @"3";
         } else {
             return @"2";
         }
@@ -501,13 +518,27 @@
             
             __weak typeof(self) weakSelf = self;
             if([self.industryID isEqualToString:@"6"]) {//航空
-                descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的员工号和姓名，我们会进行后续核实验证。";
+                descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的员工号和姓名，并上传清晰的工作证件照片，我们会进行后续核实验证。";
+                
+                UPRegisterCellItem *photoItem = [[UPRegisterCellItem alloc] init];
+                photoItem.cellStyle = UPRegisterCellStylePhoto;
+                photoItem.key = @"airPhoto";
+                
+                NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"airPhoto" ofType:@"png"]];
+                photoItem.imageData = self.imageData?:data;
+                photoItem.actionBlock = ^{
+                    [self takePhoto];
+                };
+                
+                [self.itemList addObject:photoItem];
+                
                 UPRegisterCellItem *noEmailBtnItem = [[UPRegisterCellItem alloc] init];
                 noEmailBtnItem.cellStyle = UPRegisterCellStyleButton;
                 noEmailBtnItem.title = @"有公司邮箱?";
                 noEmailBtnItem.actionBlock = ^{
                     weakSelf.noEmail = NO;
                     [weakSelf resize];
+                    weakSelf.imageData = nil;
                     [weakSelf reloadItems];
                 };
                 [self.itemList addObject:noEmailBtnItem];
@@ -518,13 +549,15 @@
                 comphoneItem.cellStyle = UPRegisterCellStyleTelephoneField;
                 comphoneItem.title = @"单位电话\nCompany phone";
                 [self.itemList addObject:comphoneItem];
+                
+                
+                UPRegisterCellItem *empIdItem = [[UPRegisterCellItem alloc] init];
+                empIdItem.key = @"empID";
+                empIdItem.cellStyle = UPRegisterCellStyleField;
+                empIdItem.title = @"员工号\nEmp NO.";
+                [self.itemList addObject:empIdItem];
             }
-            
-            UPRegisterCellItem *empIdItem = [[UPRegisterCellItem alloc] init];
-            empIdItem.key = @"empID";
-            empIdItem.cellStyle = UPRegisterCellStyleField;
-            empIdItem.title = @"员工号\nEmp NO.";
-            
+
             UPRegisterCellItem *nameItem = [[UPRegisterCellItem alloc] init];
             nameItem.key = @"name";
             nameItem.cellStyle = UPRegisterCellStyleField;
@@ -543,7 +576,7 @@
                 [weakSelf sendSMS];
             };
             
-            [self.itemList addObject:empIdItem];
+            
             [self.itemList addObject:nameItem];
             [self.itemList addObject:telephoneItem];
             [self.itemList addObject:verifyItem];
@@ -589,6 +622,8 @@
             NSString *titleStr = obj.title;
             CGRect rect = [titleStr boundingRectWithSize:CGSizeMake(obj.cellWidth-2*LeftRightPadding, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.f]} context:nil];
             obj.cellHeight = rect.size.height;
+        } else if (obj.cellStyle==UPRegisterCellStylePhoto) {
+            obj.cellHeight = (ScreenWidth-30)*0.75;
         } else {
             obj.cellHeight = 44;
         }
@@ -635,6 +670,7 @@
     _empID = @"";
     _telenum = @"";
     _emailPrefix = @"";
+    _imageData = nil;
 }
 
 -(NSString *)alertMsg
@@ -655,7 +691,7 @@
             }
         } else {
             if ([self.industryID isEqualToString:@"6"]) {
-                NSDictionary *alertMsgDict = @{@"empID":@"员工号不能为空\n", @"name":@"姓名不能为空\n", @"telephone":@"手机号不正确\n"};
+                NSDictionary *alertMsgDict = @{@"name":@"姓名不能为空\n", @"telephone":@"手机号不正确\n"};
                 
                 for (NSString *key in alertMsgDict.allKeys) {
                     for (UPRegisterCellItem *cellItem in self.itemList) {
@@ -664,6 +700,12 @@
                                 [str appendString:alertMsgDict[key]];
                             }
                         }
+                    }
+                }
+                
+                if (self.noEmail) {
+                    if (self.imageData==nil) {
+                        [str appendString:@"请上传证件照"];
                     }
                 }
             } else {
@@ -793,5 +835,72 @@
     cell.cellItem = cellItem;
     
     return cell;
+}
+
+//开始拍照
+- (void)takePhoto
+{
+    UIImagePickerControllerSourceType sourceType = UIImagePickerControllerSourceTypeCamera;
+    if ([UIImagePickerController isSourceTypeAvailable:sourceType]) {
+        UIImagePickerController *picker = [[UIImagePickerController alloc]init];
+        picker.delegate = self;
+        //设置拍照后的图片可被编辑
+        picker.allowsEditing = YES;
+        picker.edgesForExtendedLayout = UIRectEdgeNone;
+        picker.sourceType = sourceType;
+        picker.navigationBar.barTintColor = kUPThemeMainColor;
+        picker.navigationBar.tintColor = [UIColor whiteColor];
+        
+        UpRegisterController *registController = (UpRegisterController *)self.parentController;
+        [registController presentViewController:picker animated:YES completion:nil];
+    } else
+    {
+        NSLog(@"模拟器无法打开照相机");
+    }
+}
+
+static CGFloat const FixRatio = 4/3.0;
+
+//当选择一张图片后进入处理
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
+    NSString *type = [info objectForKey:UIImagePickerControllerMediaType];
+    //当选择的类型是图片
+    if ([type isEqualToString:@"public.image"]) {
+        //先把图片转成NSData
+        UIImage *image = [info objectForKey:@"UIImagePickerControllerEditedImage"];
+        
+        CGSize imgSize = [image size];
+        CGFloat kWidth;
+        
+        CGFloat ratio = imgSize.width/imgSize.height;
+        if (ratio<FixRatio) {
+            kWidth = imgSize.width;
+        } else {
+            kWidth = FixRatio*imgSize.height;
+        }
+        UIImage *cutImage = [UPTools cutImage:image withSize:CGSizeMake(kWidth, kWidth/FixRatio)];
+        
+        self.imageData = [UPTools compressImage:cutImage];
+        
+        //关闭相册界面
+        [picker dismissViewControllerAnimated:YES completion:nil];
+        
+        UPRegisterCellItem *photoItem = nil;
+        
+        for (UPRegisterCellItem *item in self.itemList) {
+            if ([item.key isEqualToString:@"airPhoto"]) {
+                photoItem = item;
+            }
+        }
+        
+        photoItem.imageData = self.imageData;
+        [self.tableView reloadRowsAtIndexPaths:@[photoItem.indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 @end

@@ -19,7 +19,8 @@ typedef NS_ENUM(NSInteger, UPRegisterCellStyle)
     UPRegisterCellStyleVerifyCode, //验证码
     UPRegisterCellStyleEmail,   //邮件
     UPRegisterCellStyleRadio,   //Radio
-    UPRegisterCellStyleButton
+    UPRegisterCellStyleButton,
+    UPRegisterCellStylePhoto,//拍照
 };
 
 @class UPRegisterCellItem;
@@ -30,6 +31,7 @@ typedef void (^CellFieldActionBlock) (UPRegisterCellItem *cellItem);
 
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *email;
+@property (nonatomic, strong) NSData *imageData;
 @property (nonatomic, copy) NSString *cellId;
 @property (nonatomic, copy) NSString *key;
 @property (nonatomic, copy) NSString *value;
@@ -54,11 +56,10 @@ typedef void (^CellFieldActionBlock) (UPRegisterCellItem *cellItem);
 
 @interface UpRegister5 : UPRegisterView <UITextFieldDelegate>
 
-//@property (nonatomic, retain) UITextField *emailField;
+@property (nonatomic, strong) NSData *imageData;
+
 @property (nonatomic, copy) NSString *emailPrefix;
 @property (nonatomic, copy) NSString *emailSuffix;
-
-//@property (nonatomic, retain) UILabel *suffixLabel;
 @property (nonatomic) BOOL noEmail;
 @property (nonatomic) NSString *industryID;
 @property (nonatomic) NSString *companyID;//公司id

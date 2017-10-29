@@ -10,6 +10,9 @@
 
 @interface UPRegisterView : UIView
 
+@property (nonatomic, weak) id parentController;
+
 -(NSString *)alertMsg;
 -(void)clearValue;
+
 @end
