@@ -23,11 +23,11 @@
 
 #define kMessageRequireTimeInterval 5.0f
 
-#ifdef UPPER_DEBUG
-#define kBaseURL @"http://118.31.69.166"
-#else
+//#ifdef UPPER_DEBUG
+//#define kBaseURL @"http://118.31.69.166"
+//#else
 #define kBaseURL @"http://api.uppercn.com/AppServ/index.php"
-#endif
+//#endif
 
 #define kShareURL @"http://share.uppercn.com"
 #define kShareActivityURL @"http://a.uppercn.com"

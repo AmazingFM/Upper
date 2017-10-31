@@ -137,6 +137,11 @@
 		3A1C12E81F3875A10046E282 /* agreement in Resources */ = {isa = PBXBuildFile; fileRef = 3A1C12E71F3875A10046E282 /* agreement */; };
 		3A26C5551E52973700339B38 /* ConversationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A26C5541E52973700339B38 /* ConversationCell.m */; };
 		3A26C55B1E52CC0200339B38 /* UIAlertView+NSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A26C55A1E52CC0200339B38 /* UIAlertView+NSObject.m */; };
+		3A280A821FA897D200A76750 /* UPRegisterFirstController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A280A811FA897D200A76750 /* UPRegisterFirstController.m */; };
+		3A280A851FA897E900A76750 /* UPRegisterSecondController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A280A841FA897E900A76750 /* UPRegisterSecondController.m */; };
+		3A280A8B1FA8983C00A76750 /* UPRegisterThirdController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A280A8A1FA8983C00A76750 /* UPRegisterThirdController.m */; };
+		3A280A8E1FA8985100A76750 /* UPRegisterFourthController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A280A8D1FA8985100A76750 /* UPRegisterFourthController.m */; };
+		3A280A911FA8987600A76750 /* UPRegisterFifthController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A280A901FA8987600A76750 /* UPRegisterFifthController.m */; };
 		3A2939901D2F798B005CB3F3 /* UPCommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A29398F1D2F798B005CB3F3 /* UPCommentController.m */; };
 		3A2939931D2F80F6005CB3F3 /* UPTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2939921D2F80F6005CB3F3 /* UPTextView.m */; };
 		3A33A3021E44147300144D66 /* UPRulesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A33A3011E44147300144D66 /* UPRulesController.m */; };
@@ -671,6 +676,16 @@
 		3A26C5541E52973700339B38 /* ConversationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationCell.m; sourceTree = "<group>"; };
 		3A26C5591E52CC0200339B38 /* UIAlertView+NSObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+NSObject.h"; sourceTree = "<group>"; };
 		3A26C55A1E52CC0200339B38 /* UIAlertView+NSObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+NSObject.m"; sourceTree = "<group>"; };
+		3A280A801FA897D200A76750 /* UPRegisterFirstController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPRegisterFirstController.h; sourceTree = "<group>"; };
+		3A280A811FA897D200A76750 /* UPRegisterFirstController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPRegisterFirstController.m; sourceTree = "<group>"; };
+		3A280A831FA897E900A76750 /* UPRegisterSecondController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPRegisterSecondController.h; sourceTree = "<group>"; };
+		3A280A841FA897E900A76750 /* UPRegisterSecondController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPRegisterSecondController.m; sourceTree = "<group>"; };
+		3A280A891FA8983C00A76750 /* UPRegisterThirdController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPRegisterThirdController.h; sourceTree = "<group>"; };
+		3A280A8A1FA8983C00A76750 /* UPRegisterThirdController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPRegisterThirdController.m; sourceTree = "<group>"; };
+		3A280A8C1FA8985100A76750 /* UPRegisterFourthController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPRegisterFourthController.h; sourceTree = "<group>"; };
+		3A280A8D1FA8985100A76750 /* UPRegisterFourthController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPRegisterFourthController.m; sourceTree = "<group>"; };
+		3A280A8F1FA8987600A76750 /* UPRegisterFifthController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UPRegisterFifthController.h; sourceTree = "<group>"; };
+		3A280A901FA8987600A76750 /* UPRegisterFifthController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UPRegisterFifthController.m; sourceTree = "<group>"; };
 		3A29398E1D2F798B005CB3F3 /* UPCommentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPCommentController.h; sourceTree = "<group>"; };
 		3A29398F1D2F798B005CB3F3 /* UPCommentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UPCommentController.m; sourceTree = "<group>"; };
 		3A2939911D2F80F6005CB3F3 /* UPTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UPTextView.h; sourceTree = "<group>"; };
@@ -1713,6 +1728,16 @@
 			children = (
 				EC3C16E81CECB16D00223D6B /* UpRegisterController.h */,
 				EC3C16E91CECB16D00223D6B /* UpRegisterController.m */,
+				3A280A801FA897D200A76750 /* UPRegisterFirstController.h */,
+				3A280A811FA897D200A76750 /* UPRegisterFirstController.m */,
+				3A280A831FA897E900A76750 /* UPRegisterSecondController.h */,
+				3A280A841FA897E900A76750 /* UPRegisterSecondController.m */,
+				3A280A891FA8983C00A76750 /* UPRegisterThirdController.h */,
+				3A280A8A1FA8983C00A76750 /* UPRegisterThirdController.m */,
+				3A280A8C1FA8985100A76750 /* UPRegisterFourthController.h */,
+				3A280A8D1FA8985100A76750 /* UPRegisterFourthController.m */,
+				3A280A8F1FA8987600A76750 /* UPRegisterFifthController.h */,
+				3A280A901FA8987600A76750 /* UPRegisterFifthController.m */,
 			);
 			name = Regist;
 			sourceTree = "<group>";
@@ -2496,6 +2521,7 @@
 				2CDAD63A1D0EEC4000C260F4 /* FMDatabase.m in Sources */,
 				2CDAD5021D0ED8A900C260F4 /* UUMessageFrame.m in Sources */,
 				2CDAD64C1D0EEC4000C260F4 /* MJRefreshComponent.m in Sources */,
+				3A280A8B1FA8983C00A76750 /* UPRegisterThirdController.m in Sources */,
 				3A837D3B1DD8920A00A9A0BB /* UPMsgBubbleCell.m in Sources */,
 				3A7B2CBD1E8117B4004F7F83 /* YMLabel.m in Sources */,
 				8555DE791EBF4D700012F162 /* UIButton+Badge.m in Sources */,
@@ -2518,6 +2544,7 @@
 				EC3C18191CECB16D00223D6B /* UpperController.m in Sources */,
 				2CDAD65C1D0EEC4000C260F4 /* UIView+MJExtension.m in Sources */,
 				2CDAD6561D0EEC4000C260F4 /* MJRefreshNormalHeader.m in Sources */,
+				3A280A8E1FA8985100A76750 /* UPRegisterFourthController.m in Sources */,
 				EC3C18151CECB16D00223D6B /* UPGuideViewController.m in Sources */,
 				85B344F81E534023002E69A9 /* UIImageView+Upper.m in Sources */,
 				2CDAD6571D0EEC4000C260F4 /* MJRefreshStateHeader.m in Sources */,
@@ -2548,6 +2575,7 @@
 				EC3C18091CECB16D00223D6B /* EnrollPeopleController.m in Sources */,
 				EC3C18121CECB16D00223D6B /* UpActDetailController.m in Sources */,
 				2CDAD6521D0EEC4000C260F4 /* MJRefreshBackGifFooter.m in Sources */,
+				3A280A911FA8987600A76750 /* UPRegisterFifthController.m in Sources */,
 				2CDAD66A1D0EEC4000C260F4 /* SDRefreshHeaderView.m in Sources */,
 				2CDAD6471D0EEC4000C260F4 /* NSObject+MJKeyValue.m in Sources */,
 				3A837D381DD88F6400A9A0BB /* MessageBubbleViewController.m in Sources */,
@@ -2579,6 +2607,7 @@
 				3AFCCDBD1D5C09BC0003F6F3 /* NewLaunchActivityController.m in Sources */,
 				2CDAD6421D0EEC4000C260F4 /* MJConst.m in Sources */,
 				EC3C181B1CECB16D00223D6B /* UpRegisterController.m in Sources */,
+				3A280A851FA897E900A76750 /* UPRegisterSecondController.m in Sources */,
 				3A3419B21EDEA320007209D5 /* UPTableViewCell.m in Sources */,
 				2CDAD6631D0EEC4000C260F4 /* SDCycleScrollView.m in Sources */,
 				EC3C181F1CECB16D00223D6B /* CityItem.m in Sources */,
@@ -2691,6 +2720,7 @@
 				3A4DF75F1F3D88C100D624AD /* UPTextAlertView.m in Sources */,
 				2CC645371D04105200A07408 /* UPBaseViewController.m in Sources */,
 				3A04D6911E51A5ED004396D2 /* MessageListController.m in Sources */,
+				3A280A821FA897D200A76750 /* UPRegisterFirstController.m in Sources */,
 				2CDAD63F1D0EEC4000C260F4 /* MBProgressHUD+MJ.m in Sources */,
 				3A837D1C1DD8123700A9A0BB /* UPMessageCell.m in Sources */,
 				3A26C55B1E52CC0200339B38 /* UIAlertView+NSObject.m in Sources */,
