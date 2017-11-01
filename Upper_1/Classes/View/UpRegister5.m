@@ -71,7 +71,8 @@
         self.photoDescLabel = [self createLabelWithFont:[UIFont systemFontOfSize:13.f]];
         self.photoDescLabel.textColor = RGBCOLOR(145, 145, 145);
         self.photoDescLabel.backgroundColor = [UIColor whiteColor];
-        self.photoDescLabel.adjustsFontSizeToFitWidth = 0.5;
+        self.photoDescLabel.adjustsFontSizeToFitWidth = YES;
+        self.photoDescLabel.minimumScaleFactor = 0.3;
         self.photoDescLabel.layer.borderWidth = 0;
         self.photoDescLabel.text = @"证件需包含公司、职务、姓名信息、请确保文字清晰可见";
         self.photoDescLabel.hidden = YES;

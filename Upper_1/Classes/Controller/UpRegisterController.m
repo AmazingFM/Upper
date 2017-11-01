@@ -371,7 +371,7 @@ typedef enum register_enum
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         [manager POST:registeUrlStr parameters:[self addDescParams:params] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             if (imageData!=nil) {
-                [formData appendPartWithFileData:imageData name:@"identify_file" fileName:@"identify_file" mimeType:@"image/jpeg"];
+                [formData appendPartWithFileData:imageData name:@"identify_file" fileName:@"airPhoto.jpg" mimeType:@"image/jpeg"];
             }
         } success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSString *resp = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
