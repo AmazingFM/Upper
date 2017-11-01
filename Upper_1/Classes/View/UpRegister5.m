@@ -42,6 +42,9 @@
 @property (nonatomic, strong) UPUnderLineField *field;
 @property (nonatomic, strong) UIButton *actionButton;
 
+@property (nonatomic, strong) UILabel *photoDescLabel;
+@property (nonatomic, strong) UILabel *photoActionLabel;
+
 @end
 @implementation UPRegisterCell
 
@@ -65,11 +68,27 @@
         
         self.actionButton = [self createButton];
         
+        self.photoDescLabel = [self createLabelWithFont:[UIFont systemFontOfSize:13.f]];
+        self.photoDescLabel.textColor = RGBCOLOR(145, 145, 145);
+        self.photoDescLabel.backgroundColor = [UIColor whiteColor];
+        self.photoDescLabel.adjustsFontSizeToFitWidth = 0.5;
+        self.photoDescLabel.layer.borderWidth = 0;
+        self.photoDescLabel.text = @"证件需包含公司、职务、姓名信息、请确保文字清晰可见";
+        self.photoDescLabel.hidden = YES;
+        self.photoActionLabel = [self createLabelWithFont:kUPThemeMiddleFont];
+        self.photoActionLabel.backgroundColor = [UIColor colorWithWhite:1 alpha:0.8];
+        self.photoActionLabel.textColor = RGBCOLOR(47, 142, 249);
+        self.photoActionLabel.hidden = YES;
+        self.photoActionLabel.textAlignment = NSTextAlignmentCenter;
+        self.photoActionLabel.text = @"+点击上传照片";
+
         [self addSubview:self.descLabel];
         [self addSubview:self.titleLabel];
         [self addSubview:self.emailLabel];
         [self addSubview:self.field];
         [self addSubview:self.actionButton];
+        [self addSubview:self.photoActionLabel];
+        [self addSubview:self.photoDescLabel];
     }
     return self;
 }
@@ -79,6 +98,9 @@
     _cellItem = cellItem;
     self.field.text = @"";
     
+    self.photoActionLabel.hidden = YES;
+    self.photoDescLabel.hidden = YES;
+    self.actionButton.layer.cornerRadius = 5.0f;
     switch (cellItem.cellStyle) {
         case UPRegisterCellStyleText:
         {
@@ -134,22 +156,27 @@
             CGSize size = [cellItem.title sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15.f]}];
             CGFloat btnWidth = ceil(size.width)+10;
             [self.actionButton setTitle:cellItem.title forState:UIControlStateNormal];
+            [self.actionButton setImage:nil forState:UIControlStateNormal];
             self.actionButton.frame = CGRectMake(LeftRightPadding, 5, btnWidth, cellItem.cellHeight-10);
         }
             break;
         case UPRegisterCellStylePhoto:
         {
+            self.actionButton.layer.cornerRadius = 0;
             self.descLabel.hidden = YES;
-            
             self.titleLabel.hidden = YES;
             self.emailLabel.hidden = YES;
             self.field.hidden = YES;
-            
             self.actionButton.hidden = NO;
             [self.actionButton setBackgroundColor:[UIColor whiteColor]];
             [self.actionButton setImage:[UIImage imageWithData:cellItem.imageData] forState:UIControlStateNormal];
             self.actionButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
-            self.actionButton.frame = CGRectMake(LeftRightPadding, 5, cellItem.cellWidth-2*LeftRightPadding, cellItem.cellHeight-10);
+            CGFloat buttonWidth =cellItem.cellWidth-2*LeftRightPadding;
+            self.actionButton.frame = CGRectMake(LeftRightPadding, 5,buttonWidth, buttonWidth*0.7);
+            self.photoActionLabel.hidden = NO;
+            self.photoDescLabel.hidden = NO;
+            self.photoActionLabel.frame = CGRectMake(LeftRightPadding, 5+buttonWidth*0.7-45, buttonWidth, 45);
+            self.photoDescLabel.frame = CGRectMake(LeftRightPadding, 5+buttonWidth*0.7,buttonWidth, 30);
         }
             break;
         case UPRegisterCellStyleField:
@@ -248,7 +275,6 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
     button.titleLabel.font = [UIFont systemFontOfSize:15.f];
-    button.layer.cornerRadius = 5.0f;
     button.layer.borderWidth = 1;
     [button setBackgroundColor:[UIColor lightGrayColor]];
     
@@ -316,7 +342,7 @@
 
 @end
 
-@interface UpRegister5() <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface UpRegister5() <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIScrollViewDelegate>
 {
     CGRect viewframe;
 }
@@ -623,7 +649,7 @@
             CGRect rect = [titleStr boundingRectWithSize:CGSizeMake(obj.cellWidth-2*LeftRightPadding, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13.f]} context:nil];
             obj.cellHeight = rect.size.height;
         } else if (obj.cellStyle==UPRegisterCellStylePhoto) {
-            obj.cellHeight = (ScreenWidth-30)*0.75;
+            obj.cellHeight = (ScreenWidth-30)*0.7+30+10;
         } else {
             obj.cellHeight = 44;
         }
@@ -648,7 +674,8 @@
     UPRegisterCell *cell = [self.tableView cellForRowAtIndexPath:self.currentIndexPath];
     CGRect cellFrame = [self convertRect:cell.frame fromView:self.tableView];
     if (CGRectGetMaxY(cellFrame)>convertedFrame.origin.y) {
-        CGRect newFrame = CGRectOffset(self.bounds, 0, convertedFrame.origin.y-CGRectGetMaxY(cellFrame));
+        CGFloat tableOffset = self.tableView.frame.origin.y;
+        CGRect newFrame = CGRectOffset(self.bounds, 0, convertedFrame.origin.y-CGRectGetMaxY(cellFrame)+tableOffset);
         [UIView beginAnimations:@"TableViewUP" context:NULL];
         [UIView setAnimationDuration:0.3f];
         self.tableView.frame = newFrame;
@@ -902,5 +929,11 @@ static CGFloat const FixRatio = 4/3.0;
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark UIScrollViewDelegate
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [self.tableView endEditing:YES];
 }
 @end

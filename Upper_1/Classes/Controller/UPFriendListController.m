@@ -184,6 +184,7 @@
     // 上海31， 071， “”
     NSMutableDictionary *params = [NSMutableDictionary new];
     [params setObject:@"FriendsList"forKey:@"a"];
+    [params setObject:@"1"forKey:@"is_sys"];
     [params setObject:[NSString stringWithFormat:@"%d", pageNum] forKey:@"current_page"];
     [params setObject:[NSString stringWithFormat:@"%d", kActivityPageSize] forKey:@"page_size"];
     

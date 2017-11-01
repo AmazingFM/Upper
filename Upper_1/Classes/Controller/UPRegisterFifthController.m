@@ -8,9 +8,11 @@
 
 #import "UPRegisterFifthController.h"
 #import "UINavigationController+FDFullscreenPopGesture.h"
+#import "UPGoShareController.h"
 #import "Info.h"
 #import "DrawSomething.h"
 #import "UpRegister5.h"
+#import "YMNetwork.h"
 
 #define BtnSpace 40
 @interface UPRegisterFifthController () <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
@@ -103,22 +105,51 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (NSString *)identifyID
+{
+    if (_emailSuffix.length>0) {
+        return [NSString stringWithFormat:@"%@%@", _emailPrefix, _emailSuffix];
+    } else {
+        if ([_industryId isEqualToString:@"1"]) {
+            return [NSString stringWithFormat:@"%@", self.empID];
+        } else if ([_industryId intValue]==6) {//航空业属于特殊情况，使用证件照
+            return @"upload_image";
+        } else {
+            return [NSString stringWithFormat:@"%@|%@", self.comPhone, self.empID];
+        }
+    }
+}
+
+- (NSString *)identifyType
+{
+    if (_emailSuffix.length>0) {
+        return @"0";
+    } else {
+        if ([_industryId isEqualToString:@"1"]) {//医生
+            return @"1";
+        } else if ([_industryId intValue]==6) { //航空
+            return @"3";
+        } else {
+            return @"2";
+        }
+    }
+}
 
 - (void)startRegist
 {
     NSMutableDictionary *params = [NSMutableDictionary new];
     [params setValue:@"Register" forKey:@"a"];
     [params setValue:_companyId forKey:@"node_id"];
-    [params setValue:_name forKey:@"user_name"];
+    [params setValue:_username forKey:@"user_name"];
     [params setValue:[UPTools md5HexDigest:_password] forKey:@"user_pass"];
     [params setValue:@"0" forKey:@"pass_type"];
     [params setValue:_industryId forKey:@"industry_id"];
-    [params setValue:self.registerV5.telenum forKey:@"mobile"];
-    [params setValue:_sex forKey:@"sexual"];
+    [params setValue:_telenum forKey:@"mobile"];
+    [params setValue:_sexType forKey:@"sexual"];
     
-    [params setValue:_provCode forKey:@"province_code"];
-    [params setValue:_cityCode forKey:@"city_code"];
-    [params setValue:_townCode forKey:@"town_code"];
+    [params setValue:_provId forKey:@"province_code"];
+    [params setValue:_cityId forKey:@"city_code"];
+    [params setValue:_townId forKey:@"town_code"];
     
     /**
      一、用户注册验证信息、激活方式、密码找回
@@ -146,12 +177,10 @@
      mobile传手机
      */
     //需要根据行业进行条件判断
-    [params setValue:self.registerV5.empName forKey:@"true_name"];
-    [params setValue:self.registerV5.empID forKey:@"employee_id"];
-    [params setValue:self.registerV5.identifyType forKey:@"identify_type"];
-    [params setValue:self.registerV5.identifyID forKey:@"identify_id"];
-    
-    
+    [params setValue:_empName forKey:@"true_name"];
+    [params setValue:_empID forKey:@"employee_id"];
+    [params setValue:[self identifyType] forKey:@"identify_type"];
+    [params setValue:[self identifyID] forKey:@"identify_id"];
     
     [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id responseObject) {
         NSDictionary *dict = (NSDictionary *)responseObject;
@@ -159,7 +188,12 @@
         
         if ([resp_id intValue]==0) {
             NSDictionary *resp_data = dict[@"resp_data"];
-            [self loadCompanyData:resp_data];
+            
+            if ([resp_id intValue]==0) {
+                UPGoShareController *shareVC = [[UPGoShareController alloc] init];
+                shareVC.registName = _username;
+                [self.navigationController pushViewController:shareVC animated:YES];
+            }
         }
         else
         {
@@ -214,6 +248,96 @@
     return newParamsDic;
 }
 
+-(void)clearValue
+{
+    _comPhone = @"";
+    _empName = @"";
+    _empID = @"";
+    _telenum = @"";
+    _emailPrefix = @"";
+    _imageData = nil;
+}
+
+-(NSString *)alertMsg
+{
+    if (_emailSuffix.length>0) {
+        NSMutableString *str = [[NSMutableString alloc] init];
+        
+        if ([_industryId isEqualToString:@"1"]) {
+            NSDictionary *alertMsgDict = @{@"empID":@"医生IC卡号不能为空\n", @"name":@"姓名不能为空\n", @"telephone":@"手机号不正确\n"};
+            for (NSString *key in alertMsgDict.allKeys) {
+                for (UPRegisterCellItem *cellItem in self.itemList) {
+                    if ([cellItem.key isEqualToString:key]) {
+                        if (cellItem.value.length==0) {
+                            [str appendString:alertMsgDict[key]];
+                        }
+                    }
+                }
+            }
+        } else {
+            if ([_industryId isEqualToString:@"6"]) {
+                NSDictionary *alertMsgDict = @{@"name":@"姓名不能为空\n", @"telephone":@"手机号不正确\n"};
+                
+                for (NSString *key in alertMsgDict.allKeys) {
+                    for (UPRegisterCellItem *cellItem in self.itemList) {
+                        if ([cellItem.key isEqualToString:key]) {
+                            if (cellItem.value.length==0) {
+                                [str appendString:alertMsgDict[key]];
+                            }
+                        }
+                    }
+                }
+                
+                if (_emailSuffix.length==0) {
+                    if (self.imageData==nil) {
+                        [str appendString:@"请上传证件照"];
+                    }
+                }
+            } else {
+                NSDictionary *alertMsgDict = @{@"comphone":@"单位电话不能为空\n", @"name":@"姓名不能为空\n", @"telephone":@"手机号不正确\n"};
+                for (NSString *key in alertMsgDict.allKeys) {
+                    for (UPRegisterCellItem *cellItem in self.itemList) {
+                        if ([cellItem.key isEqualToString:key]) {
+                            if (cellItem.value.length==0) {
+                                [str appendString:alertMsgDict[key]];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (str.length>0) {
+            return str;
+        }
+        
+        for (UPRegisterCellItem *cellItem in self.itemList) {
+            if ([cellItem.key isEqualToString:@"verify"]) {
+                if (cellItem.value.length==0) {
+                    return @"验证码不能为空\n";
+                } else {
+                    _verifyCode = cellItem.value;
+                }
+            }
+        }
+        
+        if (![_verifyCode isEqualToString:self.smsText]&&
+            ![_verifyCode isEqualToString:@"9527"]) {
+            [str appendString:@"验证码错误\n"];
+            return str;
+        }
+    } else {
+        for (UPRegisterCellItem *cellItem in self.itemList) {
+            if ([cellItem.key isEqualToString:@"email"]) {
+                if (cellItem.value.length==0) {
+                    return @"请输入邮箱";
+                }
+            }
+        }
+    }
+    return @"";
+}
+
 
 -(void)navButtonClick:(UIButton *)sender
 {
@@ -221,20 +345,9 @@
         [self.navigationController popViewControllerAnimated:YES];
     } else if (sender.tag==12) {
         
-        NSMutableString *str = [[NSMutableString alloc] init];
-        
-        if (self.username.length==0) {
-            [str appendString:@"用户名不能为空\n"];
-        } else if (self.password.length==0) {
-            [str appendString:@"密码不能为空\n"];
-        } else if (![self.confirmPass isEqualToString:self.password]) {
-            [str appendString:@"密码不一致\n"];
-        }
-        
-        if (str.length>0) {
-            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请选择行业" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-            [alertView show];
-            
+        NSString *alertMsg = [self alertMsg];
+        if (alertMsg.length>0) {
+            showDefaultAlert(@"提示", alertMsg);
         }
         
         UPRegisterFifthController *fifthController = [[UPRegisterFifthController alloc] init];

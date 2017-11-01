@@ -95,7 +95,7 @@
     
     CGRect frame = CGRectMake(0, _tipsLabel.origin.y+_tipsLabel.height+10, ScreenWidth, _nextBtn.origin.y-_tipsLabel.origin.y-_tipsLabel.height-20);
     
-    contentScro = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+    contentScro = [[UIScrollView alloc] initWithFrame:frame];
     contentScro.showsHorizontalScrollIndicator = NO;
     contentScro.showsVerticalScrollIndicator = NO;
     contentScro.scrollEnabled = YES;
@@ -112,7 +112,7 @@
     
     NSArray *labelStr = [NSArray arrayWithObjects:usernameStr,passwordStr,confirmStr,sexualStr,nil];
     
-    _fields = [[NSMutableArray alloc]initWithCapacity:5];
+    _fields = [[NSMutableArray alloc]initWithCapacity:4];
     for (int i=0; i<labelStr.count; i++) {
         UILabel *tmpLabel = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, i*(size.height+VERTICAL_SPACE), size.width, size.height)];
         tmpLabel.textAlignment = NSTextAlignmentRight;
@@ -251,10 +251,8 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     CGRect frame = textField.frame;
-    if ([self.delegate respondsToSelector:@selector(beginEditing:)]) {
-        //在这里我多加了62，（加上了输入中文选择文字的view高度）这个依据自己需求而定
-        [self.delegate beginEditing:frame.origin.y+62];
-    }
+    //在这里我多加了62，（加上了输入中文选择文字的view高度）这个依据自己需求而定
+    [self beginEditing:CGRectGetMinY(frame)+62];
 }
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField
@@ -265,11 +263,27 @@
 
 -(void)textFieldDidEndEditing:(UITextField *)textField{
     //输入框编辑完成以后，当键盘即将消失时，将视图恢复到原始状态
-    if ([self.delegate respondsToSelector:@selector(endEditing)]) {
-        [self.delegate endEditing];
+    [self endEditing];
+}
+
+
+-(void)beginEditing:(CGFloat)height
+{
+    int offset = height+contentScro.origin.y-(self.view.frame.size.height-216.0);//键盘高度216
+    if (offset>0) {
+        //将视图的Y坐标向上移动offset个单位，以使下面腾出地方用于软键盘的显示
+        [UIView animateWithDuration:0.5f animations:^{
+            self.view.frame = CGRectMake(0.0f, -offset, self.view.frame.size.width, self.view.frame.size.height);
+        }];
     }
 }
 
+-(void)endEditing
+{
+    [UIView animateWithDuration:0.5f animations:^{
+        self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    }];
+}
 
 -(void)handleSingleTap:(UITapGestureRecognizer *)sender{
     [self.fields enumerateObjectsUsingBlock:^(UITextField *obj, NSUInteger idx, BOOL *stop)
@@ -321,6 +335,24 @@
     }
 }
 
+-(NSString *)username
+{
+    _username = ((UITextField *)[contentScro viewWithTag:10]).text;
+    return _username;
+}
+
+-(NSString *)password
+{
+    _password = ((UITextField *)[contentScro viewWithTag:11]).text;
+    return _password;
+}
+
+-(NSString *)confirmPass
+{
+    _confirmPass = ((UITextField *)[contentScro viewWithTag:12]).text;
+    return _confirmPass;
+}
+
 -(void)navButtonClick:(UIButton *)sender
 {
     if (sender.tag ==11) {
@@ -338,9 +370,7 @@
         }
 
         if (str.length>0) {
-            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请选择行业" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-            [alertView show];
-            
+            showDefaultAlert(@"提示", str);
         }
         
         UPRegisterFifthController *fifthController = [[UPRegisterFifthController alloc] init];

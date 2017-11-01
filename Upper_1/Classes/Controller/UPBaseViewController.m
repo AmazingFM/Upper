@@ -61,6 +61,9 @@
 }
 @end
 
+@implementation UPBaseTableViewController
+@end
+
 @interface UPBaseWebViewController()
 {
     UIWebView *webView;

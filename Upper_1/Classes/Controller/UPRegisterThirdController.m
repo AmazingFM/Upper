@@ -98,7 +98,7 @@
     
     CGRect frame = CGRectMake(0, _tipsLabel.origin.y+_tipsLabel.height+10, ScreenWidth, _nextBtn.origin.y-_tipsLabel.origin.y-_tipsLabel.height-20);
     
-    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(8, 0, frame.size.width-2*8, 30)];
+    self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(8, CGRectGetMinY(frame), frame.size.width-2*8, 30)];
     self.searchBar.showsCancelButton = NO;
     self.searchBar.translucent = YES;
     self.searchBar.delegate = self;
@@ -119,7 +119,7 @@
     [self.view addSubview:self.searchBar];
     
     size = [companyStr sizeWithFont:[UIFont systemFontOfSize:12] constrainedToSize:CGSizeMake(100,10000.0f) lineBreakMode:NSLineBreakByWordWrapping];
-    UILabel *companyL = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, frame.size.height-2-size.height-2, size.width, size.height)];
+    UILabel *companyL = [[UILabel alloc]initWithFrame:CGRectMake(LeftRightPadding, CGRectGetMinY(frame)+frame.size.height-2-size.height-2, size.width, size.height)];
     companyL.textAlignment = NSTextAlignmentRight;
     companyL.numberOfLines = 0;
     companyL.text = companyStr;

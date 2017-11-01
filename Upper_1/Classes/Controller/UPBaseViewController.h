@@ -29,3 +29,6 @@
 - (void)loadWithURLString:(NSString *)urlString;
 
 @end
+
+@interface UPBaseTableViewController :UITableViewController
+@end
