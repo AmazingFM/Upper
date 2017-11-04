@@ -11,7 +11,8 @@
 typedef NS_ENUM(NSInteger, UPCommentType) {
     UPCommentTypeReview = 0,    //回顾
     UPCommentTypeComment,   //评论
-    UPCommentTypeComplain   //投诉
+    UPCommentTypeComplain,   //投诉
+    UPCommentTypeFeedback   //用户意见反馈
 };
 
 @interface CommentUserItem : NSObject
@@ -53,4 +54,5 @@ typedef NS_ENUM(NSInteger, UPCommentType) {
 @property (nonatomic, copy) NSString *actID;
 @property (nonatomic) UPCommentType type; //0-我要回顾， 1-我要评论
 @property (nonatomic, weak) id<UPCommentDelegate> delegate;
+- (instancetype)initWithPlaceholder:(NSString *)placeholder;
 @end

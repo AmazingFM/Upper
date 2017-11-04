@@ -29,6 +29,8 @@
 #import "CRNavigationBar.h"
 #import "TTTAttributedLabel.h"
 #import "UPTextAlertView.h"
+#import "UIBarButtonItem+CH.h"
+#import "UPCommentController.h"
 
 @interface UpLoginController () <UITextFieldDelegate, UIGestureRecognizerDelegate, TTTAttributedLabelDelegate>
 {
@@ -63,7 +65,17 @@
     backImg.frame = self.view.bounds;
     [self.view addSubview:backImg];
     
-    self.navigationItem.rightBarButtonItem= nil;
+    UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    rightButton.frame = CGRectMake(0, 0, 25, 25);
+    [rightButton setTitle:@"?" forState:UIControlStateNormal];
+    [rightButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [rightButton setTitleColor:RGBCOLOR(251, 193, 41) forState:UIControlStateHighlighted];
+    rightButton.titleLabel.font = kUPThemeNormalFont;
+    rightButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    rightButton.layer.borderWidth = 0.6;
+    rightButton.layer.cornerRadius = 12.5;
+    [rightButton addTarget:self action:@selector(showFeedback:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightButton];
     
     UIButton *leftButton = [[UIButton alloc]initWithFrame:CGRectMake(0, FirstLabelHeight, ScreenWidth, 22)];
     [leftButton setTitle:@"登陆 Login" forState:UIControlStateNormal];
@@ -182,6 +194,21 @@
     
     TTTAttributedLabel *detailLabel = [self addTTAttributedLabel];
     [self.view addSubview:detailLabel];
+}
+
+- (void)showFeedback:(UIButton *)barItem
+{
+    //意见反馈
+    UPCommentController *commentController = [[UPCommentController alloc]init];
+    
+    commentController.title = @"我的意见";
+    commentController.type = UPCommentTypeFeedback;
+    //    commentController.delegate = self;
+    //2.设置导航栏barButton上面文字的颜色
+    UIBarButtonItem *item=[UIBarButtonItem appearance];
+    [item setTintColor:[UIColor whiteColor]];
+    [item setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]} forState:UIControlStateNormal];
+    [self.navigationController pushViewController:commentController animated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated

@@ -1062,6 +1062,8 @@
     if (alertView.tag==AlertTagBlock) {
         if (buttonIndex==1) { //确定
             [self blockThisUser];
+        }else{
+            return;
         }
     } else if (alertView.tag == AlertTagEdit) {
         if (buttonIndex==0) {

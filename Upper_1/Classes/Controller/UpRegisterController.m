@@ -10,6 +10,7 @@
 #import "UPGoShareController.h"
 #import "UINavigationController+FDFullscreenPopGesture.h"
 #import "MainController.h"
+#import "UPCommentController.h"
 #import "AppDelegate.h"
 #import "UPRegisterView.h"
 #import "UpRegister1.h"
@@ -79,7 +80,18 @@ typedef enum register_enum
     leftBarItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(leftClick)];
     
     self.navigationItem.leftBarButtonItem = leftBarItem;
-    self.navigationItem.rightBarButtonItem = nil;
+    
+    UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    rightButton.frame = CGRectMake(0, 0, 25, 25);
+    [rightButton setTitle:@"?" forState:UIControlStateNormal];
+    [rightButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [rightButton setTitleColor:RGBCOLOR(251, 193, 41) forState:UIControlStateHighlighted];
+    rightButton.titleLabel.font = kUPThemeNormalFont;
+    rightButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    rightButton.layer.borderWidth = 0.6;
+    rightButton.layer.cornerRadius = 12.5;
+    [rightButton addTarget:self action:@selector(showFeedback:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightButton];
     
     isLoading = NO;
     
@@ -159,6 +171,21 @@ typedef enum register_enum
     
     [self showRegisterView:0];
     [self.registerV1 loadAlphabetCitInfo];
+}
+
+- (void)showFeedback:(UIButton *)barItem
+{
+    //意见反馈
+    UPCommentController *commentController = [[UPCommentController alloc]initWithPlaceholder:@"数据根据行业协会资料整理，可能会有错漏，如果您的单位不在列表或者邮箱后缀有误，请给我们留下反馈..."];
+    
+    commentController.title = @"我的意见";
+    commentController.type = UPCommentTypeFeedback;
+//    commentController.delegate = self;
+    //2.设置导航栏barButton上面文字的颜色
+    UIBarButtonItem *item=[UIBarButtonItem appearance];
+    [item setTintColor:[UIColor whiteColor]];
+    [item setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]} forState:UIControlStateNormal];
+    [self.navigationController pushViewController:commentController animated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -359,7 +386,7 @@ typedef enum register_enum
             return;
     }
 
-    if (type==REGISTER_REQ && [_industryId isEqualToString:@"6"] && self.registerV5.noEmail) {
+    if (type==REGISTER_REQ && self.registerV5.imageData && self.registerV5.noEmail) {
         
         NSString *registeUrlStr = [NSString stringWithFormat:@"%@?a=Register", kBaseURL];
         NSData *imageData = self.registerV5.imageData;
@@ -535,5 +562,15 @@ typedef enum register_enum
         self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     }];
 }
-
+//
+//#pragma mark UPCommentDelegate
+//- (void)commentSuccess
+//{
+//    [self performSelector:@selector(dismissCommentController) withObject:nil afterDelay:0.1];
+//}
+//
+//- (void)dismissCommentController
+//{
+//    [self.navigationController popToViewController:self animated:YES];
+//}
 @end

@@ -294,15 +294,28 @@
     NSString *commentLevel;
     
     BOOL hasLoadEnrolledPeople;
+    
+    NSString *placeholderString;
 }
 @property (nonatomic, retain) NSMutableArray *userCommentItems;
 @end
 
 @implementation UPCommentController
-
+- (instancetype)initWithPlaceholder:(NSString *)placeholder
+{
+    self = [super init];
+    if (self) {
+        placeholderString = placeholder;
+    }
+    return self;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UPTools colorWithHex:0xf3f3f3];
+//    self.view.backgroundColor = [UPTools colorWithHex:0xf3f3f3];
+    UIImageView *backImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_cover_gaussian"]];
+    backImg.userInteractionEnabled = NO;
+    backImg.frame = self.view.bounds;
+    [self.view addSubview:backImg];
     
     [self doInit];
     
@@ -377,8 +390,13 @@ static const int textViewContentHeight = 150;
     commentTextView.layer.borderColor = [UIColor grayColor].CGColor;
     commentTextView.layer.borderWidth = 1;
     
-    NSArray *placeholderText = @[@"请输入你的回顾内容...", @"请输入你的评论内容...", @"请输入你的投诉内容..."];
-    commentTextView.placeholder = placeholderText[self.type];
+    NSArray *placeholderText = @[@"请输入您的回顾内容...", @"请输入您的评论内容...", @"请输入您的投诉内容...",@"请输入您的意见..."];
+    if (placeholderString.length!=0) {
+        commentTextView.placeholder = placeholderString;
+    } else {
+        commentTextView.placeholder = placeholderText[self.type];
+    }
+    
     [contentView addSubview:commentTextView];
     [scrollView addSubview:contentView];
     
@@ -420,7 +438,7 @@ static const int textViewContentHeight = 150;
         [RadioButton addObserverForGroupId:@"comment" observer:self];
         
         [scrollView addSubview:radioBackView];
-    } else if (self.type==UPCommentTypeComplain) {
+    } else if (self.type==UPCommentTypeComplain || self.type==UPCommentTypeFeedback) {
         UIFont *titleFont = [UIFont systemFontOfSize:15];
         CGSize size = [@"联系方式" sizeWithAttributes: @{NSFontAttributeName:titleFont}];
         
@@ -430,8 +448,8 @@ static const int textViewContentHeight = 150;
         
         teleField = [[UITextField alloc] initWithFrame:CGRectMake(LeftRightPadding+100, CGRectGetMinY(titleLabel.frame), ScreenWidth-2*LeftRightPadding-100, size.height)];
         teleField.textColor = [UIColor blackColor];
-        teleField.placeholder = @"请输入联系方式";
-        teleField.keyboardType = UIKeyboardTypeNumberPad;
+        teleField.placeholder = @"请输入邮箱或手机号";
+        teleField.keyboardType = UIKeyboardTypeEmailAddress;
         teleField.font = [UIFont systemFontOfSize:15.f];
         
         line = [[UIView alloc] initWithFrame:CGRectMake(LeftRightPadding,  CGRectGetMaxY(titleLabel.frame)+2, ScreenWidth-2*LeftRightPadding, 1)];
@@ -441,6 +459,7 @@ static const int textViewContentHeight = 150;
         descLabel = [self createLabelWithFrame:CGRectMake(LeftRightPadding, CGRectGetMaxY(titleLabel.frame)+5, ScreenWidth-2*LeftRightPadding, 50) withText:descStr];
         descLabel.numberOfLines = 0;
         descLabel.font = [UIFont systemFontOfSize:13.f];
+        
         
         [scrollView addSubview:titleLabel];
         [scrollView addSubview:teleField];
@@ -458,7 +477,7 @@ static const int textViewContentHeight = 150;
 - (void)submit {
     [self checkNetStatus];
     
-    if (!commentTextView.text.length) {
+    if (commentTextView.text.length==0) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请输入您的评论" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [alertView show];
         return;
@@ -547,13 +566,18 @@ static const int textViewContentHeight = 150;
         }];
 
     } else if (self.type==UPCommentTypeComment) {
-        
+        if (!teleField.text.length) {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请输入您的联系方式" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alertView show];
+            return;
+        }
+
         [MBProgressHUD showMessage:@"正在提交评论...." toView:self.view];
-        
         NSMutableDictionary *params = [NSMutableDictionary new];
         [params setObject:@"ActivityJoinModify"forKey:@"a"];
         [params setObject:self.actID forKey:@"activity_id"];
         [params setObject:commentTextView.text forKey:@"evaluate_text"];
+        [params setObject:teleField.text forKey:@"contact_no"];
         NSString *userStatus = @"5";
         [params setObject:userStatus forKey:@"user_status"];
         [params setObject:commentLevel forKey:@"evaluate_level_1"];
@@ -577,6 +601,7 @@ static const int textViewContentHeight = 150;
             return;
         }
 
+        [MBProgressHUD showMessage:@"正在提交投诉...." toView:self.view];
         NSMutableDictionary *params = [NSMutableDictionary new];
         [params setObject:@"ActivityComplain"forKey:@"a"];
         [params setObject:[UPDataManager shared].userInfo.ID forKey:@"user_id"];
@@ -585,6 +610,50 @@ static const int textViewContentHeight = 150;
         [params setObject:teleField.text forKey:@"contact_no"];
         [params setObject:@"0" forKey:@"type"];
         [params setObject:[UPDataManager shared].token forKey:@"token"];
+        
+        [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id json) {
+            [MBProgressHUD hideHUDForView:self.view];
+            NSDictionary *dict = (NSDictionary *)json;
+            NSString *resp_id = dict[@"resp_id"];
+            if ([resp_id intValue]==0) {
+                NSString *resp_desc = dict[@"resp_desc"];
+                [MBProgressHUD showSuccess:resp_desc];
+                [self commentSuccess];
+            }
+            else
+            {
+                NSString *resp_desc = dict[@"resp_desc"];
+                [MBProgressHUD showError:resp_desc];
+            }
+            
+        } failure:^(NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD showError:@"网络错误"];
+            });
+        }];
+    } else if (self.type==UPCommentTypeFeedback) {
+        
+        NSString *contact_no = teleField.text;
+        NSString *commentText = commentTextView.text;
+        if (contact_no.length==0) {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请输入您的联系方式" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alertView show];
+            return;
+        }
+        
+        if (commentText.length==0) {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请输入您的意见" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alertView show];
+            return;
+        }
+        
+        [MBProgressHUD showMessage:@"正在提交意见...." toView:self.view];
+        NSMutableDictionary *params = [NSMutableDictionary new];
+        [params setObject:@"ActivityComplain"forKey:@"a"];
+        [params setObject:@"0"forKey:@"user_id"];
+        [params setObject:commentText forKey:@"text"];
+        [params setObject:contact_no forKey:@"contact_no"];
+        [params setObject:@"1" forKey:@"type"];
         
         [[YMHttpNetwork sharedNetwork] GET:@"" parameters:params success:^(id json) {
             NSDictionary *dict = (NSDictionary *)json;
