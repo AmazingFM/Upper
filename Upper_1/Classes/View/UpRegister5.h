@@ -10,6 +10,23 @@
 #import "UpRegisterController.h"
 #import "UPRegisterView.h"
 
+typedef NS_ENUM(NSInteger, UPRegType)
+{
+    UPRegTypeMail,
+    UPRegTypeDoctor,
+    UPRegTypeNoMail,
+    UPRegTypeNone
+};
+
+@interface UPRegTypeInfo : NSObject
+
+@property (nonatomic) UPRegType regType;
+@property (nonatomic) int pos;
+
+- (void)next;
+
+@end
+
 typedef NS_ENUM(NSInteger, UPRegisterCellStyle)
 {
     UPRegisterCellStyleText,    //纯文本
@@ -61,6 +78,8 @@ typedef void (^CellFieldActionBlock) (UPRegisterCellItem *cellItem);
 @property (nonatomic, copy) NSString *emailPrefix;
 @property (nonatomic, copy) NSString *emailSuffix;
 @property (nonatomic) BOOL noEmail;
+@property (nonatomic, strong) UPRegTypeInfo *regTypeInfo;
+
 @property (nonatomic) NSString *industryID;
 @property (nonatomic) NSString *companyID;//公司id
 

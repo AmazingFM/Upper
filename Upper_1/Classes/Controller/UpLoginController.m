@@ -66,14 +66,14 @@
     [self.view addSubview:backImg];
     
     UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    rightButton.frame = CGRectMake(0, 0, 25, 25);
+    rightButton.frame = CGRectMake(0, 0, 22, 22);
     [rightButton setTitle:@"?" forState:UIControlStateNormal];
     [rightButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [rightButton setTitleColor:RGBCOLOR(251, 193, 41) forState:UIControlStateHighlighted];
     rightButton.titleLabel.font = kUPThemeNormalFont;
     rightButton.layer.borderColor = [UIColor whiteColor].CGColor;
     rightButton.layer.borderWidth = 0.6;
-    rightButton.layer.cornerRadius = 12.5;
+    rightButton.layer.cornerRadius = 11;
     [rightButton addTarget:self action:@selector(showFeedback:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightButton];
     

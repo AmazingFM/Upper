@@ -336,6 +336,7 @@
 		857DA6741E4CA2C400250605 /* ico_make.png in Resources */ = {isa = PBXBuildFile; fileRef = 857DA6711E4CA2C400250605 /* ico_make.png */; };
 		857DA6751E4CA2C400250605 /* JSDropDownMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 857DA6731E4CA2C400250605 /* JSDropDownMenu.m */; };
 		85ABCF201FA5D93C0090E740 /* airPhoto.png in Resources */ = {isa = PBXBuildFile; fileRef = 85ABCF1F1FA5D93C0090E740 /* airPhoto.png */; };
+		85ABCF221FAE19B40090E740 /* question@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 85ABCF211FAE19B40090E740 /* question@2x.png */; };
 		85B344EF1E51FCD3002E69A9 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 85B344E61E51FCD3002E69A9 /* LICENSE */; };
 		85B344F11E51FCD3002E69A9 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B344EA1E51FCD3002E69A9 /* TTTAttributedLabel.m */; };
 		85B344F81E534023002E69A9 /* UIImageView+Upper.m in Sources */ = {isa = PBXBuildFile; fileRef = 85B344F71E534023002E69A9 /* UIImageView+Upper.m */; };
@@ -926,6 +927,7 @@
 		857DA6721E4CA2C400250605 /* JSDropDownMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSDropDownMenu.h; sourceTree = "<group>"; };
 		857DA6731E4CA2C400250605 /* JSDropDownMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSDropDownMenu.m; sourceTree = "<group>"; };
 		85ABCF1F1FA5D93C0090E740 /* airPhoto.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = airPhoto.png; sourceTree = "<group>"; };
+		85ABCF211FAE19B40090E740 /* question@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "question@2x.png"; sourceTree = "<group>"; };
 		85B344E61E51FCD3002E69A9 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		85B344E71E51FCD3002E69A9 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		85B344E91E51FCD3002E69A9 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
@@ -1581,6 +1583,7 @@
 		3A71CB3A1E26267700EBE0A2 /* pic */ = {
 			isa = PBXGroup;
 			children = (
+				85ABCF211FAE19B40090E740 /* question@2x.png */,
 				85ABCF1F1FA5D93C0090E740 /* airPhoto.png */,
 				85D6158E1F8E6CE4001A0033 /* icon_refresh@2x.png */,
 				85D6158C1F829024001A0033 /* awardsList.png */,
@@ -2391,6 +2394,7 @@
 				3A71CBAA1E26267700EBE0A2 /* error.png in Resources */,
 				8520CD631ED96FA600690739 /* icon_wx_timeline@2x.png in Resources */,
 				3A71CBA41E26267700EBE0A2 /* chatto_bg_normal.png in Resources */,
+				85ABCF221FAE19B40090E740 /* question@2x.png in Resources */,
 				3AF6803F1EC14F69007D3B91 /* icon_msg_change_launcher@2x.png in Resources */,
 				3A71CB8B1E26267700EBE0A2 /* act.png in Resources */,
 				8555DE631EBCC62E0012F162 /* default_activity_206@2x.png in Resources */,

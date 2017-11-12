@@ -82,14 +82,14 @@ typedef enum register_enum
     self.navigationItem.leftBarButtonItem = leftBarItem;
     
     UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    rightButton.frame = CGRectMake(0, 0, 25, 25);
+    rightButton.frame = CGRectMake(0, 0, 22, 22);
     [rightButton setTitle:@"?" forState:UIControlStateNormal];
     [rightButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [rightButton setTitleColor:RGBCOLOR(251, 193, 41) forState:UIControlStateHighlighted];
     rightButton.titleLabel.font = kUPThemeNormalFont;
     rightButton.layer.borderColor = [UIColor whiteColor].CGColor;
     rightButton.layer.borderWidth = 0.6;
-    rightButton.layer.cornerRadius = 12.5;
+    rightButton.layer.cornerRadius = 11;
     [rightButton addTarget:self action:@selector(showFeedback:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightButton];
     
@@ -176,7 +176,11 @@ typedef enum register_enum
 - (void)showFeedback:(UIButton *)barItem
 {
     //意见反馈
-    UPCommentController *commentController = [[UPCommentController alloc]initWithPlaceholder:@"数据根据行业协会资料整理，可能会有错漏，如果您的单位不在列表或者邮箱后缀有误，请给我们留下反馈..."];
+    NSString *placeholderString = @"请输入您的意见...";
+    if (whichStep==2) {
+        placeholderString = @"数据根据行业协会资料整理，可能会有错漏，如果您的单位不在列表或者邮箱后缀有误，请给我们留下反馈...";
+    }
+    UPCommentController *commentController = [[UPCommentController alloc]initWithPlaceholder:placeholderString];
     
     commentController.title = @"我的意见";
     commentController.type = UPCommentTypeFeedback;
@@ -296,9 +300,15 @@ typedef enum register_enum
     }
     else if(idx==4){
         if (_emailSuffix &&_emailSuffix.length>0) {
+            self.registerV5.regTypeInfo.regType = UPRegTypeMail;
             self.registerV5.noEmail = NO;
             self.registerV5.emailSuffix = _emailSuffix;
         } else {
+            if ([_industryId  isEqualToString:@"1"]) { //医生
+                self.registerV5.regTypeInfo.regType = UPRegTypeDoctor;
+            } else {
+                self.registerV5.regTypeInfo.regType = UPRegTypeNoMail;
+            }
             self.registerV5.noEmail = YES;
         }
         
