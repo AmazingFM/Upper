@@ -177,7 +177,7 @@ typedef enum register_enum
 {
     //意见反馈
     NSString *placeholderString = @"请输入您的意见...";
-    if (whichStep==2) {
+    if (whichStep==2 || whichStep==4) {
         placeholderString = @"数据根据行业协会资料整理，可能会有错漏，如果您的单位不在列表或者邮箱后缀有误，请给我们留下反馈...";
     }
     UPCommentController *commentController = [[UPCommentController alloc]initWithPlaceholder:placeholderString];
