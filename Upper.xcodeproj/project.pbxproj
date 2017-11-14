@@ -2313,7 +2313,7 @@
 				TargetAttributes = {
 					FECE88121BE344DA00CC8E85 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 77565T989X;
+						DevelopmentTeam = 8DZS62MHVB;
 					};
 				};
 			};
@@ -2802,9 +2802,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Yongming Zhang (77565T989X)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yongming Zhang (77565T989X)";
-				DEVELOPMENT_TEAM = 77565T989X;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Upper Technology Co. Ltd (8DZS62MHVB)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Upper Technology Co. Ltd (8DZS62MHVB)";
+				DEVELOPMENT_TEAM = 8DZS62MHVB;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Upper_1/PrefixHeader.pch;
 				INFOPLIST_FILE = Upper_1/Info.plist;
@@ -2823,8 +2823,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.upper.UpperForiOS;
 				PRODUCT_NAME = Upper;
-				PROVISIONING_PROFILE = "784d64dc-8a93-4658-b493-dd77ea4d578f";
-				PROVISIONING_PROFILE_SPECIFIER = YMWildPro_Adhoc;
+				PROVISIONING_PROFILE = "9e0caf4e-1125-4c07-a58c-4bd816fee1bb";
+				PROVISIONING_PROFILE_SPECIFIER = UpperPro_dis;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Adhoc;
@@ -2918,9 +2918,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Yongming Zhang (V76QA6Q843)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yongming Zhang (V76QA6Q843)";
-				DEVELOPMENT_TEAM = 77565T989X;
+				CODE_SIGN_IDENTITY = "iPhone Developer: yue xiang (2F5A8LSL7W)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: yue xiang (2F5A8LSL7W)";
+				DEVELOPMENT_TEAM = 8DZS62MHVB;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Upper_1/PrefixHeader.pch;
 				INFOPLIST_FILE = Upper_1/Info.plist;
@@ -2939,8 +2939,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.upper.UpperForiOS;
 				PRODUCT_NAME = Upper;
-				PROVISIONING_PROFILE = "2296c9e8-aa44-4fa5-9f9f-c5da751f97f1";
-				PROVISIONING_PROFILE_SPECIFIER = YMWildPro;
+				PROVISIONING_PROFILE = "4945c3e6-1107-4feb-8a0c-031cdaab4c15";
+				PROVISIONING_PROFILE_SPECIFIER = UpperPro_dev;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -2971,7 +2971,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.upper.UpperForiOS;
 				PRODUCT_NAME = Upper;
-				PROVISIONING_PROFILE = "f1f241c4-ed76-4478-a686-ef694d08ba3e";
+				PROVISIONING_PROFILE = "9e0caf4e-1125-4c07-a58c-4bd816fee1bb";
 				PROVISIONING_PROFILE_SPECIFIER = UpperPro_dis;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
