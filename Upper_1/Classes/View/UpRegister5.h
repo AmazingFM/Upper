@@ -12,9 +12,11 @@
 
 typedef NS_ENUM(NSInteger, UPRegType)
 {
-    UPRegTypeMail,
+    UPRegTypeMailThree,
+    UPregTypeMailTwo,
+    UPRegTypeNoMailTwo,
+    UPRegTypeNoMailOne,
     UPRegTypeDoctor,
-    UPRegTypeNoMail,
     UPRegTypeNone
 };
 

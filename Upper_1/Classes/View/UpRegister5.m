@@ -37,11 +37,17 @@
     _regType = regType;
     _pos = 0;
     switch (regType) {
-        case UPRegTypeMail:
+        case UPRegTypeMailThree:
             self.cycleNum = 3;
             break;
-        case UPRegTypeNoMail:
+        case UPregTypeMailTwo:
             self.cycleNum = 2;
+            break;
+        case UPRegTypeNoMailTwo:
+            self.cycleNum = 2;
+            break;
+        case UPRegTypeNoMailOne:
+            self.cycleNum = 1;
             break;
         case UPRegTypeDoctor:
             self.cycleNum = 2;
@@ -452,11 +458,10 @@
     if (!_noEmail) {
         return [NSString stringWithFormat:@"%@%@", self.emailPrefix, _emailSuffix];
     } else {
-        if ([_industryID isEqualToString:@"1"]) {
-            return [NSString stringWithFormat:@"%@", self.empID];
-        } else if (self.imageData!=nil) {
-            //原来设计航空业（id为6）属于特殊情况，使用证件照；现在调整为除医生外的所有行业
+        if (self.imageData!=nil) {
             return @"upload_image";
+        } else if ([_industryID isEqualToString:@"1"]) {
+            return [NSString stringWithFormat:@"%@", self.empID];
         } else {
             return [NSString stringWithFormat:@"%@|%@", self.comPhone, self.empID];
         }
@@ -468,10 +473,10 @@
     if (!_noEmail) {
         return @"0";
     } else {
-        if ([_industryID isEqualToString:@"1"]) {//医生
-            return @"1";
-        } else if (self.imageData!=nil) {
+        if (self.imageData!=nil) {
             return @"3";
+        } else if ([_industryID isEqualToString:@"1"]) {//医生
+            return @"1";
         } else {
             return @"2";
         }
@@ -536,7 +541,7 @@
 - (void)getRegistElements
 {
     switch (self.regTypeInfo.regType) {
-        case UPRegTypeMail:
+        case UPRegTypeMailThree:
         {
             if (self.regTypeInfo.pos==0) {
                 [self.itemList removeAllObjects];
@@ -557,16 +562,13 @@
                 __weak typeof(self) weakSelf = self;
                 UPRegisterCellItem *noEmailBtnItem = [[UPRegisterCellItem alloc] init];
                 noEmailBtnItem.cellStyle = UPRegisterCellStyleButton;
-                if([self.industryID isEqualToString:@"6"]) {//航空
-                    noEmailBtnItem.title = @"没有邮箱?";
-                } else {
-                    noEmailBtnItem.title = @"不能接收外网邮件?";
-                }
+                noEmailBtnItem.title = @"不能接收外网邮件?";
                 noEmailBtnItem.actionBlock = ^{
                     [weakSelf.regTypeInfo next];
                     [weakSelf resize];
                     weakSelf.imageData = nil;
                     [weakSelf reloadItems];
+                    _noEmail = YES;
                 };
                 [self.itemList addObject:noEmailBtnItem];
             } else if (self.regTypeInfo.pos==1) {
@@ -596,6 +598,7 @@
                     [weakSelf resize];
                     weakSelf.imageData = nil;
                     [weakSelf reloadItems];
+                    _noEmail = YES;
                 };
                 
                 UPRegisterCellItem *telephoneItem = [[UPRegisterCellItem alloc] init];
@@ -626,38 +629,31 @@
                 __weak typeof(self) weakSelf = self;
                 UPRegisterCellItem *noEmailBtnItem = [[UPRegisterCellItem alloc] init];
                 noEmailBtnItem.cellStyle = UPRegisterCellStyleButton;
-                if([self.industryID isEqualToString:@"6"]) {//航空
-                    noEmailBtnItem.title = @"有公司邮箱?";
-                } else {
-                    noEmailBtnItem.title = @"可以接收外网邮件?";
-                }
+                noEmailBtnItem.title = @"可以接收外网邮件?";
                 noEmailBtnItem.actionBlock = ^{
                     [weakSelf.regTypeInfo next];
                     [weakSelf resize];
                     weakSelf.imageData = nil;
                     [weakSelf reloadItems];
+                    _noEmail = NO;
                 };
                 [self.itemList addObject:noEmailBtnItem];
                 
-                if([self.industryID isEqualToString:@"6"]) {//航空
-                    descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的姓名，手机号，我们会进行后续核实验证。";
-                }else {
-                    descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的姓名，单位电话、员工号和手机号，我们会进行后续核实验证。（若不上传证件照，则必须填写其他信息）";
-                    
-                    
-                    UPRegisterCellItem *comphoneItem = [[UPRegisterCellItem alloc] init];
-                    comphoneItem.key = @"comphone";
-                    comphoneItem.cellStyle = UPRegisterCellStyleTelephoneField;
-                    comphoneItem.title = @"单位电话\nCompany phone";
-                    [self.itemList addObject:comphoneItem];
-                    
-                    
-                    UPRegisterCellItem *empIdItem = [[UPRegisterCellItem alloc] init];
-                    empIdItem.key = @"empID";
-                    empIdItem.cellStyle = UPRegisterCellStyleField;
-                    empIdItem.title = @"员工号\nEmp NO.";
-                    [self.itemList addObject:empIdItem];
-                }
+                descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的姓名，单位电话、员工号和手机号，我们会进行后续核实验证。";
+                
+                
+                UPRegisterCellItem *comphoneItem = [[UPRegisterCellItem alloc] init];
+                comphoneItem.key = @"comphone";
+                comphoneItem.cellStyle = UPRegisterCellStyleTelephoneField;
+                comphoneItem.title = @"单位电话\nCompany phone";
+                [self.itemList addObject:comphoneItem];
+                
+                
+                UPRegisterCellItem *empIdItem = [[UPRegisterCellItem alloc] init];
+                empIdItem.key = @"empID";
+                empIdItem.cellStyle = UPRegisterCellStyleField;
+                empIdItem.title = @"员工号\nEmp NO.";
+                [self.itemList addObject:empIdItem];
                 
                 UPRegisterCellItem *nameItem = [[UPRegisterCellItem alloc] init];
                 nameItem.key = @"name";
@@ -684,7 +680,91 @@
             }
         }
             break;
-        case UPRegTypeNoMail:
+        case UPregTypeMailTwo:
+        {
+            if (self.regTypeInfo.pos==0) {
+                [self.itemList removeAllObjects];
+                UPRegisterCellItem *descItem = [[UPRegisterCellItem alloc] init];
+                descItem.key = @"desc";
+                descItem.cellStyle = UPRegisterCellStyleText;
+                descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的公司邮箱，我们会向您提供的邮箱内发送一份验证邮件，点击邮件中的激活链接即可激活您的账号。";
+                
+                UPRegisterCellItem *emailItem = [[UPRegisterCellItem alloc] init];
+                emailItem.key = @"email";
+                emailItem.cellStyle = UPRegisterCellStyleEmail;
+                emailItem.title = @"行业邮箱\nEmail";
+                emailItem.email = self.emailSuffix;
+                
+                [self.itemList addObject:descItem];
+                [self.itemList addObject:emailItem];
+                
+                __weak typeof(self) weakSelf = self;
+                UPRegisterCellItem *noEmailBtnItem = [[UPRegisterCellItem alloc] init];
+                noEmailBtnItem.cellStyle = UPRegisterCellStyleButton;
+                if([self.industryID isEqualToString:@"6"]) {//航空
+                    noEmailBtnItem.title = @"没有邮箱?";
+                } else {
+                    noEmailBtnItem.title = @"不能接收外网邮件?";
+                }
+                noEmailBtnItem.actionBlock = ^{
+                    [weakSelf.regTypeInfo next];
+                    [weakSelf resize];
+                    weakSelf.imageData = nil;
+                    [weakSelf reloadItems];
+                    _noEmail = YES;
+                };
+                [self.itemList addObject:noEmailBtnItem];
+            } else if (self.regTypeInfo.pos==1) {
+                [self.itemList removeAllObjects];
+                UPRegisterCellItem *descItem = [[UPRegisterCellItem alloc] init];
+                descItem.key = @"desc";
+                descItem.cellStyle = UPRegisterCellStyleText;
+                descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请上传清晰的工作证件照，并输入手机号，我们会进行后续核实验证。";
+                [self.itemList addObject:descItem];
+                
+                UPRegisterCellItem *photoItem = [[UPRegisterCellItem alloc] init];
+                photoItem.cellStyle = UPRegisterCellStylePhoto;
+                photoItem.key = @"airPhoto";
+                
+                NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"airPhoto" ofType:@"png"]];
+                photoItem.imageData = self.imageData?:data;
+                photoItem.actionBlock = ^{
+                    [self takePhoto];
+                };
+                
+                __weak typeof(self) weakSelf = self;
+                UPRegisterCellItem *noEmailBtnItem = [[UPRegisterCellItem alloc] init];
+                noEmailBtnItem.cellStyle = UPRegisterCellStyleButton;
+                noEmailBtnItem.title = @"没有工作证件?";
+                noEmailBtnItem.actionBlock = ^{
+                    [weakSelf.regTypeInfo next];
+                    [weakSelf resize];
+                    weakSelf.imageData = nil;
+                    [weakSelf reloadItems];
+                    _noEmail = NO;
+                };
+                
+                UPRegisterCellItem *telephoneItem = [[UPRegisterCellItem alloc] init];
+                telephoneItem.key = @"telephone";
+                telephoneItem.cellStyle = UPRegisterCellStyleTelephoneField;
+                telephoneItem.title = @"手机号\nCellphone";
+                
+                UPRegisterCellItem *verifyItem = [[UPRegisterCellItem alloc] init];
+                verifyItem.key = @"verify";
+                verifyItem.cellStyle = UPRegisterCellStyleVerifyCode;
+                verifyItem.title = @"验证码\nVerifyCode";
+                verifyItem.actionBlock = ^{
+                    [weakSelf sendSMS];
+                };
+                
+                [self.itemList addObject:photoItem];
+                [self.itemList addObject:noEmailBtnItem];
+                [self.itemList addObject:telephoneItem];
+                [self.itemList addObject:verifyItem];
+            }
+        }
+            break;
+        case UPRegTypeNoMailTwo:
         {
             if (self.regTypeInfo.pos==0) {
                 [self.itemList removeAllObjects];
@@ -751,26 +831,21 @@
                     [weakSelf reloadItems];
                 };
                 [self.itemList addObject:noEmailBtnItem];
+                descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的姓名，单位电话、员工号和手机号，我们会进行后续核实验证。";
                 
-                if([self.industryID isEqualToString:@"6"]) {//航空
-                    descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的姓名，手机号，我们会进行后续核实验证。";
-                }else {
-                    descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请输入您的姓名，单位电话、员工号和手机号，我们会进行后续核实验证。（若不上传证件照，则必须填写其他信息）";
-                    
-                    
-                    UPRegisterCellItem *comphoneItem = [[UPRegisterCellItem alloc] init];
-                    comphoneItem.key = @"comphone";
-                    comphoneItem.cellStyle = UPRegisterCellStyleTelephoneField;
-                    comphoneItem.title = @"单位电话\nCompany phone";
-                    [self.itemList addObject:comphoneItem];
-                    
-                    
-                    UPRegisterCellItem *empIdItem = [[UPRegisterCellItem alloc] init];
-                    empIdItem.key = @"empID";
-                    empIdItem.cellStyle = UPRegisterCellStyleField;
-                    empIdItem.title = @"员工号\nEmp NO.";
-                    [self.itemList addObject:empIdItem];
-                }
+                
+                UPRegisterCellItem *comphoneItem = [[UPRegisterCellItem alloc] init];
+                comphoneItem.key = @"comphone";
+                comphoneItem.cellStyle = UPRegisterCellStyleTelephoneField;
+                comphoneItem.title = @"单位电话\nCompany phone";
+                [self.itemList addObject:comphoneItem];
+                
+                
+                UPRegisterCellItem *empIdItem = [[UPRegisterCellItem alloc] init];
+                empIdItem.key = @"empID";
+                empIdItem.cellStyle = UPRegisterCellStyleField;
+                empIdItem.title = @"员工号\nEmp NO.";
+                [self.itemList addObject:empIdItem];
                 
                 UPRegisterCellItem *nameItem = [[UPRegisterCellItem alloc] init];
                 nameItem.key = @"name";
@@ -792,6 +867,57 @@
                 
                 
                 [self.itemList addObject:nameItem];
+                [self.itemList addObject:telephoneItem];
+                [self.itemList addObject:verifyItem];
+            }
+        }
+            break;
+        case UPRegTypeNoMailOne:
+        {
+            if (self.regTypeInfo.pos==0) {
+                [self.itemList removeAllObjects];
+                UPRegisterCellItem *descItem = [[UPRegisterCellItem alloc] init];
+                descItem.key = @"desc";
+                descItem.cellStyle = UPRegisterCellStyleText;
+                descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请上传清晰的工作证件照，并输入手机号，我们会进行后续核实验证。";
+                [self.itemList addObject:descItem];
+                
+                UPRegisterCellItem *photoItem = [[UPRegisterCellItem alloc] init];
+                photoItem.cellStyle = UPRegisterCellStylePhoto;
+                photoItem.key = @"airPhoto";
+                
+                NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"airPhoto" ofType:@"png"]];
+                photoItem.imageData = self.imageData?:data;
+                photoItem.actionBlock = ^{
+                    [self takePhoto];
+                };
+                
+                __weak typeof(self) weakSelf = self;
+//                UPRegisterCellItem *noEmailBtnItem = [[UPRegisterCellItem alloc] init];
+//                noEmailBtnItem.cellStyle = UPRegisterCellStyleButton;
+//                noEmailBtnItem.title = @"没有工作证件?";
+//                noEmailBtnItem.actionBlock = ^{
+//                    [weakSelf.regTypeInfo next];
+//                    [weakSelf resize];
+//                    weakSelf.imageData = nil;
+//                    [weakSelf reloadItems];
+//                };
+                
+                UPRegisterCellItem *telephoneItem = [[UPRegisterCellItem alloc] init];
+                telephoneItem.key = @"telephone";
+                telephoneItem.cellStyle = UPRegisterCellStyleTelephoneField;
+                telephoneItem.title = @"手机号\nCellphone";
+                
+                UPRegisterCellItem *verifyItem = [[UPRegisterCellItem alloc] init];
+                verifyItem.key = @"verify";
+                verifyItem.cellStyle = UPRegisterCellStyleVerifyCode;
+                verifyItem.title = @"验证码\nVerifyCode";
+                verifyItem.actionBlock = ^{
+                    [weakSelf sendSMS];
+                };
+                
+                [self.itemList addObject:photoItem];
+//                [self.itemList addObject:noEmailBtnItem];
                 [self.itemList addObject:telephoneItem];
                 [self.itemList addObject:verifyItem];
             }
@@ -975,7 +1101,8 @@
 -(NSString *)alertMsg
 {
     switch (self.regTypeInfo.regType) {
-        case UPRegTypeMail:
+        case UPRegTypeMailThree:
+        case UPregTypeMailTwo:
         {
             if (self.regTypeInfo.pos==0) {
                 for (UPRegisterCellItem *cellItem in self.itemList) {
@@ -1017,11 +1144,8 @@
                     }
                 }
                 
-                
-                if(![self.industryID isEqualToString:@"6"]) {//非航空
-                    if ([valueDict[@"comphone"] length]==0) {
-                        return @"请输入单位电话";
-                    }
+                if ([valueDict[@"comphone"] length]==0) {
+                    return @"请输入单位电话";
                 }
                 
                 if ([valueDict[@"name"] length]==0) {
@@ -1034,7 +1158,8 @@
             }
         }
             break;
-        case UPRegTypeNoMail:
+        case UPRegTypeNoMailTwo:
+        case UPRegTypeNoMailOne:
         {
             if (self.regTypeInfo.pos==0) {
                 if (self.imageData==nil) {
@@ -1067,11 +1192,8 @@
                     }
                 }
                 
-                
-                if(![self.industryID isEqualToString:@"6"]) {//非航空
-                    if ([valueDict[@"comphone"] length]==0) {
-                        return @"请输入单位电话";
-                    }
+                if ([valueDict[@"comphone"] length]==0) {
+                    return @"请输入单位电话";
                 }
 
                 if ([valueDict[@"name"] length]==0) {
@@ -1087,25 +1209,6 @@
         case UPRegTypeDoctor:
         {
             if (self.regTypeInfo.pos==0) {
-                if (self.imageData==nil) {
-                    return @"请上传工作证件照";
-                }
-                
-                NSArray *keys = @[@"telephone"];
-                NSMutableDictionary *valueDict = [NSMutableDictionary new];
-                for (NSString *key in keys) {
-                    for (UPRegisterCellItem *cellItem in self.itemList) {
-                        if ([cellItem.key isEqualToString:key]) {
-                            NSString *value = (cellItem.value.length==0)?@"":cellItem.value;
-                            [valueDict setObject:value forKey:key];
-                        }
-                    }
-                }
-
-                if ([valueDict[@"telephone"] length]==0) {
-                    return @"手机号不正确";
-                }
-            } else if (self.regTypeInfo.pos==1) {
                 NSArray *keys = @[@"empID" ,@"name", @"telephone"];
                 NSMutableDictionary *valueDict = [NSMutableDictionary new];
                 for (NSString *key in keys) {
@@ -1127,6 +1230,25 @@
                 if ([valueDict[@"telephone"] length]==0) {
                     return @"手机号不正确";
                 }
+            } else if (self.regTypeInfo.pos==1) {
+                if (self.imageData==nil) {
+                    return @"请上传工作证件照";
+                }
+                
+                NSArray *keys = @[@"telephone"];
+                NSMutableDictionary *valueDict = [NSMutableDictionary new];
+                for (NSString *key in keys) {
+                    for (UPRegisterCellItem *cellItem in self.itemList) {
+                        if ([cellItem.key isEqualToString:key]) {
+                            NSString *value = (cellItem.value.length==0)?@"":cellItem.value;
+                            [valueDict setObject:value forKey:key];
+                        }
+                    }
+                }
+
+                if ([valueDict[@"telephone"] length]==0) {
+                    return @"手机号不正确";
+                }
             }
         }
             break;
@@ -1134,7 +1256,8 @@
             break;
     }
 
-    if (self.regTypeInfo.regType!=UPRegTypeMail) {
+    if (self.regTypeInfo.regType!=UPRegTypeMailThree ||
+        self.regTypeInfo.regType!=UPregTypeMailTwo) {
         for (UPRegisterCellItem *cellItem in self.itemList) {
             if ([cellItem.key isEqualToString:@"verify"]) {
                 if (cellItem.value.length==0) {

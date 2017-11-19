@@ -299,15 +299,24 @@ typedef enum register_enum
         [self.nextBtn setTitle:@"下一步" forState:UIControlStateNormal];
     }
     else if(idx==4){
+        //医生1， 律师2，金融3， 科技4，会计师5，航空6，咨询7， 高校8
+        int industryId = [_industryId intValue];
+        
         if (_emailSuffix &&_emailSuffix.length>0) {
-            self.registerV5.regTypeInfo.regType = UPRegTypeMail;
+            if (industryId==3 || industryId==6 || industryId==8) {
+                self.registerV5.regTypeInfo.regType = UPregTypeMailTwo;
+            } else {
+                self.registerV5.regTypeInfo.regType = UPRegTypeMailThree;
+            }
             self.registerV5.noEmail = NO;
             self.registerV5.emailSuffix = _emailSuffix;
         } else {
-            if ([_industryId  isEqualToString:@"1"]) { //医生
+            if (industryId==1) { //医生
                 self.registerV5.regTypeInfo.regType = UPRegTypeDoctor;
+            } else if (industryId==3 || industryId==6 || industryId==8) {
+                self.registerV5.regTypeInfo.regType = UPRegTypeNoMailOne;
             } else {
-                self.registerV5.regTypeInfo.regType = UPRegTypeNoMail;
+                self.registerV5.regTypeInfo.regType = UPRegTypeNoMailTwo;
             }
             self.registerV5.noEmail = YES;
         }
