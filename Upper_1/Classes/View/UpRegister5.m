@@ -719,7 +719,13 @@
                 UPRegisterCellItem *descItem = [[UPRegisterCellItem alloc] init];
                 descItem.key = @"desc";
                 descItem.cellStyle = UPRegisterCellStyleText;
-                descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请上传清晰的工作证件照，并输入手机号，我们会进行后续核实验证。";
+                
+                if ([self.industryID intValue]==6) {
+                    descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请上传清晰的工作证件或校园卡，并输入手机号，我们会进行后续核实验证。";
+                } else {
+                    descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请上传清晰的工作证件照，并输入手机号，我们会进行后续核实验证。";
+                }
+                
                 [self.itemList addObject:descItem];
                 
                 UPRegisterCellItem *photoItem = [[UPRegisterCellItem alloc] init];
@@ -879,7 +885,13 @@
                 UPRegisterCellItem *descItem = [[UPRegisterCellItem alloc] init];
                 descItem.key = @"desc";
                 descItem.cellStyle = UPRegisterCellStyleText;
-                descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请上传清晰的工作证件照，并输入手机号，我们会进行后续核实验证。";
+                
+                if ([self.industryID intValue]==6) {
+                    descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请上传清晰的工作证件或校园卡，并输入手机号，我们会进行后续核实验证。";
+                } else {
+                    descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请上传清晰的工作证件照，并输入手机号，我们会进行后续核实验证。";
+                }
+
                 [self.itemList addObject:descItem];
                 
                 UPRegisterCellItem *photoItem = [[UPRegisterCellItem alloc] init];
@@ -1256,7 +1268,7 @@
             break;
     }
 
-    if (self.regTypeInfo.regType!=UPRegTypeMailThree ||
+    if (self.regTypeInfo.regType!=UPRegTypeMailThree &&
         self.regTypeInfo.regType!=UPregTypeMailTwo) {
         for (UPRegisterCellItem *cellItem in self.itemList) {
             if ([cellItem.key isEqualToString:@"verify"]) {
