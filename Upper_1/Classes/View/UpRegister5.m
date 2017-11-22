@@ -721,6 +721,8 @@
                 descItem.cellStyle = UPRegisterCellStyleText;
                 
                 if ([self.industryID intValue]==6) {
+                    descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请上传清晰的登机证，并输入手机号，我们会进行后续核实验证。";
+                } else if ([self.industryID intValue]==8) {
                     descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请上传清晰的工作证件或校园卡，并输入手机号，我们会进行后续核实验证。";
                 } else {
                     descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请上传清晰的工作证件照，并输入手机号，我们会进行后续核实验证。";
@@ -887,6 +889,8 @@
                 descItem.cellStyle = UPRegisterCellStyleText;
                 
                 if ([self.industryID intValue]==6) {
+                    descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请上传清晰的登机证，并输入手机号，我们会进行后续核实验证。";
+                } else if ([self.industryID intValue]==8) {
                     descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请上传清晰的工作证件或校园卡，并输入手机号，我们会进行后续核实验证。";
                 } else {
                     descItem.title = @"温馨提醒:您当前账号还需要通过行业验证才能完成。请上传清晰的工作证件照，并输入手机号，我们会进行后续核实验证。";
