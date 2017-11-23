@@ -15,7 +15,7 @@
 
 #define VERTICAL_SPACE 40
 #define VerifyBtnWidth 100
-#define TimeInterval 10
+#define TimeInterval 60
 
 @interface UPRegTypeInfo()
 @property (nonatomic) int cycleNum;
