@@ -2314,6 +2314,7 @@
 					FECE88121BE344DA00CC8E85 = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = 8DZS62MHVB;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -2803,8 +2804,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Upper Technology Co. Ltd (8DZS62MHVB)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Upper Technology Co. Ltd (8DZS62MHVB)";
-				DEVELOPMENT_TEAM = 8DZS62MHVB;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Upper_1/PrefixHeader.pch;
 				INFOPLIST_FILE = Upper_1/Info.plist;
@@ -2823,8 +2825,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.upper.UpperForiOS;
 				PRODUCT_NAME = Upper;
-				PROVISIONING_PROFILE = "f1f241c4-ed76-4478-a686-ef694d08ba3e";
-				PROVISIONING_PROFILE_SPECIFIER = UpperPro_dis;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Adhoc;
@@ -2919,8 +2921,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: yue xiang (2F5A8LSL7W)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: yue xiang (2F5A8LSL7W)";
-				DEVELOPMENT_TEAM = 8DZS62MHVB;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Upper_1/PrefixHeader.pch;
 				INFOPLIST_FILE = Upper_1/Info.plist;
@@ -2939,8 +2942,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.upper.UpperForiOS;
 				PRODUCT_NAME = Upper;
-				PROVISIONING_PROFILE = "4945c3e6-1107-4feb-8a0c-031cdaab4c15";
-				PROVISIONING_PROFILE_SPECIFIER = UpperPro_dev;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -2951,8 +2954,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Upper Technology Co. Ltd (8DZS62MHVB)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Upper Technology Co. Ltd (8DZS62MHVB)";
-				DEVELOPMENT_TEAM = 8DZS62MHVB;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Upper_1/PrefixHeader.pch;
 				INFOPLIST_FILE = Upper_1/Info.plist;
@@ -2971,8 +2975,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.upper.UpperForiOS;
 				PRODUCT_NAME = Upper;
-				PROVISIONING_PROFILE = "f1f241c4-ed76-4478-a686-ef694d08ba3e";
-				PROVISIONING_PROFILE_SPECIFIER = UpperPro_dis;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
