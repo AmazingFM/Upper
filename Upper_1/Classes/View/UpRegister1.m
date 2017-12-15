@@ -72,9 +72,8 @@
     _hotCityGV.items = _arrayHotCity;
     [_tableHeaderView addSubview:_hotCityGV];
     
-    
     _tableHeaderView.frame = CGRectMake(LeftRightPadding, 0, _tableView.frame.size.width-2*LeftRightPadding, _hotCityGV.frame.origin.y+_hotCityGV.frame.size.height);
-    _tableView.tableHeaderView.frame = _tableHeaderView.frame;
+//    _tableView.tableHeaderView.frame = _tableHeaderView.frame;
     _tableView.tableHeaderView = _tableHeaderView;
 }
 

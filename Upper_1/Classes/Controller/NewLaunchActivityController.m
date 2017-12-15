@@ -62,6 +62,11 @@ static CGFloat const FixRatio = 4/3.0;
     self.tableView.dataSource = self;
     
     [self.view addSubview:self.tableView];
+    
+    [UPConfig sharedInstance].refreshBlock = ^{
+        [self.tableView reloadData];
+    };
+    [[UPConfig sharedInstance] requestCityInfo];
 }
 
 - (void)backView
@@ -1290,6 +1295,8 @@ static CGFloat const FixRatio = 4/3.0;
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = YES;
     }
+    
+    [UPConfig sharedInstance].refreshBlock = nil;
 }
 
 - (void)buttonClick:(UIButton *)sender

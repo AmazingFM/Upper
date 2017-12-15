@@ -163,7 +163,11 @@ typedef enum register_enum
     [self.view addSubview:self.registerV5];
     
     [self showRegisterView:0];
-    [self.registerV1 loadAlphabetCitInfo];
+    
+    [UPConfig sharedInstance].refreshBlock = ^{
+        [self.registerV1 loadAlphabetCitInfo];
+    };
+    [[UPConfig sharedInstance] requestCityInfo];
 }
 
 - (void)showFeedback:(UIButton *)barItem
@@ -189,6 +193,12 @@ typedef enum register_enum
 {
     [super viewWillAppear:animated];
     [self setFd_interactivePopDisabled:YES];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [UPConfig sharedInstance].refreshBlock = nil;
 }
 
 - (void)leftClick

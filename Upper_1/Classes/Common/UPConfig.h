@@ -17,6 +17,7 @@
 @class CityContainer;
 
 @interface UPConfig : NSObject
+@property (nonatomic) BOOL hasLoadCityInfo;
 @property (nonatomic) NSString *uuid;
 @property (nonatomic) NSString *currentDate;
 @property (nonatomic) int reqSeq;
@@ -30,6 +31,8 @@
 @property (nonatomic, retain) NSMutableArray<BaseType *> *payTypeArr;
 @property (nonatomic, retain) NSMutableArray<BaseType *> *placeTypeArr;
 
+@property (nonatomic, copy) void (^refreshBlock)(void);
+
 + (instancetype)sharedInstance;
 - (BaseType *)getPayTypeByID:(NSString *)ID;
 - (BaseType *)getClothTypeByID:(NSString *)ID;
@@ -38,6 +41,8 @@
 - (ActivityType *)getActivityTypeByID:(NSString *)ID;
 
 - (NSString *)newReqSeqStr;//获取递增后的request序列号
+
+- (void)requestCityInfo;//获取城市信息
 @end
 
 

@@ -159,6 +159,11 @@ static int kMsgCount = 0;
     [self.view addSubview:menu];
     
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(showMessageBadge:) name:kNotifierMessageComing object:nil];
+    
+    [UPConfig sharedInstance].refreshBlock = ^{
+        [self.mainTable reloadData];
+    };
+    [[UPConfig sharedInstance] requestCityInfo];
 }
 
 - (void)loadCollectItem
@@ -241,13 +246,6 @@ static int kMsgCount = 0;
             [_mainTable.header beginRefreshing];
         }
     }
-    
-//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-//    BOOL showAgreement = [userDefaults boolForKey:@"showAgreement"];
-//
-//    if (!showAgreement) {
-//        [self showAgreementAlert];
-//    }
 }
 
 - (void)showAgreementAlert
@@ -271,6 +269,7 @@ static int kMsgCount = 0;
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [UPConfig sharedInstance].refreshBlock = nil;
 }
 
 - (void)refresh {

@@ -41,7 +41,8 @@
         _placeTypeArr = [NSMutableArray<BaseType *> new];
         
         _cityContainer = [[CityContainer alloc] init];
-
+        
+        self.hasLoadCityInfo = NO;
         [self readActivityConfig];
         
         [self performSelectorInBackground:@selector(requestCityInfo) withObject:nil];
@@ -51,19 +52,32 @@
 
 - (void)requestCityInfo
 {
-    [[YMHttpNetwork sharedNetwork] GET:@"" parameters:@{@"a":@"CityQuery"} success:^(id responseObject) {
-        NSDictionary *respDict = (NSDictionary *)responseObject;
-        
-        if ([respDict[@"resp_id"] intValue]==0) {
+    if (!self.hasLoadCityInfo) {
+        [[YMHttpNetwork sharedNetwork] GET:@"" parameters:@{@"a":@"CityQuery"} success:^(id responseObject) {
+            NSDictionary *respDict = (NSDictionary *)responseObject;
             
-            
-            NSArray *cityArr = respDict[@"resp_data"][@"city_list"];
-            NSArray *hotCityArr = respDict[@"resp_data"][@"city_hot"];
-            [self.cityContainer updateCityInfoArr:cityArr];
-            [self.cityContainer updateHotCityInfoArr:hotCityArr];
+            if ([respDict[@"resp_id"] intValue]==0) {
+                NSArray *cityArr = respDict[@"resp_data"][@"city_list"];
+                NSArray *hotCityArr = respDict[@"resp_data"][@"city_hot"];
+                [self.cityContainer updateCityInfoArr:cityArr];
+                [self.cityContainer updateHotCityInfoArr:hotCityArr];
+                
+                self.hasLoadCityInfo = YES;
+                if (self.refreshBlock) {
+                    self.refreshBlock();
+                }
+            }
+        } failure:^(NSError *error) {
+            self.hasLoadCityInfo = NO;
+            if (self.refreshBlock) {
+                self.refreshBlock();
+            }
+        }];
+    } else {
+        if (self.refreshBlock) {
+            self.refreshBlock();
         }
-    } failure:^(NSError *error) {
-    }];
+    }
 }
 
 - (void)readActivityConfig
